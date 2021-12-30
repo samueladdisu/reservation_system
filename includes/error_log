@@ -1,0 +1,26 @@
+[28-Sep-2021 11:23:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_connect() in /home/fikirlawcom/public_html/fikerWebsite/includes/db.php:2
+Stack trace:
+#0 /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php(1): include()
+#1 {main}
+  thrown in /home/fikirlawcom/public_html/fikerWebsite/includes/db.php on line 2
+[28-Sep-2021 12:43:13 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_connect() in /home/fikirlawcom/public_html/fikerWebsite/includes/db.php:2
+Stack trace:
+#0 /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php(1): include()
+#1 {main}
+  thrown in /home/fikirlawcom/public_html/fikerWebsite/includes/db.php on line 2
+[28-Sep-2021 13:16:13 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function escape() in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php on line 7
+[28-Sep-2021 13:29:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function escape() in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php on line 7
+[28-Sep-2021 13:30:23 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function escape() in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php on line 7
+[28-Sep-2021 13:31:20 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function escape() in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/login.php on line 7

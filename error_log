@@ -1,0 +1,29 @@
+[28-Sep-2021 13:32:47 UTC] PHP Warning:  include(./functions.php): Failed to open stream: No such file or directory in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/admin_header.php on line 3
+[28-Sep-2021 13:32:47 UTC] PHP Warning:  include(): Failed opening './functions.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/admin_header.php on line 3
+[28-Sep-2021 13:32:47 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[28-Sep-2021 13:33:16 UTC] PHP Fatal error:  Cannot redeclare confirm() (previously declared in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/admin_header.php:13) in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/functions.php on line 3
+[28-Sep-2021 13:33:48 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_title in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 64
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_duration in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 90
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_status in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 95
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_status in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 95
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_status in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 98
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_image in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 112
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_tags in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 119
+[28-Sep-2021 13:35:23 UTC] PHP Warning:  Undefined variable $post_content in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 124
+[28-Sep-2021 13:36:05 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_title in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 64
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_duration in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 90
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_status in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 95
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_status in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 95
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_status in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 98
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_image in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 112
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_tags in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 119
+[28-Sep-2021 14:19:27 UTC] PHP Warning:  Undefined variable $post_content in /home/fikirlawcom/public_html/fikerWebsite/admin/includes/edit_client.php on line 124
+[29-Sep-2021 06:04:03 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[29-Sep-2021 06:08:05 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[29-Sep-2021 10:08:30 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[30-Sep-2021 06:22:02 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[05-Oct-2021 11:47:50 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[21-Oct-2021 07:45:04 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
+[23-Oct-2021 05:56:02 UTC] PHP Warning:  Undefined variable $post_count in /home/fikirlawcom/public_html/fikerWebsite/admin/dashboard.php on line 175
