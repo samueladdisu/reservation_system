@@ -88,6 +88,15 @@
              </div>
          </li>
 
+         <li class="nav-item">
+             <a class="nav-link" href="./locations.php">
+                 <i class="fas fa-newspaper fa-2x text-gray-300"></i>
+                 <span>Locations</span>
+
+             </a>
+
+         </li>
+
      <?php   } ?>
 
 

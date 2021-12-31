@@ -84,33 +84,26 @@ if (isset($_POST['add_room'])) {
       <option value="Not_booked">Not Booked</option>
     </select>
   </div>
+ 
+  <div class="form-group">
+    <label for="location">Resort Location</label>
+    <select name="room_location" class="custom-select" id="">
+      <option value="">Select Option</option>
+      <?php 
 
-  <?php
+        $query = "SELECT * FROM locations";
+        $result = mysqli_query($connection, $query);
+        confirm($result);
 
-  if ($_SESSION['user_role'] == 'admin') {
-  ?>
+        while($row = mysqli_fetch_assoc($result)){
+            $location_id = $row['location_id'];
+            $location_name = $row['location_name'];
 
-    <div class="form-group">
-      <label for="user_role"> Hotle Location </label> <br>
-      <select name="room_location" class="custom-select" id="">
-        <option value="<?php echo $user_role; ?>"><?php echo $user_role; ?></option>
-        <option value="Bishoftu">Bishoftu</option>
-        <option value="Adama">Adama</option>
-        <option value="Entoto">Entoto</option>
-        <option value="Lake_Tana">Lake Tana</option>
-        <option value="Awash">Awash</option>
-        <option value="Boston">Boston</option>
-      </select>
-    </div>
-
-  <?php  }else {?>
-
-    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_role']; ?>">
-
-    <?php }?>
-
-
-
+            echo "<option value='$location_id'>{$location_name}</option>";
+         }
+      ?>
+    </select>
+  </div>
 
 
 

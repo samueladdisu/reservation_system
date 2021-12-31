@@ -107,7 +107,13 @@
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Category Title</th>
+                                        <th>Accomodation</th>
+                                        <?php 
+                                       
+                                                if($_SESSION['user_role'] == 'admin'){
+                                                    echo "<th>Location</th>";
+                                                }
+                                            ?>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -115,8 +121,13 @@
 
                                     // Display categories from database
                                     $location = $_SESSION['user_role'];
+                                    if($location == 'admin'){
+                                        $query = "SELECT * FROM room_type";
+                                    } else{
+                                        $query = "SELECT * FROM room_type WHERE type_location = '$location' ";
 
-                                    $query = "SELECT * FROM room_type WHERE type_location = '$location' ";
+                                    }
+
                                     $result = mysqli_query($connection, $query);
 
                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -127,6 +138,12 @@
                                         <tr>
                                             <td><?php echo $type_id; ?></td>
                                             <td><?php echo $type_name; ?></td>
+                                            <?php 
+                                                if($location == 'admin'){
+                                                    echo "<td> $type_location </td>";
+                                                }
+                                            ?>
+                                           
                                             <td><?php echo "<a href='acc.php?delete={$type_id}'>Delete </a>"; ?></td>
                                             <td><?php echo "<a href='acc.php?edit={$type_id}'>Edit </a>"; ?></td>
                                         </tr>
