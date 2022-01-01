@@ -1,3 +1,5 @@
+<?php include  './includes/db.php'; ?>
+<?php include  './includes/functions.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,41 +8,93 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3.0.2"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  
   <title>Reservation</title>
 </head>
 
 <body>
+
   <div class="container" id="app">
-  form action="" class="mb-5 mt-5" method="POST">
+    <form class="col-6 offset-4 mt-5">
+      <div class="mb-3 col-4">
+        <label for="check-in" class="form-label">Check in</label>
+        <input type="date" class="form-control" v-model="checkIn" id="check-in">
+      </div>
+      <div class="mb-3 col-4">
+        <label for="check-out" class="form-label">Check out</label>
+        <input type="date" class="form-control" v-model="checkOut" id="check-out">
+      </div>
 
-<div class="form-group">
-  <label for="user_role"> Property </label> <br>
-  <select name="destination" class="custom-select" required>
-    <option value="">Select Destination</option>
-    <option value="Bishoftu">Bishoftu</option>
-    <option value="Adama">Adama</option>
-    <option value="Entoto">Entoto</option>
-    <option value="Lake_Tana">Lake Tana</option>
-    <option value="Awash">Awash</option>
-    <option value="Boston">Boston</option>
-  </select>
-</div>
+      <div class="mb-3 col-4">
+        <label for="dest" class="form-label"></label>
+        <select class="form-select" v-model="desti">
+          <option disabled value="">Select Destination</option>
+          <?php
 
-<input type="date" name="check_in" />
+          $query = "SELECT * FROM locations";
+          $result = mysqli_query($connection, $query);
+
+          confirm($result);
+
+          while ($row = mysqli_fetch_assoc($result)) {
+            $location_id = $row['location_id'];
+            $location_name = $row['location_name'];
+          ?>
+            <option value='<?php echo $location_id ?>'><?php echo $location_name ?></option>
+          <?php  }
+
+          ?>
+        </select>
+
+      </div>
+      <button type="submit" @click="submitData" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div class="card-group mt-5" >
+      <div class="card" style="max-width: 18rem;" v-for="row in allData" :key="row">
+        <img :src="'./room_img/' + row.room_image" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ row.room_location }}</h5>
+          <p class="card-text">{{ row.room_bed }}</p>
+          <p class="card-text"><small class="text-muted">${{ row.room_price }}</small></p>
+        </div>
+      </div>
+    </div>
 
 
-<input type="date" name="check_out" />
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            allData: '',
+            checkIn: '',
+            checkOut: '',
+            desti: '',
+          }
+        },
+        methods: {
+          submitData() {
+            axios.post('book.php', {
+              action: 'fetchall',
+              checkIn: this.checkIn,
+              checkOut: this.checkOut,
+              desti: this.desti
 
+            }).then(response => {
+              this.allData = response.data
+            })
+          }
+        },
+        created() {
+          this.submitData()
+        }
+      })
 
-<input type="submit" name="book" value="book now">
-</form>
-  </div>
-
-
+      app.mount('#app')
+    </script>
 </body>
 
 </html>
