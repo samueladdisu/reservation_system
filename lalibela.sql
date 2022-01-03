@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 30, 2021 at 03:12 PM
+-- Generation Time: Jan 03, 2022 at 03:22 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.24
 
@@ -24,23 +24,44 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `locations`
+--
+
+CREATE TABLE `locations` (
+  `location_id` int(11) NOT NULL,
+  `location_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `locations`
+--
+
+INSERT INTO `locations` (`location_id`, `location_name`) VALUES
+(2, 'Bishoftu'),
+(3, 'Adama'),
+(4, 'Awash');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `reservations`
 --
 
 CREATE TABLE `reservations` (
   `res_id` int(11) NOT NULL,
-  `res_room_number` int(11) NOT NULL,
-  `res_bedtype` varchar(255) NOT NULL,
   `res_firstname` varchar(255) NOT NULL,
   `res_lastname` varchar(255) NOT NULL,
   `res_phone` varchar(255) NOT NULL,
   `res_email` varchar(255) NOT NULL,
-  `res_guest` int(11) NOT NULL,
   `res_checkin` date NOT NULL,
   `res_checkout` date NOT NULL,
-  `res_price` varchar(255) NOT NULL,
-  `res_location` varchar(255) NOT NULL,
-  `res_remark` varchar(255) NOT NULL
+  `res_country` varchar(255) NOT NULL,
+  `res_address` varchar(255) NOT NULL,
+  `res_city` varchar(255) NOT NULL,
+  `res_zipcode` varchar(255) NOT NULL,
+  `res_paymentMethod` varchar(255) NOT NULL,
+  `res_roomIDs` int(255) NOT NULL,
+  `res_price` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -69,7 +90,9 @@ INSERT INTO `rooms` (`room_id`, `room_occupancy`, `room_acc`, `room_bed`, `room_
 (10, '4', '2', 'single', '150', 'Kuriftu_Room_1.png', 0, 'Not_booked', 'Adama'),
 (11, '23', '4', 'single', '150', 'Entoto_Signage.png', 0, 'Not_booked', 'Adama'),
 (12, '4', '5', 'King', '150', 'Customer Services_2.png', 12, 'Not_booked', 'Bishoftu'),
-(13, '1', '4', 'King', '200', 'Kuriftu_Bishoftu_Exerior.png', 432, 'Not_booked', 'Bishoftu');
+(13, '1', '4', 'King', '200', 'Kuriftu_Bishoftu_Exerior.png', 432, 'Not_booked', 'Bishoftu'),
+(14, '4', '', 'single', '150', 'KURIFTU Afar-0728-min.jpg', 432, 'Not_booked', 'Awash'),
+(15, '2', '10', 'new bed', '222', 'kuriftu resort logo afar white copy-min.png', 3, 'Not_booked', 'Bishoftu');
 
 -- --------------------------------------------------------
 
@@ -88,15 +111,13 @@ CREATE TABLE `room_type` (
 --
 
 INSERT INTO `room_type` (`type_id`, `type_name`, `type_location`) VALUES
-(2, 'Deluxe', ''),
-(3, 'king', ''),
-(4, 'lake front', ''),
-(5, 'Presidential Suite', ''),
-(7, 'Standard', ''),
-(8, 'Standard', ''),
-(9, 'Standard', ''),
 (10, 'king', 'Adama'),
-(11, 'Deluxe', 'Entoto');
+(11, 'Deluxe', 'Entoto'),
+(12, 'Deluxe', 'Bishoftu'),
+(13, 'Deluxe', 'Bishoftu'),
+(14, 'Standard', 'Adama'),
+(15, 'Standard', 'Adama'),
+(16, 'king', 'Bishoftu');
 
 -- --------------------------------------------------------
 
@@ -132,6 +153,12 @@ INSERT INTO `users` (`user_id`, `user_firstName`, `user_lastName`, `user_name`, 
 --
 
 --
+-- Indexes for table `locations`
+--
+ALTER TABLE `locations`
+  ADD PRIMARY KEY (`location_id`);
+
+--
 -- Indexes for table `reservations`
 --
 ALTER TABLE `reservations`
@@ -160,6 +187,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `locations`
+--
+ALTER TABLE `locations`
+  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
@@ -169,13 +202,13 @@ ALTER TABLE `reservations`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `room_type`
 --
 ALTER TABLE `room_type`
-  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`

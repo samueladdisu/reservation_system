@@ -84,7 +84,11 @@ if (isset($_POST['add_room'])) {
       <option value="Not_booked">Not Booked</option>
     </select>
   </div>
+ <?php 
  
+ if ($_SESSION['user_role'] == 'admin') {
+ 
+ ?>
   <div class="form-group">
     <label for="location">Resort Location</label>
     <select name="room_location" class="custom-select" id="">
@@ -99,11 +103,14 @@ if (isset($_POST['add_room'])) {
             $location_id = $row['location_id'];
             $location_name = $row['location_name'];
 
-            echo "<option value='$location_id'>{$location_name}</option>";
+            echo "<option value='$location_name'>{$location_name}</option>";
          }
       ?>
     </select>
   </div>
+  <?php }else {?>
+    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_role']; ?>">
+ <?php  }?>
 
 
 

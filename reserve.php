@@ -78,6 +78,7 @@
         <div class="card" style="width: 18rem;" v-for="(cart, index) of cart" :key="cart.id">
           <div class="card-body">
             <h5 class="card-title">{{ cart.room_location }}</h5>
+            <h5 class="card-title">{{ cart.room_price }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ cart.room_bed }}</h6>
             <p class="card-text">
 
@@ -116,7 +117,7 @@
               checkOut: this.checkOut,
               data: this.cart
             }).then(res => {
-              window.location.href = "res_form.php"
+              window.location.href = "register.php"
             })
           },
           addRoom(row) {

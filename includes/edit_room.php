@@ -18,6 +18,7 @@ if (isset($_GET['p_id'])) {
     $room_image = $row['room_image'];
     $room_number = $row['room_number'];
     $room_status = $row['room_status'];
+    $room_location = $row['room_location'];
   }
 }
 if (isset($_POST['edit_room'])) {
@@ -27,6 +28,7 @@ if (isset($_POST['edit_room'])) {
   $room_price       =  escape($_POST['room_price']);
   $room_number      =  escape($_POST['room_number']);
   $room_status      =  escape($_POST['room_status']);
+  $room_location      =  escape($_POST['room_location']);
 
   $room_image = $_FILES['room_image']['name'];
   $room_image_temp = $_FILES['room_image']['tmp_name'];
@@ -43,7 +45,7 @@ if (isset($_POST['edit_room'])) {
     }
   }
 
-  $query = "UPDATE `rooms` SET `room_occupancy` = '$room_occupancy', `room_acc` = '$room_acc', `room_bed` = '$room_bed', `room_price` = '$room_price', `room_image` = '$room_image', `room_status` = '$room_status' WHERE `rooms`.`room_id` = $p_id;";
+  $query = "UPDATE `rooms` SET `room_occupancy` = '$room_occupancy', `room_acc` = '$room_acc', `room_bed` = '$room_bed', `room_price` = '$room_price', `room_image` = '$room_image', `room_location` = '$room_location', `room_status` = '$room_status' WHERE `rooms`.`room_id` = $p_id;";
 
 
 
@@ -125,6 +127,34 @@ if (isset($_POST['edit_room'])) {
       ?>
     </select>
   </div>
+  <?php 
+ 
+ if ($_SESSION['user_role'] == 'admin') {
+ 
+ ?>
+  <div class="form-group">
+    <label for="location">Resort Location</label>
+    <select name="room_location" class="custom-select" id="">
+      <option value="">Select Option</option>
+      <?php 
+
+        $query = "SELECT * FROM locations";
+        $result = mysqli_query($connection, $query);
+        confirm($result);
+
+        while($row = mysqli_fetch_assoc($result)){
+            $location_id = $row['location_id'];
+            $location_name = $row['location_name'];
+
+            echo "<option value='$location_name'>{$location_name}</option>";
+         }
+      ?>
+    </select>
+  </div>
+  <?php }else {?>
+    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_role']; ?>">
+ <?php  }?>
+
   <div class="form-group">
     <input type="submit" class="btn btn-primary" name="edit_room" value="Edit Room">
   </div>
