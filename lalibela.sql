@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 03, 2022 at 03:22 PM
+-- Generation Time: Jan 04, 2022 at 03:10 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.24
 
@@ -60,9 +60,24 @@ CREATE TABLE `reservations` (
   `res_city` varchar(255) NOT NULL,
   `res_zipcode` varchar(255) NOT NULL,
   `res_paymentMethod` varchar(255) NOT NULL,
-  `res_roomIDs` int(255) NOT NULL,
-  `res_price` varchar(255) NOT NULL
+  `res_roomIDs` varchar(255) NOT NULL,
+  `res_price` varchar(255) NOT NULL,
+  `res_location` varchar(255) NOT NULL,
+  `res_confirmID` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `reservations`
+--
+
+INSERT INTO `reservations` (`res_id`, `res_firstname`, `res_lastname`, `res_phone`, `res_email`, `res_checkin`, `res_checkout`, `res_country`, `res_address`, `res_city`, `res_zipcode`, `res_paymentMethod`, `res_roomIDs`, `res_price`, `res_location`, `res_confirmID`) VALUES
+(18, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-19', '2022-01-20', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', ''),
+(19, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-05', '2022-01-06', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', ''),
+(20, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', ''),
+(21, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'amole', '[\"12\",\"13\"]', '350', 'Bishoftu', '941908946'),
+(22, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', '1030094722'),
+(23, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', '2M4Dr0o9'),
+(24, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', '8jgjpUaw');
 
 -- --------------------------------------------------------
 
@@ -196,7 +211,7 @@ ALTER TABLE `locations`
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `res_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `res_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `rooms`
