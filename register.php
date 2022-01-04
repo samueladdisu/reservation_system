@@ -15,26 +15,55 @@
 
 <?php 
   $cart = $_SESSION['cart'];
-  foreach ($cart as $val) {
-    $id     = $val->room_id;
-    $total_price = $val->room_price;
-    $occ   =     $val->room_occupancy;
-    $acc =            $val->room_acc;
-    $bed =        $val->room_bed;
-    $location =        $val->room_location;
+  $location = $_SESSION['location'];
+  $total_price = 0;
+  $id = array();
+
+  function getName($n) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
+  
+    for ($i = 0; $i < $n; $i++) {
+        $index = rand(0, strlen($characters) - 1);
+        $randomString .= $characters[$index];
+    }
+  
+    return $randomString;
+}
+
+  $res_confirmID = getName(8);
+  foreach ($cart as  $val) {
+    $id[]     = $val->room_id;
+    $total_price += $val->room_price;
   }
+    $id_sql = json_encode($id);
   if(isset($_POST['complete_book'])){
-    $res_firstname = escape($_POST['res_firstname']);
-    $res_lastname = escape($_POST['res_lastname']);
-    $res_phone = escape($_POST['res_phone']);
-    $res_email = escape($_POST['res_email']);
-    $res_checkin = escape($_POST['res_checkin']);
-    $res_checkout = escape($_POST['res_checkout']);
-    $res_country = escape($_POST['res_country']);
-    $res_address = escape($_POST['res_address']);
-    $res_city = escape($_POST['res_city']);
-    $res_zip = escape($_POST['res_zip']);
-    $res_paymentMethod = escape($_POST['res_paymentMethod']);
+
+   
+
+    foreach ($_POST as $name => $value) {
+      $params[$name] = escape($value) ; 
+    }
+
+    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID) ";
+    $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}') ";
+
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+
+    switch($params['res_paymentMethod']){
+      case 'amole':
+        header("Location: ./amole.php");
+        break;
+      case 'paypal':
+        header("Location: ./paypal.php");
+        break;
+      case 'telebirr':
+        header("Location: ./telebirr.php");
+        break;
+    }
+
+  
   }
 
 ?>
@@ -58,11 +87,11 @@
     </div>
     <div class="col-md-6">
       <label for="inputEmail4" class="form-label">Check In</label>
-      <input type="date" class="form-control" name="res_checkin" value="<?php echo $_SESSION['checkIn']; ?>" />
+      <input type="date" class="form-control"  name="res_checkin" value="<?php echo $_SESSION['checkIn']; ?>" readonly/>
     </div>
     <div class="col-md-6">
       <label for="inputPassword4" class="form-label">Check Out</label>
-      <input type="date" class="form-control" name="res_checkout" value="<?php echo $_SESSION['checkOut']; ?>" />
+      <input type="date" class="form-control"  name="res_checkout" value="<?php echo $_SESSION['checkOut']; ?>" readonly/>
     </div>
     <div class="col-md-6">
       <label for="inputCity" class="form-label">Country</label>

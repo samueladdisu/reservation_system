@@ -8,26 +8,56 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/t-datepicker.min.css" rel="stylesheet" type="text/css">
+  <link href="css/themes/t-datepicker-blue.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="./css/reserve.css">
   <script src="https://unpkg.com/vue@3.0.2"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="js/t-datepicker.min.js"></script>
   <title>Reservation</title>
 </head>
 
 <body>
 
+  <header class="header">
+    <div class="container">
+      <nav class="nav-center">
+        <div class="menu">
+          <div class="line1"></div>
+          <div class="line2"></div>
+        </div>
+        <div class="logo">
+          <img src="./img/Kuriftu_logo.svg" alt="">
+        </div>
+      </nav>
+
+      <div class="side-socials">
+        <img src="./img/facebook.svg" alt="">
+        <img src="./img/instagram.svg" alt="">
+        <img src="./img/youtube.svg" alt="">
+      </div>
+
+    </div>
+  </header>
+
   <div class="container" id="app">
     <form class="col-6 offset-4 mt-5" @submit.prevent="submitData">
-      <div class="mb-3 col-4">
+      <!-- <div class="mb-3 col-4">
         <label for="check-in" class="form-label">Check in</label>
         <input type="date" class="form-control" v-model="checkIn" id="check-in">
       </div>
       <div class="mb-3 col-4">
         <label for="check-out" class="form-label">Check out</label>
         <input type="date" class="form-control" v-model="checkOut" id="check-out">
-      </div>
-
+      </div> -->
+      <div class="t-datepicker">
+    <div class="t-check-in"></div>
+    <div class="t-check-out"></div>
+  </div>
       <div class="mb-3 col-4">
         <label for="dest" class="form-label"></label>
         <select class="form-select" v-model="desti">
@@ -97,6 +127,90 @@
 
     </div>
     <script>
+      $(function() {
+
+        $('.t-datepicker').tDatePicker({
+          // auto close after selection
+          autoClose: true,
+
+          // animation speed in milliseconds
+          durationArrowTop: 200,
+
+          // the number of calendars
+          numCalendar: 2,
+
+          // localization
+          titleCheckIn: 'Check In',
+          titleCheckOut: 'Check Out',
+          titleToday: 'Today',
+          titleDateRange: 'night',
+          titleDateRanges: 'nights',
+          titleDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+          titleMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'Septemper', 'October', 'November', "December"],
+
+          // the max length of the title
+          titleMonthsLimitShow: 3,
+
+          // replace moth names
+          replaceTitleMonths: null,
+
+          // e.g. 'dd-mm-yy'
+          showDateTheme: null,
+
+          // icon options
+          iconArrowTop: false,
+          // iconDate: '&#x279C;',
+          // arrowPrev: '&#x276E;',
+          // arrowNext: '&#x276F;',
+          // https://fontawesome.com/v4.7.0/icons/
+          // iconDate: '<i class="li-calendar-empty"></i><i class="li-arrow-right"></i>',
+          // arrowPrev: '<i class="fa fa-chevron-left"></i>',
+          // arrowNext: '<i class="fa fa-chevron-right"></i>',
+
+          // shows today title
+          toDayShowTitle: true,
+
+          // showss dange range title
+          dateRangesShowTitle: true,
+
+          // highlights today
+          toDayHighlighted: false,
+
+          // highlights next day
+          nextDayHighlighted: false,
+
+          // an array of days
+          daysOfWeekHighlighted: [0, 6],
+
+          // custom date format
+          formatDate: 'yyyy-mm-dd',
+
+          // dateCheckIn: '25/06/2018',  // DD/MM/YY
+          // dateCheckOut: '26/06/2018', // DD/MM/YY
+          dateCheckIn: null,
+          dateCheckOut: null,
+          startDate: null,
+          endDate: null,
+
+          // limits the number of months
+          limitPrevMonth: 0,
+          limitNextMonth: 11,
+
+          // limits the number of days
+          limitDateRanges: 31,
+
+          // true -> full days || false - 1 day
+          showFullDateRanges: false,
+
+          // DATA HOLIDAYS
+          // Data holidays
+          fnDataEvent: null
+        });
+
+
+console.log($.titleCheckIn);
+
+      });
       const app = Vue.createApp({
         data() {
           return {
@@ -115,6 +229,7 @@
               action: 'insert',
               checkIn: this.checkIn,
               checkOut: this.checkOut,
+              location: this.desti,
               data: this.cart
             }).then(res => {
               window.location.href = "register.php"
