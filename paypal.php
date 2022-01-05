@@ -21,30 +21,38 @@
       <thead>
         <tr>
           <th>Room Id</th>
+          <th>Room Number</th>
           <th>Occupancy</th>
           <th>Accomodation</th>
           <th>Bed</th>
           <th>Price</th>
           <th>Hotel Location</th>
-          <th>Room No.</th>
-          <th>Room No.</th>
         </tr>
       </thead>
       <tbody>
         <?php
 
         $cart = $_SESSION['cart'];
-        print_r($cart);
-        
+        // print_r($cart);
         foreach ($cart as $name => $value) {
-        
-          foreach ($value as $name1 => $val) {
+       
+         $item[$name] = $value;
+          foreach ( $item[$name] as $name1 => $val) {
+            
+            
+            $items[$name1] = $val;
            
-            echo "<td>";
-            echo $items['name1'] = $val;
-            echo "</td>";
            
           }
+          echo "<tr>";
+            echo "<td>{$items['room_id']}</td>";
+            echo "<td>{$items['room_number']}</td>";
+            echo "<td>{$items['room_occupancy']}</td>";
+            echo "<td>{$items['room_acc']}</td>";
+            echo "<td>{$items['room_bed']}</td>";
+            echo "<td>{$items['room_price']}</td>";
+            echo "<td>{$items['room_location']}</td>";
+            echo "</tr>";
         }
         ?>
 

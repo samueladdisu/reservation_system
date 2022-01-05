@@ -45,7 +45,12 @@
 
                                                 <?php
                                                 $location = $_SESSION['user_role'];
-                                                $query = "SELECT * FROM reservations WHERE res_location = '$location' ";
+                                                if($location == "admin"){
+                                                    $query = "SELECT * FROM reservations";
+
+                                                }else {
+                                                    $query = "SELECT * FROM reservations WHERE res_location = '$location' ";
+                                                }
                                                 $select_all_posts = mysqli_query($connection, $query);
                                                 $post_counts = mysqli_num_rows($select_all_posts);
                                                 echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$post_counts</div>";
@@ -74,7 +79,13 @@
                                                     Rooms</div>
                                                 <?php
 
-                                                $query = "SELECT * FROM rooms WHERE room_location = '$location'";
+                                                if($location == 'admin'){
+
+                                                    $query = "SELECT * FROM rooms";
+                                                }else{
+
+                                                    $query = "SELECT * FROM rooms WHERE room_location = '$location'";
+                                                }
                                                 $select_all_categories = mysqli_query($connection, $query);
                                                 $category_counts = mysqli_num_rows($select_all_categories);
                                                 echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$category_counts</div>";
