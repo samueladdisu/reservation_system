@@ -13,22 +13,22 @@ if (isset($_GET['p_id'])) {
     $room_id = $row['room_id'];
     $room_occupancy = $row['room_occupancy'];
     $room_acc = $row['room_acc'];
-    $room_bed = $row['room_bed'];
     $room_price = $row['room_price'];
     $room_image = $row['room_image'];
     $room_number = $row['room_number'];
     $room_status = $row['room_status'];
     $room_location = $row['room_location'];
+    $room_desc = $row['room_desc'];
   }
 }
 if (isset($_POST['edit_room'])) {
   $room_occupancy   =  escape($_POST['room_occupancy']);
   $room_acc         =  escape($_POST['room_acc']);
-  $room_bed         =  escape($_POST['room_bed']);
   $room_price       =  escape($_POST['room_price']);
   $room_number      =  escape($_POST['room_number']);
   $room_status      =  escape($_POST['room_status']);
   $room_location      =  escape($_POST['room_location']);
+  $room_desc = escape($_POST['room_desc']);
 
   $room_image = $_FILES['room_image']['name'];
   $room_image_temp = $_FILES['room_image']['tmp_name'];
@@ -45,7 +45,7 @@ if (isset($_POST['edit_room'])) {
     }
   }
 
-  $query = "UPDATE `rooms` SET `room_occupancy` = '$room_occupancy', `room_acc` = '$room_acc', `room_bed` = '$room_bed', `room_price` = '$room_price', `room_image` = '$room_image', `room_location` = '$room_location', `room_status` = '$room_status' WHERE `rooms`.`room_id` = $p_id;";
+  $query = "UPDATE `rooms` SET `room_occupancy` = '$room_occupancy', `room_acc` = '$room_acc', `room_price` = '$room_price', `room_image` = '$room_image', `room_number` = '$room_number', `room_status` = '$room_status', `room_location` = '$room_location', `room_desc` = '$room_desc' WHERE `rooms`.`room_id` = $p_id; ";
 
 
 
@@ -70,8 +70,9 @@ if (isset($_POST['edit_room'])) {
     <select name="room_acc" class="custom-select" id="">
       <option value="">Select option</option>
       <?php
-
-      $query = "SELECT * FROM room_type";
+      echo $location = $_SESSION['user_role'];
+      
+      $query = "SELECT * FROM room_type WHERE type_location = '$location' ";
       $result = mysqli_query($connection, $query);
 
       confirm($result);
@@ -96,10 +97,6 @@ if (isset($_POST['edit_room'])) {
     <input type="file" name="room_image">
   </div>
   <div class="form-group">
-    <label for="post_image"> Bed Type </label>
-    <input type="text" class="form-control" value="<?php echo $room_bed; ?>" name="room_bed">
-  </div>
-  <div class="form-group">
     <label for="post_tags"> Price </label>
     <input type="text" class="form-control" value="<?php echo $room_price; ?>" name="room_price">
   </div>
@@ -108,7 +105,13 @@ if (isset($_POST['edit_room'])) {
     <label for="post_tags"> Room Number </label>
     <input type="text" class="form-control" value="<?php echo $room_number; ?>" name="room_number">
   </div>
-
+  
+  <div class="form-group">
+    <label for="post_content"> Room Description</label>
+    <textarea name="room_desc" id="" cols="30" rows="10" class="form-control">
+    <?php echo $room_desc; ?>
+    </textarea>
+  </div>
 
   <div class="form-group">
     <label for="room_status">Room Status</label> <br>
@@ -117,7 +120,7 @@ if (isset($_POST['edit_room'])) {
       <?php
 
       if($room_status == 'booked') {
-        echo '<option value="not_booked">Not booked</option>';
+        echo '<option value="Not_booked">Not booked</option>';
       }else {
         echo '<option value="booked">Booked</option>';
       }

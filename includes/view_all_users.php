@@ -13,7 +13,7 @@
 
     <?php
 
-    $query = "SELECT * FROM users";
+    $query = "SELECT * FROM users ORDER BY user_id DESC";
     $user_result = mysqli_query($connection, $query);
 
     while ($row = mysqli_fetch_assoc($user_result)) {

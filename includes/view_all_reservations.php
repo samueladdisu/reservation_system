@@ -6,6 +6,7 @@
       <th>Last Name</th>
       <th>Phone</th>
       <th>Email</th>
+      <th># of Guest</th>
       <th>Arrival</th>
       <th>Departure</th>
       <th>Country</th>
@@ -25,9 +26,9 @@
     $location = $_SESSION['user_role'];
 
     if($location == "admin"){
-      $query = "SELECT * FROM reservations";
+      $query = "SELECT * FROM reservations ORDER BY res_id DESC";
     } else {
-      $query = "SELECT * FROM reservations WHERE res_location = '$location' ";
+      $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";
     }
     $result = mysqli_query($connection, $query);
 
@@ -49,6 +50,7 @@
       echo "<td>{$db_res['res_lastname']}</td>";
       echo "<td>{$db_res['res_phone']}</td>";
       echo "<td>{$db_res['res_email']}</td>";
+      echo "<td>{$db_res['res_guestNo']}</td>";
       echo "<td>{$db_res['res_checkin']}</td>";
       echo "<td>{$db_res['res_checkout']}</td>";
       echo "<td>{$db_res['res_country']}</td>";

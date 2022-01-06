@@ -84,22 +84,24 @@
 
       <div class="col-lg-8 mt-5">
         <div class="mycard mt-5" v-for="row in allData" :key="row.room_id">
+
+
           <img :src="'./room_img/' + row.room_image" class="mycard-img-top" alt="...">
           <div class="mycard-body">
             <h5 class="mycard-title">
-              {{ row.room_bed }}
+              {{ row.room_acc }}
             </h5>
             <p class="mycard-price">
               <small class="text-muted">
                 ${{ row.room_price }} Per Night
               </small>
 
-              <small class="text-muted">
-                {{ row.room_location }}
+              <small class="text-red">
+               only {{ row.cnt }} left
               </small>
             </p>
             <p class="mycard-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisis tincidunt nisl elementum ultrices luctus habitasse. Ut orci nam lectus at massa enim elementum varius dictumst. Nulla a, sed enim turpis non lacinia fusce. Quis volutpat sit ullamcorper vitae magna vel sit pharetra scelerisque.
+            {{ row.room_desc }}
             </p>
             <div class="btn-container1">
               <a href="" @click.prevent="addRoom(row)" class="btn btn-primary1">Select Room</a>

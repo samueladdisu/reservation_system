@@ -2,11 +2,11 @@
 if (isset($_POST['add_room'])) {
   $room_occupancy   =  escape($_POST['room_occupancy']);
   $room_acc         =  escape($_POST['room_acc']);
-  $room_bed         =  escape($_POST['room_bed']);
   $room_price       =  escape($_POST['room_price']);
   $room_number      =  escape($_POST['room_number']);
   $room_status      =  escape($_POST['room_status']);
   $room_location    =  escape($_POST['room_location']);
+  $room_desc    =  escape($_POST['room_desc']);
 
 
 
@@ -16,7 +16,7 @@ if (isset($_POST['add_room'])) {
   move_uploaded_file($room_image_temp, "./room_img/$room_image");
 
 
-  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_bed`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`) VALUES ('$room_occupancy', '$room_acc', '$room_bed', '$room_price', '$room_image', '$room_number', '$room_status', '$room_location');";
+  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$room_occupancy', '$room_acc', '$room_price', '$room_image', '$room_number', '$room_status', '$room_location', '$room_desc');";
 
 
   $result = mysqli_query($connection, $query);
@@ -38,8 +38,8 @@ if (isset($_POST['add_room'])) {
     <select name="room_acc" class="custom-select" id="">
       <option value="">Select option</option>
       <?php
-
-      $query = "SELECT * FROM room_type";
+      $location = $_SESSION['user_role'];
+      $query = "SELECT * FROM room_type WHERE type_location = '$location'";
       $result = mysqli_query($connection, $query);
 
       confirm($result);
@@ -48,7 +48,7 @@ if (isset($_POST['add_room'])) {
         $type_id = $row['type_id'];
         $type_name = $row['type_name'];
       ?>
-        <option value='<?php echo $type_id ?>'><?php echo $type_name ?></option>
+        <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
       <?php  }
 
       ?>
@@ -62,11 +62,6 @@ if (isset($_POST['add_room'])) {
   </div>
 
   <div class="form-group">
-    <label for="post_image"> Bed Type </label>
-    <input type="text" class="form-control" name="room_bed">
-  </div>
-
-  <div class="form-group">
     <label for="post_tags"> Price </label>
     <input type="text" class="form-control" name="room_price">
   </div>
@@ -75,6 +70,11 @@ if (isset($_POST['add_room'])) {
     <label for="post_tags"> Room Number </label>
     <input type="text" class="form-control" name="room_number">
   </div>
+  <div class="form-group">
+    <label for="post_content"> Room Description</label>
+    <textarea name="room_desc" id="" cols="30" rows="10" class="form-control"></textarea>
+  </div>
+
 
   <div class="form-group">
     <label for="room_status"> Room Status</label>

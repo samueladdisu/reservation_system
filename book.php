@@ -10,11 +10,15 @@ $output = array();
 
 if($received_data->action == 'fetchall'){
 
-  $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' ";
-  $result = mysqli_query($connection, $query);
+  // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked'";
+  // $query = "SELECT * FROM rooms GROUP BY room_acc";
+  $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked';";
+  // $result = mysqli_query($connection, $query);
+  $result2 = mysqli_query($connection, $query2);
 
-  confirm($result);
-  while($row = mysqli_fetch_assoc($result)){
+  // confirm($result);
+  confirm($result2);
+  while($row = mysqli_fetch_assoc($result2)){
     $data[] = $row;
   }
 

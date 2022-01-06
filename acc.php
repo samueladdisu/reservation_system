@@ -122,9 +122,9 @@
                                     // Display categories from database
                                     $location = $_SESSION['user_role'];
                                     if($location == 'admin'){
-                                        $query = "SELECT * FROM room_type";
+                                        $query = "SELECT * FROM room_type ORDER BY type_id DESC";
                                     } else{
-                                        $query = "SELECT * FROM room_type WHERE type_location = '$location' ";
+                                        $query = "SELECT * FROM room_type WHERE type_location = '$location' ORDER BY type_id DESC";
 
                                     }
 

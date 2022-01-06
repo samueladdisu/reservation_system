@@ -23,7 +23,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Lalibela Hotel - Dashboard</title>
+    <title>Kuriftu Resort - Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
