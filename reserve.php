@@ -39,34 +39,34 @@
 
   <div class="container" id="app">
     <form class="myform" @submit.prevent="submitData">
-  
 
-    <div class="mb-3">
-      <select class="form-select mySelect" v-model="desti">
-        <option disabled value="">Choose Destination</option>
-        <?php
 
-        $query = "SELECT * FROM locations";
-        $result = mysqli_query($connection, $query);
+      <div class="mb-3">
+        <select class="form-select mySelect" v-model="desti">
+          <option disabled value="">Choose Destination</option>
+          <?php
 
-        confirm($result);
+          $query = "SELECT * FROM locations";
+          $result = mysqli_query($connection, $query);
 
-        while ($row = mysqli_fetch_assoc($result)) {
-          $location_id = $row['location_id'];
-          $location_name = $row['location_name'];
-        ?>
-          <option value='<?php echo $location_name ?>'><?php echo $location_name ?></option>
-        <?php  }
+          confirm($result);
 
-        ?>
-      </select>
+          while ($row = mysqli_fetch_assoc($result)) {
+            $location_id = $row['location_id'];
+            $location_name = $row['location_name'];
+          ?>
+            <option value='<?php echo $location_name ?>'><?php echo $location_name ?></option>
+          <?php  }
 
-    </div>
- 
+          ?>
+        </select>
 
-    <div class="mb-3">
-      <input type="text" class="form-control" v-model="checkIn" placeholder="Check in" onfocus="this.type='date'" onblur="(this.type='text')" id="check-in">
-    </div>
+      </div>
+
+
+      <div class="mb-3">
+        <input type="text" class="form-control" v-model="checkIn" placeholder="Check in" onfocus="this.type='date'" onblur="(this.type='text')" id="check-in">
+      </div>
       <div class="mb-3">
         <input type="text" class="form-control" v-model="checkOut" placeholder="Check in" onfocus="this.type='date'" id="check-out">
       </div>
@@ -74,7 +74,7 @@
 
       <button type="submit" class="btn btn-primary1">Check Availability</button>
     </form>
-<!-- 
+    <!-- 
     <p>{{ checkIn }}</p>
     <p>{{ checkOut }}</p> -->
 
@@ -97,28 +97,28 @@
               </small>
 
               <small class="text-red">
-               only {{ row.cnt }} left
+                only {{ row.cnt }} left
               </small>
             </p>
             <p class="mycard-text">
-            {{ row.room_desc }}
+              {{ row.room_desc }}
             </p>
             <div class="btn-container1">
               <a href="" @click.prevent="addRoom(row)" class="btn btn-primary1">Select Room</a>
-              
+
             </div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mt-5 cart-container">
-        <div class="cart mt-5" v-for="(cart, index) of cart" :key="cart.id">
+        <div class="cart mt-5" v-for="cart1 of cart" :key="cart.id">
           <div class="cart-body">
             <div>
-            <h5 class="cart-title">{{ cart.room_location }} - {{ cart.room_bed }}</h5>
-            <h5 class="cart-title">{{ cart.room_price }}</h5>
+              <h5 class="cart-title">{{ cart1.room_location }} - {{ cart1.room_bed }}</h5>
+              <h5 class="cart-title">{{ cart1.room_price }}</h5>
             </div>
-            <a href="#" @click.prevent="deleteRoom(row)" class="card-link">Remove </a>
-           
+            <a href="#" @click.prevent="deleteRoom(cart1)" class="card-link">Remove </a>
+
           </div>
 
         </div>
@@ -134,16 +134,17 @@
         Total: ${{ totalprice }} <br>
         Rooms: {{ cart.length }}
       </p>
-      
+
       <div>
 
-          <a @click.prevent="completeCart" class="btn btn-primary1"> BOOK NOW</a>
-        </div>
+        <a @click.prevent="completeCart" class="btn btn-primary1"> BOOK NOW</a>
+      </div>
     </div>
-   
+
     <div class="footer"></div>
     <script>
       const app = Vue.createApp({
+     
         data() {
           return {
             checkIn: '',
@@ -154,12 +155,13 @@
             totalprice: ''
           }
         },
+
         methods: {
-        
+
           completeCart() {
             console.log(this.cart);
 
-            if(this.checkOut != '' && this.checkin != ''){
+            if (this.checkOut != '' && this.checkin != '') {
 
               axios.post('book.php', {
                 action: 'insert',
@@ -170,35 +172,40 @@
               }).then(res => {
                 window.location.href = "register.php"
               })
-            }else{
+            } else {
               alert("Please Select Check in and Check out date")
             }
-            
+
           },
           addRoom(row) {
             let total = 0;
             let rooms = 0;
-            if (!this.cart.includes(row)) {
+            if (row.cnt > 0) {
 
               this.cart.push(row)
-              this.cart.forEach(val=>{
-              total += parseInt(val.room_price)
-             
-            })
-            this.totalprice = total
+              this.cart.forEach(val => {
+                total += parseInt(val.room_price)
+
+              })
+              this.totalprice = total
+              localStorage.setItem('cart',JSON.stringify(row))  
+              console.log(this.cart);
+              row.cnt--
             }
-            console.log(this.cart);
+            // console.log(this.cart);
           },
           deleteRoom(row) {
             this.cart.pop(row)
             console.log(this.cart);
+            localStorage.removeItem('cart',JSON.stringify(row))  
           },
           fetchAllData() {
             axios.post('book.php', {
               action: 'fetchall'
             }).then(res => {
               this.allData = res.data
-              console.log(res.data);
+             
+              // console.log(this.cart);
             })
           },
           async submitData() {
@@ -222,6 +229,8 @@
         },
         created() {
           this.fetchAllData()
+          this.cart = JSON.parse(localStorage.getItem('cart') || '[]')
+          // console.log(this.cart);
         }
 
       })
