@@ -4,131 +4,270 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="./css/reserve.css">
   <title>register</title>
 </head>
-<body>
 
-<?php 
-  $cart = $_SESSION['cart'];
-  $location = $_SESSION['location'];
-  $total_price = 0;
-  $id = array();
+<body style="background: #E5E5E5;">
+  <header class="header">
+    <div class="container">
+      <nav class="nav-center">
+        <div class="menu">
+          <div class="line1"></div>
+          <div class="line2"></div>
+        </div>
+        <div class="logo">
+          <img src="./img/Kuriftu_logo.svg" alt="">
+        </div>
+      </nav>
 
-  function getName($n) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $randomString = '';
-  
-    for ($i = 0; $i < $n; $i++) {
+      <div class="side-socials">
+        <img src="./img/facebook.svg" alt="">
+        <img src="./img/instagram.svg" alt="">
+        <img src="./img/youtube.svg" alt="">
+      </div>
+
+    </div>
+  </header>
+
+  <?php
+    $cart = $_SESSION['cart'];
+    $location = $_SESSION['location'];
+    $total_price = 0;
+    $id = array();
+
+    function getName($n)
+    {
+      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $randomString = '';
+
+      for ($i = 0; $i < $n; $i++) {
         $index = rand(0, strlen($characters) - 1);
         $randomString .= $characters[$index];
-    }
-  
-    return $randomString;
-}
+      }
 
-  $res_confirmID = getName(8);
-  foreach ($cart as  $val) {
-    $id[]     = $val->room_id;
-    $total_price += $val->room_price;
-  }
+      return $randomString;
+    }
+
+    $res_confirmID = getName(8);
+    foreach ($cart as  $val) {
+      $id[]     = $val->room_id;
+      $total_price += $val->room_price;
+    }
     $id_sql = json_encode($id);
-  if(isset($_POST['complete_book'])){
+    if (isset($_POST['complete_book'])) {
 
-   
 
-    foreach ($_POST as $name => $value) {
-      $params[$name] = escape($value) ; 
+
+      foreach ($_POST as $name => $value) {
+        $params[$name] = escape($value);
+      }
+
+      $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID) ";
+      $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}') ";
+
+      $result = mysqli_query($connection, $query);
+      confirm($result);
+
+      switch ($params['res_paymentMethod']) {
+        case 'amole':
+          header("Location: ./amole.php");
+          break;
+        case 'paypal':
+          header("Location: ./paypal.php");
+          break;
+        case 'telebirr':
+          header("Location: ./telebirr.php");
+          break;
+      }
     }
 
-    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID) ";
-    $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}') ";
+  ?>
+<div class="container">
+  <div class="row">
+    <form class="row my-form col-md-6 g-3" action="" method="post">
 
-    $result = mysqli_query($connection, $query);
-    confirm($result);
-
-    switch($params['res_paymentMethod']){
-      case 'amole':
-        header("Location: ./amole.php");
-        break;
-      case 'paypal':
-        header("Location: ./paypal.php");
-        break;
-      case 'telebirr':
-        header("Location: ./telebirr.php");
-        break;
-    }
-
-  
-  }
-
-?>
-  
-<form class="row g-3 w-50" action="" method="post" style="margin: 0 auto;">
-    <div class="col-md-6">
-      <label for="inputEmail4" class="form-label">First Name</label>
-      <input type="text" name="res_firstname" class="form-control" id="inputEmail4">
-    </div>
-    <div class="col-md-6">
-      <label for="inputPassword4" class="form-label">Last Name</label>
-      <input type="text" name="res_lastname" class="form-control" id="inputPassword4">
-    </div>
-    <div class="col-12">
-      <label for="inputAddress" class="form-label">Phone No.</label>
-      <input type="phone" name="res_phone" class="form-control" id="inputAddress">
-    </div>
-    <div class="col-12">
-      <label for="inputAddress2" class="form-label"> Email</label>
-      <input type="email" name="res_email" class="form-control" id="inputAddress2">
-    </div>
-    <div class="col-md-6">
-      <label for="inputEmail4" class="form-label">Check In</label>
-      <input type="date" class="form-control"  name="res_checkin" value="<?php echo $_SESSION['checkIn']; ?>" readonly/>
-    </div>
-    <div class="col-md-6">
-      <label for="inputPassword4" class="form-label">Check Out</label>
-      <input type="date" class="form-control"  name="res_checkout" value="<?php echo $_SESSION['checkOut']; ?>" readonly/>
-    </div>
-    <div class="col-md-6">
-      <label for="inputCity" class="form-label">Country</label>
-      <input type="text" class="form-control" name="res_country" id="inputCity">
-    </div>
-    <div class="col-md-6">
-      <label for="inputCity" class="form-label">Address</label>
-      <input type="text" class="form-control" name="res_address" id="inputCity">
-    </div>
-    <div class="col-md-6">
-      <label for="inputCity" class="form-label">City</label>
-      <input type="text" class="form-control" name="res_city" id="inputCity">
-    </div>
-    <div class="col-md-6">
-      <label for="inputCity" class="form-label">Zip/Postal Code</label>
-      <input type="text" class="form-control" name="res_zip" id="inputCity">
-    </div>
-    <div class="col-md-6">
-      <label for="inputState" class="form-label">Payment Method</label>
-      <select id="inputState" name="res_paymentMethod" class="form-select">
-        <option value="amole">Amole</option>
-        <option value="paypal">Pay Pal</option>
-        <option value="telebirr">Telebirr</option>
-      </select>
-    </div>
-  
-    <div class="col-12">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="gridCheck">
-        <label class="form-check-label" for="gridCheck">
-           I agree with <a href="#"> Booking Coditions </a>
-        </label>
+    
+      <div class="col-md-6">
+        
+        <input type="text" placeholder="First Name" name="res_firstname" class="form-control" id="inputEmail4">
       </div>
+      <div class="col-md-6">
+      
+        <input type="text" placeholder="Last Name"  name="res_lastname" class="form-control" id="inputPassword4">
+      </div>
+      <div class="col-md-6">
+        <input type="phone" placeholder="Phone No."  name="res_phone" class="form-control" id="inputAddress">
+      </div>
+      <div class="col-md-6">
+       
+        <input type="email" placeholder="Email"  name="res_email" class="form-control" id="inputAddress2">
+      </div>
+     
+      <div class="col-md-6">
+      
+        <input type="text" placeholder="Country"  class="form-control" name="res_country" id="inputCity">
+      </div>
+      <div class="col-md-6">
+        <input type="text" placeholder="Address"  class="form-control" name="res_address" id="inputCity">
+      </div>
+      <div class="col-md-6">
+        <input type="text" placeholder="City" class="form-control" name="res_city" id="inputCity">
+      </div>
+      <div class="col-md-6">
+       
+        <input type="text" placeholder="Zip/Postal Code"  class="form-control" name="res_zip" id="inputCity">
+      </div>
+      <div class="col-md-6">
+        <label for="inputState" class="form-label payment">Payment Platform</label>
+        <select id="inputState" name="res_paymentMethod" class="form-select">
+          <option value="amole">Amole</option>
+          <option value="paypal">Pay Pal</option>
+          <option value="telebirr">Telebirr</option>
+        </select>
+      </div>
+  
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck">
+          <label class="form-check-label" for="gridCheck">
+            I agree with <a href="#"> Booking Coditions </a>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck">
+          <label class="form-check-label" for="gridCheck">
+           I would like to receive newsletters and special offers by email
+          </label>
+        </div>
+       
+      </div>
+      <div class="col-12">
+        <button type="submit" name="complete_book" class="btn btn-primary">Complete Booking</button>
+      </div>
+    </form>
+  
+  </div>
+  
+
+</div>
+
+<footer class="footer">
+    <div class="container">
+      <section class="footer-wrapper">
+      <div class="footer-link-container">
+        <div class="upper">
+          <div class="desti">
+            <h3 class="desti-title">
+              Destination
+            </h3>
+            <ul class="desti-list">
+              <div>
+                <li class="footer-link"><a href="#">Bishoftu</a></li>
+                <li class="footer-link"><a href="#">Entoto</a></li>
+                <li class="footer-link"><a href="#">Awash</a></li>
+              </div>
+
+              <div>
+                <li class="footer-link"><a href="#">Water Park</a></li>
+                <li class="footer-link"><a href="#">Lake Tana</a></li>
+                <li class="footer-link"><a href="#"></a></li>
+              </div>
+            </ul>
+          </div>
+
+          <div class="desti">
+            <h3 class="desti-title">
+              Wellness
+            </h3>
+            <ul class="desti-list">
+              <div>
+                <li class="footer-link"><a href="#">Spa</a></li>
+                <li class="footer-link"><a href="#">Pool</a></li>
+                <li class="footer-link"><a href="#">Massage</a></li>
+              </div>
+
+              <div>
+                <li class="footer-link"><a href="#">Manicure </a></li>
+                <li class="footer-link"><a href="#">Pedicure</a></li>
+                <li class="footer-link"><a href="#"></a></li>
+              </div>
+            </ul>
+          </div>
+        </div>
+
+        <div class="upper">
+          <div class="desti">
+            <h3 class="desti-title">
+              Experience
+            </h3>
+            <ul class="desti-list">
+              <div>
+                <li class="footer-link"><a href="#">Kayaking</a></li>
+                <li class="footer-link"><a href="#">Archery</a></li>
+                <li class="footer-link"><a href="#">Cycling</a></li>
+              </div>
+
+              <div>
+                <li class="footer-link"><a href="#">Paintball </a></li>
+                <li class="footer-link"><a href="#">Horse riding</a></li>
+                <li class="footer-link"><a href="#"></a></li>
+              </div>
+            </ul>
+          </div>
+
+          <div class="desti">
+            <h3 class="desti-title">
+              Quick Links
+            </h3>
+            <ul class="desti-list">
+              <div>
+                <li class="footer-link"><a href="#">Home</a></li>
+                <li class="footer-link"><a href="#">Entoto</a></li>
+                <li class="footer-link"><a href="#">Our Story</a></li>
+              </div>
+
+              <div>
+                <li class="footer-link"><a href="#">Lake Tana </a></li>
+                <li class="footer-link"><a href="#">Awash</a></li>
+                <li class="footer-link"><a href="#"></a></li>
+              </div>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <div class="social">
+        <h3 class="desti-title">follow us on</h3>
+
+        <div class="icon-container">
+          <img src="./img/facebook.svg" alt="">
+          <img src="./img/instagram.svg" alt="">
+          <img src="./img/youtube.svg" alt="">
+        </div>
+      </div>
+      </section>
+      
+      <hr>
+      <div class="lower">
+        
+        <img src="./img/Kuriftu_logo.svg" alt="">
+        <p>&copy; 2021. All Rights Reserved. Web Design & Development by <a href="https://versavvymedia.com/">Versavvy Media PLC</a> </p>
+      </div>
+
+
     </div>
-    <div class="col-12">
-      <button type="submit" name="complete_book" class="btn btn-primary">Complete Booking</button>
-    </div>
-  </form>
+  </footer>
 </body>
+
 </html>
