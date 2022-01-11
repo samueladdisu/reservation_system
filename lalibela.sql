@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 06, 2022 at 01:57 PM
+-- Generation Time: Jan 11, 2022 at 03:14 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.24
 
@@ -51,10 +51,27 @@ CREATE TABLE `members` (
   `m_id` int(11) NOT NULL,
   `m_firstname` varchar(255) NOT NULL,
   `m_lastname` varchar(255) NOT NULL,
+  `m_companyName` varchar(255) NOT NULL,
   `m_email` varchar(255) NOT NULL,
   `m_phone` varchar(255) NOT NULL,
+  `m_dob` date NOT NULL,
+  `m_regDate` date NOT NULL,
+  `m_expDate` date NOT NULL,
+  `m_type` varchar(255) NOT NULL,
   `m_username` varchar(255) NOT NULL,
   `m_pwd` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `promo`
+--
+
+CREATE TABLE `promo` (
+  `promo_id` int(11) NOT NULL,
+  `promo_code` varchar(255) NOT NULL,
+  `promo_amount` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -100,7 +117,13 @@ INSERT INTO `reservations` (`res_id`, `res_firstname`, `res_lastname`, `res_phon
 (27, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-26', '2022-01-27', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', 'bGhJVgA7'),
 (28, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-05', '2022-01-06', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', 'zsOql2Xe'),
 (29, '', '', '', '', '', '2022-01-05', '2022-01-06', '', '', '', '', 'amole', '[\"10\"]', '150', '', 'XAQZrKRh'),
-(30, '', '', '', '', '', '2022-01-05', '2022-01-06', '', '', '', '', 'paypal', '[\"10\"]', '150', '', 'RAL1tjzL');
+(30, '', '', '', '', '', '2022-01-05', '2022-01-06', '', '', '', '', 'paypal', '[\"10\"]', '150', '', 'RAL1tjzL'),
+(31, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"25\"]', '484', '', 'yoBetOBY'),
+(32, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'amole', '[\"24\",\"25\"]', '484', '', '7FUdaVVj'),
+(33, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"25\"]', '484', '', 'r3e5cos6'),
+(34, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"24\"]', '300', '', 'TmKmCByR'),
+(35, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"24\"]', '300', '', 'TaVu2x29'),
+(36, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"24\"]', '300', '', 'DAFId0l2');
 
 -- --------------------------------------------------------
 
@@ -204,6 +227,12 @@ ALTER TABLE `members`
   ADD PRIMARY KEY (`m_id`);
 
 --
+-- Indexes for table `promo`
+--
+ALTER TABLE `promo`
+  ADD PRIMARY KEY (`promo_id`);
+
+--
 -- Indexes for table `reservations`
 --
 ALTER TABLE `reservations`
@@ -244,10 +273,16 @@ ALTER TABLE `members`
   MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `promo`
+--
+ALTER TABLE `promo`
+  MODIFY `promo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `res_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `res_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `rooms`
