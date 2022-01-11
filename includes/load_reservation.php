@@ -1,5 +1,8 @@
-<table class="table table-bordered table-hover col-12" id="dataTable" width="100%" cellspacing="0">
-  <thead>
+<?php ob_start(); ?>
+<?php include  './db.php'; ?>
+<?php include  './functions.php'; ?>
+<?php session_start(); ?>
+ <thead>
     <tr>
       <th>Id</th>
       <th>First Name</th>
@@ -22,14 +25,30 @@
   </thead>
   <tbody>
 
-    <?php
-    $location = $_SESSION['user_role'];
+  <?php
+   $location = $_SESSION['user_role'];
+
+   if($_SESSION['page']){
+     $page = $_SESSION['page'];
+  } else {
+    $page = "";
+  }
+
+  if($page == "" || $page == 1){
+    $page_1 = 0;
+  }else{
+    $page_1 = ($page * 10) - 10;
+  }
 
     if($location == "admin"){
-      $query = "SELECT * FROM reservations ORDER BY res_id DESC";
+      $query = "SELECT * FROM reservations ORDER BY res_id DESC LIMIT $page_1, 10";
     } else {
-      $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";
+      $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC LIMIT $page_1, 10";
     }
+
+   
+   
+    
     $result = mysqli_query($connection, $query);
 
     while ($row = mysqli_fetch_assoc($result)) {
@@ -50,7 +69,8 @@
       echo "<td>{$db_res['res_lastname']}</td>";
       echo "<td>{$db_res['res_phone']}</td>";
       echo "<td>{$db_res['res_email']}</td>";
-      echo "<td>{$db_res['res_guestNo']}</td>";
+      echo "<td>{$_GET['page']}</td>";
+      // echo "<td>{$db_res['res_guestNo']}</td>";
       echo "<td>{$db_res['res_checkin']}</td>";
       echo "<td>{$db_res['res_checkout']}</td>";
       echo "<td>{$db_res['res_country']}</td>";
@@ -73,19 +93,5 @@
     ?>
 
   </tbody>
-</table>
 
-<?php 
-
-  if(isset($_GET['delete'])){
-    $the_post_id = escape($_GET['delete']);
-    $query = "DELETE FROM posts WHERE post_id = $the_post_id";
-    $result = mysqli_query($connection, $query);
-
-    confirm($result);
-    header("Location: ./posts.php");
-  }
-
-
-
-?>
+ 

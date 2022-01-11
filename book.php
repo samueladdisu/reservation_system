@@ -52,7 +52,8 @@ if($received_data->action == 'insert'){
   $_SESSION['checkOut'] = $checkOut = $received_data->checkOut;
   $_SESSION['location'] = $location = $received_data->location;
   $_SESSION['cart'] = $cart = $received_data->data;
-
+  $_SESSION['total'] = $received_data->total;
+  $_SESSION['rooms'] = $received_data->totalroom;
 
 }
 

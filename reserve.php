@@ -64,6 +64,7 @@
 
       </div>
 
+    
 
       <div class="mb-3">
         <input type="text" class="form-control" v-model="checkIn" placeholder="Check in" onfocus="this.type='date'" onblur="(this.type='text')" id="check-in">
@@ -71,6 +72,7 @@
       <div class="mb-3">
         <input type="text" class="form-control" v-model="checkOut" placeholder="Check in" onfocus="this.type='date'" id="check-out">
       </div>
+      
 
 
       <button type="submit" class="btn btn-primary1">Check Availability</button>
@@ -378,7 +380,9 @@
               checkIn: this.checkIn,
               checkOut: this.checkOut,
               location: this.desti,
-              data: this.cart
+              data: this.cart,
+              total: this.totalprice,
+              totalroom: this.cart.length
             }).then(res => {
               window.location.href = "register.php"
             })

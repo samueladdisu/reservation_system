@@ -44,7 +44,8 @@
                   include "./includes/edit_post.php";
                   break;
                 default:
-                  include "./includes/view_all_reservations.php";
+                  header("Location: ./view_all_reservations.php");
+                  
                   break;
               }
             
