@@ -55,6 +55,11 @@
              <span> Accomodation </span></a>
      </li>
 
+     <li class="nav-item">
+         <a class="nav-link" href="./promo.php">
+             <i class="fas fa-clipboard-list"></i>
+             <span> Promo Code </span></a>
+     </li>
      <!-- <li class="nav-item">
                 <a class="nav-link" href="./payment.php">
                     <i class="fas fa-money-bill-wave"></i>

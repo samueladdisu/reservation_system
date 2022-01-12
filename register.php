@@ -61,7 +61,11 @@
     $id[]     = $val->room_id;
     $total_price += $val->room_price;
   }
-  $id_sql = json_encode($id);
+   $id_sql = json_encode($id);
+   $id_int = implode(',', $id);
+
+
+
   if (isset($_POST['complete_book'])) {
 
 
@@ -70,12 +74,19 @@
       $params[$name] = escape($value);
     }
 
+    
+
     $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID) ";
     $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}') ";
 
     $result = mysqli_query($connection, $query);
     confirm($result);
 
+
+    $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($id_int)";
+    $result_status = mysqli_query($connection, $status_query);
+    confirm($result_status);
+    
     switch ($params['res_paymentMethod']) {
       case 'amole':
         header("Location: ./amole.php");

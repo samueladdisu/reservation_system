@@ -64,7 +64,7 @@
 
       </div>
 
-    
+
 
       <div class="mb-3">
         <input type="text" class="form-control" v-model="checkIn" placeholder="Check in" onfocus="this.type='date'" onblur="(this.type='text')" id="check-in">
@@ -72,7 +72,7 @@
       <div class="mb-3">
         <input type="text" class="form-control" v-model="checkOut" placeholder="Check in" onfocus="this.type='date'" id="check-out">
       </div>
-      
+
 
 
       <button type="submit" class="btn btn-primary1">Check Availability</button>
@@ -116,7 +116,7 @@
       </div>
 
       <div class="col-lg-4 mt-5">
-        <div class="cart-container mt-5">
+        <div v-if="cart.length != 0" class="cart-container mt-5">
           <h2 class="cart-title">Your Stay At Kuriftu</h2>
 
           <div class="cart-date">
@@ -243,105 +243,105 @@
   <footer class="footer">
     <div class="container">
       <section class="footer-wrapper">
-      <div class="footer-link-container">
-        <div class="upper">
-          <div class="desti">
-            <h3 class="desti-title">
-              Destination
-            </h3>
-            <ul class="desti-list">
-              <div>
-                <li class="footer-link"><a href="#">Bishoftu</a></li>
-                <li class="footer-link"><a href="#">Entoto</a></li>
-                <li class="footer-link"><a href="#">Awash</a></li>
-              </div>
+        <div class="footer-link-container">
+          <div class="upper">
+            <div class="desti">
+              <h3 class="desti-title">
+                Destination
+              </h3>
+              <ul class="desti-list">
+                <div>
+                  <li class="footer-link"><a href="#">Bishoftu</a></li>
+                  <li class="footer-link"><a href="#">Entoto</a></li>
+                  <li class="footer-link"><a href="#">Awash</a></li>
+                </div>
 
-              <div>
-                <li class="footer-link"><a href="#">Water Park</a></li>
-                <li class="footer-link"><a href="#">Lake Tana</a></li>
-                <li class="footer-link"><a href="#"></a></li>
-              </div>
-            </ul>
+                <div>
+                  <li class="footer-link"><a href="#">Water Park</a></li>
+                  <li class="footer-link"><a href="#">Lake Tana</a></li>
+                  <li class="footer-link"><a href="#"></a></li>
+                </div>
+              </ul>
+            </div>
+
+            <div class="desti">
+              <h3 class="desti-title">
+                Wellness
+              </h3>
+              <ul class="desti-list">
+                <div>
+                  <li class="footer-link"><a href="#">Spa</a></li>
+                  <li class="footer-link"><a href="#">Pool</a></li>
+                  <li class="footer-link"><a href="#">Massage</a></li>
+                </div>
+
+                <div>
+                  <li class="footer-link"><a href="#">Manicure </a></li>
+                  <li class="footer-link"><a href="#">Pedicure</a></li>
+                  <li class="footer-link"><a href="#"></a></li>
+                </div>
+              </ul>
+            </div>
           </div>
 
-          <div class="desti">
-            <h3 class="desti-title">
-              Wellness
-            </h3>
-            <ul class="desti-list">
-              <div>
-                <li class="footer-link"><a href="#">Spa</a></li>
-                <li class="footer-link"><a href="#">Pool</a></li>
-                <li class="footer-link"><a href="#">Massage</a></li>
-              </div>
+          <div class="upper">
+            <div class="desti">
+              <h3 class="desti-title">
+                Experience
+              </h3>
+              <ul class="desti-list">
+                <div>
+                  <li class="footer-link"><a href="#">Kayaking</a></li>
+                  <li class="footer-link"><a href="#">Archery</a></li>
+                  <li class="footer-link"><a href="#">Cycling</a></li>
+                </div>
 
-              <div>
-                <li class="footer-link"><a href="#">Manicure </a></li>
-                <li class="footer-link"><a href="#">Pedicure</a></li>
-                <li class="footer-link"><a href="#"></a></li>
-              </div>
-            </ul>
+                <div>
+                  <li class="footer-link"><a href="#">Paintball </a></li>
+                  <li class="footer-link"><a href="#">Horse riding</a></li>
+                  <li class="footer-link"><a href="#"></a></li>
+                </div>
+              </ul>
+            </div>
+
+            <div class="desti">
+              <h3 class="desti-title">
+                Quick Links
+              </h3>
+              <ul class="desti-list">
+                <div>
+                  <li class="footer-link"><a href="#">Home</a></li>
+                  <li class="footer-link"><a href="#">Entoto</a></li>
+                  <li class="footer-link"><a href="#">Our Story</a></li>
+                </div>
+
+                <div>
+                  <li class="footer-link"><a href="#">Lake Tana </a></li>
+                  <li class="footer-link"><a href="#">Awash</a></li>
+                  <li class="footer-link"><a href="#"></a></li>
+                </div>
+              </ul>
+            </div>
+
           </div>
         </div>
 
-        <div class="upper">
-          <div class="desti">
-            <h3 class="desti-title">
-              Experience
-            </h3>
-            <ul class="desti-list">
-              <div>
-                <li class="footer-link"><a href="#">Kayaking</a></li>
-                <li class="footer-link"><a href="#">Archery</a></li>
-                <li class="footer-link"><a href="#">Cycling</a></li>
-              </div>
 
-              <div>
-                <li class="footer-link"><a href="#">Paintball </a></li>
-                <li class="footer-link"><a href="#">Horse riding</a></li>
-                <li class="footer-link"><a href="#"></a></li>
-              </div>
-            </ul>
+
+        <div class="social">
+          <h3 class="desti-title">follow us on</h3>
+
+          <div class="icon-container">
+            <img src="./img/facebook.svg" alt="">
+            <img src="./img/instagram.svg" alt="">
+            <img src="./img/youtube.svg" alt="">
           </div>
-
-          <div class="desti">
-            <h3 class="desti-title">
-              Quick Links
-            </h3>
-            <ul class="desti-list">
-              <div>
-                <li class="footer-link"><a href="#">Home</a></li>
-                <li class="footer-link"><a href="#">Entoto</a></li>
-                <li class="footer-link"><a href="#">Our Story</a></li>
-              </div>
-
-              <div>
-                <li class="footer-link"><a href="#">Lake Tana </a></li>
-                <li class="footer-link"><a href="#">Awash</a></li>
-                <li class="footer-link"><a href="#"></a></li>
-              </div>
-            </ul>
-          </div>
-
         </div>
-      </div>
-
-
-
-      <div class="social">
-        <h3 class="desti-title">follow us on</h3>
-
-        <div class="icon-container">
-          <img src="./img/facebook.svg" alt="">
-          <img src="./img/instagram.svg" alt="">
-          <img src="./img/youtube.svg" alt="">
-        </div>
-      </div>
       </section>
-      
+
       <hr>
       <div class="lower">
-        
+
         <img src="./img/Kuriftu_logo.svg" alt="">
         <p>&copy; 2021. All Rights Reserved. Web Design & Development by <a href="https://versavvymedia.com/">Versavvy Media PLC</a> </p>
       </div>
@@ -394,7 +394,7 @@
         addRoom(row) {
           let total = 0;
           let rooms = 0;
-          if (row.cnt > 0) {
+          // if (row.cnt > 0) {
 
             this.cart.push(row)
             this.cart.forEach(val => {
@@ -404,8 +404,8 @@
             this.totalprice = total
             // localStorage.setItem('cart',JSON.stringify(row))  
             console.log(this.cart);
-            row.cnt--
-          }
+          //   row.cnt--
+          // }
           // console.log(this.cart);
         },
         deleteRoom(row) {
@@ -420,7 +420,7 @@
           }).then(res => {
             this.allData = res.data
 
-            // console.log(this.cart);
+            console.log(this.allData);
           })
         },
         async submitData() {
