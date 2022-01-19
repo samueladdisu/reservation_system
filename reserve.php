@@ -9,6 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="./css/t-datepicker.min.css">
+  <link rel="stylesheet" href="./css/themes/t-datepicker-main.css">
+  <link rel="stylesheet" href="public/theme/css/themes/t-datepicker-main.css">
   <link rel="stylesheet" href="./css/reserve.css">
   <script src="https://unpkg.com/vue@3.0.2"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -64,14 +67,33 @@
 
       </div>
 
-
-
       <div class="mb-3">
-        <input type="text" class="form-control" v-model="checkIn" placeholder="Check in" onfocus="this.type='date'" onblur="(this.type='text')" id="check-in">
+        <input type="date" class="form-control" v-model="checkIn" placeholder="Check in" id="check-in">
       </div>
       <div class="mb-3">
-        <input type="text" class="form-control" v-model="checkOut" placeholder="Check in" onfocus="this.type='date'" id="check-out">
+        <input type="date" class="form-control" v-model="checkOut" placeholder="Check Out" id="check-out">
       </div>
+
+
+      <!-- <div class="t-datepicker">
+        <div class="t-check-in">
+          <div class="t-dates t-date-check-in">
+            <label class="t-date-info-title">Check In</label>
+          </div>
+          <input type="date" class="t-input-check-in" v-model="checkIn"  name="start">
+          <div class="t-datepicker-day">
+            <table class="t-table-condensed">
+              <!-- Date theme calendar -->
+            <!-- </table>
+          </div>
+        </div>
+        <div class="t-check-out">
+          <div class="t-dates t-date-check-out">
+            <label class="t-date-info-title">Check Out</label>
+          </div>
+          <input type="date" class="t-input-check-out" v-model="checkOut" name="end">
+        </div>
+      </div>  -->
 
 
 
@@ -180,7 +202,7 @@
 
         </div>
         <hr>
-        <div class="date">
+        <!-- <div class="date">
           <div class="check-in">
             <h3>Check-in</h3>
             <h3>{{ checkIn }}</h3>
@@ -191,7 +213,9 @@
             <h3>{{ checkOut }}</h3>
           </div>
 
-        </div>
+        </div> -->
+
+
         <hr>
 
         <div class="cart-content" v-for="items in cart" :key="items.id">
@@ -349,13 +373,17 @@
 
     </div>
   </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="./js/t-datepicker.min.js"></script>
   <script>
     const app = Vue.createApp({
-
+      mounted() {
+       
+      },
       data() {
         return {
-          checkIn: '',
-          checkOut: '',
+          checkIn: this.$refs.checkin,
+          checkOut: this.$refs.checkout,
           desti: '',
           allData: '',
           cart: [],
@@ -402,7 +430,7 @@
 
             })
             this.totalprice = total
-           localStorage.cart = JSON.stringify(this.cart) 
+            localStorage.cart = JSON.stringify(this.cart)
             console.log(this.cart);
             row.cnt--
           }
@@ -446,6 +474,14 @@
         this.fetchAllData()
         this.cart = JSON.parse(localStorage.cart || '[]')
         console.log(this.cart);
+        $(document).ready(function() {
+         
+          $('.t-datepicker').tDatePicker({
+           
+          });
+        });
+      
+
       }
 
     })
