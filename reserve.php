@@ -394,7 +394,7 @@
         addRoom(row) {
           let total = 0;
           let rooms = 0;
-          // if (row.cnt > 0) {
+          if (row.cnt > 0) {
 
             this.cart.push(row)
             this.cart.forEach(val => {
@@ -402,10 +402,10 @@
 
             })
             this.totalprice = total
-            // localStorage.setItem('cart',JSON.stringify(row))  
+           localStorage.cart = JSON.stringify(this.cart) 
             console.log(this.cart);
-          //   row.cnt--
-          // }
+            row.cnt--
+          }
           // console.log(this.cart);
         },
         deleteRoom(row) {
@@ -444,8 +444,8 @@
       },
       created() {
         this.fetchAllData()
-        // this.cart = JSON.parse(localStorage.getItem('cart') || '[]')
-        // console.log(this.cart);
+        this.cart = JSON.parse(localStorage.cart || '[]')
+        console.log(this.cart);
       }
 
     })

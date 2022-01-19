@@ -61,8 +61,8 @@
     $id[]     = $val->room_id;
     $total_price += $val->room_price;
   }
-   $id_sql = json_encode($id);
-   $id_int = implode(',', $id);
+  $id_sql = json_encode($id);
+  $id_int = implode(',', $id);
 
 
 
@@ -74,7 +74,7 @@
       $params[$name] = escape($value);
     }
 
-    
+
 
     $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID) ";
     $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}') ";
@@ -86,7 +86,7 @@
     $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($id_int)";
     $result_status = mysqli_query($connection, $status_query);
     confirm($result_status);
-    
+
     switch ($params['res_paymentMethod']) {
       case 'amole':
         header("Location: ./amole.php");
@@ -143,8 +143,8 @@
         <div class="col-md-6">
           <label for="inputState" class="form-label payment">Payment Platform</label>
           <select id="inputState" name="res_paymentMethod" class="form-select">
-            <option value="amole">Amole</option>
             <option value="paypal">Pay Pal</option>
+            <option value="amole">Amole</option>
             <option value="telebirr">Telebirr</option>
           </select>
         </div>
@@ -219,9 +219,14 @@
 
 
             <div class="price">
-              Total: $ <?php echo $_SESSION['total']; ?> <br>
+              Total: $ <?php echo $total_price; ?> <br>
               Rooms: <?php echo $_SESSION['rooms']; ?>
             </div>
+          </div>
+
+          <div class="footer-btn">
+
+          <input type="text" placeholder="Promo Code" name="res_firstname" class="form-control" id="inputEmail4">
           </div>
 
         </div>
