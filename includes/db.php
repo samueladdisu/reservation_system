@@ -1,5 +1,5 @@
 <?php
-$connection = mysqli_connect('localhost','versavvymediacom_res','DlsIV!sw!?Ka','versavvymediacom_res');
+$connection = mysqli_connect('localhost','versavvymediacom_resUser','%1-j]tJSf,zG','versavvymediacom_res');
 // $connection = mysqli_connect('localhost','root','','lalibela');
 
 if (!$connection) {
