@@ -21,6 +21,7 @@
       $db_firstname = $row['user_firstName'];
       $db_lastname = $row['user_lastName'];
       $db_role = $row['user_role'];
+      $db_location = $row['user_location'];
     }
 
     if($user_name !== $db_username || $user_password !== $db_password){
@@ -34,6 +35,7 @@
       $_SESSION['firstname'] = $db_firstname;
       $_SESSION['lastname'] = $db_lastname;
       $_SESSION['user_role'] = $db_role;
+      $_SESSION['user_location'] = $db_location;
       header("Location: ../dashboard.php");
     }
 

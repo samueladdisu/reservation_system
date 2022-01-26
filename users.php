@@ -25,7 +25,7 @@
         <!-- End of Topbar -->
         <?php 
 
-if($_SESSION['user_role'] == 'admin') {
+if($_SESSION['user_location'] == 'admin') {
   ?>  
 
         <!-- Begin Page Content -->

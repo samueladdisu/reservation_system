@@ -44,7 +44,7 @@
                                                     Reservations</div>
 
                                                 <?php
-                                                $location = $_SESSION['user_role'];
+                                                $location = $_SESSION['user_location'];
                                                 if($location == "admin"){
                                                     $query = "SELECT * FROM reservations";
 

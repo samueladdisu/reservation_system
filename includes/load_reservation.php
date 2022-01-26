@@ -20,13 +20,14 @@
       <th>Room IDs</th>
       <th>Total Price</th>
       <th>Hotel Location</th>
+      <th>Reservation Agent</th>
       <th>Confirm Id</th>
     </tr>
   </thead>
   <tbody>
 
   <?php
-   $location = $_SESSION['user_role'];
+   echo $location = $_SESSION['user_location'];
 
    if($_SESSION['page']){
      $page = $_SESSION['page'];
@@ -50,7 +51,7 @@
    
     
     $result = mysqli_query($connection, $query);
-
+    confirm($result);
     while ($row = mysqli_fetch_assoc($result)) {
       foreach ($row as $name => $value) {
         if($name == 'res_roomIDs'){
@@ -69,8 +70,8 @@
       echo "<td>{$db_res['res_lastname']}</td>";
       echo "<td>{$db_res['res_phone']}</td>";
       echo "<td>{$db_res['res_email']}</td>";
-      echo "<td>{$_GET['page']}</td>";
-      // echo "<td>{$db_res['res_guestNo']}</td>";
+      // echo "<td>{$_GET['page']}</td>";
+      echo "<td>{$db_res['res_guestNo']}</td>";
       echo "<td>{$db_res['res_checkin']}</td>";
       echo "<td>{$db_res['res_checkout']}</td>";
       echo "<td>{$db_res['res_country']}</td>";
@@ -85,6 +86,7 @@
       echo  "</td>";
       echo "<td>{$db_res['res_price']}</td>";
       echo "<td>{$db_res['res_location']}</td>";
+      echo "<td>{$db_res['res_agent']}</td>";
       echo "<td>{$db_res['res_confirmID']}</td>";
       echo "</tr>";
     }

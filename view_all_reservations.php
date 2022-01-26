@@ -86,7 +86,7 @@ if (!isset($_SESSION['user_role'])) {
 
           
           }
-           $location = $_SESSION['user_role'];
+           $location = $_SESSION['user_location'];
            if($location == "admin"){
              $res_count = "SELECT * FROM reservations";
            } else {
@@ -163,7 +163,7 @@ if (!isset($_SESSION['user_role'])) {
     $(document).ready(function() {
       setInterval(function() {
         get_data()
-      }, 3000);
+      }, 2000);
 
       function get_data() {
         jQuery.ajax({

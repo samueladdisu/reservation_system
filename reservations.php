@@ -37,11 +37,11 @@
                 $source = '';
               }
               switch($source){
-                case 'add_post':
-                  include "./includes/add_post.php";
+                case 'add_reservation':
+                  include "./add_reservation.php";
                   break;
-                case 'edit_post':
-                  include "./includes/edit_post.php";
+                case 'edit_reservation':
+                  include "./includes/edit_reservation.php";
                   break;
                 default:
                   header("Location: ./view_all_reservations.php");

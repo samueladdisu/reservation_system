@@ -68,40 +68,19 @@
       </div>
 
       <div class="mb-3">
-        <input type="date" class="form-control" v-model="checkIn" placeholder="Check in" id="check-in">
+        <input type="date" class="form-control" v-model="checkIn" id="check-in">
       </div>
       <div class="mb-3">
-        <input type="date" class="form-control" v-model="checkOut" placeholder="Check Out" id="check-out">
+        <input type="date" class="form-control" v-model="checkOut" id="check-out">
       </div>
 
 
-      <!-- <div class="t-datepicker">
-        <div class="t-check-in">
-          <div class="t-dates t-date-check-in">
-            <label class="t-date-info-title">Check In</label>
-          </div>
-          <input type="date" class="t-input-check-in" v-model="checkIn"  name="start">
-          <div class="t-datepicker-day">
-            <table class="t-table-condensed">
-              <!-- Date theme calendar -->
-            <!-- </table>
-          </div>
-        </div>
-        <div class="t-check-out">
-          <div class="t-dates t-date-check-out">
-            <label class="t-date-info-title">Check Out</label>
-          </div>
-          <input type="date" class="t-input-check-out" v-model="checkOut" name="end">
-        </div>
-      </div>  -->
-
+      
 
 
       <button type="submit" class="btn btn-primary1">Check Availability</button>
     </form>
-    <!-- 
-    <p>{{ checkIn }}</p>
-    <p>{{ checkOut }}</p> -->
+    
 
     <div class="row">
 
@@ -378,12 +357,12 @@
   <script>
     const app = Vue.createApp({
       mounted() {
-       
+
       },
       data() {
         return {
-          checkIn: this.$refs.checkin,
-          checkOut: this.$refs.checkout,
+          checkIn: "<?php echo date('Y-m-d') ?>",
+          checkOut: '<?php echo date('Y-m-d', strtotime(' +1 day')) ?>',
           desti: '',
           allData: '',
           cart: [],
@@ -420,8 +399,8 @@
 
         },
         addRoom(row) {
-          let total = 0;
           let rooms = 0;
+          let total = 0;
           if (row.cnt > 0) {
 
             this.cart.push(row)
@@ -430,6 +409,7 @@
 
             })
             this.totalprice = total
+            localStorage.total = JSON.stringify(this.totalprice)
             localStorage.cart = JSON.stringify(this.cart)
             console.log(this.cart);
             row.cnt--
@@ -437,7 +417,14 @@
           // console.log(this.cart);
         },
         deleteRoom(row) {
+          let deleteTotal = 0;
           this.cart.pop(row)
+          this.cart.forEach(val => {
+              deleteTotal += parseInt(val.room_price)
+
+            })
+            this.totalprice = deleteTotal
+          localStorage.cart = JSON.stringify(this.cart)
           console.log(this.cart);
 
           row.cnt++
@@ -473,14 +460,10 @@
       created() {
         this.fetchAllData()
         this.cart = JSON.parse(localStorage.cart || '[]')
+        this.totalprice = JSON.parse(localStorage.total || '[]')
         console.log(this.cart);
-        $(document).ready(function() {
-         
-          $('.t-datepicker').tDatePicker({
-           
-          });
-        });
-      
+       
+
 
       }
 

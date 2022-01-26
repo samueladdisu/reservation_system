@@ -17,6 +17,7 @@ if (isset($_GET['edit'])) {
     $user_lastname =  $row['user_lastName'];
     $user_email = $row['user_email'];
     $user_role = $row['user_role'];
+    $user_location = $row['user_location'];
   }
 }
 if (isset($_POST['update_user'])) {
@@ -51,16 +52,33 @@ if (isset($_POST['update_user'])) {
     <input type="text" class="form-control" value="<?php echo $user_lastname; ?>" name="user_lastname">
   </div>
 
+  <div class="form-group ">
+  <label for="user_lastname"> User Location</label>
+    <select name="user_location" class="custom-select">
+      <option value="<?php echo $user_location; ?>"><?php echo $user_location; ?></option>
+      <?php
+
+      $query = "SELECT * FROM locations";
+      $result = mysqli_query($connection, $query);
+      confirm($result);
+
+      while ($row = mysqli_fetch_assoc($result)) {
+        $location_id = $row['location_id'];
+        $location_name = $row['location_name'];
+
+        if($user_location != $location_name){
+          echo "<option value='$location_name'>{$location_name}</option>";
+
+        }
+
+      }
+      ?>
+    </select>
+  </div>
   <div class="form-group">
-    <label for="user_role"> Property </label> <br>
+    <label for="post_status"> User Role</label>
     <select name="user_role" class="custom-select" id="">
-      <option value="<?php echo $user_role; ?>"><?php echo $user_role; ?></option>
-      <option value="Bishoftu">Bishoftu</option>
-       <option value="Adama">Adama</option>
-       <option value="Entoto">Entoto</option>
-       <option value="Lake_Tana">Lake Tana</option>
-       <option value="Awash">Awash</option>
-       <option value="Boston">Boston</option>
+      <option value="agent">Agent</option>
     </select>
   </div>
 

@@ -40,14 +40,19 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+    
+  <script src="https://unpkg.com/vue@3.0.2"></script>
+    
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./js/t-datepicker.min.js"></script>
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script src="./js/load.js"></script>
 
 
 </body>

@@ -25,14 +25,20 @@
          Interface
      </div>
 
-     <!-- Nav Item - Pages Collapse Menu -->
+   
+
      <li class="nav-item">
-         <a class="nav-link" href="./reservations.php">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#res" aria-expanded="true" aria-controls="collapseTwo">
              <i class="fas fa-newspaper fa-2x text-gray-300"></i>
              <span>Reservations</span>
-
+             <i style="margin-left: 3.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
-
+         <div id="res" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./reservations.php">View All reservations</a>
+                 <a class="collapse-item" href="./reservations.php?source=add_reservation">Add Reservation</a>
+             </div>
+         </div>
      </li>
 
      <li class="nav-item">
@@ -75,7 +81,7 @@
 
      <?php
 
-        if ($_SESSION['user_role'] == 'admin') {
+        if ($_SESSION['user_location'] == 'admin') {
         ?>
          <li class="nav-item">
              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">

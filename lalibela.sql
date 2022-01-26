@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2022 at 03:14 PM
+-- Generation Time: Jan 26, 2022 at 07:42 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.24
 
@@ -38,7 +38,6 @@ CREATE TABLE `locations` (
 
 INSERT INTO `locations` (`location_id`, `location_name`) VALUES
 (2, 'Bishoftu'),
-(3, 'Adama'),
 (4, 'Awash');
 
 -- --------------------------------------------------------
@@ -74,6 +73,13 @@ CREATE TABLE `promo` (
   `promo_amount` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `promo`
+--
+
+INSERT INTO `promo` (`promo_id`, `promo_code`, `promo_amount`) VALUES
+(2, 'bish20', '20');
+
 -- --------------------------------------------------------
 
 --
@@ -97,33 +103,46 @@ CREATE TABLE `reservations` (
   `res_roomIDs` varchar(255) NOT NULL,
   `res_price` varchar(255) NOT NULL,
   `res_location` varchar(255) NOT NULL,
-  `res_confirmID` varchar(255) NOT NULL
+  `res_confirmID` varchar(255) NOT NULL,
+  `res_groupName` varchar(255) NOT NULL,
+  `res_specialRequest` text NOT NULL,
+  `res_agent` varchar(255) NOT NULL,
+  `res_paymentStatus` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `reservations`
 --
 
-INSERT INTO `reservations` (`res_id`, `res_firstname`, `res_lastname`, `res_phone`, `res_email`, `res_guestNo`, `res_checkin`, `res_checkout`, `res_country`, `res_address`, `res_city`, `res_zipcode`, `res_paymentMethod`, `res_roomIDs`, `res_price`, `res_location`, `res_confirmID`) VALUES
-(18, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-19', '2022-01-20', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', ''),
-(19, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-05', '2022-01-06', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', ''),
-(20, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', ''),
-(21, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'amole', '[\"12\",\"13\"]', '350', 'Bishoftu', '941908946'),
-(22, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', '1030094722'),
-(23, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', '2M4Dr0o9'),
-(24, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-04', '2022-01-05', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\"]', '350', 'Bishoftu', '8jgjpUaw'),
-(25, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-05', '2022-01-06', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', 'pZOfokIC'),
-(26, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-05', '2022-01-06', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"10\"]', '150', '', 'yvPRL9ki'),
-(27, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-26', '2022-01-27', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', 'bGhJVgA7'),
-(28, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '2022-01-05', '2022-01-06', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"12\",\"13\",\"15\"]', '572', 'Bishoftu', 'zsOql2Xe'),
-(29, '', '', '', '', '', '2022-01-05', '2022-01-06', '', '', '', '', 'amole', '[\"10\"]', '150', '', 'XAQZrKRh'),
-(30, '', '', '', '', '', '2022-01-05', '2022-01-06', '', '', '', '', 'paypal', '[\"10\"]', '150', '', 'RAL1tjzL'),
-(31, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"25\"]', '484', '', 'yoBetOBY'),
-(32, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'amole', '[\"24\",\"25\"]', '484', '', '7FUdaVVj'),
-(33, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"25\"]', '484', '', 'r3e5cos6'),
-(34, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"24\"]', '300', '', 'TmKmCByR'),
-(35, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"24\"]', '300', '', 'TaVu2x29'),
-(36, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"24\",\"24\"]', '300', '', 'DAFId0l2');
+INSERT INTO `reservations` (`res_id`, `res_firstname`, `res_lastname`, `res_phone`, `res_email`, `res_guestNo`, `res_checkin`, `res_checkout`, `res_country`, `res_address`, `res_city`, `res_zipcode`, `res_paymentMethod`, `res_roomIDs`, `res_price`, `res_location`, `res_confirmID`, `res_groupName`, `res_specialRequest`, `res_agent`, `res_paymentStatus`) VALUES
+(48, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"24\",\"25\",\"26\",\"27\",\"28\"]', '', '', '', 'heniken', 'dscsdcdsc', '', ''),
+(49, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"24\",\"25\",\"26\",\"27\",\"28\"]', '', '', '', 'heniken', 'gkjg', 'sam', ''),
+(50, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"24\",\"25\",\"26\",\"27\",\"28\"]', '', '', '', 'bgi', 'glkj', 'sam', ''),
+(51, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '\"\"', '', '', '', 'bgi', 'ajg;lkjgf', 'sam', ''),
+(52, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '\"\"', '', '', '', 'bgi', 'ljljl', 'sam', ''),
+(53, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"25\",\"26\"]', '', '', '', 'heniken', 'hjlkj;lkj;lk', 'sam', ''),
+(54, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', 'dssadsa', 'sam', ''),
+(55, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '44', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'bgi', 'kjlkjkl', 'sam', ''),
+(56, '', '', '', '', '', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"25\",\"26\"]', '', '', '', '', '', 'sam', ''),
+(57, 'tile', 'tow', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', 'new', 'sam', ''),
+(58, '', '', '', '', '', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"25\",\"26\"]', '', '', '', '', '', 'sam', ''),
+(59, '', '', '', '', '', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', '', '', 'sam', ''),
+(60, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', '', 'sam', ''),
+(61, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', '', 'sam', ''),
+(62, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', '', 'sam', ''),
+(63, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', '', 'sam', ''),
+(64, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', '', 'sam', ''),
+(65, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[]', '', '', '', 'heniken', '', 'sam', ''),
+(66, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', '[\"24\",\"25\"]', '', '', '', 'bgi', 'aaaa', 'sam', ''),
+(67, 'Dumessa', 'Nahom', '+233222332', 'atnawn5@gmail.com', '34', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', 'null', '', '', '', 'heniken', 'lk', 'mik', ''),
+(68, '', '', '', '', '', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', 'null', '', '', '', '', '', 'mik', ''),
+(69, '', '', '', '', '', '2022-01-25', '2022-01-26', '', '', '', '', 'cash', 'null', '', '', '', '', '', 'mik', ''),
+(70, 'Dumessa', 'Nahom', '+2517832332', 'atnawn5@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'K.K 05, 1147', 'Addis Ababa', '22818', 'paypal', '[\"27\",\"24\",\"24\"]', '634', '', 'uuera9jI', '', '', '', ''),
+(71, 'samuel', 'addisu', '+251944064546', 'samueladdisu9@gmail.com', '', '0000-00-00', '0000-00-00', 'Ethiopia', 'AddisAbaba', 'AddisAbaba', '1000', 'paypal', '[\"28\",\"26\"]', '300', '', 'xuxtjBZP', '', '', '', ''),
+(72, '', '', '', '', '', '2022-01-26', '2022-01-27', '', '', '', '', 'cash', '[\"24\",\"28\"]', '', '', '', '', '', 'sam', ''),
+(73, 'Dumessa', 'Nahom', '+2517832332', 'atnawn5@gmail.com', '34', '2022-01-26', '2022-01-27', '', '', '', '', 'cash', '[\"25\"]', '', '', '', '', 'wer', 'mik', ''),
+(74, '', '', '', '', '', '2022-01-26', '2022-01-27', '', '', '', '', 'cash', '[\"24\",\"25\"]', '', '', '', '', '', 'mik', ''),
+(75, 'Dumessa', 'Nahom', '+2517832332', 'atnawn5@gmail.com', '44', '2022-01-26', '2022-01-27', '', '', '', '', 'cash', '[\"28\"]', '', 'Bishoftu', '', 'bgi', 'safdfas', 'sam', '');
 
 -- --------------------------------------------------------
 
@@ -148,11 +167,11 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`room_id`, `room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES
-(24, '4', 'Deluxe Lake Front king size bed', '150', 'KURIFTU Afar-0728-min.jpg', '432', 'Not_booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
-(25, '4', 'Presidential Suite Family', '334', 'P3.5 Due Diligence.jpg', 'P1', 'Not_booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
-(26, '4', 'Presidential Suite Family', '150', 'code.jpg', '432', 'Not_booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
-(27, '4', 'Deluxe Lake Front king size bed', '334', 'Screenshot (1).png', '99', 'Not_booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
-(28, '4', '', '150', 'medical-250x250.jpg', 'P1', 'booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.');
+(24, '4', 'king', '150', 'KURIFTU Afar-0728-min.jpg', '432', 'booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+(25, '4', 'Top Lake View King Size Bed', '334', 'Top lake view King (9)-min.jpg', 'P1', 'booked', 'Awash', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+(26, '4', 'Standard', '150', 'Presidential Room.jpg', '432', 'booked', 'Awash', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+(27, '4', 'Deluxe Lake Front king size bed', '334', 'Top lake view King (4)-min.jpg', '99', 'Not_booked', 'Awash', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+(28, '4', 'Presidential Suite King Size Bed', '150', 'Top lake view King (9)-min.jpg', 'P1', 'booked', 'Bishoftu', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.');
 
 -- --------------------------------------------------------
 
@@ -194,6 +213,7 @@ CREATE TABLE `users` (
   `user_name` varchar(255) NOT NULL,
   `user_pwd` varchar(255) NOT NULL,
   `user_email` varchar(255) NOT NULL,
+  `user_location` varchar(255) NOT NULL,
   `user_role` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -201,14 +221,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_firstName`, `user_lastName`, `user_name`, `user_pwd`, `user_email`, `user_role`) VALUES
-(1, 'samuel', 'addisu', 'sam', 'sam123', 'sam@sam.com', 'admin'),
-(2, 'micky', 'tesfaye', 'adama', 'adama123', 'nardi@nardi.com', 'Adama'),
-(5, 'betty', 'gebres', 'bishoftu', 'bishoftu123', 'bemni@bemni.com', 'Bishoftu'),
-(6, 'bemnt', 'seyoum', 'entoto', 'entoto123', 'gb@gb.com', 'Entoto'),
-(7, 'tsion', 'tesfaye', 'tana', 'tana123', 'bemni@bemni.com', 'Lake_Tana'),
-(8, 'nolawe', 'gebre', 'awash', 'awash123', 'bemni@bemni.com', 'Awash'),
-(9, 'peter', 'tsegaye', 'boston', 'boston123', 'bemni@bemni.com', 'Boston');
+INSERT INTO `users` (`user_id`, `user_firstName`, `user_lastName`, `user_name`, `user_pwd`, `user_email`, `user_location`, `user_role`) VALUES
+(12, 'mike', 'tesfaye', 'mik', 'mik123@kuriftu', 'mik@kuriftu.com', 'admin', 'admin'),
+(13, 'Samuel', 'Addisu', 'sam', '18424325', 'sam@sam.com', 'Bishoftu', 'agent');
 
 --
 -- Indexes for dumped tables
@@ -276,13 +291,13 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `promo`
 --
 ALTER TABLE `promo`
-  MODIFY `promo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `promo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `res_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `res_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `rooms`
@@ -300,7 +315,7 @@ ALTER TABLE `room_type`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

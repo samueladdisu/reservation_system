@@ -25,6 +25,8 @@ if (isset($_POST['add_room'])) {
   header("Location: ./rooms.php");
 }
 ?>
+
+
 <form action="" method="POST" class="col-6" enctype="multipart/form-data">
 
   <div class="form-group">
@@ -38,18 +40,27 @@ if (isset($_POST['add_room'])) {
     <select name="room_acc" class="custom-select" id="">
       <option value="">Select option</option>
       <?php
-      $location = $_SESSION['user_role'];
-      $query = "SELECT * FROM room_type WHERE type_location = '$location'";
+      echo $location = $_SESSION['user_role'];
+      if ($location == 'admin') {
+        $query = "SELECT * FROM room_type";
+      } else {
+        $query = "SELECT * FROM room_type WHERE type_location = '$location'";
+      }
       $result = mysqli_query($connection, $query);
 
       confirm($result);
-
       while ($row = mysqli_fetch_assoc($result)) {
         $type_id = $row['type_id'];
         $type_name = $row['type_name'];
+        $temp_type = "";
+        if (strcmp($type_name, $temp_type) == 0) {
+          continue;
+        } else {
       ?>
-        <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
-      <?php  }
+          <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
+      <?php
+        }
+      }
 
       ?>
     </select>
@@ -84,33 +95,33 @@ if (isset($_POST['add_room'])) {
       <option value="Not_booked">Not Booked</option>
     </select>
   </div>
- <?php 
- 
- if ($_SESSION['user_role'] == 'admin') {
- 
- ?>
-  <div class="form-group">
-    <label for="location">Resort Location</label>
-    <select name="room_location" class="custom-select" id="">
-      <option value="">Select Option</option>
-      <?php 
+  <?php
+
+  if ($_SESSION['user_role'] == 'admin') {
+
+  ?>
+    <div class="form-group">
+      <label for="location">Resort Location</label>
+      <select name="room_location" class="custom-select" id="">
+        <option value="">Select Option</option>
+        <?php
 
         $query = "SELECT * FROM locations";
         $result = mysqli_query($connection, $query);
         confirm($result);
 
-        while($row = mysqli_fetch_assoc($result)){
-            $location_id = $row['location_id'];
-            $location_name = $row['location_name'];
+        while ($row = mysqli_fetch_assoc($result)) {
+          $location_id = $row['location_id'];
+          $location_name = $row['location_name'];
 
-            echo "<option value='$location_name'>{$location_name}</option>";
-         }
-      ?>
-    </select>
-  </div>
-  <?php }else {?>
+          echo "<option value='$location_name'>{$location_name}</option>";
+        }
+        ?>
+      </select>
+    </div>
+  <?php } else { ?>
     <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_role']; ?>">
- <?php  }?>
+  <?php  } ?>
 
 
 

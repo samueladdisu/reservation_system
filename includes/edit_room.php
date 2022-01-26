@@ -68,21 +68,29 @@ if (isset($_POST['edit_room'])) {
     <label for="room_acc"> Room Type</label>
 
     <select name="room_acc" class="custom-select" id="">
-      <option value="">Select option</option>
+      <option value="<?php echo $room_acc ?>"><?php echo $room_acc ?></option>
       <?php
       echo $location = $_SESSION['user_role'];
-      
-      $query = "SELECT * FROM room_type WHERE type_location = '$location' ";
+      if ($location == 'admin') {
+        $query = "SELECT * FROM room_type";
+      } else {
+        $query = "SELECT * FROM room_type WHERE type_location = '$location'";
+      }
       $result = mysqli_query($connection, $query);
 
       confirm($result);
-
       while ($row = mysqli_fetch_assoc($result)) {
         $type_id = $row['type_id'];
         $type_name = $row['type_name'];
+        $temp_type = "";
+        if (strcmp($type_name, $temp_type) == 0) {
+          continue;
+        } else {
       ?>
-        <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
-      <?php  }
+          <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
+      <?php
+        }
+      }
 
       ?>
     </select>
@@ -138,7 +146,7 @@ if (isset($_POST['edit_room'])) {
   <div class="form-group">
     <label for="location">Resort Location</label>
     <select name="room_location" class="custom-select" id="">
-      <option value="">Select Option</option>
+      <option value="<?php echo$room_location; ?>"><?php echo$room_location; ?></option>
       <?php 
 
         $query = "SELECT * FROM locations";
