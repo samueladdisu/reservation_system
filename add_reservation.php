@@ -1,13 +1,13 @@
 <?php
 
-$room_ids = $_SESSION['checkboxarray'];
-$room_ids = json_encode($room_ids);
 
-print_r($room_ids);
 
 
 if (isset($_POST['add_res'])) {
-  
+  $room_ids = $_SESSION['checkboxarray'];
+$room_ids = json_encode($room_ids);
+
+print_r($room_ids);
   $res_location =  $_SESSION['user_location'];
  
 
