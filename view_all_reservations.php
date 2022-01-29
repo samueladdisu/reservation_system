@@ -66,9 +66,12 @@ if (!isset($_SESSION['user_role'])) {
           </div>
           <!-- Content Row -->
           <div class="row">
-            <table class="table table-bordered table-hover col-12" id="dataTable" width="100%" cellspacing="0">
+            <div id="app">
 
-            </table>
+              <table class="table table-bordered table-hover col-12" id="dataTable" width="100%" cellspacing="0">
+  
+              </table>
+            </div>
           </div>
 
         </div>
@@ -150,10 +153,47 @@ if (!isset($_SESSION['user_role'])) {
     </div>
   </div>
 
+  
+  <?php
+
+if (isset($_GET['delete'])) {
+  $rooms = array();
+  $ary1 = [1,3,5];
+  $the_post_id = escape($_GET['delete']);
+  $select_rooms_query = "SELECT res_roomIDs FROM reservations WHERE res_id = $the_post_id";
+  $select_rooms_result = mysqli_query($connection, $select_rooms_query );
+
+  confirm($select_rooms_result);
+
+  while($row = mysqli_fetch_assoc($select_rooms_result)){
+    foreach ($row as  $val) {
+    
+      $rooms = json_decode($val);
+      
+    }
+  }
+  
+
+  foreach ($rooms as  $val) {
+    $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$val'";
+    $change_status_result = mysqli_query($connection, $change_status_query);
+    confirm($change_status_result);
+  }
+
+  $delete_query = "DELETE FROM reservations WHERE res_id = $the_post_id";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+  header("Location: ./view_all_reservations.php");
+}
+
+?>
+
   <!-- Bootstrap core JavaScript-->
   <script src="./vendor/jquery/jquery.min.js"></script>
   <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://unpkg.com/vue@3.0.2"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="./js/load.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="./vendor/jquery-easing/jquery.easing.min.js"></script>
 
@@ -161,9 +201,10 @@ if (!isset($_SESSION['user_role'])) {
 
   <script>
     $(document).ready(function() {
+      get_data()
       setInterval(function() {
         get_data()
-      }, 2000);
+      }, 20000);
 
       function get_data() {
         jQuery.ajax({

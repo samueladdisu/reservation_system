@@ -19,9 +19,30 @@ if ($received_data->action == 'update') {
   }
 }
 
+if ($received_data->action == 'reserve') {
+
+  $_SESSION['checkboxarray'] = $received_data->data;
+  foreach ($received_data->data as $checkBoxValue) {
+
+
+    $query = "UPDATE rooms SET room_status = 'reserved' WHERE room_id = $checkBoxValue";
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+  }
+}
+
 if ($received_data->action == 'filter') {
-  $location = $received_data->data;
-  $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
+  $location = $received_data->location;
+  $roomType = $received_data->roomType;
+
+  if($location && $roomType){
+    $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location' AND room_acc = '$roomType'";
+  }else if(!$location && $roomType){
+    $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_acc = '$roomType'";
+  }else if($location && !$roomType){
+    $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
+  }
+ 
   $result = mysqli_query($connection, $query);
   confirm($result);
   while ($row = mysqli_fetch_assoc($result)) {

@@ -3,28 +3,19 @@
 
 
 
-if (isset($_POST['add_res'])) {
-  $room_ids = $_SESSION['checkboxarray'];
+if (isset($_GET['edit_id'])) {
+  $edit_id = escape($_GET['edit_id']);
 
-
-
-  $room_ids = json_encode($room_ids);
-
-  print_r($room_ids);
-  $res_location =  $_SESSION['user_location'];
-
-
-  foreach ($_POST as $key => $value) {
-    echo $params[$key] = escape($value);
-  }
-
-  $res_agent = $_SESSION['username'];
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark) ";
-
-  $query .= "VALUES ('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_guestNo']}', '{$params['res_groupName']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_paymentMethod']}', '{$room_ids}', '{$res_location}', '{$params['res_specialRequest']}', '{$res_agent}', '{$params['res_remark']}'  ) ";
-
+  $query = "SELECT * FROM reservations WHERE res_id = $edit_id";
   $result = mysqli_query($connection, $query);
   confirm($result);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    foreach ($row as $key => $value) {
+      $res[$key] = $value;
+    }
+  }
 }
 
 
@@ -35,44 +26,44 @@ if (isset($_POST['add_res'])) {
 
     <div class="form-group col-6">
       <label for="title">First Name</label>
-      <input type="text" class="form-control" name="res_firstname">
+      <input type="text" class="form-control" value="<?php echo $res['res_firstname']; ?>" name="res_firstname">
     </div>
     <div class="form-group col-6">
       <label for="title">Last Name</label>
-      <input type="text" class="form-control" name="res_lastname">
+      <input type="text" class="form-control" value="<?php echo $res['res_lastname']; ?>" name="res_lastname">
     </div>
 
     <div class="form-group col-6">
       <label for="title">Phone No.</label>
-      <input type="text" class="form-control" name="res_phone">
+      <input type="text" class="form-control" value="<?php echo $res['res_phone']; ?>" name="res_phone">
     </div>
 
     <div class="form-group col-6">
       <label for="title">Email</label>
-      <input type="text" class="form-control" name="res_email">
+      <input type="text" class="form-control" value="<?php echo $res['res_email']; ?>" name="res_email">
     </div>
 
 
     <div class="form-group col-6">
       <label for="title"># of Guests</label>
-      <input type="text" class="form-control" name="res_guestNo">
+      <input type="text" class="form-control" value="<?php echo $res['res_guestNo']; ?>" name="res_guestNo">
     </div>
 
     <div class="form-group col-6">
       <label for="title">Group Name</label>
-      <input type="text" class="form-control" name="res_groupName">
+      <input type="text" class="form-control" value="<?php echo $res['res_groupName']; ?>" name="res_groupName">
     </div>
 
 
     <div class="form-group col-6">
       <label for="title">Check In</label>
-      <input type="date" class="form-control" value="<?php echo date('Y-m-d') ?>" name="res_checkin">
+      <input type="date" class="form-control" value="<?php echo $res['res_checkin']; ?>" name="res_checkin">
     </div>
 
 
     <div class="form-group col-6">
       <label for="title">Check Out</label>
-      <input type="date" class="form-control" value="<?php echo date('Y-m-d', strtotime(' +1 day')) ?>" name="res_checkout">
+      <input type="date" class="form-control" value="<?php echo $res['res_checkout']; ?>" name="res_checkout">
     </div>
 
 
@@ -81,7 +72,7 @@ if (isset($_POST['add_res'])) {
     <div class="form-group col-6">
       <label for="title">Payment Method</label>
       <select name="res_paymentMethod" class="custom-select" id="">
-        <option value="">Select option</option>
+        <option value="<?php echo $res['res_paymentMethod']; ?>"><?php echo $res['res_paymentMethod']; ?></option>
         <option value="bank_transfer">Bank Transfer</option>
         <option value="cash">Cash</option>
         <option value="GC1">Gift Card 1</option>
@@ -94,18 +85,18 @@ if (isset($_POST['add_res'])) {
     <div class="form-group col-6">
       <label for="title">Select Room</label> <br>
       <!-- Button trigger modal -->
-  
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-          Select Room
-        </button>
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Select Room
+      </button>
     </div>
 
-   
+
 
     <div class="form-group col-6">
       <label for="title">Payment Status</label>
       <select name="res_paymentStatus" class="custom-select" id="">
-        <option value="">Select Option</option>
+        <option value="<?php echo $res['res_paymentStatus']; ?>"><?php echo $res['res_paymentStatus']; ?></option>
         <option value="payed">Payed</option>
         <option value="pending_payment">pending payment</option>
       </select>
@@ -113,33 +104,37 @@ if (isset($_POST['add_res'])) {
 
     <div class="form-group col-6">
       <label for="">Apply Promo Code</label>
-      <input type="text" class="form-control" name="res_promo" id="">
+      <input type="text" class="form-control" value="<?php echo $res['res_promo']; ?>" name="res_promo" id="">
     </div>
 
     <div class="form-group col-6 mt-3">
       <label for="post_content">Special Request</label>
-      <textarea name="res_specialRequest" id="" cols="30" rows="10" class="form-control"></textarea>
+      <textarea name="res_specialRequest" id="" cols="30" rows="10" class="form-control">
+      <?php echo $res['res_specialRequest']; ?>
+      </textarea>
     </div>
 
-    
+
     <div class="form-group col-6 mt-3">
       <label for="post_content">Remark</label>
-      <textarea name="res_remark" id="" cols="30" rows="10" class="form-control"></textarea>
+      <textarea name="res_remark" id="" cols="30" rows="10" class="form-control">
+      <?php echo $res['res_remark']; ?>
+      </textarea>
     </div>
 
- <div class="form-group col-12">
+    <div class="form-group col-12">
 
-   <div class="form-check">
-         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-         <label class="form-check-label" for="flexCheckDefault">
-           Extra Bed
-         </label>
-       </div>
- </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Extra Bed
+        </label>
+      </div>
+    </div>
 
 
     <div class="form-group">
-      <input type="submit" class="btn btn-primary" name="add_res" @click="reservation" value="Add Reservation">
+      <input type="submit" class="btn btn-primary" name="add_res" value="Add Reservation">
     </div>
 
   </form>
@@ -223,10 +218,10 @@ if (isset($_POST['add_res'])) {
 
                     <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
 
-                  
-                      <span class="text-muted">
-                        Total: ${{ totalPrice }}
-                      </span>
+
+                    <span class="text-muted">
+                      Total: ${{ totalPrice }}
+                    </span>
 
 
                   </div>
@@ -246,7 +241,29 @@ if (isset($_POST['add_res'])) {
                   <tbody class="insert-data">
 
 
-                    <tr v-for="row in allData" :key="row.room_id">
+                    <?php
+
+                      $room = json_decode($res['res_roomIDs']);
+                      // $room_id = array();
+
+                    foreach ($room  as $value) {
+                     echo $room_id = json_decode($value);
+                     $query = "SELECT * FROM rooms WHERE room_id = $room_id";
+                     $result = mysqli_query($connection, $query);
+
+                     confirm($result);
+                    }
+
+                      while($row = mysqli_fetch_assoc($result)){
+                        foreach ($row as $key => $value) {
+                           $params[$key] = $value;
+                           echo $params['room_id'];
+                        }
+                      }
+
+                    ?>
+
+                    <tr v-for="row in bookedRooms" :key="row.room_id">
                       <td><input type="checkbox" name="checkBoxArray[]" :value="row.room_id" @change="booked(row)" class="checkBoxes"></td>
                       <td>
                         {{ row.room_id }}

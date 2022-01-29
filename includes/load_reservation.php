@@ -2,8 +2,10 @@
 <?php include  './db.php'; ?>
 <?php include  './functions.php'; ?>
 <?php session_start(); ?>
+
  <thead>
     <tr>
+    <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th>
       <th>Id</th>
       <th>First Name</th>
       <th>Last Name</th>
@@ -65,6 +67,9 @@
       }
 
       echo "<tr>";
+      ?>
+         <td><input type="checkbox" name="checkBoxArray[]" value="<?php echo $db_res['res_id']; ?>" @change="booked(row)" class="checkBoxes"></td>
+      <?php
       echo "<td>{$db_res['res_id']}</td>";
       echo "<td>{$db_res['res_firstname']}</td>";
       echo "<td>{$db_res['res_lastname']}</td>";
@@ -88,6 +93,8 @@
       echo "<td>{$db_res['res_location']}</td>";
       echo "<td>{$db_res['res_agent']}</td>";
       echo "<td>{$db_res['res_confirmID']}</td>";
+      echo "<td><a href='./reservations.php?source=edit_res&edit_id={$db_res['res_id']}'>Edit</a></td>";
+      echo "<td><a href='view_all_reservations.php?delete={$db_res['res_id']}'>Delete</a></td>";
       echo "</tr>";
     }
 
@@ -95,5 +102,3 @@
     ?>
 
   </tbody>
-
- 

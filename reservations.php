@@ -40,8 +40,8 @@
                 case 'add_reservation':
                   include "./add_reservation.php";
                   break;
-                case 'edit_reservation':
-                  include "./includes/edit_reservation.php";
+                case 'edit_res':
+                  include "./edit_reservation.php";
                   break;
                 default:
                   header("Location: ./view_all_reservations.php");

@@ -6,9 +6,12 @@ const app = Vue.createApp({
   data(){
     return {
       location: '',
+      roomType: '',
       allData: '',
       bookedRooms: [],
+      totalPrice: 0,
       selectAllRoom: false,
+      singleRoom: false
     }
   }, 
   methods: {
@@ -16,36 +19,51 @@ const app = Vue.createApp({
       const checkBoxes = document.querySelectorAll('.checkBoxes')
 
       if(this.selectAllRoom){
-        checkBoxes.forEach(check =>{
-          check.checked = true
-        })
-      }else{
-        checkBoxes.forEach(check =>{
-          check.checked = false
-        })
-      }
-      if(this.selectAllRoom){
         this.bookedRooms = this.allData
-        console.log(this.bookedRooms);
+        this.bookedRooms.forEach(row => {
+          this.totalPrice += parseInt(row.room_price)
+        })
       }else{
         this.bookedRooms = []
-        console.log(this.bookedRooms);
+      
+        this.totalPrice = 0
+       
       }
+
+      console.log(this.totalPrice);
     },
     booked(row){
-      this.bookedRooms.push(row)
-      console.log(this.bookedRooms);
+      if(event.target.checked){
+        console.log(event.target);
+        this.totalPrice += parseInt(row.room_price)
+        this.bookedRooms.push(row)
+      }else{
+        this.totalPrice -= parseInt(row.room_price)
+        let rowIndex = this.bookedRooms.indexOf(row)
+
+        this.bookedRooms.splice(rowIndex, 1)
+        
+      }
+      this.fetchAll()
+      
+      // console.log("total price",this.totalPrice);
+      console.log("booked rooms",this.bookedRooms);
+      console.log(this.allData);
      
     },
     filterRooms(){
       console.log(this.location);
       axios.post('load_modal.php', {
         action: 'filter',
-        data: this.location
+        location: this.location,
+        roomType: this.roomType
       }).then(res => {
         console.log(res.data);
         this.allData = res.data
       }).catch(err => console.log(err.message))
+    },
+    clearFilter(){
+      this.fetchAll()
     },
     bookRooms(){
       const checkBoxes = document.querySelectorAll('.checkBoxes')
@@ -55,8 +73,33 @@ const app = Vue.createApp({
         if(check.checked){
           checkBoxArray.push(check.value)
   
+        }else{
+          console.log('not');
+        }
+ 
+    })
+
+    
+    axios.post('load_modal.php', {
+      action: 'update',
+      data: checkBoxArray,
+      
+      
+    }).then(() =>{
+     
+      console.log(this.bookedRooms);
+    }).catch(err => console.log(err.message))
+    },
+    reserveRooms(){
+      const checkBoxes = document.querySelectorAll('.checkBoxes')
+     
+      checkBoxes.forEach(check => {
+      
+        if(check.checked){
+          checkBoxArray.push(check.value)
+  
           axios.post('load_modal.php', {
-            action: 'update',
+            action: 'reserve',
             data: checkBoxArray,
             
             
@@ -69,17 +112,13 @@ const app = Vue.createApp({
         }
  
     })
-    this.fetchAll()
-    },
-    reservation(){
-
     },
     fetchAll(){
       axios.post('load_modal.php',{
         action: 'fetchAll'
       }).then(res =>{
         this.allData = res.data
-        console.log(this.allData);
+        // console.log(this.allData);
       })
     }
   },
@@ -102,12 +141,11 @@ window.addEventListener('load', () =>{
       console.log("all");
       checkBoxes.forEach(check => {
         check.checked = true
-        console.log(check.value);
       })
+
     } else {
       checkBoxes.forEach(check => {
         check.checked = false
-        console.log(check.value);
       })
     }
   })
@@ -123,32 +161,10 @@ window.addEventListener('load', () =>{
   book.addEventListener('click', function(e){
     
     e.preventDefault()
-   
-    
   })
-
-
-  
 })
 
 
    
 
 
-// function getData(){
-//   $.ajax({
-//     type: "GET",
-//     url: "./includes/load_avialable_rooms.php",
-//     data: '',
-//     beforeSend: function() {
-
-//     },
-//     complete: function() {
-
-//     },
-//     success: function(data) {
-//       $(".insert-data").html(data);
-//       $(".checkBoxes")
-//     }
-//   })
-// }
