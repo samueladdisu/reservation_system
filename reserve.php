@@ -1,5 +1,4 @@
-<?php include  './includes/db.php'; ?>
-<?php include  './includes/functions.php'; ?>
+<?php include  'config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,12 +8,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="./css/t-datepicker.min.css">
-  <link rel="stylesheet" href="./css/themes/t-datepicker-main.css">
-  <link rel="stylesheet" href="public/theme/css/themes/t-datepicker-main.css">
-  <link rel="stylesheet" href="./css/reserve.css">
-  <script src="https://unpkg.com/vue@3.0.2"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <link rel="stylesheet" href="./css/style.css">
+
   <title>Reservation</title>
 </head>
 
@@ -75,12 +71,12 @@
       </div>
 
 
-      
+
 
 
       <button type="submit" class="btn btn-primary1">Check Availability</button>
     </form>
-    
+
 
     <div class="row">
 
@@ -91,7 +87,7 @@
         <div class="mycard mt-5" v-for="row in allData" :key="row.room_id">
 
 
-          <img :src="'./room_img/' + row.room_image" class="mycard-img-top" alt="...">
+          <img :src="'./admin/room_img/' + row.room_image" class="mycard-img-top" alt="...">
           <div class="mycard-body">
             <h5 class="mycard-title">
               {{ row.room_acc }}
@@ -143,7 +139,6 @@
 
             <div class="lower">
               <p class="text-muted">
-                {{ guests }}
               </p>
 
               <p class="text-muted">
@@ -154,6 +149,16 @@
           </div>
 
           <hr>
+          <div class="footer-btn promo mb-3">
+
+            <div class="input-group">
+              <input type="text" placeholder="Apply Promo Code" name="res_promo" v-model="promoCode" class="form-control">
+              <div class="input-group-append">
+                <button :disabled="oneClick" @click="fetchPromo" class="input-group-text">Apply</button>
+
+              </div>
+            </div>
+          </div>
           <div class="cart-footer-lg" v-if="cart.length != 0">
 
             <div class="footer-btn">
@@ -207,7 +212,6 @@
 
           <div class="lower">
             <p class="text-muted">
-              {{ guests }}
             </p>
 
             <p class="text-muted">
@@ -243,117 +247,7 @@
   </div>
 
 
-  <footer class="footer">
-    <div class="container">
-      <section class="footer-wrapper">
-        <div class="footer-link-container">
-          <div class="upper">
-            <div class="desti">
-              <h3 class="desti-title">
-                Destination
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Bishoftu</a></li>
-                  <li class="footer-link"><a href="#">Entoto</a></li>
-                  <li class="footer-link"><a href="#">Awash</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Water Park</a></li>
-                  <li class="footer-link"><a href="#">Lake Tana</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-
-            <div class="desti">
-              <h3 class="desti-title">
-                Wellness
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Spa</a></li>
-                  <li class="footer-link"><a href="#">Pool</a></li>
-                  <li class="footer-link"><a href="#">Massage</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Manicure </a></li>
-                  <li class="footer-link"><a href="#">Pedicure</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-          </div>
-
-          <div class="upper">
-            <div class="desti">
-              <h3 class="desti-title">
-                Experience
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Kayaking</a></li>
-                  <li class="footer-link"><a href="#">Archery</a></li>
-                  <li class="footer-link"><a href="#">Cycling</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Paintball </a></li>
-                  <li class="footer-link"><a href="#">Horse riding</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-
-            <div class="desti">
-              <h3 class="desti-title">
-                Quick Links
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Home</a></li>
-                  <li class="footer-link"><a href="#">Entoto</a></li>
-                  <li class="footer-link"><a href="#">Our Story</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Lake Tana </a></li>
-                  <li class="footer-link"><a href="#">Awash</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-
-          </div>
-        </div>
-
-
-
-        <div class="social">
-          <h3 class="desti-title">follow us on</h3>
-
-          <div class="icon-container">
-            <img src="./img/facebook.svg" alt="">
-            <img src="./img/instagram.svg" alt="">
-            <img src="./img/youtube.svg" alt="">
-          </div>
-        </div>
-      </section>
-
-      <hr>
-      <div class="lower">
-
-        <img src="./img/Kuriftu_logo.svg" alt="">
-        <p>&copy; 2021. All Rights Reserved. Web Design & Development by <a href="https://versavvymedia.com/">Versavvy Media PLC</a> </p>
-      </div>
-
-
-    </div>
-  </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="./js/t-datepicker.min.js"></script>
+  <?php include_once './includes/footer.php' ?>
   <script>
     const app = Vue.createApp({
       mounted() {
@@ -367,7 +261,9 @@
           allData: '',
           cart: [],
           totalprice: '',
-          toggleModal: false
+          promoCode: '',
+          toggleModal: false,
+          oneClick: false
         }
       },
 
@@ -376,9 +272,20 @@
           this.toggleModal = !this.toggleModal
 
         },
-
+        async fetchPromo() {
+          this.oneClick = true
+          await axios.post('book.php', {
+            action: 'promoCode',
+            data: this.promoCode
+          }).then(res => {
+            let discount = this.totalprice - ((res.data / 100) * this.totalprice)
+           
+            this.totalprice = discount
+            localStorage.total = JSON.stringify(this.totalprice)
+          })
+          console.log("total price", this.totalprice);
+        },
         completeCart() {
-          console.log(this.cart);
 
           if (this.checkOut != '' && this.checkin != '') {
 
@@ -390,8 +297,9 @@
               data: this.cart,
               total: this.totalprice,
               totalroom: this.cart.length
-            }).then(res => {
+            }).then(() => {
               window.location.href = "register.php"
+              console.log(this.totalprice);
             })
           } else {
             alert("Please Select Check in and Check out date")
@@ -418,12 +326,13 @@
         },
         deleteRoom(row) {
           let deleteTotal = 0;
-          this.cart.pop(row)
+          let cartIndex = this.cart.indexOf(row)
+          this.cart.splice(cartIndex, 1)
           this.cart.forEach(val => {
-              deleteTotal += parseInt(val.room_price)
+            deleteTotal += parseInt(val.room_price)
 
-            })
-            this.totalprice = deleteTotal
+          })
+          this.totalprice = deleteTotal
           localStorage.cart = JSON.stringify(this.cart)
           console.log(this.cart);
 
@@ -462,7 +371,7 @@
         this.cart = JSON.parse(localStorage.cart || '[]')
         this.totalprice = JSON.parse(localStorage.total || '[]')
         console.log(this.cart);
-       
+
 
 
       }

@@ -1,14 +1,201 @@
-footer.sticky-footer {
-  padding: 2rem 0;
-  flex-shrink: 0;
-  .copyright {
-    line-height: 1;
-    font-size: 0.8rem;
+.footer {
+  background: $kuriftu-black;
+  margin-top: 6.25rem;
+
+  .container {
+    .footer-wrapper {
+      .footer-link-container {
+        .upper {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          place-items: center;
+
+          .desti {
+            .desti-title {
+              color: $kuriftu-brown;
+              @extend .title;
+              margin-top: 4.37rem;
+              text-align: center;
+              font-size: 1rem;
+              text-transform: uppercase;
+            }
+            .desti-list {
+              text-align: center;
+              margin-top: 1.88rem;
+              margin-bottom: 1.88rem;
+              // margin-left: 2rem;
+              // gap: 3.31rem;
+              div {
+                display: grid;
+                place-items: left;
+                gap: 1rem;
+                margin-top: 0.8rem;
+                .footer-link {
+                  a {
+                    color: $kuriftu-white;
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .social {
+        h3 {
+          color: $kuriftu-brown;
+          @extend .title;
+
+          margin-top: 4.37rem;
+          text-align: center;
+          font-size: 1rem;
+          text-transform: uppercase;
+        }
+        .icon-container {
+          display: flex;
+          justify-content: center;
+          gap: 1.88rem;
+          margin-top: 1.88rem;
+          // width: 2rem;
+        }
+      }
+    }
+    hr {
+      margin-top: 4.37rem;
+      color: $kuriftu-brown;
+    }
+    .lower {
+      display: grid;
+      place-items: center;
+      margin-top: 4.37rem;
+      margin-bottom: 5rem;
+      img {
+        width: 10rem;
+      }
+      p {
+        color: $kuriftu-white;
+        font-size: 0.88rem;
+        margin-top: 1.88rem;
+        line-height: 1.3rem;
+        text-align: center;
+        a {
+          color: $kuriftu-blue;
+        }
+      }
+    }
   }
 }
+@include responsive($md) {
+  .footer {
+    .container {
+      .footer-wrapper {
+        .footer-link-container {
+          .upper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            place-items: center;
 
-body.sidebar-toggled {
-  footer.sticky-footer {
-    width: 100%;
+            .desti {
+              .desti-title {
+                text-align: left;
+              }
+              .desti-list {
+                text-align: left;
+                margin-top: 0.98rem;
+                margin-bottom: 0.98rem;
+
+                div {
+                  display: grid;
+                  grid-template-columns: 1fr;
+                  gap: 1.3rem;
+                  margin-top: 0.98rem;
+                  .footer-link {
+                    a {
+                      color: $kuriftu-white;
+                      font-size: 1rem;
+                      text-align: left;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .lower {
+        margin-bottom: 6.3rem;
+        img {
+          width: 15rem;
+        }
+      }
+    }
+  }
+}
+@include responsive($lg) {
+  .footer {
+    margin-top: 8.13rem;
+    .container {
+      .footer-wrapper {
+        .footer-link-container {
+          place-items: center;
+          .upper {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 5rem;
+            .desti {
+              .desti-title {
+                text-align: left;
+              }
+              .desti-list {
+                text-align: left;
+                margin-top: 0.98rem;
+                margin-bottom: 0.98rem;
+              }
+            }
+          }
+        }
+      }
+
+      .lower {
+        margin-bottom: 0rem;
+        display: flex;
+        justify-content: space-between;
+        img {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+@include responsive($xl) {
+  .footer {
+    .container {
+      .footer-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 8rem;
+        .footer-link-container {
+          .upper {
+            gap: 8rem;
+          }
+        }
+      }
+    }
+  }
+}
+@include responsive($xxl) {
+  .footer {
+    .container {
+      .footer-wrapper {
+        gap: 10rem;
+        .footer-link-container {
+          .upper {
+            gap: 10rem;
+          }
+        }
+      }
+    }
   }
 }

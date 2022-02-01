@@ -1,0 +1,133 @@
+.signup-header {
+  .container {
+    .nav-center {
+      margin-top: 2.63rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .signup-menu {
+        div {
+          height: 2px;
+          margin-bottom: 0.63rem;
+          width: 2.31rem;
+          background: $kuriftu-black;
+        }
+      }
+
+      .logo {
+        width: 10.69rem;
+      }
+
+      .book-now {
+        display: none;
+      }
+
+      @include responsive($md) {
+        .book-now {
+          display: block;
+        }
+      }
+
+
+    }
+  }
+}
+
+// main body 
+
+.main-body {
+  .caps {
+    color: $kuriftu-red;
+    margin-top: 5.19rem;
+  }
+
+  .container {
+    .signup-form {
+      margin: 0 auto;
+      margin-top: 3.81rem;
+      width: 100%;
+      max-width: 44.19rem;
+
+      .form-group {
+        .inner-form {
+          width: 100%;
+          margin-bottom: 1.13rem;
+          .input-container{
+            position: relative;
+            max-width: 21.25rem;
+            img{
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              right: 0.88rem;
+              cursor: pointer;
+            }
+          }
+          p{
+            color: $kuriftu-red;
+            font-size: 0.88rem;
+            margin-top: 0.88rem;
+          }
+        }
+
+        input {
+          width: 100%;
+          max-width: 21.25rem;
+          background: none;
+          outline: none;
+          border: 1px solid $kuriftu-grey;
+
+          padding: 1.25rem 0.88rem;
+        }
+
+        select {
+          width: 100%;
+          max-width: 21.25rem;
+          display: block;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          background: url(../img/down.svg) 96% / 5% no-repeat;
+          padding: 1.25rem 0.88rem;
+
+          * {
+            color: $kuriftu-grey;
+          }
+        }
+      }
+
+      .checkbox {
+        input[type=checkbox] {
+          width: 100%;
+        }
+      }
+    }
+
+    .bottom-form {
+      margin-top: 2.75rem;
+
+      a {
+        color: $kuriftu-purple;
+      }
+    }
+  }
+}
+
+@include responsive($md) {
+  .main-body {
+    .caps {
+      font-size: 2.25rem;
+    }
+
+    .container {
+      .signup-form {
+
+        .form-group {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}

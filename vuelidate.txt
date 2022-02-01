@@ -1,0 +1,37 @@
+
+  validations () {
+    return {
+      fName: { 
+        required,
+        alpha 
+      },
+      lName: { 
+        required,
+        alpha 
+      },
+      email: {
+        required,
+        email
+      },
+      phone: {
+        numeric,
+        required
+      },
+      dob: {
+        required
+      },
+      uName: {
+        required,
+        alpha
+      },
+      cName: {
+        alpha
+      },
+      pwd: {
+        required,
+        maxLength: maxLength(12),
+        minLength: minLength(6)
+      },
+      cPwd: sameAs(this.pwd)
+    }
+  },

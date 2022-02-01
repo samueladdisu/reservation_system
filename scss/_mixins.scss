@@ -1,1 +1,32 @@
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1920px;
 
+
+@mixin responsive($screen-size){
+   @if $screen-size == $sm {
+      @media screen and (min-width: $screen-size){
+         @content;
+      }
+   }@else if $screen-size == $md {
+      @media screen and (min-width: $screen-size){
+         @content;
+      }
+   }@else if $screen-size == $lg {
+      @media screen and (min-width: $screen-size){
+         @content;
+      }
+   }@else if $screen-size == $xl {
+      @media screen and (min-width: $screen-size){
+         @content;
+      }
+   }@else if $screen-size == $xxl {
+      @media screen and (min-width: $screen-size){
+         @content;
+      }
+   }@else {
+      @error "#{$screen-size} is Invalid screen size";
+   }
+}

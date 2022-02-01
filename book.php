@@ -1,6 +1,4 @@
-<?php session_start(); ?>
-<?php include  './includes/db.php'; ?>
-<?php include  './includes/functions.php'; ?>
+<?php include  'config.php'; ?>
 <?php 
 
 $received_data = json_decode(file_get_contents("php://input"));
@@ -25,7 +23,23 @@ if($received_data->action == 'fetchall'){
   echo json_encode($data);
 }
 
+if($received_data->action == 'promoCode'){
+  $code = $received_data->data;
+  $promoData = array();
+  $promo_query = "SELECT * FROM promo WHERE promo_code = '$code' ";
+  $promo_result = mysqli_query($connection, $promo_query);
 
+  confirm($promo_result);
+
+  while($row = mysqli_fetch_assoc($promo_result)){
+    foreach ($row as $key => $value) {
+      $params[$key] = $value;
+    }
+  }
+
+  echo json_encode($params['promo_amount']);
+
+}
 if($received_data->action == 'getData'){
   $data = array(
     ':checkIn' => $received_data->checkIn,
@@ -33,8 +47,10 @@ if($received_data->action == 'getData'){
     ':desti' => $received_data->desti
   );
 
-  $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$received_data->desti' ";
-  $result = mysqli_query($connection, $query);
+  $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked' AND room_location = '$received_data->desti';";
+
+  // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$received_data->desti' ";
+  $result = mysqli_query($connection, $query2);
   confirm($result);
 
   while($row = mysqli_fetch_assoc($result)){

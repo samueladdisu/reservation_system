@@ -1,6 +1,4 @@
-<?php include  './includes/db.php'; ?>
-<?php include  './includes/functions.php'; ?>
-<?php session_start(); ?>
+<?php include  'config.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="./css/reserve.css">
+  <link rel="stylesheet" href="./css/style.css">
   <title>register</title>
 </head>
 
@@ -40,7 +38,9 @@
   <?php
   $cart = $_SESSION['cart'];
   $location = $_SESSION['location'];
-  $total_price = 0;
+  $checkIn =  $_SESSION['checkIn'];
+  $checkOut = $_SESSION['checkOut'];
+  $total_price = $_SESSION['total'];
   $id = array();
 
   function getName($n)
@@ -59,7 +59,6 @@
   $res_confirmID = getName(8);
   foreach ($cart as  $val) {
     $id[]     = $val->room_id;
-    $total_price += $val->room_price;
   }
   $id_sql = json_encode($id);
   $id_int = implode(',', $id);
@@ -76,8 +75,8 @@
 
 
 
-    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID) ";
-    $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}') ";
+    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
+    $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$params['res_guestNo']}', 'website') ";
 
     $result = mysqli_query($connection, $query);
     confirm($result);
@@ -130,11 +129,21 @@
 
           <input type="text" placeholder="Country" class="form-control" name="res_country" id="inputCity">
         </div>
+
         <div class="col-md-6">
           <input type="text" placeholder="Address" class="form-control" name="res_address" id="inputCity">
         </div>
+
+
+        <div class="col-md-6">
+
+          <input type="text" placeholder="No. of Guests" class="form-control" name="res_guestNo" id="inputCity">
+        </div>
         <div class="col-md-6">
           <input type="text" placeholder="City" class="form-control" name="res_city" id="inputCity">
+        </div>
+        <div class="col-md-6">
+          <input type="text" placeholder="Special Request" class="form-control" name="res_specialRequest" id="inputCity">
         </div>
         <div class="col-md-6">
 
@@ -216,7 +225,7 @@
           <hr>
           <div class="cart-footer-lg" v-if="cart.length != 0">
 
-
+            
 
             <div class="price">
               Total: $ <?php echo $total_price; ?> <br>
@@ -224,10 +233,7 @@
             </div>
           </div>
 
-          <div class="footer-btn">
 
-          <input type="text" placeholder="Promo Code" name="res_firstname" class="form-control" id="inputEmail4">
-          </div>
 
         </div>
       </div>
@@ -236,115 +242,9 @@
 
   </div>
 
-  <footer class="footer">
-    <div class="container">
-      <section class="footer-wrapper">
-        <div class="footer-link-container">
-          <div class="upper">
-            <div class="desti">
-              <h3 class="desti-title">
-                Destination
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Bishoftu</a></li>
-                  <li class="footer-link"><a href="#">Entoto</a></li>
-                  <li class="footer-link"><a href="#">Awash</a></li>
-                </div>
+  <?php include_once './includes/footer.php' ?>
 
-                <div>
-                  <li class="footer-link"><a href="#">Water Park</a></li>
-                  <li class="footer-link"><a href="#">Lake Tana</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-
-            <div class="desti">
-              <h3 class="desti-title">
-                Wellness
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Spa</a></li>
-                  <li class="footer-link"><a href="#">Pool</a></li>
-                  <li class="footer-link"><a href="#">Massage</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Manicure </a></li>
-                  <li class="footer-link"><a href="#">Pedicure</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-          </div>
-
-          <div class="upper">
-            <div class="desti">
-              <h3 class="desti-title">
-                Experience
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Kayaking</a></li>
-                  <li class="footer-link"><a href="#">Archery</a></li>
-                  <li class="footer-link"><a href="#">Cycling</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Paintball </a></li>
-                  <li class="footer-link"><a href="#">Horse riding</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-
-            <div class="desti">
-              <h3 class="desti-title">
-                Quick Links
-              </h3>
-              <ul class="desti-list">
-                <div>
-                  <li class="footer-link"><a href="#">Home</a></li>
-                  <li class="footer-link"><a href="#">Entoto</a></li>
-                  <li class="footer-link"><a href="#">Our Story</a></li>
-                </div>
-
-                <div>
-                  <li class="footer-link"><a href="#">Lake Tana </a></li>
-                  <li class="footer-link"><a href="#">Awash</a></li>
-                  <li class="footer-link"><a href="#"></a></li>
-                </div>
-              </ul>
-            </div>
-
-          </div>
-        </div>
-
-
-
-        <div class="social">
-          <h3 class="desti-title">follow us on</h3>
-
-          <div class="icon-container">
-            <img src="./img/facebook.svg" alt="">
-            <img src="./img/instagram.svg" alt="">
-            <img src="./img/youtube.svg" alt="">
-          </div>
-        </div>
-      </section>
-
-      <hr>
-      <div class="lower">
-
-        <img src="./img/Kuriftu_logo.svg" alt="">
-        <p>&copy; 2021. All Rights Reserved. Web Design & Development by <a href="https://versavvymedia.com/">Versavvy Media PLC</a> </p>
-      </div>
-
-
-    </div>
-  </footer>
+ 
 </body>
 
 </html>

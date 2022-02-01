@@ -1,0 +1,22 @@
+@import 'fonts';
+@import 'reboot';
+@import 'mixins';
+@import 'utilities';
+@import 'reserve';
+@import 'footer';
+@import 'signup';
+
+.promo{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .input-group{
+    .input-group-append {
+      span{
+        background: $kuriftu-grey;
+        color: #fff;
+        cursor: pointer;
+      }
+    }
+  }
+}
