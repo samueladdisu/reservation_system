@@ -1,9 +1,9 @@
 
 
 let checkBoxArray = []
- 
+
 const app = Vue.createApp({
-  data(){
+  data() {
     return {
       location: '',
       roomType: '',
@@ -13,45 +13,45 @@ const app = Vue.createApp({
       selectAllRoom: false,
       singleRoom: false
     }
-  }, 
+  },
   methods: {
-    bookAll(){
+    bookAll() {
       const checkBoxes = document.querySelectorAll('.checkBoxes')
 
-      if(this.selectAllRoom){
+      if (this.selectAllRoom) {
         this.bookedRooms = this.allData
         this.bookedRooms.forEach(row => {
           this.totalPrice += parseInt(row.room_price)
         })
-      }else{
+      } else {
         this.bookedRooms = []
-      
+
         this.totalPrice = 0
-       
+
       }
 
       console.log(this.totalPrice);
     },
-    booked(row){
-      if(event.target.checked){
+    booked(row) {
+      if (event.target.checked) {
         console.log(event.target);
         this.totalPrice += parseInt(row.room_price)
         this.bookedRooms.push(row)
-      }else{
+      } else {
         this.totalPrice -= parseInt(row.room_price)
         let rowIndex = this.bookedRooms.indexOf(row)
 
         this.bookedRooms.splice(rowIndex, 1)
-        
+
       }
       this.fetchAll()
-      
+
       // console.log("total price",this.totalPrice);
-      console.log("booked rooms",this.bookedRooms);
+      console.log("booked rooms", this.bookedRooms);
       console.log(this.allData);
-     
+
     },
-    filterRooms(){
+    filterRooms() {
       console.log(this.location);
       axios.post('load_modal.php', {
         action: 'filter',
@@ -62,67 +62,68 @@ const app = Vue.createApp({
         this.allData = res.data
       }).catch(err => console.log(err.message))
     },
-    clearFilter(){
+    clearFilter() {
       this.fetchAll()
     },
-    bookRooms(){
+    bookRooms() {
       const checkBoxes = document.querySelectorAll('.checkBoxes')
-     
+
       checkBoxes.forEach(check => {
-      
-        if(check.checked){
+
+        if (check.checked) {
           checkBoxArray.push(check.value)
-  
-        }else{
+
+        } else {
           console.log('not');
         }
- 
-    })
 
-    
-    axios.post('load_modal.php', {
-      action: 'update',
-      data: checkBoxArray,
-      
-      
-    }).then(() =>{
-     
-      console.log(this.bookedRooms);
-    }).catch(err => console.log(err.message))
+      })
+
+
+      axios.post('load_modal.php', {
+        action: 'update',
+        data: checkBoxArray,
+        price: this.totalPrice
+
+      }).then(res => {
+
+        console.log(this.bookedRooms);
+        console.log("price", res.data);
+      }).catch(err => console.log(err.message))
     },
-    reserveRooms(){
+    reserveRooms() {
       const checkBoxes = document.querySelectorAll('.checkBoxes')
-     
+
       checkBoxes.forEach(check => {
-      
-        if(check.checked){
+
+        if (check.checked) {
           checkBoxArray.push(check.value)
-  
+
           axios.post('load_modal.php', {
             action: 'reserve',
             data: checkBoxArray,
-            
-            
-          }).then(() =>{
-           
+            price: this.totalPrice
+
+          }).then(() => {
+
             console.log(this.bookedRooms);
           }).catch(err => console.log(err.message))
-        }else{
+        } else {
           console.log('not');
         }
- 
-    })
+
+      })
     },
-    fetchAll(){
-      axios.post('load_modal.php',{
+    fetchAll() {
+      axios.post('load_modal.php', {
         action: 'fetchAll'
-      }).then(res =>{
+      }).then(res => {
         this.allData = res.data
         // console.log(this.allData);
       })
     }
   },
-  created(){
+  created() {
     this.fetchAll()
   }
 })
@@ -130,7 +131,7 @@ const app = Vue.createApp({
 app.mount('#app')
 
 
-window.addEventListener('load', () =>{
+window.addEventListener('load', () => {
   // getData()
   const book = document.querySelector('#book')
   const location = document.querySelector('#location')
@@ -150,7 +151,7 @@ window.addEventListener('load', () =>{
     }
   })
 
-  location.addEventListener('click', function(e){
+  location.addEventListener('click', function (e) {
     e.preventDefault()
     axios.post('load_modal.php', {
       action: 'filter',
@@ -158,13 +159,13 @@ window.addEventListener('load', () =>{
     })
 
   })
-  book.addEventListener('click', function(e){
-    
+  book.addEventListener('click', function (e) {
+
     e.preventDefault()
   })
 })
 
 
-   
+
 
 

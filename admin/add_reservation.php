@@ -7,21 +7,39 @@ if (isset($_POST['add_res'])) {
   $room_ids = $_SESSION['checkboxarray'];
 
 
-
+  $total_price = $_SESSION['totalPrice'];
   $room_ids = json_encode($room_ids);
+  function getName($n)
+  {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
+
+    for ($i = 0; $i < $n; $i++) {
+      $index = rand(0, strlen($characters) - 1);
+      $randomString .= $characters[$index];
+    }
+
+    return $randomString;
+  }
+
+  $res_confirmID = getName(8);
 
   print_r($room_ids);
   $res_location =  $_SESSION['user_location'];
 
-
+  $extraBed = isset($_POST['res_extraBed']) ? 'yes' : 'no';
   foreach ($_POST as $key => $value) {
-    echo $params[$key] = escape($value);
+     $params[$key] = escape($value);
   }
 
-  $res_agent = $_SESSION['username'];
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark, res_promo) ";
+ 
 
-  $query .= "VALUES ('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_guestNo']}', '{$params['res_groupName']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_paymentMethod']}', '{$room_ids}', '{$res_location}', '{$params['res_specialRequest']}', '{$res_agent}', '{$params['res_remark']}', '{$params['res_promo']}'  ) ";
+  // echo $params['res_extraBed'];
+
+  $res_agent = $_SESSION['username'];
+  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
+
+  $query .= "VALUES ('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_guestNo']}', '{$params['res_groupName']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_paymentMethod']}', '{$room_ids}', '{$res_location}', '{$params['res_specialRequest']}', '{$res_agent}', '{$params['res_remark']}', '{$params['res_promo']}', '$extraBed', '$res_confirmID', '$total_price'  ) ";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
@@ -130,7 +148,7 @@ if (isset($_POST['add_res'])) {
  <div class="form-group col-12">
 
    <div class="form-check">
-         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+         <input class="form-check-input" type="checkbox" name="res_extraBed" value="Extra_bed" id="flexCheckDefault">
          <label class="form-check-label" for="flexCheckDefault">
            Extra Bed
          </label>

@@ -10,12 +10,14 @@ $allData = array();
 if ($received_data->action == 'update') {
 
   $_SESSION['checkboxarray'] = $received_data->data;
+  $_SESSION['totalPrice'] = $received_data->price;
   foreach ($received_data->data as $checkBoxValue) {
 
 
     $query = "UPDATE rooms SET room_status = 'booked' WHERE room_id = $checkBoxValue";
     $result = mysqli_query($connection, $query);
     confirm($result);
+    echo json_encode($received_data->price);
   }
 }
 

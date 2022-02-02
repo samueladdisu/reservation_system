@@ -263,7 +263,8 @@
           totalprice: '',
           promoCode: '',
           toggleModal: false,
-          oneClick: false
+          oneClick: false,
+          isPromoApplied: ''
         }
       },
 
@@ -272,17 +273,31 @@
           this.toggleModal = !this.toggleModal
 
         },
-        async fetchPromo() {
+       fetchPromo() {
           this.oneClick = true
-          await axios.post('book.php', {
-            action: 'promoCode',
-            data: this.promoCode
-          }).then(res => {
-            let discount = this.totalprice - ((res.data / 100) * this.totalprice)
-           
-            this.totalprice = discount
-            localStorage.total = JSON.stringify(this.totalprice)
-          })
+          
+          console.log("top promo", this.isPromoApplied);
+          if (!localStorage.promo) {
+            console.log("excuted");
+            axios.post('book.php', {
+              action: 'promoCode',
+              data: this.promoCode
+            }).then(res => {
+              let discount = this.totalprice - ((res.data / 100) * this.totalprice)
+
+              this.totalprice = discount
+              localStorage.total = JSON.stringify(this.totalprice)
+             
+            })
+            this.isPromoApplied = true
+              localStorage.promo = this.isPromoApplied
+          }
+
+          this.isPromoApplied =  JSON.parse(localStorage.promo || false)
+
+          console.log("bottom promo", this.isPromoApplied);
+
+
           console.log("total price", this.totalprice);
         },
         completeCart() {
