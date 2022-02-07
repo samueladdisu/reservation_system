@@ -53,16 +53,16 @@ if (isset($_POST['add_res'])) {
 
     <div class="form-group col-6">
       <label for="title">First Name</label>
-      <input type="text" class="form-control" name="res_firstname">
+      <input type="text" class="form-control" name="res_firstname" required>
     </div>
     <div class="form-group col-6">
       <label for="title">Last Name</label>
-      <input type="text" class="form-control" name="res_lastname">
+      <input type="text" class="form-control" name="res_lastname" required>
     </div>
 
     <div class="form-group col-6">
       <label for="title">Phone No.</label>
-      <input type="text" class="form-control" name="res_phone">
+      <input type="text" class="form-control" name="res_phone" >
     </div>
 
     <div class="form-group col-6">
@@ -142,7 +142,7 @@ if (isset($_POST['add_res'])) {
     
     <div class="form-group col-6 mt-3">
       <label for="post_content">Remark</label>
-      <textarea name="res_remark" id="" cols="30" rows="10" class="form-control"></textarea>
+      <textarea name="res_remark" id="" cols="30" rows="10" class="form-control" required></textarea>
     </div>
 
  <div class="form-group col-12">

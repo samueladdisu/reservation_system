@@ -30,7 +30,10 @@
           <!-- Content Row -->
           <div class="row">
 
-            <div class="col-4">
+              <?php 
+                if($_SESSION['user_role'] == 'admin'){
+                 ?>
+                  <div class="col-4">
               <?php
 
               if (isset($_POST['add_promo'])) {
@@ -79,8 +82,28 @@
 
 
               ?>
+               <?php
+                  // Delete Categories from data base
+                  if (isset($_GET['delete'])) {
+                    $the_type_id = escape($_GET['delete']);
+                    $query = "DELETE FROM promo WHERE promo_id = {$the_type_id} ";
+                    $delete = mysqli_query($connection, $query);
+
+                    if (!$delete) {
+                      die('Can not delete data' . mysqli_error($connection));
+                    } else {
+                      header("Location: ./promo.php");
+                    }
+                  }
+
+                  ?>
 
             </div>
+              <?php  }
+              
+              
+              ?>
+           
 
             <div class="col-8">
 
@@ -110,27 +133,19 @@
                       <td><?php echo $promo_code; ?></td>
                       <td><?php echo $promo_amount; ?></td>
                     
+                      <?php 
+                      
+                        if($_SESSION['user_role'] == 'admin'){
+                          ?>
+                      
+                    
 
                       <td><?php echo "<a href='promo.php?delete={$promo_id}'>Delete </a>"; ?></td>
                       <td><?php echo "<a href='promo.php?edit={$promo_id}'>Edit </a>"; ?></td>
                     </tr>
-                  <?php  } ?>
+                  <?php  }  } ?>
 
-                  <?php
-                  // Delete Categories from data base
-                  if (isset($_GET['delete'])) {
-                    $the_type_id = escape($_GET['delete']);
-                    $query = "DELETE FROM promo WHERE promo_id = {$the_type_id} ";
-                    $delete = mysqli_query($connection, $query);
-
-                    if (!$delete) {
-                      die('Can not delete data' . mysqli_error($connection));
-                    } else {
-                      header("Location: ./promo.php");
-                    }
-                  }
-
-                  ?>
+                 
 
 
 

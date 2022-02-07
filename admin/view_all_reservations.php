@@ -28,7 +28,30 @@ if (!isset($_SESSION['user_role'])) {
   <!-- Custom fonts for this template-->
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+  <style>
+    .pag {
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 2rem;
+    }
 
+    button.page-link {
+      display: inline-block;
+    }
+
+    button.page-link {
+      font-size: 20px;
+      color: #29b3ed;
+      font-weight: 500;
+    }
+
+    .offset {
+      width: 500px !important;
+      margin: 20px auto;
+    }
+  </style>
   <!-- Custom styles for this template-->
   <link href="./css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -47,7 +70,7 @@ if (!isset($_SESSION['user_role'])) {
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="resApp" class="d-flex flex-column">
 
       <!-- Main Content -->
       <div id="content">
@@ -63,14 +86,140 @@ if (!isset($_SESSION['user_role'])) {
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Reservations</h1>
 
+
+
+
           </div>
           <!-- Content Row -->
           <div class="row">
-            <div id="app">
+            <div>
 
               <table class="table table-bordered table-hover col-12" id="dataTable" width="100%" cellspacing="0">
-  
+
+                <!-- filter  -->
+
+                <div class="filter d-flex">
+
+                  <?php
+
+                  if ($_SESSION['user_location'] == 'admin') {
+
+                  ?>
+                    <div class="form-group col-4">
+                      <select name="room_location" v-model="location" class="custom-select" id="">
+                        <option disabled value="">Resort Location</option>
+                        <?php
+
+                        $query = "SELECT * FROM locations";
+                        $result = mysqli_query($connection, $query);
+                        confirm($result);
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+                          $location_id = $row['location_id'];
+                          $location_name = $row['location_name'];
+
+                          echo "<option value='$location_name'>{$location_name}</option>";
+                        }
+                        ?>
+                      </select>
+                    </div>
+                  <?php } else { ?>
+                    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+
+
+                  <?php  }
+
+
+                  ?>
+
+                  <div class="form-group col-4">
+                    <input type="date" v-model="date" class="form-control" id="">
+                  </div>
+                  <div id="bulkContainer" class="col-4">
+                    <button name="booked" value="location" id="location" @click.prevent="filterRes" class="btn btn-success">Filter</button>
+
+                    <button name="booked" value="location" id="location" @click.prevent="fetchData" class="btn btn-danger mx-2">Clear Filters</button>
+
+
+                    <span class="text-muted">
+
+                    </span>
+
+
+                  </div>
+                </div>
+
+
+                <!-- end of filter  -->
+                <thead>
+                  <tr>
+                    <!-- <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th> -->
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th># of Guest</th>
+                    <th>Arrival</th>
+                    <th>Departure</th>
+                    <th>Payment Platform</th>
+                    <th>Room IDs</th>
+                    <th>Total Price</th>
+                    <th>Confirm Id</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr v-for="row in displayedPosts" :key="row">
+                    <td>
+                      {{ row.res_id}}
+                    </td>
+                    <td>
+                      {{ row.res_firstname }}
+                    </td>
+                    <td>
+                      {{ row.res_lastname}}
+                    </td>
+                    <td>
+                      {{ row.res_phone}}
+                    </td>
+                    <td>
+                      {{ row.res_guestNo}}
+                    </td>
+                    <td>
+                      {{ row.res_checkin }}
+                    </td>
+                    <td>
+                      {{ row.res_checkout }}
+                    </td>
+                    <td>
+                      {{ row.res_paymentMethod }}
+                    </td>
+                    <td>
+                      {{ row.res_roomIDs }}
+                    </td>
+                    <td>
+                      {{ row.res_price}}
+                    </td>
+                    <td>
+                      {{ row.res_confirmID }}
+                    </td>
+                    <td @click="editRes(row)" data-toggle="modal" :data-target="modal">
+                      <i style="color: turquoise;" class="far fa-edit"></i>
+                    </td>
+                    <td>
+                      <i style="color: red;" class="far fa-trash-alt"></i>
+                    </td>
+                    <td>
+                      <i class="fas fa-ellipsis-v"></i>
+                    </td>
+                  </tr>
+
+
+                </tbody>
+
               </table>
+
+
             </div>
           </div>
 
@@ -79,45 +228,92 @@ if (!isset($_SESSION['user_role'])) {
 
       </div>
       <!-- End of Main Content -->
-
-     
-        <ul class="pagination my-3 justify-content-center">
-          <?php 
-
-          if(isset($_GET['page'])){
-            $_SESSION['page'] = $_GET['page'];
-
-          
-          }
-           $location = $_SESSION['user_location'];
-           if($location == "admin"){
-             $res_count = "SELECT * FROM reservations";
-           } else {
-             $res_count = "SELECT * FROM reservations WHERE res_location = '$location'";
-           }
-       
-           
-           $find_count = mysqli_query($connection, $res_count);
-             $count = mysqli_num_rows($find_count);
-             $count = ceil($count / 10);
-             for($i = 1; $i <= $count; $i++){
-              ?>
-           <li class="page-item"><a class="page-link" href="view_all_reservations.php?page=<?php echo $i;?>"><?php echo $i; ?></a></li>
-
-            <?php }
-          ?>
-          <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+      <nav class="pag" aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
+          </li>
+          <li class="page-item">
+            <button type="button" class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
+          </li>
+          <li class="page-item">
+            <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
+          </li>
         </ul>
-      
+      </nav>
+
+
+      <!-- Edit bulk reservation Modal -->
+
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add Guest</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="row">
+                
+                <div class="form-group col-6">
+                  <label for="recipient-name" class="col-form-label">First Name:</label>
+                  <input type="text" v-model="firstName" class="form-control" id="recipient-name">
+                </div>
+                <div class="form-group col-6">
+                  <label for="recipient-name" class="col-form-label">Last Name:</label>
+                  <input type="text" v-model="lastName" class="form-control" id="recipient-name">
+                </div>
+                <div class="form-group col-12">
+                  <label for="recipient-name" class="col-form-label">Email:</label>
+                  <input type="text" v-model="email" class="form-control" id="recipient-name">
+                </div>
+                <div class="form-group col-6">
+                  <label for="recipient-name" class="col-form-label">Phone:</label>
+                  <input type="text" v-model="phone" class="form-control" id="recipient-name">
+                </div>
+
+                <div class="form-group col-6">
+                  <label for="recipient-name" class="col-form-label">Date of Birth:</label>
+                  <input type="date" v-model="dob" class="form-control" id="recipient-name">
+                </div>
+
+                <div class="form-group col-6">
+                  <label for="recipient-name" class="col-form-label">Check in:</label>
+                  <input type="date" class="form-control" :value="tempcheckin" readonly>
+                </div>
+
+                <div class="form-group col-6">
+                  <label for="recipient-name" class="col-form-label">Check Out:</label>
+                  <input type="date" class="form-control" :value="tempcheckout" readonly>
+                </div>
+                
+            
+                
+               
+                <div class="form-group col-12">
+                  <label for="message-text" class="col-form-label">Remark:</label>
+                  <textarea v-model="remark" class="form-control" id="message-text"></textarea>
+                </div>
+
+               
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" @click="singleRes(row)" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end edit bulk reservation  -->
+
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Kuriftu resorts 2021. Developed by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+            <span>Copyright &copy; Kuriftu resorts 2021. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
           </div>
         </div>
       </footer>
@@ -153,74 +349,156 @@ if (!isset($_SESSION['user_role'])) {
     </div>
   </div>
 
-  
-  <?php
-
-if (isset($_GET['delete'])) {
-  $rooms = array();
-  $ary1 = [1,3,5];
-  $the_post_id = escape($_GET['delete']);
-  $select_rooms_query = "SELECT res_roomIDs FROM reservations WHERE res_id = $the_post_id";
-  $select_rooms_result = mysqli_query($connection, $select_rooms_query );
-
-  confirm($select_rooms_result);
-
-  while($row = mysqli_fetch_assoc($select_rooms_result)){
-    foreach ($row as  $val) {
-    
-      $rooms = json_decode($val);
-      
-    }
-  }
-  
-
-  foreach ($rooms as  $val) {
-    $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$val'";
-    $change_status_result = mysqli_query($connection, $change_status_query);
-    confirm($change_status_result);
-  }
-
-  $delete_query = "DELETE FROM reservations WHERE res_id = $the_post_id";
-  $delete_result = mysqli_query($connection, $delete_query);
-  confirm($delete_result);
-  header("Location: ./view_all_reservations.php");
-}
-
-?>
-
   <!-- Bootstrap core JavaScript-->
   <script src="./vendor/jquery/jquery.min.js"></script>
   <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/vue@3.0.2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="./js/load.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="./vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
   <script>
-    $(document).ready(function() {
-      get_data()
-      setInterval(function() {
-        get_data()
-      }, 20000);
+    // $(document).ready(function() {
+    //   get_data()
+    //   setInterval(function() {
+    //     get_data()
+    //   }, 20000);
 
-      function get_data() {
-        jQuery.ajax({
-          type: "GET",
-          url: "./includes/load_reservation.php",
-          data: '',
-          beforeSend: function() {
+    //   function get_data() {
+    //     jQuery.ajax({
+    //       type: "GET",
+    //       url: "./includes/load_reservation.php",
+    //       data: '',
+    //       beforeSend: function() {
 
-          },
-          complete: function() {
+    //       },
+    //       complete: function() {
 
-          },
-          success: function(data) {
-            $("table").html(data);
+    //       },
+    //       success: function(data) {
+    //         $("table").html(data);
+    //       }
+    //     })
+    //   }
+    // })
+  </script>
+
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <script>
+    // Enable pusher logging - don't include this in production
+
+
+
+
+    new Vue({
+      el: "#resApp",
+      data() {
+        return {
+          posts: [''],
+          page: 1,
+          perPage: 9,
+          pages: [],
+          location: '',
+          date: '',
+          modal: "",
+          tempcheckin: '',
+          tempcheckout: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          dob: '',
+          remark: ''
+        }
+      },
+      methods: {
+        filterRes() {
+          console.log(this.location);
+          axios.post('./includes/backEndreservation.php', {
+            action: 'filter',
+            location: this.location,
+            date: this.date
+          }).then(res => {
+            console.log(res.data);
+            this.posts = res.data
+          }).catch(err => console.log(err.message))
+        },
+         singleRes(row){
+          console.log(row);
+          // await axios.post('./includes/backEndreservation.php', {
+          //     action: 'singleRes',
+          //     firstName: 
+          //   })
+        },
+         editRes(row) {
+          let array_rooms = JSON.parse(row.res_roomIDs)
+          if (array_rooms.length > 1) {
+            console.log("more than one");
+            this.modal = "#exampleModal"
+            this.tempcheckin = row.res_checkin
+            this.tempcheckout = row.res_checkout
+            
+
+
+          } else {
+            this.modal = ""
+          
+          }
+        },
+        fetchData() {
+          axios.post('./includes/backEndreservation.php', {
+            action: 'fetchRes'
+          }).then(res => {
+            this.posts = res.data
+            console.log(this.posts);
+          })
+        },
+        setPages() {
+          let numberOfPages = Math.ceil(this.posts.length / this.perPage);
+          for (let index = 1; index <= numberOfPages; index++) {
+            this.pages.push(index);
+          }
+        },
+        paginate(posts) {
+          let page = this.page;
+          let perPage = this.perPage;
+          let from = (page * perPage) - perPage;
+          let to = (page * perPage);
+          return posts.slice(from, to);
+        }
+      },
+      computed: {
+        displayedPosts() {
+          return this.paginate(this.posts);
+        }
+      },
+      watch: {
+        posts() {
+          this.setPages();
+        }
+      },
+      created() {
+        this.fetchData()
+        Pusher.logToConsole = true;
+
+        const pusher = new Pusher('341b77d990ca9f10d6d9', {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+        const channel = pusher.subscribe('notifications');
+        channel.bind('new_reservation', (data) => {
+          if (data) {
+            this.fetchData()
           }
         })
+      },
+      filters: {
+        trimWords(value) {
+          return value.split(" ").splice(0, 20).join(" ") + '...';
+        }
       }
     })
   </script>

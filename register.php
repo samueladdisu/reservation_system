@@ -1,5 +1,4 @@
 <?php include  'config.php'; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,6 +35,22 @@
   </header>
 
   <?php
+
+  // Pusher library setup
+
+  require __DIR__ . './vendor/autoload.php';
+
+  $app_id = '1329709';
+  $app_key = '341b77d990ca9f10d6d9';
+  $app_secret = '2e226aa040b0bc8c8e94';
+  $app_cluster = 'mt1';
+  
+  $pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);
+
+
+
+
+  // pusher setup end
   $cart = $_SESSION['cart'];
   $location = $_SESSION['location'];
   $checkIn =  $_SESSION['checkIn'];
@@ -86,6 +101,7 @@
     $result_status = mysqli_query($connection, $status_query);
     confirm($result_status);
 
+   
     switch ($params['res_paymentMethod']) {
       case 'amole':
         header("Location: ./amole.php");
@@ -97,6 +113,15 @@
         header("Location: ./telebirr.php");
         break;
     }
+
+     // pusher trigger notification
+
+    //  $data = array($params, $id);
+     $data = true;
+
+     $pusher->trigger('notifications', 'new_reservation', $data);
+
+     // end
   }
 
   ?>
@@ -225,7 +250,7 @@
           <hr>
           <div class="cart-footer-lg" v-if="cart.length != 0">
 
-            
+
 
             <div class="price">
               Total: $ <?php echo $total_price; ?> <br>
@@ -244,7 +269,7 @@
 
   <?php include_once './includes/footer.php' ?>
 
- 
+
 </body>
 
 </html>

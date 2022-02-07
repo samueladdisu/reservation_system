@@ -5,24 +5,17 @@
 
  <thead>
     <tr>
-    <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th>
+    <!-- <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th> -->
       <th>Id</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Phone</th>
-      <th>Email</th>
       <th># of Guest</th>
       <th>Arrival</th>
       <th>Departure</th>
-      <th>Country</th>
-      <th>Address</th>
-      <th>City</th>
-      <th>Zip/Postal Code </th>
       <th>Payment Platform</th>
       <th>Room IDs</th>
       <th>Total Price</th>
-      <th>Hotel Location</th>
-      <th>Reservation Agent</th>
       <th>Confirm Id</th>
     </tr>
   </thead>
@@ -68,21 +61,15 @@
 
       echo "<tr>";
       ?>
-         <td><input type="checkbox" name="checkBoxArray[]" value="<?php echo $db_res['res_id']; ?>" @change="booked(row)" class="checkBoxes"></td>
+         <!-- <td><input type="checkbox" name="checkBoxArray[]" value="<?php echo $db_res['res_id']; ?>" @change="booked(row)" class="checkBoxes"></td> -->
       <?php
       echo "<td>{$db_res['res_id']}</td>";
       echo "<td>{$db_res['res_firstname']}</td>";
       echo "<td>{$db_res['res_lastname']}</td>";
       echo "<td>{$db_res['res_phone']}</td>";
-      echo "<td>{$db_res['res_email']}</td>";
-      // echo "<td>{$_GET['page']}</td>";
       echo "<td>{$db_res['res_guestNo']}</td>";
       echo "<td>{$db_res['res_checkin']}</td>";
       echo "<td>{$db_res['res_checkout']}</td>";
-      echo "<td>{$db_res['res_country']}</td>";
-      echo "<td>{$db_res['res_address']}</td>";
-      echo "<td>{$db_res['res_city']}</td>";
-      echo "<td>{$db_res['res_zipcode']}</td>";
       echo "<td>{$db_res['res_paymentMethod']}</td>";
       echo "<td>";
       foreach ($db_res['res_roomIDs'] as $value) {
@@ -90,8 +77,6 @@
       }
       echo  "</td>";
       echo "<td>{$db_res['res_price']}</td>";
-      echo "<td>{$db_res['res_location']}</td>";
-      echo "<td>{$db_res['res_agent']}</td>";
       echo "<td>{$db_res['res_confirmID']}</td>";
       if($db_res['res_agent'] != 'website' && $db_res['res_paymentStatus'] != 'payed'){
 

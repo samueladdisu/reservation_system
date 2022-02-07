@@ -2,7 +2,7 @@
    <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Kuriftu resorts 2021. Developed by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+                    <span>Copyright &copy; Kuriftu resorts 2021. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
                     </div>
                 </div>
             </footer>

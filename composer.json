@@ -1,5 +1,11 @@
 {
+    "autoload": {
+        "psr-4": {
+            "MyApp\\": "src"
+        }
+    },
     "require": {
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
+        "pusher/pusher-php-server": "^7.0"
     }
 }

@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th>Id</th>
+      <th>Membership Id</th>
       <th>Firstname</th>
       <th>Lastname</th>
       <th>Company Name</th>
@@ -15,6 +16,7 @@
     </tr>
   </thead>
   <tbody>
+  
 
     <?php
 
@@ -23,7 +25,7 @@
 
     while ($row = mysqli_fetch_assoc($user_result)) {
     
-
+    
       echo "<tr>";
       foreach ($row as $key => $value) {
         echo "<td>";
@@ -42,34 +44,3 @@
 
   </tbody>
 </table>
-
-<?php
-
-
-if (isset($_GET['admin'])) {
-  $the_user_id = escape($_GET['admin']);
-  $query = "UPDATE users SET user_role = 'Admin' WHERE user_id = $the_user_id";
-  $result = mysqli_query($connection, $query);
-
-  confirm($result);
-  header("Location: ./users.php");
-}
-
-if (isset($_GET['author'])) {
-  $the_user_id = escape($_GET['author']);
-  $query = "UPDATE users SET user_role = 'Subsciber' WHERE user_id = $the_user_id";
-  $result = mysqli_query($connection, $query);
-
-  confirm($result);
-  header("Location: ./users.php");
-}
-
-if (isset($_GET['delete'])) {
-  $the_user_id = escape($_GET['delete']);
-  $query = "DELETE FROM users WHERE user_id = $the_user_id";
-  $result = mysqli_query($connection, $query);
-
-  confirm($result);
-  header("Location: ./users.php");
-}
-?>
