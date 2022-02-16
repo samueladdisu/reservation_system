@@ -1,6 +1,11 @@
-<?php ob_start(); ?>
-<?php require __DIR__ . '/vendor/autoload.php'; ?>
+<?php 
+ob_start(); 
+session_start();
+require  './admin/includes/db.php';
+require  './admin/includes/functions.php';
+require __DIR__ . '/vendor/autoload.php';
 
-<?php session_start(); ?>
-<?php include  './admin/includes/db.php'; ?>
-<?php include  './admin/includes/functions.php'; ?>
+
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();

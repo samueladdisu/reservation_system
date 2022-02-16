@@ -1,11 +1,13 @@
 <?php include  'config.php'; ?>
-<?php require_once  __DIR__.'/vendor/autoload.php' ?>
 <?php 
+
+
   use PHPMailer\PHPMailer\PHPMailer;
   use PHPMailer\PHPMailer\Exception;
 
-$recieved = json_decode(file_get_contents("php://input"));
 
+$recieved = json_decode(file_get_contents("php://input"));
+$gmail_pwd = $_ENV['GMAIL_PASSWORD'];
 if($recieved->action == "insert"){
   $formData = $recieved->data;
 
@@ -36,7 +38,7 @@ if($recieved->action == "insert"){
     $mail->SMTPSecure = "ssl";
   
     $mail->Username = "samueladdisu9@gmail.com";
-    $mail->Password = "18424325";
+    $mail->Password = "$gmail_pwd";
   
     $mail->setFrom("samueladdisu9@gmail.com");
     $mail->addReplyTo("no-reply@samuel.com");
