@@ -1,7 +1,7 @@
 <?php
 
 
-include (__DIR__ . "/admin_config.php");
+include (__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "/admin_config.php");
 
 $db_username = $_ENV['DB_USERNAME'];
 $db_pwd = $_ENV['DB_PASSWORD'];
