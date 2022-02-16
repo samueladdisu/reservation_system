@@ -33,9 +33,18 @@ const app = Vue.createApp({
       console.log(this.totalPrice);
     },
     booked(row) {
+      var checkin = new Date(this.$refs.checkin.value);
+      var checkout = new Date(this.$refs.checkout.value);
+      // To calculate the time difference of two dates
+      var Difference_In_Time = checkout.getTime() - checkin.getTime();
+        
+      // To calculate the no. of days between two dates
+      var stayedNights = Difference_In_Time / (1000 * 3600 * 24);
+      
+      console.log(stayedNights)
       if (event.target.checked) {
         console.log(event.target);
-        this.totalPrice += parseInt(row.room_price)
+        this.totalPrice += parseInt(row.room_price) * stayedNights
         this.bookedRooms.push(row)
       } else {
         this.totalPrice -= parseInt(row.room_price)
@@ -67,7 +76,8 @@ const app = Vue.createApp({
     },
     bookRooms() {
       const checkBoxes = document.querySelectorAll('.checkBoxes')
-
+        
+   
       checkBoxes.forEach(check => {
 
         if (check.checked) {
@@ -86,10 +96,10 @@ const app = Vue.createApp({
         price: this.totalPrice
 
       }).then(res => {
-
         console.log(this.bookedRooms);
         console.log("price", res.data);
       }).catch(err => console.log(err.message))
+
     },
     reserveRooms() {
       const checkBoxes = document.querySelectorAll('.checkBoxes')

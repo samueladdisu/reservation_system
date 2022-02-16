@@ -84,13 +84,13 @@ if (isset($_POST['add_res'])) {
 
     <div class="form-group col-6">
       <label for="title">Check In</label>
-      <input type="date" class="form-control" value="<?php echo date('Y-m-d') ?>" name="res_checkin">
+      <input type="date" class="form-control" ref="checkin" value="<?php echo date('Y-m-d') ?>" name="res_checkin">
     </div>
 
 
     <div class="form-group col-6">
       <label for="title">Check Out</label>
-      <input type="date" class="form-control" value="<?php echo date('Y-m-d', strtotime(' +1 day')) ?>" name="res_checkout">
+      <input type="date" class="form-control" ref="checkout" value="<?php echo date('Y-m-d', strtotime(' +1 day')) ?>" name="res_checkout">
     </div>
 
 
@@ -157,7 +157,7 @@ if (isset($_POST['add_res'])) {
 
 
     <div class="form-group">
-      <input type="submit" class="btn btn-primary" name="add_res" @click="reservation" value="Add Reservation">
+      <input type="submit" class="btn btn-primary" name="add_res" value="Add Reservation">
     </div>
 
   </form>
@@ -298,7 +298,7 @@ if (isset($_POST['add_res'])) {
           </div>
         </div>
         <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+  
           <button name="booked" value="booked" id="book" @click.prevent="reserveRooms" data-dismiss="modal" class="btn btn-secondary">Reserve Room</button>
           <button name="booked" value="booked" id="book" @click.prevent="bookRooms" data-dismiss="modal" class="btn btn-primary">Book Room</button>
         </div>

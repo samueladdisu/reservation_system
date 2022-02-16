@@ -2211,6 +2211,10 @@ header {
   margin-top: 5.19rem;
 }
 
+.main-body .container .signin-form {
+  transform: translateX(10%);
+}
+
 .main-body .container .signup-form {
   margin: 0 auto;
   margin-top: 3.81rem;
@@ -2279,6 +2283,9 @@ header {
 @media screen and (min-width: 768px) {
   .main-body .caps {
     font-size: 2.25rem;
+  }
+  .main-body .container .signin-form {
+    transform: translateX(20%);
   }
   .main-body .container .signup-form .form-group {
     display: flex;

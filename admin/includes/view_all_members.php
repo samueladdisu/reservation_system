@@ -13,6 +13,7 @@
       <th>Exp. Date</th>
       <th>Type</th>
       <th>User name</th>
+      <th>Is Activated</th>
     </tr>
   </thead>
   <tbody>
@@ -28,10 +29,10 @@
     
       echo "<tr>";
       foreach ($row as $key => $value) {
-        echo "<td>";
-        if($key == "m_pwd"){
+        if($key == "m_pwd" || $key == "m_validationKey"){
           continue;
         }
+        echo "<td>";
         echo $params[$key] = escape($value);
         echo "</td>";
       }

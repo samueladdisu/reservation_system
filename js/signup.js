@@ -1,3 +1,7 @@
+var myModal = new bootstrap.Modal(document.getElementById('successModal'), {
+  keyboard: false
+})
+
 
 const app = Vue.createApp({
   data(){
@@ -15,7 +19,8 @@ const app = Vue.createApp({
       },
       cPwd: '',
       pwdError: '',
-      cPwdError: ''
+      cPwdError: '',
+      modal: ''
     }
   },
   methods: {
@@ -43,13 +48,16 @@ const app = Vue.createApp({
         data: this.form 
       }).then(res => {
         console.log(res.data);
-        this.form = {}
-        this.cPwd = ""
+        if(res.data === "Successful"){
+          this.form = {}
+          this.cPwd = ""
+          myModal.show()
+        }else{
+          console.log("Something went wrong");
+        }
+        
 
-        // for(let key in this.form){
-        //   let value = this.form[key]
-        //   value = ""
-        // }
+
       }).catch(err => {
         console.log(err.message);
       })

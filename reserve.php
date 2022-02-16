@@ -15,7 +15,15 @@
 </head>
 
 <body>
+  <?php
 
+  if (isset($_SESSION['m_username'])) {
+    $user_name =  $_SESSION['m_username'];
+  }else {
+    $user_name = null;
+  }
+
+  ?>
   <header class="header">
     <div class="container">
       <nav class="nav-center">
@@ -142,7 +150,7 @@
               </p>
 
               <p class="text-muted">
-                ${{ items.room_price }}
+                ${{ items.room_price }} Per Night
               </p>
             </div>
 
@@ -249,6 +257,9 @@
 
   <?php include_once './includes/footer.php' ?>
   <script>
+    const user = '<?php echo $user_name ?>'
+
+    
     const app = Vue.createApp({
       mounted() {
 
@@ -273,9 +284,9 @@
           this.toggleModal = !this.toggleModal
 
         },
-       fetchPromo() {
+        fetchPromo() {
           this.oneClick = true
-          
+
           console.log("top promo", this.isPromoApplied);
           if (!localStorage.promo) {
             console.log("excuted");
@@ -287,13 +298,13 @@
 
               this.totalprice = discount
               localStorage.total = JSON.stringify(this.totalprice)
-             
+
             })
             this.isPromoApplied = true
-              localStorage.promo = this.isPromoApplied
+            localStorage.promo = this.isPromoApplied
           }
 
-          this.isPromoApplied =  JSON.parse(localStorage.promo || false)
+          this.isPromoApplied = JSON.parse(localStorage.promo || false)
 
           console.log("bottom promo", this.isPromoApplied);
 
@@ -324,34 +335,70 @@
         addRoom(row) {
           let rooms = 0;
           let total = 0;
-          if (row.cnt > 0) {
+          
 
-            this.cart.push(row)
-            this.cart.forEach(val => {
-              total += parseInt(val.room_price)
+          if (user) {
+            if (row.cnt > 0) {
 
-            })
-            this.totalprice = total
-            localStorage.total = JSON.stringify(this.totalprice)
-            localStorage.cart = JSON.stringify(this.cart)
-            console.log(this.cart);
-            row.cnt--
+              this.cart.push(row)
+              this.cart.forEach(val => {
+                total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+
+              })
+              this.totalprice = total
+              localStorage.total = JSON.stringify(this.totalprice)
+              localStorage.cart = JSON.stringify(this.cart)
+              console.log(this.cart);
+              row.cnt--
+            }
+          } else {
+
+            if (row.cnt > 0) {
+
+              this.cart.push(row)
+              this.cart.forEach(val => {
+                total += parseInt(val.room_price) * this.nights
+
+              })
+              this.totalprice = total
+              localStorage.total = JSON.stringify(this.totalprice)
+              localStorage.cart = JSON.stringify(this.cart)
+              console.log(this.cart);
+              row.cnt--
+            }
           }
-          // console.log(this.cart);
+
+          console.log(this.cart);
         },
         deleteRoom(row) {
+
           let deleteTotal = 0;
-          let cartIndex = this.cart.indexOf(row)
-          this.cart.splice(cartIndex, 1)
-          this.cart.forEach(val => {
-            deleteTotal += parseInt(val.room_price)
+          if (user){
+            let cartIndex = this.cart.indexOf(row)
+            this.cart.splice(cartIndex, 1)
+            this.cart.forEach(val => {
+              deleteTotal += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+  
+            })
+            this.totalprice = deleteTotal
+            localStorage.cart = JSON.stringify(this.cart)
+            console.log(this.cart);
+  
+            row.cnt++
+          }else{
 
-          })
-          this.totalprice = deleteTotal
-          localStorage.cart = JSON.stringify(this.cart)
-          console.log(this.cart);
-
-          row.cnt++
+            let cartIndex = this.cart.indexOf(row)
+            this.cart.splice(cartIndex, 1)
+            this.cart.forEach(val => {
+              deleteTotal += parseInt(val.room_price) * this.nights
+  
+            })
+            this.totalprice = deleteTotal
+            localStorage.cart = JSON.stringify(this.cart)
+            console.log(this.cart);
+  
+            row.cnt++
+          }
         },
         fetchAllData() {
           axios.post('book.php', {
@@ -363,7 +410,7 @@
           })
         },
         async submitData() {
-          if (this.checkIn != '' && this.checkOut != '' && this.desti != '') {
+          if (this.checkIn != '' && this.checkOut != '') {
             await axios.post('book.php', {
               action: 'getData',
               checkIn: this.checkIn,
@@ -373,6 +420,8 @@
               this.allData = res.data
               console.log(res.data);
               console.log(this.allData);
+            }).catch(err => {
+              console.log(err);
             })
           } else {
             alert('Please fill all fields')
@@ -381,11 +430,24 @@
 
 
       },
+      computed: {
+        nights() {
+          var checkin = new Date(this.checkIn);
+          var checkout = new Date(this.checkOut);
+
+
+          var Difference_In_Time = checkout.getTime() - checkin.getTime();
+
+          var stayedNights = Difference_In_Time / (1000 * 3600 * 24);
+
+          return stayedNights
+        }
+      },
       created() {
         this.fetchAllData()
         this.cart = JSON.parse(localStorage.cart || '[]')
         this.totalprice = JSON.parse(localStorage.total || '[]')
-        console.log(this.cart);
+
 
 
 

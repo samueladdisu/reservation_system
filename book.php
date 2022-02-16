@@ -41,24 +41,32 @@ if($received_data->action == 'promoCode'){
 
 }
 if($received_data->action == 'getData'){
-  $data = array(
-    ':checkIn' => $received_data->checkIn,
-    ':checkOut' => $received_data->checkOut,
-    ':desti' => $received_data->desti
-  );
+  
+  // $sql = "SELECT * FROM reservations r1 , reservations r2 WHERE r1.res_checkout <= '$received_data->checkIn' AND r2.res_checkin >= '$received_data->checkOut' AND r1.res_id = r2.res_id";
+  $sql = "SELECT * FROM reservations r1 , reservations r2 WHERE r1.res_checkout <= '$received_data->checkIn' AND r2.res_checkin >= '$received_data->checkOut'";
 
-  $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked' AND room_location = '$received_data->desti';";
-
-  // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$received_data->desti' ";
-  $result = mysqli_query($connection, $query2);
-  confirm($result);
-
-  while($row = mysqli_fetch_assoc($result)){
-    $output[] = $row;
+  $res_result = mysqli_query($connection, $sql);
+  
+  confirm($res_result);
+ 
+  while($row = mysqli_fetch_assoc($res_result)){
+    $output[] = $row['res_id'];
   }
+  echo json_encode($output);
+
+  // echo json_encode(confirm($res_result));
+
+  // $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked' AND room_location = '$received_data->desti';";
+
+  // // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$received_data->desti' ";
+  // $result = mysqli_query($connection, $query2);
+  // confirm($result);
+
+  // while($row = mysqli_fetch_assoc($result)){
+  //   $output[] = $row;
+  // }
 
   
-  echo json_encode($output);
 
 }
 

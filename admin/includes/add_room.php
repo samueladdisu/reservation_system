@@ -2,14 +2,26 @@
 if (isset($_POST['add_room'])) {
   $room_occupancy   =  escape($_POST['room_occupancy']);
   $room_acc         =  escape($_POST['room_acc']);
-  $room_price       =  escape($_POST['room_price']);
   $room_number      =  escape($_POST['room_number']);
   $room_status      =  escape($_POST['room_status']);
   $room_location    =  escape($_POST['room_location']);
   $room_desc    =  escape($_POST['room_desc']);
+  // $location = $_SESSION['user_role'];
+  //   if ($location == 'admin') {
+  //     $price_query = "SELECT * FROM room_type";
+  //   } else {
+  //     $query = "SELECT room_price  FROM room_type WHERE type_location = '$location'";
+  //   }
+  //   $result = mysqli_query($connection, $query);
 
+  // confirm($result);
+  // while ($row = mysqli_fetch_assoc($result)) {
+  //   $type_id = $row['type_id'];
+  //   $type_name = $row['type_name'];
+  //   $room_price = $row['room_price'];
+  //   $temp_type = "";
 
-
+  // }
   $room_image = $_FILES['room_image']['name'];
   $room_image_temp = $_FILES['room_image']['tmp_name'];
 
@@ -52,11 +64,13 @@ if (isset($_POST['add_room'])) {
       while ($row = mysqli_fetch_assoc($result)) {
         $type_id = $row['type_id'];
         $type_name = $row['type_name'];
+        $room_price = $row['room_price'];
         $temp_type = "";
         if (strcmp($type_name, $temp_type) == 0) {
           continue;
         } else {
       ?>
+      
           <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
       <?php
         }
@@ -70,11 +84,6 @@ if (isset($_POST['add_room'])) {
   <div class="form-group">
     <label for="post_image"> Room Image</label>
     <input type="file" name="room_image">
-  </div>
-
-  <div class="form-group">
-    <label for="post_tags"> Price </label>
-    <input type="text" class="form-control" name="room_price">
   </div>
 
   <div class="form-group">

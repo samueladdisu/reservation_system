@@ -43,6 +43,9 @@
   }
 
   .container {
+    .signin-form{
+      transform: translateX(10%);
+    }
     .signup-form {
       margin: 0 auto;
       margin-top: 3.81rem;
@@ -121,6 +124,9 @@
     }
 
     .container {
+      .signin-form{
+        transform: translateX(20%);
+      }
       .signup-form {
 
         .form-group {

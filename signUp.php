@@ -1,4 +1,6 @@
 <?php include  'config.php'; ?>
+<?php require_once  __DIR__.'/vendor/autoload.php' ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +8,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <title>Sign Up - Kuriftu Resorts</title>
   <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -112,20 +115,37 @@
 
         </div>
 
-        <button class="btn btn-secondary">
+        <button class="btn btn-secondary" data-bs-toggle="modal" :data-bs-target="modal">
           Sign Up
         </button>
         <p class="bottom-form">
-          Already have an account? <a href="#">Sign up</a>
+          Already have an account? <a href="http://localhost/reservation_system/signIn.php">Sign in</a>
         </p>
 
       </form>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       Sign up Successful Please Verify Your email
+      </div>
+     
+    </div>
+  </div>
+</div>
     </div>
   </section>
 
   <?php include_once './includes/footer.php' ?>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./js/signup.js" type="module"></script>
 </body>
 

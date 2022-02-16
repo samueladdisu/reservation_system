@@ -206,7 +206,8 @@ if (!isset($_SESSION['user_role'])) {
                     <td @click="editRes(row)" data-toggle="modal" :data-target="modal">
                       <i style="color: turquoise;" class="far fa-edit"></i>
                     </td>
-                    <td>
+                    <td data-toggle="modal" data-target="#deleteModal"
+                    @click="setTemp(row)">
                       <i style="color: red;" class="far fa-trash-alt"></i>
                     </td>
                     <td>
@@ -302,7 +303,7 @@ if (!isset($_SESSION['user_role'])) {
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" @click="singleRes(row)" class="btn btn-primary">Add</button>
+              <button type="button" data-dismiss="modal" @click="singleRes" class="btn btn-primary">Add</button>
             </div>
           </div>
         </div>
@@ -319,6 +320,25 @@ if (!isset($_SESSION['user_role'])) {
       </footer>
       <!-- End of Footer -->
 
+       <!-- Delete Modal  -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure You want to Delete?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Delete" to confirm deletion.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of Delete Modal  -->
     </div>
     <!-- End of Content Wrapper -->
 
@@ -329,6 +349,8 @@ if (!isset($_SESSION['user_role'])) {
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
+
+ 
 
   <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -357,34 +379,6 @@ if (!isset($_SESSION['user_role'])) {
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="./vendor/jquery-easing/jquery.easing.min.js"></script>
-
-
-  <script>
-    // $(document).ready(function() {
-    //   get_data()
-    //   setInterval(function() {
-    //     get_data()
-    //   }, 20000);
-
-    //   function get_data() {
-    //     jQuery.ajax({
-    //       type: "GET",
-    //       url: "./includes/load_reservation.php",
-    //       data: '',
-    //       beforeSend: function() {
-
-    //       },
-    //       complete: function() {
-
-    //       },
-    //       success: function(data) {
-    //         $("table").html(data);
-    //       }
-    //     })
-    //   }
-    // })
-  </script>
-
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
     // Enable pusher logging - don't include this in production
@@ -397,6 +391,7 @@ if (!isset($_SESSION['user_role'])) {
       data() {
         return {
           posts: [''],
+          tempRow: {},
           page: 1,
           perPage: 9,
           pages: [],
@@ -410,7 +405,8 @@ if (!isset($_SESSION['user_role'])) {
           email: '',
           phone: '',
           dob: '',
-          remark: ''
+          remark: '',
+          tempDelete: {}
         }
       },
       methods: {
@@ -425,12 +421,42 @@ if (!isset($_SESSION['user_role'])) {
             this.posts = res.data
           }).catch(err => console.log(err.message))
         },
-         singleRes(row){
-          console.log(row);
-          // await axios.post('./includes/backEndreservation.php', {
-          //     action: 'singleRes',
-          //     firstName: 
-          //   })
+        setTemp(row){
+          this.tempDelete = row
+        },
+      async deleteRes(){
+          
+          await axios.post('./includes/backEndreservation.php',{
+            action: 'delete',
+            row: this.tempDelete
+          }).then(res => {
+            console.log(res.data);
+            this.fetchData()
+          })
+        },
+         async singleRes(){
+          console.log(this.tempRow);
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'addSingleRes',
+            row: this.tempRow,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+            phone: this.phone,
+            dob: this.dob,
+            remark: this.remark
+          }).then(res => {
+            console.log(res.data);
+            this.tempRow = {}
+            this.firstName = ''
+            this.lastName = ''
+            this.email = ''
+            this.phone = ''
+            this.dob = ''
+            this.remark = ''
+            this.fetchData()
+          })
+       
         },
          editRes(row) {
           let array_rooms = JSON.parse(row.res_roomIDs)
@@ -439,9 +465,7 @@ if (!isset($_SESSION['user_role'])) {
             this.modal = "#exampleModal"
             this.tempcheckin = row.res_checkin
             this.tempcheckout = row.res_checkout
-            
-
-
+            this.tempRow = row
           } else {
             this.modal = ""
           
@@ -452,7 +476,7 @@ if (!isset($_SESSION['user_role'])) {
             action: 'fetchRes'
           }).then(res => {
             this.posts = res.data
-            console.log(this.posts);
+            // console.log(this.posts);
           })
         },
         setPages() {
