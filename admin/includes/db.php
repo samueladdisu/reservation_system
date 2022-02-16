@@ -1,7 +1,7 @@
 <?php
 
 
-include '../../admin_config.php';
+include 'https://versavvymedia.com/reservation_system/admin_config.php';
 
 $db_username = $_ENV['DB_USERNAME'];
 $db_pwd = $_ENV['DB_PASSWORD'];
