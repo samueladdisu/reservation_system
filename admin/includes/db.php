@@ -1,7 +1,7 @@
 <?php
 
 
-require 'admin_config.php';
+require '../../admin_config.php';
 
 $db_username = $_ENV['DB_USERNAME'];
 $db_pwd = $_ENV['DB_PASSWORD'];
