@@ -206,8 +206,7 @@ if (!isset($_SESSION['user_role'])) {
                     <td @click="editRes(row)" data-toggle="modal" :data-target="modal">
                       <i style="color: turquoise;" class="far fa-edit"></i>
                     </td>
-                    <td data-toggle="modal" data-target="#deleteModal"
-                    @click="setTemp(row)">
+                    <td data-toggle="modal" data-target="#deleteModal" @click="setTemp(row)">
                       <i style="color: red;" class="far fa-trash-alt"></i>
                     </td>
                     <td>
@@ -247,7 +246,7 @@ if (!isset($_SESSION['user_role'])) {
       <!-- Edit bulk reservation Modal -->
 
 
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -258,7 +257,7 @@ if (!isset($_SESSION['user_role'])) {
             </div>
             <div class="modal-body">
               <form class="row">
-                
+
                 <div class="form-group col-6">
                   <label for="recipient-name" class="col-form-label">First Name:</label>
                   <input type="text" v-model="firstName" class="form-control" id="recipient-name">
@@ -290,16 +289,16 @@ if (!isset($_SESSION['user_role'])) {
                   <label for="recipient-name" class="col-form-label">Check Out:</label>
                   <input type="date" class="form-control" :value="tempcheckout" readonly>
                 </div>
-                
-            
-                
-               
+
+
+
+
                 <div class="form-group col-12">
                   <label for="message-text" class="col-form-label">Remark:</label>
                   <textarea v-model="remark" class="form-control" id="message-text"></textarea>
                 </div>
 
-               
+
               </form>
             </div>
             <div class="modal-footer">
@@ -320,25 +319,25 @@ if (!isset($_SESSION['user_role'])) {
       </footer>
       <!-- End of Footer -->
 
-       <!-- Delete Modal  -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are you sure You want to Delete?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Delete" to confirm deletion.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Delete</button>
+      <!-- Delete Modal  -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Are you sure You want to Delete?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">Select "Delete" to confirm deletion.</div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Delete</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- End of Delete Modal  -->
+      <!-- End of Delete Modal  -->
     </div>
     <!-- End of Content Wrapper -->
 
@@ -350,7 +349,7 @@ if (!isset($_SESSION['user_role'])) {
     <i class="fas fa-angle-up"></i>
   </a>
 
- 
+
 
   <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -421,12 +420,12 @@ if (!isset($_SESSION['user_role'])) {
             this.posts = res.data
           }).catch(err => console.log(err.message))
         },
-        setTemp(row){
+        setTemp(row) {
           this.tempDelete = row
         },
-      async deleteRes(){
-          
-          await axios.post('./includes/backEndreservation.php',{
+        async deleteRes() {
+
+          await axios.post('./includes/backEndreservation.php', {
             action: 'delete',
             row: this.tempDelete
           }).then(res => {
@@ -434,7 +433,7 @@ if (!isset($_SESSION['user_role'])) {
             this.fetchData()
           })
         },
-         async singleRes(){
+        async singleRes() {
           console.log(this.tempRow);
           await axios.post('./includes/backEndreservation.php', {
             action: 'addSingleRes',
@@ -456,9 +455,9 @@ if (!isset($_SESSION['user_role'])) {
             this.remark = ''
             this.fetchData()
           })
-       
+
         },
-         editRes(row) {
+        editRes(row) {
           let array_rooms = JSON.parse(row.res_roomIDs)
           if (array_rooms.length > 1) {
             console.log("more than one");
@@ -468,7 +467,7 @@ if (!isset($_SESSION['user_role'])) {
             this.tempRow = row
           } else {
             this.modal = ""
-          
+
           }
         },
         fetchData() {

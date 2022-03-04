@@ -1,3 +1,12 @@
+<?php 
+
+  if($_SESSION['user_role'] == 'RA'){
+    header("Location: acc.php");
+  }
+
+
+?>
+
 <form action="" method="post">
   <div class="form-group">
     <label for="cat_title">Edit Category</label>
@@ -18,13 +27,14 @@
                                     echo $type_name;
                                   } ?>" class="form-control" name="type_name" id="">
 
-        <?php
-        if ($_SESSION['user_location'] == 'admin') {
-        ?>
-          <div class="form-group">
+<div class="form-group">
             <label for="user_role"> Room price </label>
             <input type="text" value="<?php echo $room_price; ?>" class="form-control" name="room_price" id="">
           </div>
+        <?php
+        if ($_SESSION['user_location'] == 'admin') {
+        ?>
+          
           <div class="form-group">
             <label for="user_role"> Hotel Location </label> <br>
             <select name="type_location" class="custom-select">
@@ -50,7 +60,7 @@
 
         <?php  } else { ?>
 
-          <input type="hidden" name="type_location" value="<?php echo $_SESSION['user_role']; ?>">
+          <input type="hidden" name="type_location" value="<?php echo $_SESSION['user_location']; ?>">
 
         <?php } ?>
     <?php }

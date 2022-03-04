@@ -5,6 +5,11 @@ $received_data = json_decode(file_get_contents("php://input"));
 
 $data = array();
 $output = array();
+$filterd_data1 = array();
+$filterd_data2 = array();
+$Not_booked = array();
+$booked = array();
+
 
 if($received_data->action == 'fetchall'){
 
@@ -26,7 +31,7 @@ if($received_data->action == 'fetchall'){
 if($received_data->action == 'promoCode'){
   $code = $received_data->data;
   $promoData = array();
-  $promo_query = "SELECT * FROM promo WHERE promo_code = '$code' ";
+  $promo_query = "SELECT * FROM promo WHERE promo_code = '$code'";
   $promo_result = mysqli_query($connection, $promo_query);
 
   confirm($promo_result);
@@ -35,39 +40,117 @@ if($received_data->action == 'promoCode'){
     foreach ($row as $key => $value) {
       $params[$key] = $value;
     }
+    date_default_timezone_set('Africa/Addis_Ababa');
+    $current_date = date('m/d/Y h:i:s', time());
+
+    if($params['promo_time'] > $current_date && $params['promo_usage'] > 0){
+      $updated_usage = $params['promo_usage'] - 1;
+      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = {$params['promo_id']}";
+
+      $update_promo_result = mysqli_query($connection, $update_promo);
+      confirm($update_promo_result);
+      echo json_encode($params['promo_amount']);
+    }else{
+      echo json_encode(false);
+    }
   }
 
-  echo json_encode($params['promo_amount']);
+  
 
 }
 if($received_data->action == 'getData'){
-  
-  // $sql = "SELECT * FROM reservations r1 , reservations r2 WHERE r1.res_checkout <= '$received_data->checkIn' AND r2.res_checkin >= '$received_data->checkOut' AND r1.res_id = r2.res_id";
-  $sql = "SELECT * FROM reservations r1 , reservations r2 WHERE r1.res_checkout <= '$received_data->checkIn' AND r2.res_checkin >= '$received_data->checkOut'";
+  $location = $received_data->desti;
+  $checkin = $received_data->checkIn;
+  $checkout = $received_data->checkOut;
 
-  $res_result = mysqli_query($connection, $sql);
-  
-  confirm($res_result);
  
-  while($row = mysqli_fetch_assoc($res_result)){
-    $output[] = $row['res_id'];
-  }
-  echo json_encode($output);
+  $A_query = "SELECT *, COUNT(room_acc) AS cnt 
+    FROM rooms
+    GROUP BY room_acc
+    HAVING room_status = 'Not_booked'
+    AND room_location = '$location'";
 
-  // echo json_encode(confirm($res_result));
+    $A_result = mysqli_query($connection, $A_query);
+    confirm($A_result);
 
-  // $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked' AND room_location = '$received_data->desti';";
+    $rows = mysqli_num_rows($A_result);
 
-  // // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$received_data->desti' ";
-  // $result = mysqli_query($connection, $query2);
-  // confirm($result);
+    
+    if (!empty($rows)) {
 
-  // while($row = mysqli_fetch_assoc($result)){
-  //   $output[] = $row;
-  // }
+      
+    
+      while ($avaliable_rooms = mysqli_fetch_assoc($A_result)) {
+        $Not_booked[] = $avaliable_rooms;
 
-  
+      }
+      // echo json_encode($Not_booked);
+      $BR_query = "SELECT DISTINCT b_roomId
+      FROM booked_rooms 
+      WHERE b_checkout<= '$checkin' 
+      AND b_roomLocation = '$location'
+      UNION
+      SELECT DISTINCT b_roomId
+      FROM booked_rooms
+      WHERE b_checkin >= '$checkout'
+      AND b_roomLocation = '$location'";
+      $result = mysqli_query($connection, $BR_query);
+      confirm($result);
 
+      while($row3 = mysqli_fetch_assoc($result)){
+       $r_query = "SELECT *, COUNT(room_acc) AS cnt 
+       FROM rooms
+       GROUP BY room_acc
+       HAVING room_id = {$row3['b_roomId']}";
+       $r_result = mysqli_query($connection, $r_query);
+       confirm($r_result);
+
+       while($row4 = mysqli_fetch_assoc($r_result)){
+          $booked[] = $row4;
+         
+        }
+      }
+      
+      $all = array_merge($Not_booked, $booked);
+
+     echo json_encode($all);
+
+    } else {
+
+      $BR_query = "SELECT DISTINCT b_roomId
+      FROM booked_rooms 
+      WHERE b_checkout<= '$checkin' 
+      AND b_roomLocation = '$location'
+      UNION
+      SELECT DISTINCT b_roomId
+      FROM booked_rooms
+      WHERE b_checkin >= '$checkout'
+      AND b_roomLocation = '$location'";
+      $result = mysqli_query($connection, $BR_query);
+      confirm($result);
+
+      $BR_rows = mysqli_num_rows($result);
+      if(!empty($BR_rows)){
+        while($row1 = mysqli_fetch_assoc($result)){
+          $S_query = "SELECT *, COUNT(room_acc) AS cnt 
+          FROM rooms
+          GROUP BY room_acc
+          HAVING room_id = {$row1['b_roomId']}";
+          
+          $S_result = mysqli_query($connection, $S_query);
+
+          confirm($S_result);
+
+          while($row2 = mysqli_fetch_assoc($S_result)){
+            $Not_booked[] = $row2;
+          }
+        }
+        echo json_encode($Not_booked);
+      }
+    }
+
+
+  // echo json_encode($filterd_data1);
 }
 
 if($received_data->action == 'insert'){

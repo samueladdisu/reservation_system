@@ -11,33 +11,30 @@
     $query = "SELECT * FROM users WHERE user_name = '$user_name' ";
     $select_user = mysqli_query($connection, $query);
 
-    if(!$select_user){
-      die("QUERY FAILED ". mysqli_error($connection));
+    confirm($select_user);
+
+    $row = mysqli_num_rows($select_user);
+
+    if(!empty($row)){
+      while($data = mysqli_fetch_assoc($select_user)){
+        // echo $user_password . "=";
+        // echo $data['user_pwd'];
+        if(password_verify($user_password,$data['user_pwd'])){
+          $_SESSION['username'] = $data['user_name'];
+          $_SESSION['firstname'] = $data['user_firstName'];
+          $_SESSION['lastname'] = $data['user_lastName'];
+          $_SESSION['user_role'] = $data['user_role'];
+          $_SESSION['user_location'] = $data['user_location'];
+          header("Location: ../dashboard.php");
+        }else{
+          header("Location: ../index.php");
+        }
+      }
+    }else{
+      echo "not";
     }
 
-    while($row = mysqli_fetch_assoc($select_user)){
-      $db_username = $row['user_name'];
-      $db_password = $row['user_pwd'];
-      $db_firstname = $row['user_firstName'];
-      $db_lastname = $row['user_lastName'];
-      $db_role = $row['user_role'];
-      $db_location = $row['user_location'];
-    }
-
-    if($user_name !== $db_username || $user_password !== $db_password){
-      
-      header("Location: ../index.php");
-
-     
-    }else if($user_name === $db_username && $user_password === $db_password){
-     
-      $_SESSION['username'] = $db_username;
-      $_SESSION['firstname'] = $db_firstname;
-      $_SESSION['lastname'] = $db_lastname;
-      $_SESSION['user_role'] = $db_role;
-      $_SESSION['user_location'] = $db_location;
-      header("Location: ../dashboard.php");
-    }
+    
 
   }
 

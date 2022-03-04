@@ -25,7 +25,7 @@
          Interface
      </div>
 
-   
+
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#res" aria-expanded="true" aria-controls="collapseTwo">
@@ -50,16 +50,26 @@
          <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
                  <a class="collapse-item" href="./rooms.php">View All Rooms</a>
-                 <a class="collapse-item" href="./rooms.php?source=add_room">Add Room</a>
+                 <?php
+                    if ($_SESSION['user_role'] != 'RA') {
+                    ?>
+                     <a class="collapse-item" href="./rooms.php?source=add_room">Add Room</a>
+                 <?php
+                    }
+                    ?>
+
              </div>
          </div>
      </li>
      <!-- Nav Item - Utilities Collapse Menu -->
+
      <li class="nav-item">
          <a class="nav-link" href="./acc.php">
              <i class="fas fa-clipboard-list"></i>
              <span> Accomodation </span></a>
      </li>
+
+
 
      <li class="nav-item">
          <a class="nav-link" href="./promo.php">
@@ -68,30 +78,15 @@
      </li>
 
      <li class="nav-item">
-             <a class="nav-link collapsed" href="./members.php">
-                 <i class="fas fa-users"></i>
-
-                 <span>Members</span>
-                
-             </a>
-
-         </li>
-     <!-- <li class="nav-item">
-                <a class="nav-link" href="./payment.php">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>Payment Request</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./view_confirm_payment.php">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>Confirm Payment</span></a>
-            </li> -->
-
-     <!-- Nav Item - Pages Collapse Menu -->
+         <a class="nav-link collapsed" href="./members.php">
+             <i class="fas fa-users"></i>
+             <span>Members</span>
+         </a>
+     </li>
 
      <?php
 
-        if ($_SESSION['user_location'] == 'admin') {
+        if ($_SESSION['user_role'] == 'SA' || $_SESSION['user_role'] == 'PA') {
         ?>
          <li class="nav-item">
              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
@@ -109,6 +104,12 @@
              </div>
          </li>
 
+
+
+     <?php   } ?>
+
+     <?php if ($_SESSION['user_role'] == 'SA') {
+        ?>
          <li class="nav-item">
              <a class="nav-link" href="./locations.php">
                  <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -117,8 +118,8 @@
              </a>
 
          </li>
-
-     <?php   } ?>
+     <?php
+        } ?>
 
 
 

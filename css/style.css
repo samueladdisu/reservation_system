@@ -879,7 +879,6 @@ body {
   width: calc(100% - 10%);
   max-width: 1440px;
   margin: 0 auto;
-  overflow: hidden;
 }
 
 .huge {
@@ -1566,18 +1565,53 @@ body {
   line-height: 4.31rem;
 }
 
-header {
+.header {
   background: url(../img/reserve.jpg) rgba(0, 0, 0, 0.3) no-repeat;
   background-position: center center;
   background-size: cover;
   background-blend-mode: overlay;
   height: 29.81rem;
   position: relative;
-  z-index: -9999;
+}
+
+.header .profile {
+  position: relative;
+  height: auto;
+}
+
+.header .profile .profile-icon {
+  background: #C4C4C4;
+  border-radius: 50%;
+  width: 3.94rem;
+  height: 3.94rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.header .profile .profile-icon .profile-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.header .profile .drop-down {
+  background: #fff;
+  border-radius: 5px;
+  position: absolute;
+  top: 110%;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 9999;
+  width: 7rem;
+  padding: 0.66rem 1rem;
+}
+
+.header .profile .drop-down ul li:first-child {
+  padding-bottom: 1rem;
 }
 
 .header .nav-center {
-  margin-top: 2.63rem;
+  padding-top: 2.63rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1605,7 +1639,6 @@ header {
 }
 
 .container .myform {
-  background: #E1DFDF;
   padding: 1.75rem 2.38rem;
   border-radius: .63rem;
   margin-top: 2rem;
@@ -1624,8 +1657,8 @@ header {
 @media screen and (min-width: 1440px) {
   .container .myform {
     display: flex;
-    justify-content: space-between;
     width: 100%;
+    margin: 0 auto;
     margin-top: 1rem;
     z-index: 9999;
     align-items: center;
@@ -1634,26 +1667,23 @@ header {
   .myform .mySelect,
   .myform input {
     background: none;
-    border: none;
+    border: 1px solid #bebebe;
     width: 100%;
-    border-bottom: 1px solid #bebebe;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
   }
 }
 
 .myform .mySelect,
 .myform input {
-  background: none;
-  border: none;
-  border-bottom: 1px solid #bebebe;
+  border: 1px solid #bebebe;
 }
 
 .myform .mySelect {
   appearance: none;
-  background: url(../img/down.svg) 96%/8% no-repeat;
-}
-
-.myform input {
-  appearance: none;
+  background: url(../img/down.svg) 96%/5% no-repeat;
+  width: 14rem;
+  padding: 12px 15px;
 }
 
 .mySelect::-ms-expand {
@@ -1663,8 +1693,17 @@ header {
 .btn-primary1 {
   border-radius: 0;
   background: #C2874A;
+  border: 1px solid #C2874A;
   color: #F1F1EA;
   padding: 0.63rem 1.63rem;
+  cursor: pointer;
+  z-index: 999999;
+}
+
+.btn-primary1:hover {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
 }
 
 .btn-primary2 {
@@ -1672,14 +1711,22 @@ header {
   background: #A82F2F;
   color: #F1F1EA;
   padding: 0.63rem 1.63rem;
+  cursor: pointer;
 }
 
 .btn-secondary2 {
   border-radius: 0;
   background: transparent;
-  border: 1px solid #C2874A;
-  color: #C2874A;
+  border: 1px solid #fff;
+  color: #fff;
   padding: 0.63rem 1.63rem;
+  z-index: 999999;
+}
+
+.btn-secondary2:hover {
+  border: none;
+  background: #C2874A;
+  color: #fff;
 }
 
 .btn-container1 {
@@ -2290,6 +2337,141 @@ header {
   .main-body .container .signup-form .form-group {
     display: flex;
     justify-content: space-between;
+  }
+}
+
+.p-header {
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  height: auto;
+  position: relative;
+  z-index: -9999;
+}
+
+.p-header .nav-center {
+  margin-top: 2.63rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.p-header .nav-center .menu > div {
+  height: 2px;
+  margin-bottom: 0.63rem;
+  width: 2.31rem;
+  background: #000;
+}
+
+.p-header .nav-center .logo {
+  width: 10.69rem;
+}
+
+.p-header .container .side-socials {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-20%);
+}
+
+.p-header .container .side-socials img {
+  margin-bottom: 1.94rem;
+}
+
+.jambotron {
+  height: auto;
+  width: 100%;
+  background: #C2874A;
+  margin-top: 1.94rem;
+  padding: 3.31rem 0;
+}
+
+.jambotron .container .left h1 {
+  font-family: 'HelveticaNeue';
+  font-size: 2.13rem;
+  color: #fff;
+}
+
+.jambotron .container .left p {
+  font-family: 'Myriad Pro Regular';
+  font-size: 1.13rem;
+  color: #fff;
+}
+
+.jambotron .container .right {
+  margin-top: 2.13rem;
+}
+
+.jambotron .container .right .member-info {
+  background: #F1F1EA;
+  padding: 1.13rem 1.31rem;
+  border-radius: 0.44rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.jambotron .container .right .member-info h1.tier-title {
+  font-family: 'HelveticaNeue';
+  font-size: 2.13rem;
+}
+
+.jambotron .container .right .member-info p {
+  font-family: 'Myriad Pro Regular';
+  font-size: 1.13rem;
+  color: #808080;
+}
+
+.jambotron .container .right .member-info .nights .nights-title {
+  font-family: 'HelveticaNeue';
+  font-size: 2.13rem;
+}
+
+.container h3.activity {
+  font-size: 2rem;
+  margin-top: 1.63rem;
+  margin-bottom: 2.38rem;
+}
+
+.container .profile-cards .profile-card {
+  background: #fff;
+  border-radius: 0.38rem;
+  box-shadow: 0.13rem 0.13rem 1.06rem rgba(0, 0, 0, 0.08);
+  margin-bottom: 2.31rem;
+  padding: 1.06rem 0.69rem;
+}
+
+.container .profile-cards .profile-card .profile-header {
+  font-family: 'HelveticaNeue';
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  color: #A35F58;
+  font-size: 1.5rem;
+}
+
+.container .profile-cards .profile-card .date .from-date .date-title, .container .profile-cards .profile-card .date .to-date .date-title {
+  margin-bottom: 0.81rem;
+}
+
+@media screen and (min-width: 768px) {
+  .jambotron .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .jambotron .container .right .member-info {
+    gap: 2rem;
+  }
+  .container .profile-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .container .profile-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
   }
 }
 

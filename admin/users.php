@@ -2,7 +2,14 @@
 
 
 
+<?php 
 
+if ($_SESSION['user_role'] == 'RA') {
+  header("Location: ./dashboard.php");
+}
+
+
+?>
 
 
 <body id="page-top">
@@ -25,7 +32,8 @@
         <!-- End of Topbar -->
         <?php 
 
-if($_SESSION['user_location'] == 'admin') {
+// if($_SESSION['user_location'] == 'admin') 
+if(true){
   ?>  
 
         <!-- Begin Page Content -->

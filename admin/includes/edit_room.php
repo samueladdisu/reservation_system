@@ -1,9 +1,18 @@
+
+<?php
+
+if ($_SESSION['user_role'] == 'RA') {
+  header("Location: ./rooms.php");
+}
+?>
 <?php
 if (isset($_GET['p_id'])) {
   $p_id = escape($_GET['p_id']);
 
+  
+   
+    $query = "SELECT * FROM rooms WHERE room_id = $p_id";
 
-  $query = "SELECT * FROM rooms WHERE room_id = $p_id";
 
   $result = mysqli_query($connection, $query);
 
@@ -19,6 +28,10 @@ if (isset($_GET['p_id'])) {
     $room_status = $row['room_status'];
     $room_location = $row['room_location'];
     $room_desc = $row['room_desc'];
+  }
+
+  if($_SESSION['user_role'] == 'PA' && $_SESSION['user_location'] != $room_location){
+    header("Location: ./rooms.php");
   }
 }
 if (isset($_POST['edit_room'])) {
@@ -70,8 +83,8 @@ if (isset($_POST['edit_room'])) {
     <select name="room_acc" class="custom-select" id="">
       <option value="<?php echo $room_acc ?>"><?php echo $room_acc ?></option>
       <?php
-      echo $location = $_SESSION['user_role'];
-      if ($location == 'admin') {
+      $location = $_SESSION['user_location'];
+      if ($location == 'Boston') {
         $query = "SELECT * FROM room_type";
       } else {
         $query = "SELECT * FROM room_type WHERE type_location = '$location'";
@@ -82,6 +95,7 @@ if (isset($_POST['edit_room'])) {
       while ($row = mysqli_fetch_assoc($result)) {
         $type_id = $row['type_id'];
         $type_name = $row['type_name'];
+        $type_room_price = $row['room_price'];
         $temp_type = "";
         if (strcmp($type_name, $temp_type) == 0) {
           continue;
@@ -105,15 +119,14 @@ if (isset($_POST['edit_room'])) {
     <input type="file" name="room_image">
   </div>
   <div class="form-group">
-    <label for="post_tags"> Price </label>
-    <input type="text" class="form-control" value="<?php echo $room_price; ?>" name="room_price">
+    <input type="hidden" class="form-control" value="<?php echo  $type_room_price; ?>" name="room_price">
   </div>
 
   <div class="form-group">
     <label for="post_tags"> Room Number </label>
     <input type="text" class="form-control" value="<?php echo $room_number; ?>" name="room_number">
   </div>
-  
+
   <div class="form-group">
     <label for="post_content"> Room Description</label>
     <textarea name="room_desc" id="" cols="30" rows="10" class="form-control">
@@ -127,9 +140,9 @@ if (isset($_POST['edit_room'])) {
       <option value="<?php echo $room_status; ?>"><?php echo $room_status; ?></option>
       <?php
 
-      if($room_status == 'booked') {
+      if ($room_status == 'booked') {
         echo '<option value="Not_booked">Not booked</option>';
-      }else {
+      } else {
         echo '<option value="booked">Booked</option>';
       }
 
@@ -138,36 +151,39 @@ if (isset($_POST['edit_room'])) {
       ?>
     </select>
   </div>
-  <?php 
- 
- if ($_SESSION['user_role'] == 'admin') {
- 
- ?>
-  <div class="form-group">
-    <label for="location">Resort Location</label>
-    <select name="room_location" class="custom-select" id="">
-      <option value="<?php echo$room_location; ?>"><?php echo$room_location; ?></option>
-      <?php 
+  <?php
+
+  if ($_SESSION['user_role'] == 'SA' && $_SESSION['user_location'] == 'Boston') {
+
+  ?>
+    <div class="form-group">
+      <label for="location">Resort Location</label>
+      <select name="room_location" class="custom-select">
+        <option value="<?php echo $room_location; ?>">
+          <?php echo $room_location; ?>
+        </option>
+        <?php
 
         $query = "SELECT * FROM locations";
         $result = mysqli_query($connection, $query);
         confirm($result);
 
-        while($row = mysqli_fetch_assoc($result)){
-            $location_id = $row['location_id'];
-            $location_name = $row['location_name'];
+        while ($row = mysqli_fetch_assoc($result)) {
+          $location_id = $row['location_id'];
+          $location_name = $row['location_name'];
 
-            echo "<option value='$location_name'>{$location_name}</option>";
-         }
-      ?>
-    </select>
-  </div>
-  <?php }else {?>
-    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_role']; ?>">
- <?php  }?>
+          echo "<option value='$location_name'>{$location_name}</option>";
+        }
+        ?>
+      </select>
+    </div>
+  <?php } else { ?>
+    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+  <?php  } ?>
 
   <div class="form-group">
     <input type="submit" class="btn btn-primary" name="edit_room" value="Edit Room">
   </div>
 
 </form>
+

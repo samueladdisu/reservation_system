@@ -250,9 +250,17 @@ if (!isset($_SESSION['user_role'])) {
 
 
     foreach ($rooms as  $val) {
+
+      //    Update room status 
       $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$val'";
       $change_status_result = mysqli_query($connection, $change_status_query);
       confirm($change_status_result);
+
+      // Remove Room from Booked rooms table
+      $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_roomId = $val";
+      $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+
+      confirm($delete_booked_rooms_result);
     }
 
     $delete_query = "DELETE FROM reservations WHERE res_id = $the_post_id";

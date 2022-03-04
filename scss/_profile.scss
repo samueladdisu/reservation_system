@@ -1,0 +1,158 @@
+
+
+.p-header {
+  // background: url(../img/reserve.jpg) rgba(0, 0, 0, 0.3) no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  height: auto;
+  position: relative;
+  z-index: -9999;
+}
+
+.p-header .nav-center {
+  margin-top: 2.63rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.p-header .nav-center .menu>div {
+  height: 2px;
+  margin-bottom: 0.63rem;
+  width: 2.31rem;
+  background: #000;
+
+}
+
+.p-header .nav-center .logo {
+  width: 10.69rem;
+}
+
+.p-header .container .side-socials {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-20%);
+}
+
+.p-header .container .side-socials img {
+  margin-bottom: 1.94rem;
+}
+
+
+.jambotron{
+  height: auto;
+  width: 100%;
+  background: #C2874A;
+  margin-top: 1.94rem;
+  padding: 3.31rem 0;
+  .container{
+    .left{
+      
+      h1{
+        font-family: 'HelveticaNeue';
+        font-size: 2.13rem;
+        color: #fff;
+      }
+      p{
+        font-family: 'Myriad Pro Regular';
+        font-size: 1.13rem;
+        color: #fff;
+      }
+    }
+
+    .right{
+      margin-top: 2.13rem;
+      .member-info{
+        background: #F1F1EA;
+        // width: 50%;
+        padding: 1.13rem 1.31rem;
+        border-radius: 0.44rem;
+        display: flex;
+        justify-content: space-between;
+        // margin: 0 auto;
+        h1.tier-title{
+          font-family: 'HelveticaNeue';
+          font-size: 2.13rem;
+        }
+        p{
+          font-family: 'Myriad Pro Regular';
+          font-size: 1.13rem;
+          color: #808080;
+        }
+        .nights{
+          .nights-title{
+            font-family: 'HelveticaNeue';
+            font-size: 2.13rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.container{
+  h3.activity{
+    font-size: 2rem;
+    margin-top: 1.63rem;
+    margin-bottom: 2.38rem;
+  }
+  .profile-cards{
+    .profile-card {
+      background: #fff;
+      border-radius: 0.38rem;
+      box-shadow: 0.13rem 0.13rem 1.06rem rgba(0,0,0,0.08);
+      margin-bottom: 2.31rem;
+      padding: 1.06rem 0.69rem;
+      .profile-header{
+        font-family: 'HelveticaNeue';
+        font-weight: 400;
+        margin-bottom: 1.5rem;
+        color: #A35F58;
+        font-size: 1.5rem;
+      }
+      .date{
+        .from-date, .to-date{
+          .date-title{
+            margin-bottom: 0.81rem;
+          }
+        }
+      }
+    }
+
+  }
+}
+
+@include responsive($md){
+  .jambotron{
+    .container{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .right{
+        .member-info{
+          gap: 2rem;
+        }
+      }
+    }
+  }
+ 
+  .container{
+    .profile-cards{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+  }
+}
+
+@include responsive($lg){
+  .container{
+    .profile-cards{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+  }
+}

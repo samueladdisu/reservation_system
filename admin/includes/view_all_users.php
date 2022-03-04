@@ -5,7 +5,6 @@
       <th>Username</th>
       <th>Firstname</th>
       <th>Lastname</th>
-      <th>Email</th>
       <th>Property</th>
       <th>Role</th>
     </tr>
@@ -14,7 +13,12 @@
 
     <?php
 
-    $query = "SELECT * FROM users ORDER BY user_id DESC";
+    if($_SESSION['user_role'] == 'PA'){
+      $query = "SELECT * FROM users WHERE user_location = '{$_SESSION['user_location']}' ORDER BY user_id DESC";
+
+    }else{
+      $query = "SELECT * FROM users ORDER BY user_id DESC";
+    }
     $user_result = mysqli_query($connection, $query);
 
     while ($row = mysqli_fetch_assoc($user_result)) {
@@ -23,7 +27,6 @@
       $user_password = $row['user_pwd'];
       $user_firstname = $row['user_firstName'];
       $user_lastname =  $row['user_lastName'];
-      $user_email = $row['user_email'];
       $user_location = $row['user_location'];
       $user_role = $row['user_role'];
 
@@ -33,11 +36,8 @@
       echo "<td>{$user_name}</td>";
       echo "<td>{$user_firstname}</td>";
       echo "<td>{$user_lastname}</td>";
-
-      echo "<td>{$user_email}</td>";
       echo "<td>{$user_location}</td>";
       echo "<td>{$user_role}</td>";
-      echo "<td><a href='users.php?source=edit_user&edit=$user_id'>Edit</a></td>";
       echo "<td><a href='users.php?delete=$user_id'>Delete</a></td>";
       echo "</tr>";
     }
@@ -45,29 +45,10 @@
 
     ?>
 
-  </tbody>
+</tbody>
 </table>
 
 <?php
-
-
-if (isset($_GET['admin'])) {
-  $the_user_id = escape($_GET['admin']);
-  $query = "UPDATE users SET user_role = 'Admin' WHERE user_id = $the_user_id";
-  $result = mysqli_query($connection, $query);
-
-  confirm($result);
-  header("Location: ./users.php");
-}
-
-if (isset($_GET['author'])) {
-  $the_user_id = escape($_GET['author']);
-  $query = "UPDATE users SET user_role = 'Subsciber' WHERE user_id = $the_user_id";
-  $result = mysqli_query($connection, $query);
-
-  confirm($result);
-  header("Location: ./users.php");
-}
 
 if (isset($_GET['delete'])) {
   $the_user_id = escape($_GET['delete']);

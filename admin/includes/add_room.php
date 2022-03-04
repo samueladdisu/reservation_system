@@ -1,31 +1,24 @@
 <?php
+
+if ($_SESSION['user_role'] == 'RA') {
+  header("Location: ./rooms.php");
+}
+?>
+
+<?php
 if (isset($_POST['add_room'])) {
   $room_occupancy   =  escape($_POST['room_occupancy']);
   $room_acc         =  escape($_POST['room_acc']);
   $room_number      =  escape($_POST['room_number']);
   $room_status      =  escape($_POST['room_status']);
   $room_location    =  escape($_POST['room_location']);
-  $room_desc    =  escape($_POST['room_desc']);
-  // $location = $_SESSION['user_role'];
-  //   if ($location == 'admin') {
-  //     $price_query = "SELECT * FROM room_type";
-  //   } else {
-  //     $query = "SELECT room_price  FROM room_type WHERE type_location = '$location'";
-  //   }
-  //   $result = mysqli_query($connection, $query);
-
-  // confirm($result);
-  // while ($row = mysqli_fetch_assoc($result)) {
-  //   $type_id = $row['type_id'];
-  //   $type_name = $row['type_name'];
-  //   $room_price = $row['room_price'];
-  //   $temp_type = "";
-
-  // }
-  $room_image = $_FILES['room_image']['name'];
-  $room_image_temp = $_FILES['room_image']['tmp_name'];
+  $room_price       =  escape($_POST['room_price']);
+  $room_desc        =  escape($_POST['room_desc']);
+  $room_image       = $_FILES['room_image']['name'];
+  $room_image_temp  = $_FILES['room_image']['tmp_name'];
 
   move_uploaded_file($room_image_temp, "./room_img/$room_image");
+
 
 
   $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$room_occupancy', '$room_acc', '$room_price', '$room_image', '$room_number', '$room_status', '$room_location', '$room_desc');";
@@ -52,8 +45,8 @@ if (isset($_POST['add_room'])) {
     <select name="room_acc" class="custom-select" id="">
       <option value="">Select option</option>
       <?php
-      echo $location = $_SESSION['user_role'];
-      if ($location == 'admin') {
+      $location = $_SESSION['user_location'];
+      if ($location == 'Boston') {
         $query = "SELECT * FROM room_type";
       } else {
         $query = "SELECT * FROM room_type WHERE type_location = '$location'";
@@ -64,7 +57,7 @@ if (isset($_POST['add_room'])) {
       while ($row = mysqli_fetch_assoc($result)) {
         $type_id = $row['type_id'];
         $type_name = $row['type_name'];
-        $room_price = $row['room_price'];
+        $type_room_price = $row['room_price'];
         $temp_type = "";
         if (strcmp($type_name, $temp_type) == 0) {
           continue;
@@ -79,7 +72,9 @@ if (isset($_POST['add_room'])) {
       ?>
     </select>
   </div>
-
+  <div class="form-group">
+      <input type="hidden" name="room_price" value='<?php echo $type_room_price ?>'>
+    </div>
 
   <div class="form-group">
     <label for="post_image"> Room Image</label>
@@ -106,7 +101,7 @@ if (isset($_POST['add_room'])) {
   </div>
   <?php
 
-  if ($_SESSION['user_role'] == 'admin') {
+  if ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'SA') {
 
   ?>
     <div class="form-group">
@@ -129,7 +124,7 @@ if (isset($_POST['add_room'])) {
       </select>
     </div>
   <?php } else { ?>
-    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_role']; ?>">
+    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
   <?php  } ?>
 
 

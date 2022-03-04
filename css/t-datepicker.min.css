@@ -4,6 +4,7 @@
   display: inline-block;
   position: relative;
   float: left;
+
 }
 .t-datepicker {
   clear: both;
@@ -11,6 +12,8 @@
   font-size: 14px;
   line-height: 1.4em;
   max-width: 650px;
+  border: 1px solid #bebebe;
+  
 }
 .t-check-in,
 .t-check-out {
@@ -71,8 +74,16 @@
 }
 .t-dates {
   padding: 10px 15px;
-  height: 38px;
+  /* padding: 0.88rem 1rem; */
+  height: auto;
   box-sizing: border-box;
+}
+.t-dates .t-day-check-in {
+  /* font-size: 2rem; */
+ 
+}
+ .t-date-check-in{
+  
 }
 .t-datepicker-day {
   border-width: 1px;

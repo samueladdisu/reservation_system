@@ -15,7 +15,6 @@ if (isset($_GET['edit'])) {
     $user_password = $row['user_pwd'];
     $user_firstname = $row['user_firstName'];
     $user_lastname =  $row['user_lastName'];
-    $user_email = $row['user_email'];
     $user_role = $row['user_role'];
     $user_location = $row['user_location'];
   }
@@ -25,10 +24,9 @@ if (isset($_POST['update_user'])) {
   $user_password = escape($_POST['user_password']);
   $user_firstname = escape($_POST['user_firstname']);
   $user_lastname = escape($_POST['user_lastname']);
-  $user_email = escape($_POST['user_email']);
   $user_role = escape($_POST['user_role']);
 
-  $query = "UPDATE `users` SET `user_name` = '$user_name', `user_pwd` = '$user_password', `user_firstName` = '$user_firstname', `user_lastName` = '$user_lastname', `user_email` = '$user_email', `user_role` = '$user_role' WHERE `users`.`user_id` = $user_id;";
+  $query = "UPDATE `users` SET `user_name` = '$user_name', `user_pwd` = '$user_password', `user_firstName` = '$user_firstname', `user_lastName` = '$user_lastname', `user_role` = '$user_role' WHERE `users`.`user_id` = $user_id;";
 
   $update_post = mysqli_query($connection, $query);
 
@@ -52,7 +50,11 @@ if (isset($_POST['update_user'])) {
     <input type="text" class="form-control" value="<?php echo $user_lastname; ?>" name="user_lastname">
   </div>
 
-  <div class="form-group ">
+  <?php 
+    if($_SESSION['user_role'] == 'SA'){
+      ?>
+
+  <div class="form-group">
   <label for="user_lastname"> User Location</label>
     <select name="user_location" class="custom-select">
       <option value="<?php echo $user_location; ?>"><?php echo $user_location; ?></option>
@@ -75,20 +77,26 @@ if (isset($_POST['update_user'])) {
       ?>
     </select>
   </div>
+
+  <?php
+    } else {
+      ?> 
+      <input type="hidden" name="user_location" value="<?php echo $_SESSION['user_location'] ?>">
+      <?php 
+    }
+  ?>
   <div class="form-group">
     <label for="post_status"> User Role</label>
     <select name="user_role" class="custom-select" id="">
-      <option value="agent">Agent</option>
+      <option value="RA">Reservation Agent</option>
+      <option value="PA">Property Admin</option>
+      <option value="SA">Super Admin</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="post_status"> User Name</label>
     <input type="text" class="form-control" name="user_name" value="<?php echo $user_name; ?>">
-  </div>
-  <div class="form-group">
-    <label for="post_status"> Email</label>
-    <input type="email" class="form-control" value="<?php echo $user_email; ?>" name="user_email">
   </div>
 
 

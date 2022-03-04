@@ -1,17 +1,52 @@
-
-
-header {
+.header {
   background: url(../img/reserve.jpg) rgba(0, 0, 0, 0.3) no-repeat;
   background-position: center center;
   background-size: cover;
   background-blend-mode: overlay;
   height: 29.81rem;
   position: relative;
-  z-index: -9999;
+  // z-index: -9999;
+  .profile{
+    position: relative;
+    height: auto;
+    .profile-icon{
+      background: #C4C4C4;
+      border-radius: 50%;
+      width: 3.94rem;
+      height: 3.94rem;
+      display: grid;
+      place-items: center;
+     
+      cursor: pointer;
+      .profile-name{
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+    }
+    .drop-down{
+      background: #fff;
+      border-radius: 5px;
+      position: absolute;
+      top: 110%;
+      right: 50%;
+      transform: translateX(50%);
+      z-index: 9999;
+      width: 7rem;
+      padding: 0.66rem 1rem;
+      ul{
+        li{
+          &:first-child{
+
+            padding-bottom: 1rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 .header .nav-center {
-  margin-top: 2.63rem;
+  padding-top: 2.63rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,7 +76,7 @@ header {
 }
 
 .container .myform {
-  background: #E1DFDF;
+  // background: #E1DFDF;
   padding: 1.75rem 2.38rem;
   border-radius: .63rem;
   margin-top: 2rem;
@@ -60,8 +95,9 @@ header {
 @media screen and (min-width: 1440px) {
   .container .myform {
     display: flex;
-    justify-content: space-between;
+
     width: 100%;
+    margin: 0 auto;
     margin-top: 1rem;
     z-index: 9999;
     align-items: center;
@@ -71,33 +107,40 @@ header {
   .myform .mySelect,
   .myform input {
     background: none;
-    border: none;
+    border:  1px solid #bebebe;
     width: 100%;
-    border-bottom: 1px solid #bebebe;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
   }
 }
 
 .myform .mySelect,
 .myform input {
-  background: none;
-  border: none;
-  border-bottom: 1px solid #bebebe;
+  // background: none;
+  border: 1px solid #bebebe;
 }
 
 .myform .mySelect {
+  // -webkit-appearance: none;
+  // -moz-appearance: none;
+  // appearance: none;
+  // background: url(../img/down.svg) 96% / 8% no-repeat;
+
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url(../img/down.svg) 96% / 8% no-repeat;
+  background: url(../img/down.svg) 96% / 5% no-repeat;
+  width: 14rem;
+  padding: 12px 15px;
 
 }
 
-.myform input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+// .myform input {
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   appearance: none;
 
-}
+// }
 
 .mySelect::-ms-expand {
   display: none;
@@ -106,23 +149,40 @@ header {
 .btn-primary1 {
   border-radius: 0;
   background: #C2874A;
+  border: 1px solid #C2874A;
   color: #F1F1EA;
   padding: 0.63rem 1.63rem;
+  cursor: pointer;
+  z-index: 999999;
+  &:hover{
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+  }
 }
+
+
 
 .btn-primary2 {
   border-radius: 0;
   background: #A82F2F;
   color: #F1F1EA;
   padding: 0.63rem 1.63rem;
+  cursor: pointer;
 }
 
 .btn-secondary2 {
   border-radius: 0;
   background: transparent;
-  border: 1px solid #C2874A;
-  color: #C2874A;
+  border: 1px solid #fff;
+  color: #fff;
   padding: 0.63rem 1.63rem;
+  z-index: 999999;
+  &:hover{
+    border: none;
+    background: #C2874A;
+    color: #fff;
+  }
 }
 
 .btn-container1 {

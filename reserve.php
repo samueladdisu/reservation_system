@@ -6,24 +6,19 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
+  <link rel="stylesheet" href="css/t-datepicker.min.css">
+  <link rel="stylesheet" href="css/themes/t-datepicker-green.css">
   <link rel="stylesheet" href="./css/style.css">
 
   <title>Reservation</title>
 </head>
 
 <body>
-  <?php
-
-  if (isset($_SESSION['m_username'])) {
-    $user_name =  $_SESSION['m_username'];
-  }else {
-    $user_name = null;
-  }
-
-  ?>
+  <div id="app">
   <header class="header">
     <div class="container">
       <nav class="nav-center">
@@ -34,6 +29,44 @@
         <div class="logo">
           <img src="./img/Kuriftu_logo.svg" alt="">
         </div>
+
+        <?php
+
+        if (isset($_SESSION['m_username'])) {
+          $user_name =  $_SESSION['m_username'];
+        ?>
+          <div class="profile">
+            <div @click="showDropdown" class="profile-icon">
+              <h1 class="profile-name">
+                SA
+              </h1>
+
+            </div>
+
+            <div v-if="dropdown" class="drop-down">
+              <ul>
+                <li><a href="./profile.php"> <i class="fa-solid fa-user"></i> Profile</a></li>
+                <li> <a href="./logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log out</a></li>
+              </ul>
+            </div>
+          </div>
+
+        <?php
+        } else {
+          $user_name = null;
+        ?>
+          <div class="login">
+            <a href="./signIn.php" class="btn-primary1 mx-2">Log In</a>
+            <a href="./signUp.php" class="btn-secondary2">Sign Up</a>
+          </div>
+
+
+        <?php
+        }
+
+        ?>
+
+
       </nav>
 
       <div class="side-socials">
@@ -45,12 +78,30 @@
     </div>
   </header>
 
-  <div class="container" id="app">
+  <div class="container">
     <form class="myform" @submit.prevent="submitData">
+      <div class="t-datepicker col-6">
+        <div class="t-check-in">
+          <div class="t-dates t-date-check-in">
+            <label class="t-date-info-title">Check In</label>
+          </div>
+          <input type="hidden" class="t-input-check-in" name="start">
+          <div class="t-datepicker-day">
+            <table class="t-table-condensed">
+              <!-- Date theme calendar -->
+            </table>
+          </div>
+        </div>
+        <div class="t-check-out">
+          <div class="t-dates t-date-check-out">
+            <label class="t-date-info-title">Check Out</label>
+          </div>
+          <input type="hidden" class="t-input-check-out" name="end">
+        </div>
+      </div>
 
-
-      <div class="mb-3">
-        <select class="form-select mySelect" v-model="desti">
+      <div class="">
+        <select class="mySelect" v-model="desti">
           <option disabled value="">Choose Destination</option>
           <?php
 
@@ -71,18 +122,9 @@
 
       </div>
 
-      <div class="mb-3">
-        <input type="date" class="form-control" v-model="checkIn" id="check-in">
-      </div>
-      <div class="mb-3">
-        <input type="date" class="form-control" v-model="checkOut" id="check-out">
-      </div>
-
-
-
-
-
-      <button type="submit" class="btn btn-primary1">Check Availability</button>
+      <button type="submit" class="btn btn-primary1">
+        Check Availability
+      </button>
     </form>
 
 
@@ -103,6 +145,8 @@
             <p class="mycard-price">
               <small class="text-muted">
                 ${{ row.room_price }} Per Night
+
+                {{ row.room_id }}
               </small>
 
               <small class="text-red">
@@ -124,18 +168,7 @@
         <div v-if="cart.length != 0" class="cart-container mt-5">
           <h2 class="cart-title">Your Stay At Kuriftu</h2>
 
-          <div class="cart-date">
-            <div class="u-checkin">
-              <h3 class="t-chkin">Check-in</h3>
-              <h3>{{ checkIn }}</h3>
-            </div>
-
-            <div class="u-checkin">
-              <h3 class="t-chkin">Check-out</h3>
-              <h3>{{ checkOut }}</h3>
-            </div>
-
-          </div>
+          
 
           <div class="cart" v-for="items of cart" :key="items.id">
             <div class="upper">
@@ -194,18 +227,6 @@
 
         </div>
         <hr>
-        <!-- <div class="date">
-          <div class="check-in">
-            <h3>Check-in</h3>
-            <h3>{{ checkIn }}</h3>
-          </div>
-
-          <div class="check-in">
-            <h3>Check-out</h3>
-            <h3>{{ checkOut }}</h3>
-          </div>
-
-        </div> -->
 
 
         <hr>
@@ -253,21 +274,43 @@
 
     </div>
   </div>
-
+  </div>
 
   <?php include_once './includes/footer.php' ?>
   <script>
-    const user = '<?php echo $user_name ?>'
+    var start, end
+    $(document).ready(function() {
 
-    
+      const tdate = $('.t-datepicker')
+      tdate.tDatePicker({
+        show: true,
+        iconDate: '<i class="fa fa-calendar"></i>'
+      });
+      tdate.tDatePicker('show')
+
+
+      tdate.on('eventClickDay', function(e, dataDate) {
+
+        var getDateInput = tdate.tDatePicker('getDateInputs')
+
+        start = getDateInput[0];
+        end = getDateInput[1];
+
+        console.log("start", start);
+        console.log("end", end);
+
+      })
+    });
+
+    const user = '<?php echo $user_name ?>'
     const app = Vue.createApp({
       mounted() {
 
       },
       data() {
         return {
-          checkIn: "<?php echo date('Y-m-d') ?>",
-          checkOut: '<?php echo date('Y-m-d', strtotime(' +1 day')) ?>',
+          checkIn: '',
+          checkOut: '',
           desti: '',
           allData: '',
           cart: [],
@@ -275,11 +318,15 @@
           promoCode: '',
           toggleModal: false,
           oneClick: false,
-          isPromoApplied: ''
+          isPromoApplied: '',
+          dropdown: false
         }
       },
 
       methods: {
+        showDropdown(){
+          this.dropdown = !this.dropdown
+        },
         openModal() {
           this.toggleModal = !this.toggleModal
 
@@ -298,6 +345,7 @@
 
               this.totalprice = discount
               localStorage.total = JSON.stringify(this.totalprice)
+              console.log(res.data);
 
             })
             this.isPromoApplied = true
@@ -306,19 +354,19 @@
 
           this.isPromoApplied = JSON.parse(localStorage.promo || false)
 
-          console.log("bottom promo", this.isPromoApplied);
+          // console.log("bottom promo", this.isPromoApplied);
 
 
-          console.log("total price", this.totalprice);
+          // console.log("total price", this.totalprice);
         },
         completeCart() {
 
-          if (this.checkOut != '' && this.checkin != '') {
+          if (start != '' && end != '') {
 
             axios.post('book.php', {
               action: 'insert',
-              checkIn: this.checkIn,
-              checkOut: this.checkOut,
+              checkIn: start,
+              checkOut: end,
               location: this.desti,
               data: this.cart,
               total: this.totalprice,
@@ -335,7 +383,7 @@
         addRoom(row) {
           let rooms = 0;
           let total = 0;
-          
+
 
           if (user) {
             if (row.cnt > 0) {
@@ -344,6 +392,7 @@
               this.cart.forEach(val => {
                 total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
 
+                console.log(total);
               })
               this.totalprice = total
               localStorage.total = JSON.stringify(this.totalprice)
@@ -373,30 +422,30 @@
         deleteRoom(row) {
 
           let deleteTotal = 0;
-          if (user){
+          if (user) {
             let cartIndex = this.cart.indexOf(row)
             this.cart.splice(cartIndex, 1)
             this.cart.forEach(val => {
               deleteTotal += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
-  
+
             })
             this.totalprice = deleteTotal
             localStorage.cart = JSON.stringify(this.cart)
             console.log(this.cart);
-  
+
             row.cnt++
-          }else{
+          } else {
 
             let cartIndex = this.cart.indexOf(row)
             this.cart.splice(cartIndex, 1)
             this.cart.forEach(val => {
               deleteTotal += parseInt(val.room_price) * this.nights
-  
+
             })
             this.totalprice = deleteTotal
             localStorage.cart = JSON.stringify(this.cart)
             console.log(this.cart);
-  
+
             row.cnt++
           }
         },
@@ -410,11 +459,13 @@
           })
         },
         async submitData() {
-          if (this.checkIn != '' && this.checkOut != '') {
+          console.log(start);
+          console.log(end);
+          if (start != '' && end != '') {
             await axios.post('book.php', {
               action: 'getData',
-              checkIn: this.checkIn,
-              checkOut: this.checkOut,
+              checkIn: start,
+              checkOut: end,
               desti: this.desti
             }).then(res => {
               this.allData = res.data
@@ -432,8 +483,8 @@
       },
       computed: {
         nights() {
-          var checkin = new Date(this.checkIn);
-          var checkout = new Date(this.checkOut);
+          var checkin = new Date(start);
+          var checkout = new Date(end);
 
 
           var Difference_In_Time = checkout.getTime() - checkin.getTime();

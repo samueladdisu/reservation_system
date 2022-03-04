@@ -7,10 +7,11 @@
 $incoming = json_decode(file_get_contents("php://input"));
 
 $location = $_SESSION['user_location'];
+$role = $_SESSION['user_role'];
 $data = array();
 $filterd_data = array();
 if ($incoming->action == 'fetchRes') {
-  if ($location == "admin") {
+  if ($role == "SA" && $location == "Boston") {
     $query = "SELECT * FROM reservations ORDER BY res_id DESC";
   } else {
     $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";
@@ -99,16 +100,36 @@ if ($incoming->action == "delete") {
   // echo json_encode();
 
   if(gettype($rooms) == 'integer'){
+
+    // CHANGE ROOM STATUS TO NOT BOOKED 
+
     $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$rooms'";
     $change_status_result = mysqli_query($connection, $change_status_query);
     confirm($change_status_result);
+
+      // REMOVE ROOMS FROM BOOKED ROOMS TABLE 
+    
+    $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_roomId = $val";
+    $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+
+     confirm($delete_booked_rooms_result);
   }else if(gettype($rooms) == 'array'){
     
     foreach ($rooms as  $val) {
+
+      // CHANGE ROOM STATUS TO NOT BOOKED 
+
       $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$val'";
       $change_status_result = mysqli_query($connection, $change_status_query);
       confirm($change_status_result);
-      echo json_encode(confirm($change_status_result));
+
+      // REMOVE ROOMS FROM BOOKED ROOMS TABLE 
+
+      $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_roomId = $val";
+      $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+ 
+       confirm($delete_booked_rooms_result);
+      echo json_encode(confirm($delete_booked_rooms_result));
     }
   }
 
