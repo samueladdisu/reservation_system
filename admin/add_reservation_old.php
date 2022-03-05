@@ -16,7 +16,6 @@ if (isset($_POST['add_res'])) {
 
 ?>
 
-
 <form action="" method="POST" class="col-6 row" enctype="multipart/form-data">
 
   <div class="form-group col-6">

@@ -62,6 +62,7 @@ if (isset($_POST['add_res'])) {
 ?>
 <div id="app">
 
+
   <form action="" @submit.prevent="addReservation" method="POST" id="reservation" class="col-12 row" enctype="multipart/form-data">
 
     <h1 class="mb-2">Select Room</h1>
