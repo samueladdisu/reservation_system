@@ -82,12 +82,22 @@
 
   if (isset($_POST['complete_book'])) {
 
-
-
     foreach ($_POST as $name => $value) {
       $params[$name] = escape($value);
     }
 
+    if($params['res_paymentMethod'] == 'arrival'){
+      $firstDate = new DateTime($checkIn);
+      $today = new DateTime();
+      $diff = $firstDate->diff($today);
+      $days = $diff->days;
+   
+      if($days < 5){
+        echo "<script> alert('You can\'t reserve less than 5 days in advance');</script>";
+        return;
+      }
+ 
+    }
 
 
     $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
@@ -125,7 +135,7 @@
   }
 
   ?>
-  <div class="container ">
+  <div class="container" id="regApp">
     <h1 class="register-title">YOUR DETAILS</h1>
     <p class="register-subtitle">
       Feel out the form below inorder to book a room
@@ -136,63 +146,87 @@
 
         <div class="col-md-6">
 
-          <input type="text" placeholder="First Name" name="res_firstname" class="form-control" id="inputEmail4">
+          <input type="text" placeholder="First Name" name="res_firstname" 
+          value="<?php echo isset($params['res_firstname'])?$params['res_firstname']: '';   ?>" class="form-control" id="inputEmail4">
         </div>
         <div class="col-md-6">
 
-          <input type="text" placeholder="Last Name" name="res_lastname" class="form-control" id="inputPassword4">
+          <input type="text" placeholder="Last Name" 
+          value="<?php echo isset($params['res_lastname'])?$params['res_lastname']: '';   ?>" 
+          name="res_lastname" class="form-control" id="inputPassword4">
         </div>
         <div class="col-md-6">
-          <input type="phone" placeholder="Phone No." name="res_phone" class="form-control" id="inputAddress">
-        </div>
-        <div class="col-md-6">
-
-          <input type="email" placeholder="Email" name="res_email" class="form-control" id="inputAddress2">
-        </div>
-
-        <div class="col-md-6">
-
-          <input type="text" placeholder="Country" class="form-control" name="res_country" id="inputCity">
-        </div>
-
-        <div class="col-md-6">
-          <input type="text" placeholder="Address" class="form-control" name="res_address" id="inputCity">
-        </div>
-
-
-        <div class="col-md-6">
-
-          <input type="text" placeholder="No. of Guests" class="form-control" name="res_guestNo" id="inputCity">
-        </div>
-        <div class="col-md-6">
-          <input type="text" placeholder="City" class="form-control" name="res_city" id="inputCity">
-        </div>
-        <div class="col-md-6">
-          <input type="text" placeholder="Special Request" class="form-control" name="res_specialRequest" id="inputCity">
+          <input type="phone" placeholder="Phone No."
+          value="<?php echo isset($params['res_phone'])?$params['res_phone']: '';   ?>"
+          name="res_phone" class="form-control" id="inputAddress">
         </div>
         <div class="col-md-6">
 
-          <input type="text" placeholder="Zip/Postal Code" class="form-control" name="res_zip" id="inputCity">
+          <input type="email" placeholder="Email" 
+          value="<?php echo isset($params['res_email'])?$params['res_email']: '';   ?>"
+          name="res_email" class="form-control" id="inputAddress2">
+        </div>
+
+        <div class="col-md-6">
+
+          <input type="text" placeholder="Country"
+          value="<?php echo isset($params['res_country'])?$params['res_country']: '';   ?>"
+          class="form-control" name="res_country" id="inputCity">
+        </div>
+
+        <div class="col-md-6">
+          <input type="text"
+          value="<?php echo isset($params['res_address'])?$params['res_address']: '';   ?>"
+          placeholder="Address" class="form-control" name="res_address" id="inputCity">
+        </div>
+
+
+        <div class="col-md-6">
+
+          <input type="text" placeholder="No. of Guests"
+          value="<?php echo isset($params['res_guestNo'])?$params['res_guestNo']: '';   ?>"
+          class="form-control" name="res_guestNo" id="inputCity">
+        </div>
+        <div class="col-md-6">
+          <input type="text" placeholder="City"
+          value="<?php echo isset($params['res_city'])?$params['res_city']: '';   ?>"
+          class="form-control" name="res_city" id="inputCity">
+        </div>
+        <div class="col-md-6">
+          <input type="text" placeholder="Special Request"
+          value="<?php echo isset($params['res_specialRequest'])?$params['res_specialRequest']: '';   ?>"
+          class="form-control" name="res_specialRequest" id="inputCity">
+        </div>
+        <div class="col-md-6">
+
+          <input type="text"
+          value="<?php echo isset($params['res_zip'])?$params['res_zip']: '';   ?>"
+          placeholder="Zip/Postal Code" class="form-control" name="res_zip" id="inputCity">
         </div>
         <div class="col-md-6">
           <label for="inputState" class="form-label payment">Payment Platform</label>
-          <select id="inputState" name="res_paymentMethod" class="form-select">
+          <select id="inputState"
+          value="<?php echo isset($params['res_paymentMethod'])?$params['res_paymentMethod']: '';   ?>"
+          name="res_paymentMethod" class="form-select">
+          <option disabled value="">Select Option</option>
             <option value="paypal">Pay Pal</option>
             <option value="amole">Amole</option>
             <option value="telebirr">Telebirr</option>
+            <option value="arrival">Pay on Arrival</option>
           </select>
         </div>
+        
 
         <div class="col-12">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
+            <input class="form-check-input" type="checkbox" id="book">
+            <label class="form-check-label" for="book">
               I agree with <a href="#"> Booking Coditions </a>
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
+            <input class="form-check-input" type="checkbox" id="news">
+            <label class="form-check-label" for="news">
               I would like to receive newsletters and special offers by email
             </label>
           </div>
@@ -219,7 +253,7 @@
             </div>
 
           </div>
-          <div class="cart" v-for="items of cart" :key="items.id">
+          <div class="cart">
             <?php
 
             $cart = $_SESSION['cart'];
@@ -236,7 +270,7 @@
                 <h3><?php echo $items['room_acc']; ?> -
                   <?php echo $items['room_location']; ?></h3>
                 <p class="text-muted">
-                  $<?php echo $items['room_price']; ?>
+                  $<?php echo $items['room_price']; ?> / night
                 </p>
               </div>
             <?php }
@@ -248,7 +282,7 @@
           </div>
 
           <hr>
-          <div class="cart-footer-lg" v-if="cart.length != 0">
+          <div class="cart-footer-lg">
 
 
 
@@ -268,7 +302,7 @@
   </div>
 
   <?php include_once './includes/footer.php' ?>
-
+  <script src="./js/reserve.js"></script>
 
 </body>
 

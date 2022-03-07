@@ -518,7 +518,13 @@
   padding: 1.13rem 0.88rem;
   margin-bottom: 1.5rem;
 }
-
+.arrival {
+  margin-bottom: 1.5rem;
+  a{
+    color: #808080;
+    text-decoration: underline;
+  }
+}
 .register-title {
   font-family: 'HelveticaNeue';
   font-size: 1.50rem;

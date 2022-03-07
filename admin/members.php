@@ -23,10 +23,7 @@
         <!-- Topbar -->
         <?php include './includes/topbar.php'; ?>
         <!-- End of Topbar -->
-        <?php
-
-        if ($_SESSION['user_location'] == 'admin') {
-        ?>
+       
 
           <!-- Begin Page Content -->
           <div class="container-fluid">
@@ -65,19 +62,5 @@
 
       </div>
       <!-- End of Main Content -->
-    <?php    } else { ?>
-      <div class="container-fluid">
-
-        <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">Sorry, You're Not Allowed in this area</h1>
-
-        </div>
-        <!-- Content Row -->
-        <div class="row">
-
-        </div>
-
-      </div>
-    <?php } ?>
+      
     <?php include './includes/admin_footer.php'; ?>

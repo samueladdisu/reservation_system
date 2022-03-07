@@ -48,3 +48,21 @@ const app = Vue.createApp({
 })
 
 app.mount('#app')
+
+const register = Vue.createApp({
+  data() {
+    return {
+      arrival: ""
+    }
+  },
+  methods: {
+    
+  },
+  watch: {
+    arrival() {
+
+    }
+  }
+})
+
+register.mount("#regApp")

@@ -70,7 +70,7 @@ if (!isset($_SESSION['user_role'])) {
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="resApp" class="d-flex flex-column">
+    <div id="resApp" style="width: 100vw;" class="d-flex flex-column">
 
       <!-- Main Content -->
       <div id="content">
@@ -102,7 +102,7 @@ if (!isset($_SESSION['user_role'])) {
 
                   <?php
 
-                  if ($_SESSION['user_location'] == 'admin') {
+                  if ($_SESSION['user_location'] == 'SA') {
 
                   ?>
                     <div class="form-group col-4">
@@ -203,15 +203,31 @@ if (!isset($_SESSION['user_role'])) {
                     <td>
                       {{ row.res_confirmID }}
                     </td>
-                    <td @click="editRes(row)" data-toggle="modal" :data-target="modal">
-                      <i style="color: turquoise;" class="far fa-edit"></i>
-                    </td>
-                    <td data-toggle="modal" data-target="#deleteModal" @click="setTemp(row)">
-                      <i style="color: red;" class="far fa-trash-alt"></i>
-                    </td>
                     <td>
-                      <i class="fas fa-ellipsis-v"></i>
+                      <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                          <!-- <div class="dropdown-header">Options</div> -->
+
+                          <a data-toggle="modal" @click="editRes(row)" :data-target="modal" class="dropdown-item" href="#">
+                            Add
+                          </a>
+                          <a class="dropdown-item" 
+                          href="#"
+                          data-toggle="modal" data-target="#exampleModalLong" @click="setTemp(row)">
+                            View
+                          </a>
+                          <div class="dropdown-divider"></div>
+                          <a data-toggle="modal" href="#" class="dropdown-item text-danger" data-target="#deleteModal" @click="setTemp(row)">
+                            Delete
+                          </a>
+
+                        </div>
+                      </div>
                     </td>
+
                   </tr>
 
 
@@ -338,6 +354,50 @@ if (!isset($_SESSION['user_role'])) {
         </div>
       </div>
       <!-- End of Delete Modal  -->
+       <!-- View Full Reservation Details  -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">
+            {{ tempDelete.res_firstname }}
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+              
+        <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+              <thead>
+                <th>
+                  Key
+                </th>
+                <th>
+                  Value
+                </th>
+              </thead>
+              <tbody>
+                <tr v-for="(value, key) in tempDelete">
+                  <td>
+                  {{ key }}
+                  </td>
+                  <td>
+                  {{ value }}
+                  </td>
+                </tr>
+              </tbody>
+        </table>
+   
+        </div>
+       
+      </div>
+    </div>
+  </div>
+
+  <!-- End of View Full Reservation Details -->
     </div>
     <!-- End of Content Wrapper -->
 
@@ -349,6 +409,7 @@ if (!isset($_SESSION['user_role'])) {
     <i class="fas fa-angle-up"></i>
   </a>
 
+ 
 
 
   <!-- Logout Modal-->
