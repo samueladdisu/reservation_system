@@ -3,7 +3,7 @@ ob_start();
 session_start();
 require  './admin/includes/db.php';
 require  './admin/includes/functions.php';
-require (__DIR__.'/vendor/autoload.php');
+include (__DIR__.'/vendor/autoload.php');
 
 
 
