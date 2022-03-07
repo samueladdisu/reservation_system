@@ -38,7 +38,6 @@
 
   // Pusher library setup
 
-  require __DIR__ . './vendor/autoload.php';
 
   $app_id = '1329709';
   $app_key = '341b77d990ca9f10d6d9';
