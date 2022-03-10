@@ -211,9 +211,9 @@ if (isset($_POST['add_res'])) {
             <td>
               {{ row.room_location }}
             </td>
-            <!-- <td>
+            <td>
               {{ row.room_desc.substring(0,50)+"..." }}
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>

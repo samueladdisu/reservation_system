@@ -361,8 +361,10 @@
         },
         completeCart() {
 
-          if (start != '' && end != '') {
-
+          if (start && end) {
+            
+            console.log(start);
+            console.log(end);
             axios.post('book.php', {
               action: 'insert',
               checkIn: start,
@@ -383,39 +385,44 @@
         addRoom(row) {
           let rooms = 0;
           let total = 0;
-
-
-          if (user) {
-            if (row.cnt > 0) {
-
-              this.cart.push(row)
-              this.cart.forEach(val => {
-                total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
-
-                console.log(total);
-              })
-              this.totalprice = total
-              localStorage.total = JSON.stringify(this.totalprice)
-              localStorage.cart = JSON.stringify(this.cart)
-              console.log(this.cart);
-              row.cnt--
+          
+          if(start && end){
+            
+            if (user) {
+              if (row.cnt > 0) {
+  
+                this.cart.push(row)
+                this.cart.forEach(val => {
+                  total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+  
+                  console.log(total);
+                })
+                this.totalprice = total
+                localStorage.total = JSON.stringify(this.totalprice)
+                localStorage.cart = JSON.stringify(this.cart)
+                console.log(this.cart);
+                row.cnt--
+              }
+            } else {
+  
+              if (row.cnt > 0) {
+  
+                this.cart.push(row)
+                this.cart.forEach(val => {
+                  total += parseInt(val.room_price) * this.nights
+  
+                })
+                this.totalprice = total
+                localStorage.total = JSON.stringify(this.totalprice)
+                localStorage.cart = JSON.stringify(this.cart)
+                console.log(this.cart);
+                row.cnt--
+              }
             }
-          } else {
-
-            if (row.cnt > 0) {
-
-              this.cart.push(row)
-              this.cart.forEach(val => {
-                total += parseInt(val.room_price) * this.nights
-
-              })
-              this.totalprice = total
-              localStorage.total = JSON.stringify(this.totalprice)
-              localStorage.cart = JSON.stringify(this.cart)
-              console.log(this.cart);
-              row.cnt--
-            }
+          }else{
+            alert("Please Select Dates")
           }
+
 
           console.log(this.cart);
         },
@@ -461,7 +468,7 @@
         async submitData() {
           console.log(start);
           console.log(end);
-          if (start != '' && end != '') {
+          if (start && end) {
             await axios.post('book.php', {
               action: 'getData',
               checkIn: start,

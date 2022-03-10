@@ -1697,7 +1697,6 @@ body {
   color: #F1F1EA;
   padding: 0.63rem 1.63rem;
   cursor: pointer;
-  z-index: 999999;
 }
 
 .btn-primary1:hover {

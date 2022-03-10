@@ -56,11 +56,10 @@ const register = Vue.createApp({
     }
   },
   methods: {
-    
-  },
-  watch: {
-    arrival() {
-
+    clearCart(){
+      // localStorage.cart = [];
+      // localStorage.total = 0
+      localStorage.clear();
     }
   }
 })

@@ -102,6 +102,7 @@ const app = Vue.createApp({
         roomIds: this.rowId,
         price: this.totalPrice
       }).then(res => {
+        window.location.href = 'view_all_reservations.php'
         console.log(res.data);
       })
 

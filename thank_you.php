@@ -36,14 +36,14 @@
   
     <?php 
     
-      if(isset($_GET['tx'])){
-        $amount = $_GET['amt'];
-        $currency = $_GET['cc'];
-        $transaction = $_GET['tx'];
-        $status = $_GET['st'];
-      }else {
-        header("Location: ./reserve.php");
-      }
+      // if(isset($_GET['tx'])){
+      //   $amount = $_GET['amt'];
+      //   $currency = $_GET['cc'];
+      //   $transaction = $_GET['tx'];
+      //   $status = $_GET['st'];
+      // }else {
+      //   header("Location: ./reserve.php");
+      // }
     
     
     ?>
