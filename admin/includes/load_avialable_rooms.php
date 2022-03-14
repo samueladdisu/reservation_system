@@ -13,6 +13,12 @@ $allData = array();
 $user_location = $_SESSION['user_location'];
 $user_role = $_SESSION['user_role'];
 
+if($received_data->action == 'amt'){
+
+  $_SESSION['amt'] = $received_data->data;
+  echo json_encode($received_data->data);
+}
+
 if ($received_data->action == 'filter') {
   $location = $received_data->location;
   $roomType = $received_data->roomType;

@@ -25,6 +25,7 @@ if (isset($_GET['p_id'])) {
     $room_price = $row['room_price'];
     $room_image = $row['room_image'];
     $room_number = $row['room_number'];
+    $room_amt = json_decode($row['room_amenities']);
     $room_status = $row['room_status'];
     $room_location = $row['room_location'];
     $room_desc = $row['room_desc'];
@@ -127,12 +128,7 @@ if (isset($_POST['edit_room'])) {
     <input type="text" class="form-control" value="<?php echo $room_number; ?>" name="room_number">
   </div>
 
-  <div class="form-group">
-    <label for="post_content"> Room Description</label>
-    <textarea name="room_desc" id="" cols="30" rows="10" class="form-control">
-    <?php echo $room_desc; ?>
-    </textarea>
-  </div>
+ 
 
   <div class="form-group">
     <label for="room_status">Room Status</label> <br>
@@ -180,6 +176,36 @@ if (isset($_POST['edit_room'])) {
   <?php } else { ?>
     <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
   <?php  } ?>
+
+  <div class="form-group">
+    <label for="">Room amenities</label>
+    <input type="text" name="" id="" value="" class="form-control">
+  </div>
+
+  <div class="my-1">
+    <?php 
+    foreach ($room_amt as $value) {
+      ?>
+      <span v-for="am in amt" :key="am" class="badge-pill px-3 mx-1 py-1 badge-dark">
+
+      <span @click="deleteAmt(am)"> <?php echo $value ?>{{ am }}<i class="fal fa-times pl-2"></i></span>
+      </span>
+      <?php 
+      
+    }
+    ?>
+    
+  </div>
+
+  
+
+
+  <div class="form-group">
+    <label for="post_content"> Room Description</label>
+    <textarea name="room_desc" id="" cols="30" rows="10" class="form-control">
+    <?php echo $room_desc; ?>
+    </textarea>
+  </div>
 
   <div class="form-group">
     <input type="submit" class="btn btn-primary" name="edit_room" value="Edit Room">

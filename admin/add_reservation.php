@@ -94,7 +94,7 @@ if (isset($_POST['add_res'])) {
 
         <?php
 
-        if ($_SESSION['user_location'] == 'admin') {
+        if ($_SESSION['user_role'] == 'SA') {
 
         ?>
           <div class="form-group col-2">

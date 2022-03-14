@@ -207,3 +207,41 @@ const userForm = Vue.createApp({
 })
 
 userForm.mount('#userForm')
+
+const roomFrom = Vue.createApp({
+  data() {
+    return {
+      tempAmt: '',
+      amt: []
+
+    }
+  },
+  methods: {
+    addAmt(e){
+      if(e.key === ',' && this.tempAmt){
+        if (!this.amt.includes(this.tempAmt)){
+          this.amt.push(this.tempAmt)
+
+          axios.post('./includes/load_avialable_rooms.php',{
+            action: 'amt',
+            data: this.amt
+          }).then(res =>{
+            console.log(res.data);
+          })
+        }
+        this.tempAmt = ''
+      }
+    },
+    deleteAmt(am){
+      this.amt = this.amt.filter(item => {
+        return am !== item
+      })
+      axios.post('./includes/load_avialable_rooms.php',{
+        action: 'amt',
+        data: this.amt
+      }).then(res =>{
+        console.log(res.data);
+      })
+    }
+  }
+}).mount('#addRoom')

@@ -44,7 +44,9 @@ if ($received_data->action == 'filter') {
     WHERE b_checkin >= '$checkout'
     AND b_roomLocation = '$location'
     AND b_roomType = '$roomType'";
+
   }else if(($checkin && $checkout) && !($location && $roomType)){
+
     $query = "SELECT DISTINCT b_roomId
     FROM booked_rooms 
     WHERE b_checkout<= '$checkin' 
@@ -52,6 +54,7 @@ if ($received_data->action == 'filter') {
     SELECT DISTINCT b_roomId
     FROM booked_rooms
     WHERE b_checkin >= '$checkout'";
+    
   }else if(($checkin && $checkout) && !$location && $roomType){
     $query = "SELECT DISTINCT b_roomId 
     FROM booked_rooms 
@@ -89,26 +92,8 @@ if ($received_data->action == 'filter') {
     }
   
   }
-
-
-
-
-
   echo json_encode($filterd_data);
-
-
-
-
-  // if($location && $roomType){
-  //   $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location' AND room_acc = '$roomType'";
-  // }else if(!$location && $roomType){
-  //   $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_acc = '$roomType'";
-  // }else if($location && !$roomType){
-  //   $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
-  // }
- 
- 
-}
+ }
 
 if ($received_data->action == 'fetchAll') {
 

@@ -6,22 +6,29 @@ if ($_SESSION['user_role'] == 'RA') {
 ?>
 
 <?php
+  $incoming = json_decode(file_get_contents("php://input"));
 if (isset($_POST['add_room'])) {
+
+
+ 
+
   $room_occupancy   =  escape($_POST['room_occupancy']);
   $room_acc         =  escape($_POST['room_acc']);
   $room_number      =  escape($_POST['room_number']);
   $room_status      =  escape($_POST['room_status']);
   $room_location    =  escape($_POST['room_location']);
   $room_price       =  escape($_POST['room_price']);
+  $room_amenities   =  $_SESSION['amt'];
   $room_desc        =  escape($_POST['room_desc']);
   $room_image       = $_FILES['room_image']['name'];
   $room_image_temp  = $_FILES['room_image']['tmp_name'];
 
   move_uploaded_file($room_image_temp, "./room_img/$room_image");
 
+  $room_amenities = json_encode($room_amenities);
 
 
-  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$room_occupancy', '$room_acc', '$room_price', '$room_image', '$room_number', '$room_status', '$room_location', '$room_desc');";
+  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_amenities`, `room_desc`) VALUES ('$room_occupancy', '$room_acc', '$room_price', '$room_image', '$room_number', '$room_status', '$room_location', '$room_amenities', '$room_desc');";
 
 
   $result = mysqli_query($connection, $query);
@@ -32,7 +39,7 @@ if (isset($_POST['add_room'])) {
 ?>
 
 
-<form action="" method="POST" class="col-6" enctype="multipart/form-data">
+<form action="" id="addRoom" method="POST" class="col-6" enctype="multipart/form-data">
 
   <div class="form-group">
     <label for="title">Room Occupancy</label>
@@ -63,7 +70,7 @@ if (isset($_POST['add_room'])) {
           continue;
         } else {
       ?>
-      
+
           <option value='<?php echo $type_name ?>'><?php echo $type_name ?></option>
       <?php
         }
@@ -73,8 +80,8 @@ if (isset($_POST['add_room'])) {
     </select>
   </div>
   <div class="form-group">
-      <input type="hidden" name="room_price" value='<?php echo $type_room_price ?>'>
-    </div>
+    <input type="hidden" name="room_price" value='<?php echo $type_room_price ?>'>
+  </div>
 
   <div class="form-group">
     <label for="post_image"> Room Image</label>
@@ -85,12 +92,6 @@ if (isset($_POST['add_room'])) {
     <label for="post_tags"> Room Number </label>
     <input type="text" class="form-control" name="room_number">
   </div>
-  <div class="form-group">
-    <label for="post_content"> Room Description</label>
-    <textarea name="room_desc" id="" cols="30" rows="10" class="form-control"></textarea>
-  </div>
-
-
   <div class="form-group">
     <label for="room_status"> Room Status</label>
     <select name="room_status" class="custom-select" id="">
@@ -127,6 +128,21 @@ if (isset($_POST['add_room'])) {
     <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
   <?php  } ?>
 
+  <div class="form-group">
+    <label for="amt">Room Amenities</label>
+    <input type="text" name="room_amenities" @keyup.alt="addAmt" v-model="tempAmt" id="amt" class="form-control">
+  </div>
+  <div class="my-1">
+    <span v-for="am in amt" :key="am" class="badge-pill px-3 mx-1 py-1 badge-dark">
+
+      <span @click="deleteAmt(am)"> {{ am }}<i class="fal fa-times pl-2"></i></span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="post_content"> Room Description</label>
+    <textarea name="room_desc" id="" cols="30" rows="10" class="form-control"></textarea>
+  </div>
 
 
   <div class="form-group">
