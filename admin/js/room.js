@@ -107,6 +107,8 @@ roomApp.mount('#viewRoom')
 let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
 let mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
 
+const email = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+
 
 const userForm = Vue.createApp({
   data() {
@@ -116,6 +118,7 @@ const userForm = Vue.createApp({
       uname: '',
       upwd: '',
       ucpwd: '',
+      uemail: '',
       msg: [],
       button: true
     }
@@ -140,14 +143,21 @@ const userForm = Vue.createApp({
     ucpwd(value){
       this.ucpwd = value
       this.checkPassword(value)
-
-      
+    },
+    uemail(value){
+      this.uemail = value
+      this.checkEmail(value)
     }
   },
   methods: {
     buttonToggle(){
       if(this.msg.length == 0){
         this.button = true
+      }
+    },
+    checkEmail(value){
+      if(!email.test(value)){
+        this.msg['email'] = 'Invalid Email'
       }
     },
     validatePassword(value){

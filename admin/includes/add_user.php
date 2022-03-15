@@ -5,15 +5,15 @@ if (isset($_POST['create_user'])) {
   // $user_Cpwd = escape($_POST['user_Cpassword']);
   $user_firstname = escape($_POST['user_firstname']);
   $user_lastname = escape($_POST['user_lastname']);
-  // $user_email = escape($_POST['user_email']);
+  $user_email = escape($_POST['user_email']);
   $user_role = escape($_POST['user_role']);
   $user_location = escape($_POST['user_location']);
 
 
   $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
 
-  $query = "INSERT INTO users(user_name, user_pwd, user_firstname, user_lastname, user_role, user_location ) ";
-  $query .= "VALUES('$user_name','$encryptePwd','$user_firstname','$user_lastname','$user_role','$user_location' ) ";
+  $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role) ";
+  $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role') ";
 
   $user_result = mysqli_query($connection, $query);
 
@@ -86,6 +86,14 @@ if (isset($_POST['create_user'])) {
     <label for="post_status"> User Name*</label>
     <input type="text" v-model="uname" class="form-control" name="user_name">
     <div v-if="msg.uname || msg.Luname" class="mt-1 text-danger">{{ msg.uname }} {{ msg.Luname }} </div>
+  </div>
+
+  <div class="form-group">
+    <label for="post_status"> User Email*</label>
+    <input type="text" v-model="uemail" class="form-control" name="user_email" required>
+    <div v-if="msg.email" class="mt-1 text-danger">
+      {{ msg.email }}
+    </div>
   </div>
 
   <div class="form-group">

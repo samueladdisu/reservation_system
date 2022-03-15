@@ -41,12 +41,12 @@
                                 if (isset($_POST['submit'])) {
                                     $type_name = escape($_POST['type_name']);
                                     $type_location = escape($_POST['type_location']);
-                                    $room_price = escape($_POST['room_price']);
+                                    $rack_rate = escape($_POST['rack_rate']);
                                     if ($type_name == "") {
                                         echo "<script> alert('Please Enter Category Title');</script>";
                                     } else {
-                                        $query = "INSERT INTO room_type (type_name, type_location, room_price) ";
-                                        $query .= "VALUE ('{$type_name}', '$type_location', '$room_price')";
+                                        $query = "INSERT INTO room_type (type_name, type_location, rack_rate) ";
+                                        $query .= "VALUE ('{$type_name}', '$type_location', '$rack_rate')";
 
                                         $create_category = mysqli_query($connection, $query);
 
@@ -54,6 +54,9 @@
                                             die('Query Failed' . mysqli_error($connection));
                                         }
                                     }
+
+                                    header("Refresh:0");
+
                                 }
 
 
@@ -70,8 +73,8 @@
                                         <input type="text" class="form-control" name="type_name" id="">
                                     </div>
                                     <div class="form-group">
-                                        <label for="user_role"> Room price </label>
-                                        <input type="text" class="form-control" name="room_price" id="">
+                                        <label for="user_role"> Full Amount </label>
+                                        <input type="text" class="form-control" name="rack_rate" id="">
                                     </div>
 
                                     <?php
@@ -136,7 +139,9 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Accomodation</th>
-                                        <th>Price</th>
+                                        <th>Full Amount(Rack Rate)</th>
+                                        <th>Price for today</th>
+                                        <th>Location</th>
                                         <?php
 
                                         if ($_SESSION['user_role'] == 'admin') {
@@ -151,19 +156,43 @@
                                     $monday = date('m/d/Y', strtotime('monday'));
                                     $friday = date('m/d/Y', strtotime('friday'));
                                     $sunday = date('m/d/Y', strtotime('sunday'));
+                                    $thursday = date('m/d/Y', strtotime('thursday'));
                                     $saturday = date('m/d/Y', strtotime('saturday'));
                                     // echo $weekdays;
 
-                                    $today =  date('m/d/Y', strtotime('today'));
+                                    $today =  date('m/d/Y', strtotime('friday'));
 
-                                    if ($today >= $monday || $today <= $friday) {
-                                        $update_price = "UPDATE room_type SET room_price = 100";
-                                        $result_price = mysqli_query($connection, $update_price);
-                                        confirm($result_price);
-                                    } else {
-                                        $update_price = "UPDATE room_type SET room_price = 150";
-                                        $result_price = mysqli_query($connection, $update_price);
-                                        confirm($result_price);
+                                    $room_query = "SELECT * FROM room_type";
+                                    $result = mysqli_query($connection, $room_query);
+
+                                    while($row = mysqli_fetch_assoc($result)){
+
+                                        $price = $row['rack_rate'];
+                                        
+                                        if ($today >= $sunday || $today <= $thursday) {
+
+                                            $weekday_rate = $price * 0.15;
+
+                                            $price = $price - $weekday_rate;
+
+                                            $update_price = "UPDATE room_type SET room_price = $price";
+                                            $result_price = mysqli_query($connection, $update_price);
+                                            confirm($result_price);
+
+                                          
+
+                                        } else if($today == $friday){
+
+                                            $weekend_rate = $price * 0.909;
+
+                                            $update_price = "UPDATE room_type SET room_price = $weekend_rate";
+                                            $result_price = mysqli_query($connection, $update_price);
+                                            confirm($result_price);
+                                        } else if($today == $saturday){
+                                            $update_price = "UPDATE room_type SET room_price = $price";
+                                            $result_price = mysqli_query($connection, $update_price);
+                                            confirm($result_price);
+                                        }
                                     }
                                     // Display categories from database
                                     $location = $_SESSION['user_location'];
@@ -179,12 +208,14 @@
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         $type_id = $row['type_id'];
                                         $type_name = $row['type_name'];
+                                        $db_rack_rate = $row['rack_rate'];
                                         $type_location = $row['type_location'];
                                         $room_price = $row['room_price'];
                                     ?>
                                         <tr>
                                             <td><?php echo $type_id; ?></td>
                                             <td><?php echo $type_name; ?></td>
+                                            <td><?php echo $db_rack_rate; ?></td>
                                             <td><?php echo $room_price; ?></td>
                                             <?php
                                             if ($location == 'Boston') {

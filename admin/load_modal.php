@@ -54,7 +54,7 @@ if ($received_data->action == 'filter') {
     SELECT DISTINCT b_roomId
     FROM booked_rooms
     WHERE b_checkin >= '$checkout'";
-    
+
   }else if(($checkin && $checkout) && !$location && $roomType){
     $query = "SELECT DISTINCT b_roomId 
     FROM booked_rooms 
@@ -80,19 +80,26 @@ if ($received_data->action == 'filter') {
   $result = mysqli_query($connection, $query);
   confirm($result);
 
-  while($row = mysqli_fetch_assoc($result)){
+  $exists = mysqli_num_rows($result);
 
-    $select_room_query = "SELECT * FROM rooms WHERE room_id = {$row['b_roomId']}";
+  if($exists){
+    while($row = mysqli_fetch_assoc($result)){
   
-    $select_room_result = mysqli_query($connection, $select_room_query);
-    confirm($select_room_result);
-    while($row2 = mysqli_fetch_assoc($select_room_result)){
-  
-      $filterd_data[] = $row2;
+      $select_room_query = "SELECT * FROM rooms WHERE room_id = {$row['b_roomId']}";
+    
+      $select_room_result = mysqli_query($connection, $select_room_query);
+      confirm($select_room_result);
+      while($row2 = mysqli_fetch_assoc($select_room_result)){
+    
+        $filterd_data[] = $row2;
+      }
     }
-  
+    echo json_encode($filterd_data);
+
+  }else{
+    $ava_query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
   }
-  echo json_encode($filterd_data);
+
  }
 
 if ($received_data->action == 'fetchAll') {
