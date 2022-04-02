@@ -10,7 +10,7 @@
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" class="d_flex flex-column">
 
             <!-- Main Content -->
             <div id="content">
@@ -23,7 +23,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div class="d_sm-flex align-items_center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Accomodation</h1>
 
                     </div>
@@ -33,55 +33,97 @@
                         global $type_location;
                         if ($_SESSION['user_role'] == 'SA' || $_SESSION['user_role'] == 'PA') {
                         ?>
-                            <div class="col-4">
+                            <div class="col-12">
                                 <?php
 
 
 
                                 if (isset($_POST['submit'])) {
-                                    $type_name = escape($_POST['type_name']);
-                                    $type_location = escape($_POST['type_location']);
-                                    $rack_rate = escape($_POST['rack_rate']);
-                                    if ($type_name == "") {
-                                        echo "<script> alert('Please Enter Category Title');</script>";
-                                    } else {
-                                        $query = "INSERT INTO room_type (type_name, type_location, rack_rate) ";
-                                        $query .= "VALUE ('{$type_name}', '$type_location', '$rack_rate')";
+                                    $type_name          = escape($_POST['type_name']);
+                                    $type_location      = escape($_POST['type_location']);
+                                    $double             = escape($_POST['d_rack_rate']);
+                                    $single             = escape($_POST['s_rack_rate']);
+                                    $room_occupancy     = escape($_POST['room_occupancy']);
+                                    $room_image         = $_FILES['room_image']['name'];
+                                    $room_image_temp    = $_FILES['room_image']['tmp_name'];
 
-                                        $create_category = mysqli_query($connection, $query);
+                                    move_uploaded_file($room_image_temp, "./room_img/$room_image");
 
-                                        if (!$create_category) {
-                                            die('Query Failed' . mysqli_error($connection));
-                                        }
+                                    $d_weekdays = number_format($double - ($double * 0.15), 2, '.', '');
+                                    $s_weekdays = number_format($single - ($single * 0.15), 2, '.', '');
+
+                                    if ($type_location === "Bishoftu") {
+
+                                        $s_weekend   = number_format($single - ($single * 0.1), 2, '.', '');
+                                        $d_weekend   = number_format($double - ($double * 0.1), 2, '.', '');
+                                        $s_member    = number_format($single - ($single * 0.25), 2, '.', '');
+                                        $d_member    = number_format($double - ($double * 0.25), 2, '.', '');
+
+                                        // echo "single Full    => $single <br>";
+                                        // echo "single weekend => $s_weekend <br>";
+                                        // echo "single member  => $s_member <br>";
+                                        // echo "single weekday => $s_weekdays <br><br>";
+                                        // echo "double Full    => $double <br>";
+                                        // echo "double weekend => $d_weekend <br>";
+                                        // echo "double member  => $d_member <br>";
+                                        // echo "double weekday => $d_weekdays \n";
+
+                                        $query_bishoftu = "INSERT INTO room_type(type_name, type_location, occupancy, room_image, d_rack_rate, d_weekend_rate, d_member_rate, d_weekday_rate, s_rack_rate, s_weekend_rate, s_member_rate, s_weekday_rate) ";
+
+                                        $query_bishoftu .= "VALUE ('$type_name', '$type_location', '$room_occupancy', '$room_image', $double, $d_weekend, $d_member, $d_weekdays, $single, $s_weekend, $s_member, $s_weekdays)";
+
+                                        $result_bishoftu = mysqli_query($connection, $query_bishoftu);
+
+                                        confirm($result_bishoftu);
+                                    } else if ($type_location === "Awash") {
+
+                                        $query_awash = "INSERT INTO room_type(type_name, type_location, occupancy, room_image, d_rack_rate, d_weekend_rate, d_weekday_rate, s_rack_rate, s_weekend_rate, s_weekday_rate) ";
+
+                                        $query_awash .= "VALUE ('$type_name', '$type_location', '$room_occupancy', '$room_image', $double, $double, $d_weekdays, $single, $single, $s_weekdays)";
+
+                                        $result_awash = mysqli_query($connection, $query_awash);
+
+                                        confirm($result_awash);
                                     }
 
-                                    header("Refresh:0");
 
+
+                                    // header("Refresh:0");
                                 }
 
 
                                 ?>
 
 
-                                <form action="" method="post">
+                                <form method="POST" class="row" enctype="multipart/form-data">
 
 
-
-
-                                    <div class="form-group">
-                                        <label for="type_name">Room Type</label>
-                                        <input type="text" class="form-control" name="type_name" id="">
+                                    <div class="form-group col-4">
+                                        <label for="title">Room Occupancy</label>
+                                        <input type="text" class="form-control" name="room_occupancy">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="user_role"> Full Amount </label>
-                                        <input type="text" class="form-control" name="rack_rate" id="">
+
+                                    <div class="form-group col-4">
+                                        <label for="type_name">Room Type</label>
+                                        <input type="text" class="form-control" name="type_name">
+                                    </div>
+
+
+
+                                    <div class="form-group col-4">
+                                        <label for="user_role"> Double Occupancy(rack rate)</label>
+                                        <input type="text" class="form-control" name="d_rack_rate">
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="user_role"> Single Occupancy(rack rate) </label>
+                                        <input type="text" class="form-control" name="s_rack_rate">
                                     </div>
 
                                     <?php
 
                                     if ($_SESSION['user_role'] != 'PA') {
                                     ?>
-                                        <div class="form-group">
+                                        <div class="form-group col-4">
                                             <label for="user_role"> Hotel Location </label> <br>
                                             <select name="type_location" class="custom-select" v-model="location" id="">
                                                 <option disabled value="">Resort Location</option>
@@ -111,9 +153,13 @@
 
                                     ?>
 
+                                    <div class="form-group col-4">
+                                        <label for="type_name">Room Image</label> <br>
+                                        <input type="file" name="room_image">
 
+                                    </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group col-12">
                                         <input type="submit" class="btn btn-primary" name="submit" value="Add">
                                     </div>
                                 </form>
@@ -131,16 +177,25 @@
 
                         <?php } ?>
 
-                        <div class="col-8">
+                        <div class="col-12">
 
 
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+                            <table class="table table-bordered" id="accTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
                                         <th>Accomodation</th>
-                                        <th>Full Amount(Rack Rate)</th>
-                                        <th>Price for today</th>
+                                        <th>Occupancy</th>
+                                        <th>Image</th>
+                                        <th>Double Full</th>
+                                        <th>Double Weekend</th>
+                                        <th>Double member</th>
+                                        <th>Double Weekday</th>
+                                        <th>Single Full</th>
+                                        <th>Single Weekend</th>
+                                        <th>Single member</th>
+                                        <th>Single Weekday</th>
                                         <th>Location</th>
                                         <?php
 
@@ -152,52 +207,12 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    date_default_timezone_set('Africa/Addis_Ababa');
-                                    $monday = date('m/d/Y', strtotime('monday'));
-                                    $friday = date('m/d/Y', strtotime('friday'));
-                                    $sunday = date('m/d/Y', strtotime('sunday'));
-                                    $thursday = date('m/d/Y', strtotime('thursday'));
-                                    $saturday = date('m/d/Y', strtotime('saturday'));
-                                    // echo $weekdays;
+                                   
 
-                                    $today =  date('m/d/Y', strtotime('friday'));
-
-                                    $room_query = "SELECT * FROM room_type";
-                                    $result = mysqli_query($connection, $room_query);
-
-                                    while($row = mysqli_fetch_assoc($result)){
-
-                                        $price = $row['rack_rate'];
-                                        
-                                        if ($today >= $sunday || $today <= $thursday) {
-
-                                            $weekday_rate = $price * 0.15;
-
-                                            $price = $price - $weekday_rate;
-
-                                            $update_price = "UPDATE room_type SET room_price = $price";
-                                            $result_price = mysqli_query($connection, $update_price);
-                                            confirm($result_price);
-
-                                          
-
-                                        } else if($today == $friday){
-
-                                            $weekend_rate = $price * 0.909;
-
-                                            $update_price = "UPDATE room_type SET room_price = $weekend_rate";
-                                            $result_price = mysqli_query($connection, $update_price);
-                                            confirm($result_price);
-                                        } else if($today == $saturday){
-                                            $update_price = "UPDATE room_type SET room_price = $price";
-                                            $result_price = mysqli_query($connection, $update_price);
-                                            confirm($result_price);
-                                        }
-                                    }
                                     // Display categories from database
                                     $location = $_SESSION['user_location'];
                                     $role = $_SESSION['user_role'];
-                                    if ($location == 'Boston' && $role == 'SA') {
+                                    if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
                                         $query = "SELECT * FROM room_type ORDER BY type_id DESC";
                                     } else {
                                         $query = "SELECT * FROM room_type WHERE type_location = '$location' ORDER BY type_id DESC";
@@ -208,15 +223,25 @@
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         $type_id = $row['type_id'];
                                         $type_name = $row['type_name'];
-                                        $db_rack_rate = $row['rack_rate'];
+                                        $db_rate = $row['d_rack_rate'];
+                                        $sg_rate = $row['s_rack_rate'];
                                         $type_location = $row['type_location'];
-                                        $room_price = $row['room_price'];
                                     ?>
                                         <tr>
                                             <td><?php echo $type_id; ?></td>
                                             <td><?php echo $type_name; ?></td>
-                                            <td><?php echo $db_rack_rate; ?></td>
-                                            <td><?php echo $room_price; ?></td>
+                                            <td><?php echo $row['occupancy']; ?></td>
+                                            <td>
+                                                <img width="100" src="./room_img/<?php echo $row['room_image']; ?>" alt="">
+                                            </td>
+                                            <td><?php echo $db_rate; ?></td>
+                                            <td><?php echo $row['d_weekend_rate']; ?></td>
+                                            <td><?php echo $row['d_member_rate']; ?></td>
+                                            <td><?php echo $row['d_weekday_rate']; ?></td>
+                                            <td><?php echo $sg_rate; ?></td>
+                                            <td><?php echo $row['s_weekend_rate']; ?></td>
+                                            <td><?php echo $row['s_member_rate']; ?></td>
+                                            <td><?php echo $row['s_weekday_rate']; ?></td>
                                             <?php
                                             if ($location == 'Boston') {
                                                 echo "<td> $type_location </td>";
@@ -225,8 +250,8 @@
                                             ?>
 
 
-                                                <td><?php echo "<a href='acc.php?edit={$type_id}'>Edit </a>"; ?></td>
-                                                <td><?php echo "<a href='acc.php?delete={$type_id}'>Delete </a>"; ?></td>
+                                                <td><?php echo "<a href='acc.php?edit={$type_id}'><i style='color: turquoise;' class='far fa-edit'></i> </a>"; ?></td>
+                                                <td><?php echo "<a href='acc.php?delete={$type_id}'><i style='color: red;' class='far fa-trash-alt'></i> </a>"; ?></td>
                                         </tr>
                                 <?php  }
                                         } ?>

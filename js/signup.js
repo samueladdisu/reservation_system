@@ -11,7 +11,9 @@ const app = Vue.createApp({
         lName: '',
         email: '',
         phone: '',
-        dob: '',
+        day: '',
+        month: '',
+        year: '',
         mType: '',
         uName: '',
         cName: '',
@@ -48,16 +50,19 @@ const app = Vue.createApp({
         data: this.form 
       }).then(res => {
         console.log(res.data);
+
         if(res.data === "Successful"){
           this.form = {}
           this.cPwd = ""
           myModal.show()
-        }else{
+        } else if(res.data == "user"){
+          alert("User Name Already Exists")
+        } else if(res.data == "email"){
+          alert("Email Already Exists");
+        }
+        else{
           console.log("Something went wrong");
         }
-        
-
-
       }).catch(err => {
         console.log(err.message);
       })

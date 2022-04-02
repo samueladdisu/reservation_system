@@ -34,6 +34,69 @@
   }
 }
 
+.kuriftu-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.53);
+  display: grid;
+  place-items: center;
+  z-index: 999999;
+  .close-circle, .success-circle{
+    position: relative;
+    top: -3.44rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    width: 4.69rem;
+    height: 4.69rem;
+    display: grid;
+    place-items: center;
+  }
+  .close-circle{
+    background: $kuriftu-red;
+  }
+  .success-circle {
+    background: $kuriftu-green;
+  }
+  .kuriftu-modal-content{
+    background: #fff;
+    max-width: 24.44rem;
+    width: 18.94rem;
+    height: 16.31rem;
+    max-height: 20.69rem;
+    box-shadow: 2px 2px 15px -2px rgba(0, 0, 0, 0.15);
+    border-radius: 0.44rem;
+    .kmodal-body {
+      text-align: center;
+      .k-modalHeader {
+        font-family: 'HelveticaNeue';
+        font-weight: bold;
+        font-size: 2.25rem;
+        line-height: 2.69rem;
+        margin-top: -1.5rem;
+      }
+      .k-modalBody {
+        color: #636363;
+        margin: 1.75rem auto 0;
+        width: 15.31rem;
+        .ver{
+          color: $kuriftu-purple;
+          text-decoration: underline;
+          &:hover{
+            text-decoration: none;
+          }
+        }
+      }
+      button{
+        margin-top: 1.75rem;
+      }
+    }
+  }
+}
+
 // main body 
 
 .main-body {
@@ -53,9 +116,26 @@
       max-width: 44.19rem;
 
       .form-group {
+        .dob-cont {
+          display: inline-flex;
+          select {
+            width: 100%;
+            max-width: 21.25rem;
+            display: block;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: url(../img/down.svg) 86% / 10% no-repeat;
+            padding: 1.25rem 1.88rem;
+          }
+          .dob{
+            margin-right: 0.5rem;
+          }
+        }
         .inner-form {
           width: 100%;
           margin-bottom: 1.13rem;
+        
           .input-container{
             position: relative;
             max-width: 21.25rem;
@@ -131,7 +211,7 @@
 
         .form-group {
           display: flex;
-          justify-content: space-between;
+          // justify-content: space-between;
         }
       }
     }

@@ -1,65 +1,3 @@
-<?php
-if (isset($_POST['add_res'])) {
-
-  echo $_POST['t-start'];
-  echo $_POST['t-end'];
-  // $room_ids = $_SESSION['checkboxarray'];
-
-
-  // foreach ($_POST as $key => $value) {
-  //   $params[$key] = escape($value);
-  // }
-
-  // foreach ($room_ids as $value) {
-
-  //   $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
-
-  //   $room_result = mysqli_query($connection, $room_query);
-  //   confirm($room_result);
-  //   $room_row = mysqli_fetch_assoc($room_result);
-
-  //   $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
-  //   $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$params['res_checkin']}', '{$params['res_checkout']}')";
-
-  //   $booked_result = mysqli_query($connection, $booked_query);
-  //   confirm($booked_result);
-  // }
-  // $total_price = $_SESSION['totalPrice'];
-  // $room_ids = json_encode($room_ids);
-  // function getName($n)
-  // {
-  //   $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  //   $randomString = '';
-
-  //   for ($i = 0; $i < $n; $i++) {
-  //     $index = rand(0, strlen($characters) - 1);
-  //     $randomString .= $characters[$index];
-  //   }
-
-  //   return $randomString;
-  // }
-
-  // $res_confirmID = getName(8);
-
-  // $res_location =  $_SESSION['user_location'];
-
-  // $extraBed = isset($_POST['res_extraBed']) ? 'yes' : 'no';
-
-
-
-  // // echo $params['res_extraBed'];
-
-  // $res_agent = $_SESSION['username'];
-  // $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
-
-  // $query .= "VALUES ('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_guestNo']}', '{$params['res_groupName']}', '{$params['res_checkin']}', '{$params['res_checkout']}', '{$params['res_paymentMethod']}', '{$room_ids}', '{$res_location}', '{$params['res_specialRequest']}', '{$res_agent}', '{$params['res_remark']}', '{$params['res_promo']}', '$extraBed', '$res_confirmID', '$total_price'  ) ";
-
-  // $result = mysqli_query($connection, $query);
-  // confirm($result);
-}
-
-
-?>
 <div id="app">
 
 
@@ -94,7 +32,7 @@ if (isset($_POST['add_res'])) {
 
         <?php
 
-        if ($_SESSION['user_role'] == 'SA') {
+        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
 
         ?>
           <div class="form-group col-2">
@@ -160,7 +98,7 @@ if (isset($_POST['add_res'])) {
 
 
       </div>
-      
+
       <div class="input-group mb-3 col-2">
         <input type="text" placeholder="Promo Code" name="res_promo" v-model="formData.res_promo" class="form-control">
         <div class="input-group-append">
@@ -279,7 +217,7 @@ if (isset($_POST['add_res'])) {
       </div>
 
       <div class="form-group col-6">
-        <input type="text" placeholder="Member User Name" v-model="formData.res_member"class="form-control">
+        <input type="text" placeholder="Member User Name" v-model="formData.res_member" class="form-control">
       </div>
 
       <div class="form-group col-12">

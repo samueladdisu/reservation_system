@@ -195,6 +195,8 @@ const app = Vue.createApp({
     },
     clearFilter() {
       this.fetchAll()
+      this.roomType = ''
+      this.location = ''
     },
    
     fetchAll() {

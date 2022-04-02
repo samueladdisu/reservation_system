@@ -69,6 +69,7 @@ const roomApp = Vue.createApp({
         action: 'fetchAllRoom'
       }).then(res => {
         this.allData = res.data
+        $("#dataTable").DataTable();
         console.log(this.allData);
       })
     },
@@ -96,8 +97,10 @@ const roomApp = Vue.createApp({
       this.setPages();
     }
   },
-  created() {
+  mounted() {
+    
     this.fetchAll()
+    
   }
 })
 

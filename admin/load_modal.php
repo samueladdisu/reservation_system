@@ -4,6 +4,7 @@
 <?php
 
 $received_data = json_decode(file_get_contents("php://input"));
+date_default_timezone_set('Africa/Addis_Ababa');
 
 $location = $_SESSION['user_location'];
 $role = $_SESSION['user_role'];
@@ -45,7 +46,7 @@ if ($received_data->action == 'filter') {
     AND b_roomLocation = '$location'
     AND b_roomType = '$roomType'";
 
-  }else if(($checkin && $checkout) && !($location && $roomType)){
+  }else if(($checkin && $checkout) && !$location && !$roomType){
 
     $query = "SELECT DISTINCT b_roomId
     FROM booked_rooms 
@@ -85,7 +86,35 @@ if ($received_data->action == 'filter') {
   if($exists){
     while($row = mysqli_fetch_assoc($result)){
   
-      $select_room_query = "SELECT * FROM rooms WHERE room_id = {$row['b_roomId']}";
+      if($location && $roomType){
+      $select_room_query = "SELECT * 
+      FROM rooms 
+      WHERE room_id = {$row['b_roomId']}
+      UNION
+      SELECT * 
+      FROM rooms
+      WHERE room_status = 'Not_booked'
+      AND room_location = '$location'
+      AND room_acc = '$roomType'";
+      }else if($location && !$roomType){
+        $select_room_query = "SELECT * 
+        FROM rooms 
+        WHERE room_id = {$row['b_roomId']}
+        UNION
+        SELECT * 
+        FROM rooms
+        WHERE room_status = 'Not_booked'
+        AND room_location = '$location'";
+      }else if(!$location && $roomType){
+        $select_room_query = "SELECT * 
+      FROM rooms 
+      WHERE room_id = {$row['b_roomId']}
+      UNION
+      SELECT * 
+      FROM rooms
+      WHERE room_status = 'Not_booked'
+      AND room_acc = '$roomType'";
+      }
     
       $select_room_result = mysqli_query($connection, $select_room_query);
       confirm($select_room_result);
@@ -97,14 +126,38 @@ if ($received_data->action == 'filter') {
     echo json_encode($filterd_data);
 
   }else{
-    $ava_query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
+      if($location && $roomType){
+      $ava_query = "SELECT * 
+      FROM rooms 
+      WHERE room_status = 'Not_booked' 
+      AND room_location = '$location'
+      AND room_acc = '$roomType'";
+    }else if($location && !$roomType){
+      $ava_query = "SELECT * 
+      FROM rooms 
+      WHERE room_status = 'Not_booked' 
+      AND room_location = '$location'";
+    }else if(!$location && $roomType){
+      $ava_query = "SELECT *
+      FROM rooms
+      WHERE room_status = 'Not_booked'
+      AND room_acc = '$roomType'";
+    }
+    $ava_result = mysqli_query($connection, $ava_query);
+    confirm($ava_result);
+    while($row_ava = mysqli_fetch_assoc($ava_result)){
+    
+      $filterd_data[] = $row_ava;
+    }
+    echo json_encode($filterd_data);
   }
+  
 
- }
+}
 
 if ($received_data->action == 'fetchAll') {
 
-  if($role == 'SA' && $location == 'Boston'){
+  if($role == "SA" || ( $location == "Boston" && $role == 'RA')){
     $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked'";
   }else{
 
@@ -203,7 +256,7 @@ if($received_data->action == 'promoCode'){
     foreach ($row as $key => $value) {
       $params[$key] = $value;
     }
-    date_default_timezone_set('Africa/Addis_Ababa');
+    
     $current_date = date('m/d/Y h:i:s', time());
 
     if($params['promo_time'] > $current_date && $params['promo_usage'] > 0){

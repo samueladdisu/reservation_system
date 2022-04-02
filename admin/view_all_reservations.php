@@ -102,7 +102,7 @@ if (!isset($_SESSION['user_role'])) {
 
                   <?php
 
-                  if ($_SESSION['user_location'] == 'SA') {
+                  if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
 
                   ?>
                     <div class="form-group col-4">

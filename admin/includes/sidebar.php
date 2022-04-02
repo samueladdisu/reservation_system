@@ -60,17 +60,21 @@
                  <?php
                     }
                     ?>
+                 <a class="collapse-item" href="./acc.php">Room Type</a>
 
+                 <?php if ($_SESSION['user_role'] == 'SA') {
+                    ?>
+                     <a class="collapse-item" href="./locations.php">
+                         <span>Locations</span>
+                     </a>
+                 <?php
+                    } ?>
              </div>
          </div>
      </li>
      <!-- Nav Item - Utilities Collapse Menu -->
 
-     <li class="nav-item">
-         <a class="nav-link" href="./acc.php">
-             <i class="fas fa-clipboard-list"></i>
-             <span> Accomodation </span></a>
-     </li>
+
 
 
 
@@ -80,11 +84,20 @@
              <span> Promo Code </span></a>
      </li>
 
+    
+
      <li class="nav-item">
-         <a class="nav-link collapsed" href="./members.php">
-             <i class="fas fa-users"></i>
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#member" aria-expanded="true" aria-controls="collapseTwo">
+         <i class="fas fa-users"></i>
              <span>Members</span>
+             <i style="margin-left: 4.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
+         <div id="member" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./members.php">View All members</a>
+                 <a class="collapse-item" href="./members.php?source=add_member">Add Member</a>
+             </div>
+         </div>
      </li>
 
      <?php
@@ -111,18 +124,7 @@
 
      <?php   } ?>
 
-     <?php if ($_SESSION['user_role'] == 'SA') {
-        ?>
-         <li class="nav-item">
-             <a class="nav-link" href="./locations.php">
-                 <i class="fas fa-newspaper fa-2x text-gray-300"></i>
-                 <span>Locations</span>
 
-             </a>
-
-         </li>
-     <?php
-        } ?>
 
 
 

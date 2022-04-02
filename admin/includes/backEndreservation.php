@@ -11,7 +11,7 @@ $role = $_SESSION['user_role'];
 $data = array();
 $filterd_data = array();
 if ($incoming->action == 'fetchRes') {
-  if ($role == "SA" && $location == "Boston") {
+  if ($role == "SA" || ( $location == "Boston" && $role == 'RA')) {
     $query = "SELECT * FROM reservations ORDER BY res_id DESC";
   } else {
     $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";

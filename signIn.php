@@ -35,97 +35,146 @@
     <h1 class="caps text-center">Sign In </h1>
     <div class="container" id="signin-wiget">
 
-      <?php
-
-      if (isset($_POST['login'])) {
-        $email = escape($_POST['email']);
-        $pwd = escape($_POST['pwd']);
-
-        $query = "SELECT * FROM members WHERE m_email = '$email' AND is_active = 1";
-        $result = mysqli_query($connection, $query);
-
-        confirm($result);
-
-        $row = mysqli_fetch_assoc($result);
-        //  echo $row['m_email'];
-        if (!empty($row['m_email'])) {
-          if (password_verify($pwd, $row['m_pwd'])) {
-            $login = $_SESSION['login'] = "success";
-            $_SESSION['m_username'] = $row['m_username'];
-            header("Location: ./reserve.php");
-          } else {
-      ?>
-
-           {{ showModal() }}
-             
-             
-           
-      <?php
-          }
-        }
-      }
-
-
-      ?>
-
-      <form action="" method="post" class="signup-form signin-form">
+      <form @submit.prevent="submitForm" class="signup-form signin-form">
 
 
         <div class="form-group ">
           <div class="inner-form">
-            <input type="email" placeholder="Email" name="email" required>
+            <input type="email" v-model="email" placeholder="Email" ref="eml" required>
           </div>
         </div>
         <div class="form-group">
           <div class="inner-form">
             <div class="input-container">
               <img src="./img/view.svg" @click="showPwd" alt="">
-              <input type="password" ref="pwd" placeholder="Password" name="pwd" required>
+              <input type="password" v-model="password" ref="pwd" placeholder="Password" required>
             </div>
           </div>
         </div>
 
-        <button type="submit" name="login" class="btn btn-secondary">
-          Sign Up
+        <button type="submit"  name="login" class="btn btn-secondary">
+          Sign In 
         </button>
         <p class="bottom-form">
           Don't have an account? <a href="http://localhost/reservation_system/signUp.php">Sign up</a>
+            <br> <br>
+            Or <a href="http://localhost/reservation_system/forgot_password.php">Forgot password</a>
+          
         </p>
+
 
       </form>
 
+      <div class="kuriftu-modal" v-if="success">
+        <div class="kuriftu-modal-content">
+          <div class="success-circle">
+            <img src="./img/check.svg" alt="">
+          </div>
+
+          <div class="kmodal-body">
+            <h5 class="k-modalHeader">
+              Success
+            </h5>
+            <p class="k-modalBody" ref="data">
+              <div v-html="succ"></div>
+            </p>
+
+            <button @click="closeSuccess" style="background: #45b75c;" class="btn">
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="kuriftu-modal" v-if="modal">
+        <div class="kuriftu-modal-content">
+          <div class="close-circle" @click="closeModal">
+            <img src="./img/X.svg" alt="">
+          </div>
+
+          <div class="kmodal-body">
+            <h5 class="k-modalHeader">
+              Sorry!
+            </h5>
+            <p class="k-modalBody" ref="data">
+              <div v-html="msg"></div>
+              <div @click='verify' style="color: #6945a8; text-decoration: underline; cursor: pointer; margin-top: 0.5rem;" class="ver" v-if="ver">
+                {{ ver }}
+              </div>
+            </p>
+
+            <button @click="closeModal" class="btn btn-secondary">
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
 
     </div>
   </section>
 
-  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-       
-        <div class="modal-body text-center text-danger">
-         Incorrect Email or Password.
-        </div>
 
-      </div>
-    </div>
-  </div>
 
   <?php include_once './includes/footer.php' ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-     var myModal = new bootstrap.Modal(document.getElementById('successModal'), {
-                keyboard: false
-              })
     const app = Vue.createApp({
       data() {
         return {
           email: '',
-          pwd: ''
+          password: '',
+          msg: '',
+          succ: '',
+          modal: false,
+          success: false,
+          ver: ''
         }
       },
       methods: {
-        showModal(){
-          myModal.show()
+        async submitForm() {
+          await axios.post('member.php',{
+            action: 'submit',
+            email: this.email,
+            password: this.password
+          }).then(res => {
+            console.log(res.data);
+            if(res.data == "P"){
+              this.msg = "Incorrect Password. Please try again"
+              this.modal = true
+            }else if(res.data == "E"){
+              this.msg = "Email Not Found. Please try again"
+              this.modal = true
+            }else if(res.data == "V"){
+              this.msg = "You are not verified member."
+              this.ver = "Click here to verify"
+              this.modal = true
+            }else if(res.data == "In"){
+              window.location.href = "profile.php"
+            }
+          })
+        },
+        async verify(){
+          await axios.post('member.php', {
+            action: 'verify',
+            email: this.email,
+            pwd: this.password
+          }).then(res => {
+            console.log(res.data);
+            console.log("hellow");
+
+            if(res.data == "check_email"){
+              this.modal = false
+              this.success = true
+              this.succ = "Check your email for activation link"
+            }
+          })
+        },
+        closeSuccess() {
+          this.success = false
+        },
+        closeModal() {
+          this.modal = false
         },
         showPwd() {
           if (this.$refs.pwd.type == "password") {
