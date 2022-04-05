@@ -83,30 +83,43 @@
         </div>
       </div>
 
-      <form  action="payment_confirmation.php" method="post">
-        <?php
+      <!-- <form action="payment_confirmation.php" method="post"> -->
+      <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" method="post" />
+      <?php
 
-        $cart = $_SESSION['cart'];
-        $total_price = $_SESSION['total'];
-        $quantity = 1;
-        $item_name = 1;
-        $item_number = 1;
-        $amount = 1;
-        ?>
-        <input type="hidden" name="access_key" value="bf0d90b4542b3b2b91ad73049ad08abc">
-        <input type="hidden" name="profile_id" value="0CD052F3-59A9-44AD-B4B3-54053477F7DA">
-        <input type="hidden" name="transaction_uuid" value="<?php echo uniqid() ?>">
-        <input type="hidden" name="signed_field_names" value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency">
-        <input type="hidden" name="unsigned_field_names">
-        <input type="hidden" name="signed_date_time" value="<?php echo gmdate("Y-m-d\TH:i:s\Z"); ?>">
-        <input type="hidden" name="locale" value="en">
-        <input type="hidden" value="authorization" name="transaction_type" size="25"><br />
-        <input type="hidden" name="reference_number" value="1643727245076" size="25"><br />
-        <input type="hidden" name="amount" value="<?php echo $total_price; ?>" size="25"><br />
-        <input type="hidden" value="USD" name="currency" size="25"><br />
+      $cart = $_SESSION['cart'];
+      // $total_price = $_SESSION['total'];
+      $total_price = 30;
+      $quantity = 1;
+      $item_name = 1;
+      $item_number = 1;
+      $amount = 1;
+
+      $arrayVariable = array(
+        "access_key"  => "bf0d90b4542b3b2b91ad73049ad08abc",
+        "profile_id"  => "0CD052F3-59A9-44AD-B4B3-54053477F7DA",
+        "transaction_uuid"  =>  uniqid(),
+        "signed_field_names"  => "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency",
+        "unsigned_field_names"  => "",
+        "signed_date_time"  => gmdate("Y-m-d\TH:i:s\Z"),
+        "locale"  => "en",
+        "transaction_type" => "authorization",
+        "reference_number" => "1643727245076",
+        "amount" => $total_price,
+        "currency" => "USD"
+
+      );
+
+      foreach ($arrayVariable as $name => $value) {
+        echo "<input type=\"hidden\" id=\"" . $name . "\" name=\"" . $name . "\" value=\"" . $value . "\"/>\n";
+      }
+      echo "<input type=\"hidden\" id=\"signature\" name=\"signature\" value=\"" . sign($arrayVariable) . "\"/>\n";
 
 
-        <input type="submit" id="submit" name="submit" value="submit" />
+
+
+      ?>
+      <input type="submit" id="submit" name="submit" value="submit" />
 
       </form>
     </div>

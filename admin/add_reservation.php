@@ -3,110 +3,149 @@
 
   <form action="" @submit.prevent="addReservation" method="POST" id="reservation" class="col-12 row" enctype="multipart/form-data">
 
-    <h1 class="mb-2">Select Room</h1>
+    <h1 class="mb-4">Select Room</h1>
+
     <div class="col-12 row">
-      <!------------------------- t-date picker  --------------------->
-      <div class="col-12 row mb-2">
 
-        <div class="t-datepicker col-3">
-          <div class="t-check-in">
-            <div class="t-dates t-date-check-in">
-              <label class="t-date-info-title">Check In</label>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        1 room(s) 1 guest(s)
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-            <input type="hidden" class="t-input-check-in" name="start">
-            <div class="t-datepicker-day">
-              <table class="t-table-condensed">
-                <!-- Date theme calendar -->
-              </table>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="" class="text-dark">Room 1:</label>
+                <div class="row">
+                  <input type="number" class="form-control col-3" placeholder="Adults">
+                  <input type="number" class="form-control col-3 offset-1" placeholder="Teens(6-11)">
+                  <input type="number" class="form-control col-3 offset-1" placeholder="kid(12-17)">
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
             </div>
           </div>
-          <div class="t-check-out">
-            <div class="t-dates t-date-check-out">
-              <label class="t-date-info-title">Check Out</label>
-            </div>
-            <input type="hidden" class="t-input-check-out" name="end">
-          </div>
         </div>
-
-
-
-        <?php
-
-        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
-
-        ?>
-          <div class="form-group col-2">
-            <select name="room_location" class="custom-select" v-model="location" id="">
-              <option disabled value="">Resort Location</option>
-              <?php
-
-              $query = "SELECT * FROM locations";
-              $result = mysqli_query($connection, $query);
-              confirm($result);
-
-              while ($row = mysqli_fetch_assoc($result)) {
-                $location_id = $row['location_id'];
-                $location_name = $row['location_name'];
-
-                echo "<option value='$location_name'>{$location_name}</option>";
-              }
-              ?>
-            </select>
-          </div>
-        <?php } else { ?>
-          <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
-
-
-        <?php  }
-
-
-        ?>
-
-        <div class="form-group col-2">
-          <select name="room_location" class="custom-select" v-model="roomType" id="">
-            <option disabled value="">Room Type</option>
-            <?php
-
-            $query = "SELECT * FROM room_type";
-            $result = mysqli_query($connection, $query);
-            confirm($result);
-
-            while ($row = mysqli_fetch_assoc($result)) {
-              $type_name = $row['type_name'];
-              $type_location = $row['type_location'];
-
-              echo "<option value='$type_name'>{$type_name}</option>";
-            }
-            ?>
-          </select>
-        </div>
-
-
-        <div id="bulkContainer" class="col-3">
-          <button name="booked" @click.prevent="filterRooms" class="btn btn-success">Filter</button>
-
-          <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
-
-          <span class="text-muted">
-            Total: ${{ totalPrice }}
-          </span>
-
-
-
-        </div>
-
-
-
       </div>
 
-      <div class="input-group mb-3 col-2">
+
+      <!-- <div class="input-group mb-3 col-2">
         <input type="text" placeholder="Promo Code" name="res_promo" v-model="formData.res_promo" class="form-control">
         <div class="input-group-append">
           <button :disabled="oneClick" @click="fetchPromo" class="input-group-text">Apply</button>
 
         </div>
+      </div> -->
+    </div>
+
+
+
+    <div class="col-12 row">
+      <!------------------------- t-date picker  --------------------->
+      <!-- <div class="col-12 row mb-2"> -->
+
+      <div class="t-datepicker col-3">
+        <div class="t-check-in">
+          <div class="t-dates t-date-check-in">
+            <label class="t-date-info-title">Check In</label>
+          </div>
+          <input type="hidden" class="t-input-check-in" name="start">
+          <div class="t-datepicker-day">
+            <table class="t-table-condensed">
+              <!-- Date theme calendar -->
+            </table>
+          </div>
+        </div>
+        <div class="t-check-out">
+          <div class="t-dates t-date-check-out">
+            <label class="t-date-info-title">Check Out</label>
+          </div>
+          <input type="hidden" class="t-input-check-out" name="end">
+        </div>
       </div>
-      <!------------------------- t-date picker end  ------------------>
+
+<!------------------------- t-date picker end  ------------------>
+
+      <?php
+
+      if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+      ?>
+        <div class="form-group col-2">
+          <select name="room_location" class="custom-select" v-model="location" id="">
+            <option disabled value="">Resort Location</option>
+            <?php
+
+            $query = "SELECT * FROM locations";
+            $result = mysqli_query($connection, $query);
+            confirm($result);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+              $location_id = $row['location_id'];
+              $location_name = $row['location_name'];
+
+              echo "<option value='$location_name'>{$location_name}</option>";
+            }
+            ?>
+          </select>
+        </div>
+      <?php } else { ?>
+        <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+
+
+      <?php  }
+
+
+      ?>
+
+      <div class="form-group col-2">
+        <select name="room_location" class="custom-select" v-model="roomType" id="">
+          <option disabled value="">Room Type</option>
+          <?php
+
+          $query = "SELECT * FROM room_type";
+          $result = mysqli_query($connection, $query);
+          confirm($result);
+
+          while ($row = mysqli_fetch_assoc($result)) {
+            $type_name = $row['type_name'];
+            $type_location = $row['type_location'];
+
+            echo "<option value='$type_name'>{$type_name}</option>";
+          }
+          ?>
+        </select>
+      </div>
+
+
+
+      <div id="bulkContainer" class="col-3">
+        <button name="booked" @click.prevent="filterRooms" class="btn btn-success">Filter</button>
+
+        <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
+        <!--
+          <span class="text-muted">
+            Total: ${{ totalPrice }}
+          </span> -->
+
+
+
+      </div>
+
+      
 
       <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
 
@@ -177,8 +216,11 @@
       </div>
 
 
-      <div class="form-group col-6">
-        <input type="text" placeholder="No. of Guests*" class="form-control" v-model="formData.res_guestNo" name="res_guestNo">
+      <div class="form-group col-6 row">
+        <!-- <input type="text" placeholder="No. of Guests*" class="form-control" v-model="formData.res_guestNo" name="res_guestNo"> -->
+        <!-- <input type="number" class="form-control col-4" placeholder="Adults">
+        <input type="number" class="form-control col-4" placeholder="Teens(6-11)">
+        <input type="number" class="form-control col-4" placeholder="kid(12-17)"> -->
       </div>
 
       <div class="form-group col-6">

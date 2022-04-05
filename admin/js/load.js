@@ -100,10 +100,11 @@ const app = Vue.createApp({
         checkin: start,
         checkout: end,
         roomIds: this.rowId,
-        price: this.totalPrice
+        // price: this.totalPrice
       }).then(res => {
         window.location.href = 'view_all_reservations.php'
         console.log(res.data);
+        this.totalPrice = res.data
       })
 
     },
