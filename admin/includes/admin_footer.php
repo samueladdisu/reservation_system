@@ -48,7 +48,7 @@
    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
    <!-- Core plugin JavaScript-->
    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script> -->
@@ -60,17 +60,17 @@
 
   
 
-   <!-- Page level custom scripts -->
+   
+ 
    <!-- Custom scripts for all pages-->
    <script src="js/sb-admin-2.min.js"></script>
    <script src="./js/load.js"></script>
-   <script src="./js/chart.js"></script>
+   <!-- <script src="./js/chart.js"></script> -->
 
   
   
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
- 
+   
 
    <script src="./js/room.js"></script>
 

@@ -94,7 +94,7 @@ if (!isset($_SESSION['user_role'])) {
           <div class="row">
             <div>
 
-              <table class="table table-bordered table-hover col-12" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-bordered table-hover col-12"  width="100%" cellspacing="0">
 
                 <!-- filter  -->
 

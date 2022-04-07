@@ -33,7 +33,6 @@ if (isset($_GET['p_id'])) {
 if (isset($_POST['edit_room'])) {
   $room_acc         =  escape($_POST['room_acc']);
   $room_number      =  escape($_POST['room_number']);
-  $room_location    =  escape($_POST['room_location']);
   $room_desc        =  escape($_POST['room_desc']);
 
   
@@ -44,11 +43,11 @@ if (isset($_POST['edit_room'])) {
   
   while ($row = mysqli_fetch_assoc($acc_result)){
     $occ = $row['occupancy'];
-    $price = $row['rack_rate'];
+    $price = $row['d_rack_rate'];
     $img = $row['room_image'];
   }
 
-  $query = "UPDATE `rooms` SET `room_occupancy` = '$occ', `room_acc` = '$room_acc', `room_price` = '$price', `room_image` = '$img', `room_number` = '$room_number', `room_location` = '$room_location', `room_desc` = '$room_desc' WHERE `rooms`.`room_id` = $p_id; ";
+  $query = "UPDATE `rooms` SET `room_occupancy` = '$occ', `room_acc` = '$room_acc', `room_price` = '$price', `room_image` = '$img', `room_number` = '$room_number', `room_location` = '{$row['type_location']}', `room_desc` = '$room_desc' WHERE `rooms`.`room_id` = $p_id; ";
 
 
 
@@ -102,60 +101,6 @@ if (isset($_POST['edit_room'])) {
     <label for="post_tags"> Room Number </label>
     <input type="text" class="form-control" value="<?php echo $room_number; ?>" name="room_number">
   </div>
-
-
-
-  <?php
-
-  if ($_SESSION['user_role'] == 'SA' && $_SESSION['user_location'] == 'Boston') {
-
-  ?>
-    <div class="form-group">
-      <label for="location">Resort Location</label>
-      <select name="room_location" class="custom-select">
-        <option value="<?php echo $room_location; ?>">
-          <?php echo $room_location; ?>
-        </option>
-        <?php
-
-        $query = "SELECT * FROM locations";
-        $result = mysqli_query($connection, $query);
-        confirm($result);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-          $location_id = $row['location_id'];
-          $location_name = $row['location_name'];
-
-          echo "<option value='$location_name'>{$location_name}</option>";
-        }
-        ?>
-      </select>
-    </div>
-  <?php } else { ?>
-    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
-  <?php  } ?>
-
-  <div class="form-group">
-    <label for="">Room amenities</label>
-    <input type="text" name="" id="" value="" class="form-control">
-  </div>
-
-  <div class="my-1">
-    <?php
-    foreach ($room_amt as $value) {
-    ?>
-      <span v-for="am in amt" :key="am" class="badge-pill px-3 mx-1 py-1 badge-dark">
-
-        <span @click="deleteAmt(am)"> <?php echo $value ?>{{ am }}<i class="fal fa-times pl-2"></i></span>
-      </span>
-    <?php
-
-    }
-    ?>
-
-  </div>
-
-
 
 
   <div class="form-group">

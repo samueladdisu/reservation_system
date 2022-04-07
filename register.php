@@ -132,6 +132,29 @@
       header("Location: ./session_destory.php");
       }
     } else {
+
+      foreach ($id  as $value) {
+
+        //  Select room details from room id 
+    
+    
+        $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
+    
+        $room_result = mysqli_query($connection, $room_query);
+        confirm($room_result);
+        $room_row = mysqli_fetch_assoc($room_result);
+    
+    
+        // Insert into booked table
+    
+        $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
+        $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkIn}', '{$checkOut}')";
+    
+        $booked_result = mysqli_query($connection, $booked_query);
+    
+        confirm($booked_result);
+      }
+      
       $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
       $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$params['res_guestNo']}', 'website') ";
 

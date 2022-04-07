@@ -43,6 +43,9 @@
                 case 'edit_res':
                   include "./edit_reservation.php";
                   break;
+                case 'bulk':
+                  include "./add_bulk_reservation.php";
+                  break;
                 default:
                   header("Location: ./view_all_reservations.php");
                   

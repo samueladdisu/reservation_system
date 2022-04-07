@@ -68,7 +68,7 @@ if (!isset($_SESSION['user_role'])) {
           <div class="row">
             <div id="app">
 
-              <table class="table table-bordered table-hover col-12" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-bordered table-hover col-12" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <!-- <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th> -->

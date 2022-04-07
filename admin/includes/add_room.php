@@ -10,11 +10,10 @@ if ($_SESSION['user_role'] == 'RA') {
 if (isset($_POST['add_room'])) {
   $room_acc         =  escape($_POST['room_acc']);
   $room_number      =  escape($_POST['room_number']);
-  $room_location    =  escape($_POST['room_location']);
-  $room_amenities   =  $_SESSION['amt'];
+  // $room_amenities   =  $_SESSION['amt'];
   $room_desc        =  escape($_POST['room_desc']);
 
-  $room_amenities = json_encode($room_amenities);
+  // $room_amenities = json_encode($room_amenities);
 
   $acc_query  = "SELECT * FROM room_type WHERE type_name = '$room_acc'";
   $acc_result = mysqli_query($connection,$acc_query);
@@ -23,18 +22,19 @@ if (isset($_POST['add_room'])) {
   
   while ($row = mysqli_fetch_assoc($acc_result)){
     $occ = $row['occupancy'];
-    $price = $row['rack_rate'];
+    $price = $row['d_rack_rate'];
     $img = $row['room_image'];
+    $loc = $row['type_location'];
   }
 
 
-  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_amenities`, `room_desc`) VALUES ('$occ', '$room_acc', '$price', '$img', '$room_number', 'Not_booked', '$room_location', '$room_amenities', '$room_desc');";
+  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$occ', '$room_acc', '$price', '$img', '$room_number', 'Not_booked', '$loc', '$room_desc');";
 
 
   $result = mysqli_query($connection, $query);
 
   confirm($result);
-  header("Location: ./rooms.php");
+  // header("Location: ./rooms.php");
 }
 ?>
 
@@ -70,43 +70,9 @@ if (isset($_POST['add_room'])) {
     <label for="post_tags"> Room Number </label>
     <input type="text" class="form-control" name="room_number">
   </div>
+
+
   <!-- <div class="form-group">
-    <label for="room_status"> Room Status</label>
-    <select name="room_status" class="custom-select" id="">
-      <option value="Not_booked">Select Options</option>
-      <option value="booked">Booked</option>
-      <option value="Not_booked">Not Booked</option>
-    </select>
-  </div> -->
-  <?php
-
-  if ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'SA') {
-
-  ?>
-    <div class="form-group">
-      <label for="location">Resort Location</label>
-      <select name="room_location" class="custom-select" id="">
-        <option value="">Select Option</option>
-        <?php
-
-        $query = "SELECT * FROM locations";
-        $result = mysqli_query($connection, $query);
-        confirm($result);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-          $location_id = $row['location_id'];
-          $location_name = $row['location_name'];
-
-          echo "<option value='$location_name'>{$location_name}</option>";
-        }
-        ?>
-      </select>
-    </div>
-  <?php } else { ?>
-    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
-  <?php  } ?>
-
-  <div class="form-group">
     <label for="amt">Room Amenities</label>
     <input type="text" name="room_amenities" @keyup.alt="addAmt" v-model="tempAmt" id="amt" class="form-control">
   </div>
@@ -115,7 +81,7 @@ if (isset($_POST['add_room'])) {
 
       <span @click="deleteAmt(am)"> {{ am }}<i class="fal fa-times pl-2"></i></span>
     </span>
-  </div>
+  </div> -->
 
   <div class="form-group">
     <label for="post_content"> Room Description</label>

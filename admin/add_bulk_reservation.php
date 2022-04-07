@@ -8,11 +8,38 @@
     <div class="col-12 row">
 
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">
-        Cart
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#guest">
+        1 room(s) 1 guest(s)
       </button>
 
+      <!-- Modal -->
+      <div class="modal fade" id="guest">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="" class="text-dark">Room 1:</label>
+                <div class="row">
+                  <input type="number" class="form-control col-3" placeholder="Adults">
+                  <input type="number" class="form-control col-3 offset-1" placeholder="Teens(6-11)">
+                  <input type="number" class="form-control col-3 offset-1" placeholder="kid(12-17)">
 
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
       <!-- <div class="input-group mb-3 col-2">
@@ -113,99 +140,18 @@
           <span class="text-muted">
             Total: ${{ totalPrice }}
           </span> -->
-      </div>
-
-      <!-- Modal -->
-      <div class="modal fade" id="guest">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Add Guests</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <label for="" class="text-dark">Room 1:</label>
-                <div class="row">
-                  <select name="adults" v-model="res_adults" class="custom-select col-3">
-                    <option value="" disabled>Adults*</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                  </select>
-
-                  <select name="adults" @change="checkTeen" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
-                    <option value="" disabled>Teens(6-11)</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                  </select>
-
-                  <select name="adults" @change="checkKid" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
-                    <option value="" disabled>kid(12-17)</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                  </select>
 
 
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" @click="booked" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
+
       </div>
 
 
-      <div class="modal fade" id="cart">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Selected Rooms</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
 
-              <!-- cart items  -->
-              <div class="list-group">
-
-                <div v-if="cart.length">
-                  <a href="#" v-for="item in cart" :key="item.room_id" class="list-group-item list-group-item-action flex-column align-items-start ">
-                    <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">{{ item.room_acc }} - {{ item.room_number }}</h5>
-                      <small> ${{ item.room_price }}</small>
-                    </div>
-                    <p class="mb-1"> Adults: {{ item.adults }} </p>
-                    <p class="mb-1"> Teens: {{ item.teens }} </p>
-                    <p class="mb-1"> Kids: {{ item.kids }} </p>
-                    <small>{{ item.room_location }} </small>
-                  </a>
-                </div>
-
-                <div v-else>
-                 <h2> No Room Selected </h2>
-                </div>
-
-
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" @click="booked" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <table class="table table-bordered table-hover" id="addReserveTable" width="100%" cellspacing="0">
+      <table class="table table-bordered table-hover" width="100%" cellspacing="0">
 
         <thead>
           <tr>
+            <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @click="selectAll"></th>
             <th>Id</th>
             <th>Occupancy</th>
             <th>Accomodation</th>
@@ -213,14 +159,14 @@
             <th>Room Number</th>
             <th>Room Status</th>
             <th>Hotel Location</th>
-            <th>Select Room</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody class="insert-data">
 
 
           <tr v-for="row in allData" :key="row.room_id">
-
+            <td><input type="checkbox" name="checkBoxArray[]" :value="row.room_id" data-toggle="modal" data-target="#guest" v-model="rowId" @change="booked(row)" class="checkBoxes"></td>
             <td>
               {{ row.room_id }}
             </td>
@@ -243,12 +189,11 @@
               {{ row.room_location }}
             </td>
             <td>
-              <input type="button" value="Select" @click="temp(row)" data-toggle="modal" data-target="#guest">
+              {{ row.room_desc.substring(0,50)+"..." }}
             </td>
           </tr>
         </tbody>
       </table>
-
 
     </div>
 
@@ -271,7 +216,12 @@
       </div>
 
 
-
+      <div class="form-group col-6 row">
+        <!-- <input type="text" placeholder="No. of Guests*" class="form-control" v-model="formData.res_guestNo" name="res_guestNo"> -->
+        <!-- <input type="number" class="form-control col-4" placeholder="Adults">
+        <input type="number" class="form-control col-4" placeholder="Teens(6-11)">
+        <input type="number" class="form-control col-4" placeholder="kid(12-17)"> -->
+      </div>
 
       <div class="form-group col-6">
         <input type="text" placeholder="Group Name*" class="form-control" v-model="formData.res_groupName" name="res_groupName">

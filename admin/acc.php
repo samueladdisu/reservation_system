@@ -59,15 +59,6 @@
                                         $s_member    = number_format($single - ($single * 0.25), 2, '.', '');
                                         $d_member    = number_format($double - ($double * 0.25), 2, '.', '');
 
-                                        // echo "single Full    => $single <br>";
-                                        // echo "single weekend => $s_weekend <br>";
-                                        // echo "single member  => $s_member <br>";
-                                        // echo "single weekday => $s_weekdays <br><br>";
-                                        // echo "double Full    => $double <br>";
-                                        // echo "double weekend => $d_weekend <br>";
-                                        // echo "double member  => $d_member <br>";
-                                        // echo "double weekday => $d_weekdays \n";
-
                                         $query_bishoftu = "INSERT INTO room_type(type_name, type_location, occupancy, room_image, d_rack_rate, d_weekend_rate, d_member_rate, d_weekday_rate, s_rack_rate, s_weekend_rate, s_member_rate, s_weekday_rate) ";
 
                                         $query_bishoftu .= "VALUE ('$type_name', '$type_location', '$room_occupancy', '$room_image', $double, $d_weekend, $d_member, $d_weekdays, $single, $s_weekend, $s_member, $s_weekdays)";
