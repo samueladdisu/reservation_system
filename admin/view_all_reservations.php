@@ -94,63 +94,62 @@ if (!isset($_SESSION['user_role'])) {
           <div class="row">
             <div>
 
-              <table class="table table-bordered table-hover col-12"  width="100%" cellspacing="0">
+              <!-- filter  -->
+              <div class="filter d-flex">
 
-                <!-- filter  -->
+                <?php
 
-                <div class="filter d-flex">
+                if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
 
-                  <?php
-
-                  if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
-
-                  ?>
-                    <div class="form-group col-4">
-                      <select name="room_location" v-model="location" class="custom-select" id="">
-                        <option disabled value="">Resort Location</option>
-                        <?php
-
-                        $query = "SELECT * FROM locations";
-                        $result = mysqli_query($connection, $query);
-                        confirm($result);
-
-                        while ($row = mysqli_fetch_assoc($result)) {
-                          $location_id = $row['location_id'];
-                          $location_name = $row['location_name'];
-
-                          echo "<option value='$location_name'>{$location_name}</option>";
-                        }
-                        ?>
-                      </select>
-                    </div>
-                  <?php } else { ?>
-                    <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
-
-
-                  <?php  }
-
-
-                  ?>
-
+                ?>
                   <div class="form-group col-4">
-                    <input type="date" v-model="date" class="form-control" id="">
+                    <select name="room_location" v-model="location" class="custom-select" id="">
+                      <option disabled value="">Resort Location</option>
+                      <?php
+
+                      $query = "SELECT * FROM locations";
+                      $result = mysqli_query($connection, $query);
+                      confirm($result);
+
+                      while ($row = mysqli_fetch_assoc($result)) {
+                        $location_id = $row['location_id'];
+                        $location_name = $row['location_name'];
+
+                        echo "<option value='$location_name'>{$location_name}</option>";
+                      }
+                      ?>
+                    </select>
                   </div>
-                  <div id="bulkContainer" class="col-4">
-                    <button name="booked" value="location" id="location" @click.prevent="filterRes" class="btn btn-success">Filter</button>
-
-                    <button name="booked" value="location" id="location" @click.prevent="fetchData" class="btn btn-danger mx-2">Clear Filters</button>
+                <?php } else { ?>
+                  <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
 
 
-                    <span class="text-muted">
-
-                    </span>
+                <?php  }
 
 
-                  </div>
+                ?>
+
+                <div class="form-group col-4">
+                  <input type="date" v-model="date" class="form-control" id="">
                 </div>
+                <div id="bulkContainer" class="col-4">
+                  <button name="booked" value="location" id="location" @click.prevent="filterRes" class="btn btn-success">Filter</button>
+
+                  <button name="booked" value="location" id="location" @click.prevent="fetchData" class="btn btn-danger mx-2">Clear Filters</button>
 
 
-                <!-- end of filter  -->
+                  <span class="text-muted">
+
+                  </span>
+
+
+                </div>
+              </div>
+              <!-- end of filter  -->
+
+              <table class="table table-bordered table-hover col-12" width="100%" id="viewResTable" cellspacing="0">
+
+
                 <thead>
                   <tr>
                     <!-- <th><input type="checkbox" name="" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th> -->
@@ -158,7 +157,7 @@ if (!isset($_SESSION['user_role'])) {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Phone</th>
-                    <th># of Guest</th>
+                    <!-- <th># of Guest</th> -->
                     <th>Arrival</th>
                     <th>Departure</th>
                     <th>Payment Platform</th>
@@ -182,9 +181,9 @@ if (!isset($_SESSION['user_role'])) {
                     <td>
                       {{ row.res_phone}}
                     </td>
-                    <td>
+                    <!-- <td>
                       {{ row.res_guestNo}}
-                    </td>
+                    </td> -->
                     <td>
                       {{ row.res_checkin }}
                     </td>
@@ -214,9 +213,7 @@ if (!isset($_SESSION['user_role'])) {
                           <a data-toggle="modal" @click="editRes(row)" :data-target="modal" class="dropdown-item" href="#">
                             Add
                           </a>
-                          <a class="dropdown-item" 
-                          href="#"
-                          data-toggle="modal" data-target="#exampleModalLong" @click="setTemp(row)">
+                          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalLong" @click="setTemp(row)">
                             View
                           </a>
                           <div class="dropdown-divider"></div>
@@ -354,50 +351,50 @@ if (!isset($_SESSION['user_role'])) {
         </div>
       </div>
       <!-- End of Delete Modal  -->
-       <!-- View Full Reservation Details  -->
+      <!-- View Full Reservation Details  -->
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">
-            {{ tempDelete.res_firstname }}
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">
+                {{ tempDelete.res_firstname }}
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <thead>
+                  <th>
+                    Key
+                  </th>
+                  <th>
+                    Value
+                  </th>
+                </thead>
+                <tbody>
+                  <tr v-for="(value, key) in tempDelete">
+                    <td>
+                      {{ key }}
+                    </td>
+                    <td>
+                      {{ value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+          </div>
         </div>
-        <div class="modal-body">
-              
-        <table class="table table-bordered table-hover" width="100%" cellspacing="0">
-              <thead>
-                <th>
-                  Key
-                </th>
-                <th>
-                  Value
-                </th>
-              </thead>
-              <tbody>
-                <tr v-for="(value, key) in tempDelete">
-                  <td>
-                  {{ key }}
-                  </td>
-                  <td>
-                  {{ value }}
-                  </td>
-                </tr>
-              </tbody>
-        </table>
-   
-        </div>
-       
       </div>
-    </div>
-  </div>
 
-  <!-- End of View Full Reservation Details -->
+      <!-- End of View Full Reservation Details -->
     </div>
     <!-- End of Content Wrapper -->
 
@@ -409,7 +406,7 @@ if (!isset($_SESSION['user_role'])) {
     <i class="fas fa-angle-up"></i>
   </a>
 
- 
+
 
 
   <!-- Logout Modal-->

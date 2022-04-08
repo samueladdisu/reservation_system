@@ -198,7 +198,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                   
+
 
                                     // Display categories from database
                                     $location = $_SESSION['user_location'];
@@ -247,26 +247,6 @@
                                 <?php  }
                                         } ?>
 
-                                <?php
-                                // Delete Categories from data base
-                                if ($role != 'RA') {
-
-                                    if (isset($_GET['delete'])) {
-                                        $the_type_id = escape($_GET['delete']);
-                                        $query = "DELETE FROM room_type WHERE type_id = {$the_type_id} ";
-                                        $delete = mysqli_query($connection, $query);
-
-                                        if (!$delete) {
-                                            die('Can not delete data' . mysqli_error($connection));
-                                        } else {
-                                            header("Location: ./acc.php");
-                                        }
-                                    }
-                                }
-
-                                ?>
-
-
 
                                 </tbody>
                             </table>
@@ -277,6 +257,25 @@
                 <!-- /.container-fluid -->
 
             </div>
+
+            <?php
+            // Delete Categories from data base
+            if ($role != 'RA') {
+
+                if (isset($_GET['delete'])) {
+                    $the_type_id = escape($_GET['delete']);
+                    $query = "DELETE FROM room_type WHERE type_id = {$the_type_id} ";
+                    $delete = mysqli_query($connection, $query);
+
+                    if (!$delete) {
+                        die('Can not delete data' . mysqli_error($connection));
+                    } else {
+                        header("Location: ./acc.php");
+                    }
+                }
+            }
+
+            ?>
             <!-- End of Main Content -->
 
             <?php include './includes/admin_footer.php'; ?>

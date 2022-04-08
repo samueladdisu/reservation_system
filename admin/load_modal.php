@@ -183,9 +183,11 @@ if ($received_data->action == 'addReservation') {
   $form_data  = $received_data->Form;
   $checkin    = $received_data->checkin;
   $checkout   = $received_data->checkout;
-  $roomIds    = $received_data->roomIds;
+  $rooms      = $received_data->rooms;
   $price      = 0.00;
   $room_types = array();
+  $room_num   = array();
+  $res_location = '';
 
   // calculate number of days
   $days       = array();
@@ -197,24 +199,19 @@ if ($received_data->action == 'addReservation') {
   }
 
 
-  foreach ($roomIds as $value) {
+  foreach ($rooms as $value) {
+    $intRooms = intval($value->room_id);
+    $adults   = intval($value->adults);
+    $teens    = intval($value->teens);
+    $kids     = intval($value->kids);
 
-    //  Select room details from room id 
-
-
-    $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
-
-
-    $room_result = mysqli_query($connection, $room_query);
-    confirm($room_result);
-    $room_row = mysqli_fetch_assoc($room_result);
-
-    $room_types[] = $room_row['room_acc'];
-
+    $room_types[] = $value->room_acc;
+    $room_num[]   = intval($value->room_id);
+    $res_location = $value->room_location;
     // Insert into booked table
 
     $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
-    $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkin}', '{$checkout}')";
+    $booked_query .= "VALUES ($intRooms , '{$value->room_acc}', '{$value->room_location}',  '{$checkin}', '{$checkout}')";
 
     $booked_result = mysqli_query($connection, $booked_query);
 
@@ -222,77 +219,97 @@ if ($received_data->action == 'addReservation') {
 
     // Update room to booked
 
-    $update_query = "UPDATE rooms SET room_status = 'booked' WHERE room_id = $value";
+    $update_query = "UPDATE rooms SET room_status = 'booked' WHERE room_id = $intRooms";
 
     $update_result = mysqli_query($connection, $update_query);
     confirm($update_result);
+
+
+
   }
 
-  
-  foreach ($room_types as $value) {
+  foreach ($room_types as $value){
     $query_type = "SELECT * FROM room_type WHERE type_name = '$value'";
     $result_type = mysqli_query($connection, $query_type);
     confirm($result_type);
-
+  
+  
+  
     while ($row_type = mysqli_fetch_assoc($result_type)) {
-      
-
-      if($row_type['type_location'] == 'Bishoftu'){
-
+  
+      // double occupancy rate
+      $dbRack    = doubleval($row_type['d_rack_rate']);
+      $dbWeekend = doubleval($row_type['d_weekend_rate']);
+      $dbWeekdays = doubleval($row_type['d_weekday_rate']);
+      $dbMember  = doubleval($row_type['d_member_rate']);
+  
+      // Single occupancy rate
+      $sRack     = doubleval($row_type['s_rack_rate']);
+      $sWeekend  = doubleval($row_type['s_weekend_rate']);
+      $sWeekdays = doubleval($row_type['s_weekday_rate']);
+      $sMember  = doubleval($row_type['s_member_rate']);
+  
+      if ($row_type['type_location'] == 'Bishoftu') {
+  
         foreach ($days as $day) {
           switch ($day) {
             case 'Friday':
-              $price +=  doubleval($row_type['d_weekend_rate']);
+              // $price +=  doubleval($row_type['d_weekend_rate']);
+              $price += calculatePrice($adults, $kids, $teens, $sWeekend, $dbWeekend);
               break;
             case 'Saturday':
-              $price += doubleval($row_type['d_rack_rate']);
+              // $price += doubleval($row_type['d_rack_rate']);
+              $price += calculatePrice($adults, $kids, $teens, $sRack, $dbRack);
               break;
             default:
-              $price += doubleval($row_type['d_weekday_rate']);
+              // $price += doubleval($row_type['d_weekday_rate']);
+              $price += calculatePrice($adults, $kids, $teens, $sWeekdays, $dbWeekdays);
               break;
           }
         }
-      }else if ($row_type['type_location'] == 'Awash'){
+      } else if ($row_type['type_location'] == 'Awash') {
         foreach ($days as $day) {
           switch ($day) {
             case 'Friday':
-              $price += doubleval($row_type['d_rack_rate']);
+              // $price += doubleval($row_type['d_rack_rate']);
+              $price += calculatePrice($adults, $kids, $teens, $sRack, $dbRack);
               break;
             case 'Saturday':
-              $price += doubleval($row_type['d_rack_rate']);
+              $price += calculatePrice($adults, $kids, $teens, $sRack, $dbRack);
               break;
             default:
-              $price += doubleval($row_type['d_weekday_rate']);
+              $price += calculatePrice($adults, $kids, $teens, $sWeekdays, $dbWeekdays);
               break;
           }
         }
       }
-
-      
-     
     }
+
   }
+
+  
+
+
   echo json_encode($price);
 
-  // echo json_encode($room_types);
+  // // echo json_encode($room_types);
 
   $res_confirmID = getName(8);
 
 
   $extraBed = isset($form_data->res_extraBed) ? 'yes' : 'no';
 
-  $roomIds = json_encode($roomIds);
+  $roomIds = json_encode($room_num);
 
   // echo $params['res_extraBed'];
 
   $res_agent = $_SESSION['username'];
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
+  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_adults, res_teens, res_kids, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
 
-  $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', '{$form_data->res_guestNo}', '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$room_row['room_location']}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_remark}', '{$form_data->res_promo}', '$extraBed', '$res_confirmID', '$price'  ) ";
+  $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', $adults, $teens, $kids, '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_remark}', '{$form_data->res_promo}', '$extraBed', '$res_confirmID', $price) ";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
-  // echo json_encode(confirm($booked_result));
 
 }
 

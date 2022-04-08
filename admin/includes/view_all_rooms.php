@@ -23,21 +23,6 @@
               <th></th>
             </tr>
           </thead>
-          <!-- <tfoot>
-            <tr>
-              <th>Id</th>
-              <th>Occupancy</th>
-              <th>Accomodation</th>
-              <th>Image</th>
-              <th>Price</th>
-              <th>Number</th>
-              <th>Status</th>
-              <th>Location</th>
-              <th>Description</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot> -->
           <tbody>
             <tr v-for="row in allData" :key="row.room_id">
               <td>

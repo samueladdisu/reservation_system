@@ -96,7 +96,7 @@ const roomApp = Vue.createApp({
       this.setPages();
     }
   },
-  mounted() {
+  created() {
     
     this.fetchAll()
     

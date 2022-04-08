@@ -64,8 +64,8 @@ if ($incoming->action == 'addSingleRes') {
 
   $row = mysqli_fetch_row($room_result);
 
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_groupName, res_specialRequest, res_agent, res_paymentStatus, res_remark, res_promo, res_extraBed, res_dob) ";
-  $query .= "VALUES ('$firstName', '$lastName', '$phone', '$email', '$tempRow->res_guestNo', '$tempRow->res_checkin', '$tempRow->res_checkout', '$tempRow->res_country', '$tempRow->res_address', '$tempRow->res_city', '$tempRow->res_zipcode', '$tempRow->res_paymentMethod', '$roomId[0]', $row[0],'$row[1]', '$tempRow->res_confirmID', '$tempRow->res_groupName', '$tempRow->res_specialRequest', '$res_agent', '$tempRow->res_paymentStatus', '$remark', '$tempRow->res_promo', '$tempRow->res_extraBed', '$dob')";
+  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_adults, res_teens, res_kids, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_groupName, res_specialRequest, res_agent, res_paymentStatus, res_remark, res_promo, res_extraBed, res_dob) ";
+  $query .= "VALUES ('$firstName', '$lastName', '$phone', '$email', '$tempRow->res_adults', '$tempRow->res_teens', '$tempRow->res_kids','$tempRow->res_checkin', '$tempRow->res_checkout', '$tempRow->res_country', '$tempRow->res_address', '$tempRow->res_city', '$tempRow->res_zipcode', '$tempRow->res_paymentMethod', '$roomId[0]', $row[0],'$row[1]', '$tempRow->res_confirmID', '$tempRow->res_groupName', '$tempRow->res_specialRequest', '$res_agent', '$tempRow->res_paymentStatus', '$remark', '$tempRow->res_promo', '$tempRow->res_extraBed', '$dob')";
 
   $result = mysqli_query($connection, $query);
   confirm($result);

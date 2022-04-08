@@ -129,7 +129,7 @@
               <div class="form-group">
                 <label for="" class="text-dark">Room 1:</label>
                 <div class="row">
-                  <select name="adults" v-model="res_adults" class="custom-select col-3">
+                  <select name="adults" @change="checkAdult" v-model="res_adults" class="custom-select col-3">
                     <option value="" disabled>Adults*</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -152,8 +152,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" @click="booked" class="btn btn-primary">Save changes</button>
+              <button type="button" @click="booked" data-dismiss="modal" class="btn btn-primary">Save changes</button>
             </div>
           </div>
         </div>
@@ -178,17 +177,27 @@
                   <a href="#" v-for="item in cart" :key="item.room_id" class="list-group-item list-group-item-action flex-column align-items-start ">
                     <div class="d-flex w-100 justify-content-between">
                       <h5 class="mb-1">{{ item.room_acc }} - {{ item.room_number }}</h5>
-                      <small> ${{ item.room_price }}</small>
+                      <small> ${{ item.room_price }} / night</small>
                     </div>
                     <p class="mb-1"> Adults: {{ item.adults }} </p>
                     <p class="mb-1"> Teens: {{ item.teens }} </p>
                     <p class="mb-1"> Kids: {{ item.kids }} </p>
-                    <small>{{ item.room_location }} </small>
+
+                    <div class="d-flex w-100 justify-content-between">
+                      <small>{{ item.room_location }} </small>
+
+                      <div class="d-flex">
+
+                        <p class="ml-2">
+                          <i style='color: red;' @click="deleteCart(item)" class='far fa-trash-alt'></i>
+                        </p>
+                      </div>
+                    </div>
                   </a>
                 </div>
 
                 <div v-else>
-                 <h2> No Room Selected </h2>
+                  <h2> No Room Selected </h2>
                 </div>
 
 
@@ -196,7 +205,6 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" @click="booked" class="btn btn-primary">Save changes</button>
             </div>
           </div>
         </div>
@@ -273,12 +281,6 @@
 
 
 
-      <div class="form-group col-6">
-        <input type="text" placeholder="Group Name*" class="form-control" v-model="formData.res_groupName" name="res_groupName">
-      </div>
-
-
-
 
       <div class="form-group col-6">
         <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" id="">
@@ -314,16 +316,6 @@
 
       <div class="form-group col-12">
         <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark*" id="" cols="30" rows="10" class="form-control"></textarea>
-      </div>
-
-      <div class="form-group col-12">
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="res_extraBed" v-model="formData.res_extraBed" value="Extra_bed" id="flexCheckDefault">
-          <label class="form-check-label" for="flexCheckDefault">
-            Extra Bed
-          </label>
-        </div>
       </div>
 
 

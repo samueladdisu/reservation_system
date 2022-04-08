@@ -6,7 +6,7 @@ let start, end;
 
 $(document).ready(function () {
   $("#addReserveTable").DataTable();
-  $('#accTable').DataTable();
+  $("#accTable").DataTable();
   $("#roomTable").DataTable();
   const tdate = $('.t-datepicker')
   tdate.tDatePicker({
@@ -41,7 +41,7 @@ const app = Vue.createApp({
       totalPrice: 0,
       cart: [],
       selectAllRoom: false,
-      singleRoom: false,
+      selectBtn: false,
       stayedNights: 0,
       isPromoApplied: '',
       promoCode: '',
@@ -66,8 +66,15 @@ const app = Vue.createApp({
       res_teen: '',
       res_kid: '',
     }
+
   },
   methods: {
+    deleteCart(item){
+      let cartIndex = this.cart.indexOf(item)
+      this.cart.splice(cartIndex, 1)
+
+      console.log(this.cart);
+    },
     booked() {
 
       this.cart.forEach(item => {
@@ -93,7 +100,15 @@ const app = Vue.createApp({
     },
     temp(row){
       this.tempRow = row
-      
+      this.selectBtn = true
+    },
+    checkAdult() {
+      if(this.res_adults == 2){
+        this.teen = true 
+        this.res_teen = 0
+      }else {
+        this.teen = false 
+      }
     },
     checkTeen() {
       if(this.res_teen == 2){
@@ -144,7 +159,7 @@ const app = Vue.createApp({
       this.isPromoApplied = JSON.parse(localStorage.promoback || false)
     },
     async addReservation(){
-      console.log("Room Ids",this.rowId);
+      console.log("Selected room",this.cart);
       console.log("check in", start);
       console.log("check out", end);
       console.log("Form Data", this.formData);
@@ -154,10 +169,10 @@ const app = Vue.createApp({
         Form: this.formData,
         checkin: start,
         checkout: end,
-        roomIds: this.rowId,
+        rooms: this.cart,
         // price: this.totalPrice
       }).then(res => {
-        window.location.href = 'view_all_reservations.php'
+        // window.location.href = 'view_all_reservations.php'
         console.log(res.data);
         this.totalPrice = res.data
       })
