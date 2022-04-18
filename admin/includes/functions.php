@@ -24,7 +24,7 @@ function getToken($len) {
 
 function calculatePrice($ad, $kid, $teen, $single, $double){
 
-  $price = 0;
+  $price = 0.00;
 
   if($ad == 1){
     if($kid == 0 && $teen == 0){

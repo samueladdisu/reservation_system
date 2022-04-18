@@ -43,7 +43,7 @@
                 include "./includes/edit_room.php";
                 break;
               default:
-                include "./includes/view_all_rooms.php";
+                header("Location: ./view_all_rooms.php");
                 break;
             }
 

@@ -49,7 +49,7 @@
                   include "./includes/edit_member.php";
                   break;
                 default:
-                  include "./includes/view_all_members.php";
+                  header("Location: ./view_all_members.php");
                   break;
               }
 

@@ -38,13 +38,14 @@
               }
               switch($source){
                 case 'add_reservation':
-                  include "./add_reservation.php";
+                  // include "./add_reservation.php";
+                  header("Location: ./add_reservation.php");
                   break;
                 case 'edit_res':
                   include "./edit_reservation.php";
                   break;
                 case 'bulk':
-                  include "./add_bulk_reservation.php";
+                  header("Location: ./add_bulk_reservation.php");
                   break;
                 default:
                   header("Location: ./view_all_reservations.php");

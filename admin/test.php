@@ -85,10 +85,13 @@
               <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                 <thead>
                   <th>
-                    Name
+                    Room Number
                   </th>
                   <th>
-                    Value
+                    Room Type
+                  </th>
+                  <th>
+                    Guests
                   </th>
                 </thead>
                 <tbody>

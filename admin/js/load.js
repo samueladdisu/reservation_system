@@ -5,9 +5,10 @@ let checkBoxArray = []
 let start, end;
 
 $(document).ready(function () {
-  $("#addReserveTable").DataTable();
-  $("#accTable").DataTable();
-  $("#roomTable").DataTable();
+  // $("#addReserveTable").DataTable();
+ 
+  // $("#roomTable").DataTable();
+  // $("table.display").DataTable();
   const tdate = $('.t-datepicker')
   tdate.tDatePicker({
     show: true,

@@ -31,6 +31,8 @@ if (!isset($_SESSION['user_role'])) {
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
    
+    <!-- <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    -->
     <!-- Custom styles for this template-->
 
     <link rel="stylesheet" href="./css/t-datepicker.min.css">

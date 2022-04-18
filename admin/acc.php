@@ -172,84 +172,87 @@
 
 
 
-                            <table class="table table-bordered" id="accTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Accomodation</th>
-                                        <th>Occupancy</th>
-                                        <th>Image</th>
-                                        <th>Double Full</th>
-                                        <th>Double Weekend</th>
-                                        <th>Double member</th>
-                                        <th>Double Weekday</th>
-                                        <th>Single Full</th>
-                                        <th>Single Weekend</th>
-                                        <th>Single member</th>
-                                        <th>Single Weekday</th>
-                                        <th>Location</th>
-                                        <?php
-
-                                        if ($_SESSION['user_role'] == 'admin') {
-                                            echo "<th>Location</th>";
-                                        }
-                                        ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-
-
-                                    // Display categories from database
-                                    $location = $_SESSION['user_location'];
-                                    $role = $_SESSION['user_role'];
-                                    if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
-                                        $query = "SELECT * FROM room_type ORDER BY type_id DESC";
-                                    } else {
-                                        $query = "SELECT * FROM room_type WHERE type_location = '$location' ORDER BY type_id DESC";
-                                    }
-
-                                    $result = mysqli_query($connection, $query);
-
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        $type_id = $row['type_id'];
-                                        $type_name = $row['type_name'];
-                                        $db_rate = $row['d_rack_rate'];
-                                        $sg_rate = $row['s_rack_rate'];
-                                        $type_location = $row['type_location'];
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $type_id; ?></td>
-                                            <td><?php echo $type_name; ?></td>
-                                            <td><?php echo $row['occupancy']; ?></td>
-                                            <td>
-                                                <img width="100" src="./room_img/<?php echo $row['room_image']; ?>" alt="">
-                                            </td>
-                                            <td><?php echo $db_rate; ?></td>
-                                            <td><?php echo $row['d_weekend_rate']; ?></td>
-                                            <td><?php echo $row['d_member_rate']; ?></td>
-                                            <td><?php echo $row['d_weekday_rate']; ?></td>
-                                            <td><?php echo $sg_rate; ?></td>
-                                            <td><?php echo $row['s_weekend_rate']; ?></td>
-                                            <td><?php echo $row['s_member_rate']; ?></td>
-                                            <td><?php echo $row['s_weekday_rate']; ?></td>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Room Types</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table display table-bordered" id="accTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Accomodation</th>
+                                                    <th>Occupancy</th>
+                                                    <th>Image</th>
+                                                    <th>Double Full</th>
+                                                    <th>Double Weekend</th>
+                                                    <th>Double member</th>
+                                                    <th>Double Weekday</th>
+                                                    <th>Single Full</th>
+                                                    <th>Single Weekend</th>
+                                                    <th>Single member</th>
+                                                    <th>Single Weekday</th>
+                                                    <th>Location</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
                                             <?php
-                                            if ($location == 'Boston') {
-                                                echo "<td> $type_location </td>";
+
+
+                                            // Display categories from database
+                                            $location = $_SESSION['user_location'];
+                                            $role = $_SESSION['user_role'];
+                                            if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+                                                $query = "SELECT * FROM room_type ORDER BY type_id DESC";
+                                            } else {
+                                                $query = "SELECT * FROM room_type WHERE type_location = '$location' ORDER BY type_id DESC";
                                             }
-                                            if ($role != 'RA') {
+
+                                            $result = mysqli_query($connection, $query);
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                $type_id = $row['type_id'];
+                                                $type_name = $row['type_name'];
+                                                $db_rate = $row['d_rack_rate'];
+                                                $sg_rate = $row['s_rack_rate'];
+                                                $type_location = $row['type_location'];
                                             ?>
+                                                <tr>
+                                                    <td><?php echo $type_id; ?></td>
+                                                    <td><?php echo $type_name; ?></td>
+                                                    <td><?php echo $row['occupancy']; ?></td>
+                                                    <td>
+                                                        <img width="100" src="./room_img/<?php echo $row['room_image']; ?>" alt="">
+                                                    </td>
+                                                    <td><?php echo $db_rate; ?></td>
+                                                    <td><?php echo $row['d_weekend_rate']; ?></td>
+                                                    <td><?php echo $row['d_member_rate']; ?></td>
+                                                    <td><?php echo $row['d_weekday_rate']; ?></td>
+                                                    <td><?php echo $sg_rate; ?></td>
+                                                    <td><?php echo $row['s_weekend_rate']; ?></td>
+                                                    <td><?php echo $row['s_member_rate']; ?></td>
+                                                    <td><?php echo $row['s_weekday_rate']; ?></td>
+                                                    <?php
+                                                    if ($location == 'Boston') {
+                                                        echo "<td> $type_location </td>";
+                                                    }
+                                                    if ($role != 'RA') {
+                                                    ?>
 
 
-                                                <td><?php echo "<a href='acc.php?edit={$type_id}'><i style='color: turquoise;' class='far fa-edit'></i> </a>"; ?></td>
-                                                <td><?php echo "<a href='acc.php?delete={$type_id}'><i style='color: red;' class='far fa-trash-alt'></i> </a>"; ?></td>
-                                        </tr>
-                                <?php  }
-                                        } ?>
+                                                        <td><?php echo "<a href='acc.php?edit={$type_id}'><i style='color: turquoise;' class='far fa-edit'></i> </a>"; ?></td>
+                                                        <td><?php echo "<a href='acc.php?delete={$type_id}'><i style='color: red;' class='far fa-trash-alt'></i> </a>"; ?></td>
+                                                </tr>
+                                        <?php  }
+                                                } ?>
 
 
-                                </tbody>
-                            </table>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -278,4 +281,76 @@
             ?>
             <!-- End of Main Content -->
 
-            <?php include './includes/admin_footer.php'; ?>
+          <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Kuriftu resorts 2021. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="./includes/logout.php">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="https://unpkg.com/vue@3.0.2"></script>
+
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- Core plugin JavaScript-->
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <script>
+      $(document).ready(function() {
+        $("#accTable").DataTable();
+      })
+  </script>
+
+  
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+
+
+
+
+
+  <!-- <script src="./js/room.js"></script> -->
+
+</body>
+
+</html>

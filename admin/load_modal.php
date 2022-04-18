@@ -187,6 +187,8 @@ if ($received_data->action == 'addReservation') {
   $price      = 0.00;
   $room_types = array();
   $room_num   = array();
+  $room_numbers = array();
+  $guests = array();
   $res_location = '';
 
   // calculate number of days
@@ -205,9 +207,12 @@ if ($received_data->action == 'addReservation') {
     $teens    = intval($value->teens);
     $kids     = intval($value->kids);
 
-    $room_types[] = $value->room_acc;
-    $room_num[]   = intval($value->room_id);
-    $res_location = $value->room_location;
+    $guests[]         = array($adults, $kids, $teens);
+    $room_types[]     = $value->room_acc;
+    $room_num[]       = intval($value->room_id);
+    $room_numbers[]   = intval($value->room_number);
+    $res_location     = $value->room_location;
+
     // Insert into booked table
 
     $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
@@ -228,85 +233,131 @@ if ($received_data->action == 'addReservation') {
 
   }
 
-  foreach ($room_types as $value){
+  $index = 0;
+  foreach ($room_types as $value) {
     $query_type = "SELECT * FROM room_type WHERE type_name = '$value'";
     $result_type = mysqli_query($connection, $query_type);
     confirm($result_type);
-  
-  
-  
+
+
+    // echo json_encode("room type");
+    // echo json_encode($value);
+    // echo json_encode($guests[$index][0]);
+
     while ($row_type = mysqli_fetch_assoc($result_type)) {
-  
+
       // double occupancy rate
+      $type_location = $row_type['type_location'];
+
+
+
       $dbRack    = doubleval($row_type['d_rack_rate']);
       $dbWeekend = doubleval($row_type['d_weekend_rate']);
       $dbWeekdays = doubleval($row_type['d_weekday_rate']);
       $dbMember  = doubleval($row_type['d_member_rate']);
-  
+
       // Single occupancy rate
       $sRack     = doubleval($row_type['s_rack_rate']);
       $sWeekend  = doubleval($row_type['s_weekend_rate']);
       $sWeekdays = doubleval($row_type['s_weekday_rate']);
       $sMember  = doubleval($row_type['s_member_rate']);
-  
-      if ($row_type['type_location'] == 'Bishoftu') {
-  
-        foreach ($days as $day) {
-          switch ($day) {
-            case 'Friday':
-              // $price +=  doubleval($row_type['d_weekend_rate']);
-              $price += calculatePrice($adults, $kids, $teens, $sWeekend, $dbWeekend);
-              break;
-            case 'Saturday':
-              // $price += doubleval($row_type['d_rack_rate']);
-              $price += calculatePrice($adults, $kids, $teens, $sRack, $dbRack);
-              break;
-            default:
-              // $price += doubleval($row_type['d_weekday_rate']);
-              $price += calculatePrice($adults, $kids, $teens, $sWeekdays, $dbWeekdays);
-              break;
-          }
+    }
+
+    if ($type_location == 'Bishoftu') {
+
+      foreach ($days as $day) {
+        switch ($day) {
+          case 'Friday':
+            $price += calculatePrice($guests[$index][0], $guests[$index][1], $guests[$index][2], $sWeekend, $dbWeekend);
+            break;
+          case 'Saturday':
+            $price += calculatePrice($guests[$index][0], $guests[$index][1], $guests[$index][2], $sRack, $dbRack);
+            break;
+          default:
+            // $price += doubleval($row_type['d_weekday_rate']);
+            $price += calculatePrice($guests[$index][0], $guests[$index][1], $guests[$index][2], $sWeekdays, $dbWeekdays);
+            break;
         }
-      } else if ($row_type['type_location'] == 'Awash') {
-        foreach ($days as $day) {
-          switch ($day) {
-            case 'Friday':
-              // $price += doubleval($row_type['d_rack_rate']);
-              $price += calculatePrice($adults, $kids, $teens, $sRack, $dbRack);
-              break;
-            case 'Saturday':
-              $price += calculatePrice($adults, $kids, $teens, $sRack, $dbRack);
-              break;
-            default:
-              $price += calculatePrice($adults, $kids, $teens, $sWeekdays, $dbWeekdays);
-              break;
-          }
+      }
+    } else if ($type_location == 'Awash') {
+      foreach ($days as $day) {
+        switch ($day) {
+          case 'Friday':
+            $price += calculatePrice($guests[$index][0], $guests[$index][1], $guests[$index][2], $sRack, $dbRack);
+            break;
+          case 'Saturday':
+            $price += calculatePrice($guests[$index][0], $guests[$index][1], $guests[$index][2], $sRack, $dbRack);
+            break;
+          default:
+            $price += calculatePrice($guests[$index][0], $guests[$index][1], $guests[$index][2], $sWeekdays, $dbWeekdays);
+            break;
+        }
+      }
+    }
+    $index++;
+  }
+
+
+
+  echo json_encode("Total Price");
+  echo json_encode($price);
+
+  if ($form_data->res_promo) {
+
+    if($form_data->res_promo == "member"){
+      $promo_query = "SELECT * FROM promo WHERE promo_code = '$form_data->res_promo' LIMIT 1";
+      $promo_result = mysqli_query($connection, $promo_query);
+
+      confirm($promo_result);
+
+      $row =  mysqli_fetch_assoc($promo_result);
+
+      
+      $price = $price - ($price * ($row['promo_amount'] / 100));
+
+    }else{
+      
+      $promo_query = "SELECT * FROM promo WHERE promo_code = '$form_data->res_promo'";
+      $promo_result = mysqli_query($connection, $promo_query);
+  
+      confirm($promo_result);
+  
+      while ($row = mysqli_fetch_assoc($promo_result)) {
+        foreach ($row as $key => $value) {
+          $params[$key] = $value;
+        }
+  
+        $current_date = date('m/d/Y h:i:s', time());
+  
+        if ($params['promo_time'] > $current_date && $params['promo_usage'] > 0) {
+          $updated_usage = $params['promo_usage'] - 1;
+          $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = {$params['promo_id']}";
+  
+          $update_promo_result = mysqli_query($connection, $update_promo);
+          confirm($update_promo_result);
+          echo json_encode($params['promo_amount']);
+        } else {
+          echo json_encode(false);
         }
       }
     }
 
   }
 
-  
-
-
+  echo json_encode("Discount");
   echo json_encode($price);
 
-  // // echo json_encode($room_types);
+  $res_confirmID   = getName(8);
 
-  $res_confirmID = getName(8);
-
-
-  $extraBed = isset($form_data->res_extraBed) ? 'yes' : 'no';
-
-  $roomIds = json_encode($room_num);
-
-  // echo $params['res_extraBed'];
+  $roomIds         = json_encode($room_num);
+  $roomNumbers     = json_encode($room_numbers);
+  $roomTypes       = json_encode($room_types);
+  $res_guests      = json_encode($guests);
 
   $res_agent = $_SESSION['username'];
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_adults, res_teens, res_kids, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_location, res_specialRequest, res_agent, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
+  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_roomNo, res_roomType, res_location, res_specialRequest, res_agent, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
 
-  $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', $adults, $teens, $kids, '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_remark}', '{$form_data->res_promo}', '$extraBed', '$res_confirmID', $price) ";
+  $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', '{$res_guests}', '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$roomNumbers}', '{$roomTypes}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_remark}', '{$form_data->res_promo}', 'Null', '$res_confirmID', $price) ";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
@@ -340,6 +391,25 @@ if ($received_data->action == 'promoCode') {
       echo json_encode(false);
     }
   }
+}
+
+if ($received_data->action == 'fetchPromo') {
+  $query = $received_data->query;
+  $data = array();
+
+  if ($query != '') {
+
+    $sql = "SELECT * FROM promo WHERE promo_code LIKE '%" . $query . "%' AND promo_active = 'yes'";
+    $result = mysqli_query($connection, $sql);
+    confirm($result);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+      $data[] = $row;
+    }
+  }
+
+  echo json_encode($data);
+  // echo json_encode(confirm($result));
 }
 
 ?>
