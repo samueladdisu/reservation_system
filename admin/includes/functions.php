@@ -22,34 +22,66 @@ function getToken($len) {
   return $token;
 }
 
-function calculatePrice($ad, $kid, $teen, $single, $double){
+function calculatePrice($ad, $kid, $teen, $single, $double, $dMember, $sMemeber, $promo){
 
   $price = 0.00;
 
-  if($ad == 1){
-    if($kid == 0 && $teen == 0){
-      // Single occupancy
-      $price = $single;
-    }else if($kid == 1 && $teen == 1){
-      $price = $double + 10;
-    }else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)){
-      $price = $double;
-    }else if ($kid == 2 && $teen == 0){
-      $price = $double + 10;
-    }else if ($kid == 0 && $teen == 2){
-      $price = $double + 38;
+  if($promo === "member"){
+    if($ad == 1){
+      if($kid == 0 && $teen == 0){
+        // Single occupancy
+        $price = $sMemeber;
+      }else if($kid == 1 && $teen == 1){
+        $price = $dMember + 10;
+      }else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)){
+        $price = $dMember;
+      }else if ($kid == 2 && $teen == 0){
+        $price = $dMember + 10;
+      }else if ($kid == 0 && $teen == 2){
+        $price = $dMember + 38;
+      }
+    } else if($ad == 2){
+      if($kid == 0 && $teen == 0 ){
+        $price = $dMember;
+      } else if($kid == 1 && $teen == 0){
+        $price = $double + 10;
+      }else if($kid == 1 && $teen == 1){
+        $price = $dMember + 48;
+      }else if ($kid == 2 && $teen == 0){
+        $price = $dMember + 20;
+      }else if ($kid = 0 && $teen == 1){
+        $price = $dMember + 38;
+      }
     }
-  } else if($ad == 2){
-    if($kid == 0 && $teen == 0 ){
-      $price = $double;
-    } else if($kid == 1 && $teen == 1){
-      $price = $double + 48;
-    }else if ($kid == 2 && $teen == 0){
-      $price = $double + 20;
-    }else if ($kid = 0 && $teen == 1){
-      $price = $double + 38;
+  }else {
+    if($ad == 1){
+      if($kid == 0 && $teen == 0){
+        // Single occupancy
+        $price = $single;
+      }else if($kid == 1 && $teen == 1){
+        $price = $double + 10;
+      }else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)){
+        $price = $double;
+      }else if ($kid == 2 && $teen == 0){
+        $price = $double + 10;
+      }else if ($kid == 0 && $teen == 2){
+        $price = $double + 38;
+      }
+    } else if($ad == 2){
+      if($kid == 0 && $teen == 0 ){
+        $price = $double;
+      } else if($kid == 1 && $teen == 0){
+        $price = $double + 10;
+      }else if($kid == 1 && $teen == 1){
+        $price = $double + 48;
+      }else if ($kid == 2 && $teen == 0){
+        $price = $double + 20;
+      }else if ($kid = 0 && $teen == 1){
+        $price = $double + 38;
+      }
     }
   }
+
 
   return $price;
 

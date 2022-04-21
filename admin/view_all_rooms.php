@@ -231,9 +231,7 @@ if (!isset($_SESSION['user_role'])) {
                 },
               });
 
-              const deleteR = document.querySelector('#deleteRow')
-
-              deleteR.addEventListener('click', () => {
+              $(document).on('click', '#deleteRow', function(){
                 let id = deleteR.dataset.row
                 console.log(id);
                 let temprow = this.allData.filter(item => {
@@ -250,6 +248,7 @@ if (!isset($_SESSION['user_role'])) {
                 let objTemp = temprow.reduce(reducer, {})
                 console.log(objTemp);
                 this.tempDelete = objTemp
+
               })
 
             },

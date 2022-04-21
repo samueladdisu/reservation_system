@@ -379,7 +379,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Kuriftu resorts 2021. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+            <span>Copyright &copy; Kuriftu resorts 2022. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
           </div>
         </div>
       </footer>
@@ -636,18 +636,18 @@
         //   this.tempRow = row
         // },
         checkAdult() {
-          if (this.res_adults == 2) {
-            this.teen = true
-            this.res_teen = 0
-          } else {
-            this.teen = false
-          }
+          // if (this.res_adults == 2) {
+            
+          // } else {
+          //   this.teen = false
+          // }
         },
         checkTeen() {
-          if (this.res_teen == 2) {
+          if (this.res_teen == 2 && this.res_adults == 2) {
             console.log("more than two");
-            this.kid = true
-            this.res_kid = 0
+            this.res_teen = 0
+
+            alert("2 adult and 2 teens can't stay in 1 room")
 
             console.log(this.res_kid);
           } else {
@@ -656,11 +656,11 @@
           }
         },
         checkKid() {
-          if (this.res_kid == 2) {
+          if (this.res_kid == 2 && this.res_adults == 2) {
             console.log("more than two");
             this.teen = true
+            alert(`2 adult, 2 kids and ${this.res_teen} teen can't stay in 1 room`)
             this.res_teen = 0
-
             console.log(this.res_teen);
           } else {
             this.teen = false
@@ -686,47 +686,6 @@
             console.log(res.data);
             this.totalPrice = res.data
           })
-
-        },
-        selectAll() {
-
-          var checkin = new Date(start)
-          var checkout = new Date(end)
-
-          console.log(checkin);
-          console.log(checkout);
-          // To calculate the time difference of two dates
-          var Difference_In_Time = checkout.getTime() - checkin.getTime();
-
-          // To calculate the no. of days between two dates
-          var stayedNights = Difference_In_Time / (1000 * 3600 * 24);
-
-          if (!this.selectAllRoom) {
-            console.log("all");
-            for (data in this.allData) {
-              this.rowId.push(parseInt(this.allData[data].room_id))
-              this.bookedRooms = this.allData
-
-            }
-            this.bookedRooms.forEach(row => {
-              this.totalPrice += parseInt(row.room_price) * stayedNights
-            })
-
-
-            console.log("booked rooms", this.bookedRooms);
-            console.log("Total Price", this.totalPrice);
-            console.log("row ids", this.rowId);
-
-
-          } else {
-
-            this.rowId = []
-            this.bookedRooms = []
-            this.totalPrice = 0
-            console.log("booked rooms", this.bookedRooms);
-            console.log("Total Price", this.totalPrice);
-            console.log(this.rowId);
-          }
 
         },
         async filterRooms() {

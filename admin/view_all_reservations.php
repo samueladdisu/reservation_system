@@ -280,6 +280,9 @@
                           <a class="dropdown-item" data-id="${data}" id="view" href="#">
                             View
                           </a>
+                          <a class="dropdown-item" id="edit" href="edit_reservation.php?id=${data}" href="#">
+                            Edit
+                          </a>
                           <div class="dropdown-divider"></div>
                           <a data-id="${data}" id="delete" href="#" class="dropdown-item text-danger">
                             Delete
@@ -294,6 +297,12 @@
 
 
           let vm = this
+
+          // $(document).on('click', '#edit', function(){
+          //   let res_id = $(this).data("id")
+            
+          // })
+
           $(document).on('click', '#delete', function() {
             // get room id from the table
             let ids = $(this).data("id")
@@ -345,21 +354,6 @@
             action: 'fetchRes'
           }).then(res => {
             console.log("comes from api", res.data);
-            // let guest, room, type;
-            //  res.data.forEach(data => {
-            //   if(data.res_guestNo){
-            //     let guest = JSON.parse(data.res_guestNo)
-            //     console.log(guest[1]);
-            //   }else if (data.res_roomNo){
-            //     let room = JSON.parse(data.res_roomNo)
-            //   }else if (data.res_roomType){
-            //     let type = JSON.parse(data.res_roomType)
-            //   }
-            // })
-
-            // console.log("guests",guest);
-            // console.log("room number",room);
-            // console.log("room type",type);
             this.posts = res.data
             this.table(res.data)
           })
