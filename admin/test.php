@@ -1,20 +1,19 @@
-<?php session_start(); ?>
-<?php include  './includes/db.php'; ?>
-<?php include  './includes/functions.php'; ?>
-<?php 
+<?php include './includes/admin_header.php'; ?>
 
+<body id="page-top">
 
-$cart = array();
-$new = array();
-$res_query = "SELECT res_cart FROM reservations WHERE res_id = 331";
+  <!-- Page Wrapper -->
+  <div id="wrapper">
 
-$res_result = mysqli_query($connection, $res_query);
-confirm($res_result);
+    <!-- Sidebar -->
+    <?php include './includes/sidebar.php'; ?>
+    <!-- End of Sidebar -->
 
- while($row = mysqli_fetch_assoc($res_result)){
-   $ecoded = unserialize($row['res_cart']);
    
- }
+  </div>
+  <!-- /.container-fluid -->
 
- print_r($ecoded);
-// print_r($new);
+  </div>
+  <!-- End of Main Content -->
+
+  <?php include './includes/admin_footer.php'; ?>

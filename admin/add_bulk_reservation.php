@@ -1,4 +1,46 @@
-<?php include './includes/admin_header.php'; ?>
+<?php ob_start(); ?>
+<?php include  './includes/db.php'; ?>
+<?php include  './includes/functions.php'; ?>
+<?php session_start(); ?>
+
+<?php
+
+if (!isset($_SESSION['user_role'])) {
+  header("Location: ./index.php");
+}
+
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Kuriftu Resort - Dashboard</title>
+
+  <!-- Custom fonts for this template-->
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/s/dt/dt-1.10.10,se-1.1.0/datatables.min.css">
+  <!-- Custom styles for this template-->
+
+  <link rel="stylesheet" href="./css/t-datepicker.min.css">
+  <link rel="stylesheet" href="./css/themes/t-datepicker-green.css">
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css">
+
+</head>
 
 <body id="page-top">
 
@@ -35,22 +77,28 @@
             <div id="app">
 
 
-              <form action="" @submit.prevent="addReservation" method="POST" id="reservation" class="col-12 row" enctype="multipart/form-data">
+              <form action="" method="POST" @submit.prevent="addbulk" id="reservation" class="col-12 row" enctype="multipart/form-data">
 
                 <h1 class="mb-4">Group Reservation</h1>
 
-               
+
 
 
                 <div class="col-12">
                   <!------------------------- t-date picker  --------------------->
+
+
+
+
+
+
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary">Pick a Date & Filter </h6>
+                      <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
                     </div>
-                    <div class="card-body">
-                      <div class="row py-1">
-                        <div class="t-datepicker mt-2 col-3">
+                    <div class="card-body d-flex justify-content-center">
+                      <div class="col-6 row">
+                        <div class="t-datepicker col-12 form-group  my-2">
                           <div class="t-check-in">
                             <div class="t-dates t-date-check-in">
                               <label class="t-date-info-title">Check In</label>
@@ -70,180 +118,48 @@
                           </div>
                         </div>
 
-                        <!------------------------- t-date picker end  ------------------>
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="Group Name *" class="form-control" v-model="formData.group_name">
+                        </div>
 
-                        <?php
-
-                        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
-
-                        ?>
-                          <div class="form-group mt-2 col-2">
-                            <select name="room_location" class="custom-select" v-model="location" id="">
-                              <option disabled value="">Resort Location</option>
-                              <?php
-
-                              $query = "SELECT * FROM locations";
-                              $result = mysqli_query($connection, $query);
-                              confirm($result);
-
-                              while ($row = mysqli_fetch_assoc($result)) {
-                                $location_id = $row['location_id'];
-                                $location_name = $row['location_name'];
-
-                                echo "<option value='$location_name'>{$location_name}</option>";
-                              }
-                              ?>
-                            </select>
-                          </div>
-                        <?php } else { ?>
-                          <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
-
-
-                        <?php  }
-
-
-                        ?>
-
-                        <div class="form-group mt-2 col-2">
-                          <select name="room_location" class="custom-select" v-model="roomType" id="">
-                            <option disabled value="">Room Type</option>
-                            <?php
-
-                            $query = "SELECT * FROM room_type";
-                            $result = mysqli_query($connection, $query);
-                            confirm($result);
-
-                            while ($row = mysqli_fetch_assoc($result)) {
-                              $type_name = $row['type_name'];
-                              $type_location = $row['type_location'];
-
-                              echo "<option value='$type_name'>{$type_name}</option>";
-                            }
-                            ?>
+                        <div class="form-group col-6">
+                          <select v-model="formData.group_paymentStatus" class="custom-select" id="">
+                            <option value="">Payment Status*</option>
+                            <option value="payed">Payed</option>
+                            <option value="pending_payment">pending payment</option>
                           </select>
                         </div>
 
-
-
-                        <div id="bulkContainer" class="col-3 mt-2">
-                          <button name="booked" @click.prevent="filterRooms" class="btn btn-success">Filter</button>
-
-                          <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
-
-                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">
-                            Cart
-                          </button>
-
+                        <div class="form-group col-6">
+                          <select v-model="formData.group_reason" class="custom-select" id="">
+                            <option value="">Reason*</option>
+                            <option value="con">Conference</option>
+                            <option value="wed">Wedding</option>
+                          </select>
                         </div>
 
-                        <!-- Button trigger modal -->
+                        <div class="form-group col-6">
+
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            Select Room
+                          </button>
+                        </div>
+
+                        <div class="form-group col-12">
+                          <textarea v-model="formData.group_remark" placeholder="Remark*" id="" cols="30" rows="5" class="form-control"></textarea>
+                        </div>
 
 
-
+                        <div class="form-group">
+                          <input type="submit" class="btn btn-primary" name="add_res" value="Submit">
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                
-
-                  <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary">Available Rooms </h6>
-                    </div>
-                    <div class="card-body">
-                      <div class="table-responsive">
-
-                        <table class="table display table-bordered table-hover" id="addReserveTable" width="100%" cellspacing="0">
-
-                          <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>Occupancy</th>
-                              <th>Accomodation</th>
-                              <th>Price</th>
-                              <th>Room Number</th>
-                              <th>Room Status</th>
-                              <th>Hotel Location</th>
-                              <th>Select Room</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
 
                 </div>
 
-                <div class="card shadow mb-4">
-                  <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
-                  </div>
-                  <div class="card-body d-flex justify-content-center">
-                    <div class="col-6 row">
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname">
-                      </div>
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname">
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone">
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email">
-                      </div>
-
-
-
-
-
-                      <div class="form-group col-6">
-                        <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" id="">
-                          <option value="">Payment Method*</option>
-                          <option value="bank_transfer">Bank Transfer</option>
-                          <option value="cash">Cash</option>
-                          <option value="GC1">Gift Card 1</option>
-                          <option value="GC2">Gift Card 2</option>
-                          <option value="GC3">Gift Card 3</option>
-                        </select>
-
-                      </div>
-
-
-                      <div class="form-group col-6">
-                        <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" id="">
-                          <option value="">Payment Status*</option>
-                          <option value="payed">Payed</option>
-                          <option value="pending_payment">pending payment</option>
-                        </select>
-                      </div>
-
-
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Special Request*" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
-                        <!-- <textarea name="res_specialRequest" id="" cols="30" rows="10" placeholder="Special Request" class="form-control"></textarea> -->
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Promo Code" v-model="formData.res_promo" class="form-control">
-                      </div>
-
-                      <div class="form-group col-12">
-                        <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark*" id="" cols="30" rows="10" class="form-control"></textarea>
-                      </div>
-
-
-                      <div class="form-group">
-                        <input type="submit" class="btn btn-primary" name="add_res" value="Add Reservation">
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
 
 
@@ -252,6 +168,146 @@
 
 
 
+
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Select Room
+
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="container-fluid">
+
+                        <div class="card shadow mb-4">
+                          <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Available Rooms </h6>
+                          </div>
+                          <div class="card-body">
+                            <div class="row py-1">
+
+                              <!------------------------- t-date picker end  ------------------>
+
+                              <?php
+
+                              if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+                              ?>
+                                <div class="form-group mt-2 col-2">
+                                  <select name="room_location" class="custom-select" v-model="location" id="">
+                                    <option disabled value="">Resort Location</option>
+                                    <?php
+
+                                    $query = "SELECT * FROM locations";
+                                    $result = mysqli_query($connection, $query);
+                                    confirm($result);
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                      $location_id = $row['location_id'];
+                                      $location_name = $row['location_name'];
+
+                                      echo "<option value='$location_name'>{$location_name}</option>";
+                                    }
+                                    ?>
+                                  </select>
+                                </div>
+                              <?php } else { ?>
+                                <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+
+
+                              <?php  }
+
+
+                              ?>
+
+                              <div class="form-group mt-2 col-2">
+                                <select name="room_location" class="custom-select" v-model="roomType" id="">
+                                  <option disabled value="">Room Type</option>
+                                  <?php
+
+                                  $query = "SELECT * FROM room_type";
+                                  $result = mysqli_query($connection, $query);
+                                  confirm($result);
+
+                                  while ($row = mysqli_fetch_assoc($result)) {
+                                    $type_name = $row['type_name'];
+                                    $type_location = $row['type_location'];
+
+                                    echo "<option value='$type_name'>{$type_name}</option>";
+                                  }
+                                  ?>
+                                </select>
+                              </div>
+
+                              <div class="form-group mt-2 col-2">
+                                <input type="number" v-model="room_quantity" class="form-control" placeholder="Number of Rooms">
+                              </div>
+
+                              <div id="bulkContainer" class="col-3 mt-2">
+                                <button name="booked" @click.prevent="filterRooms" class="btn btn-success">Filter</button>
+
+                                <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
+
+                              </div>
+                            </div>
+
+
+                            <div class="table-responsive">
+                              <table class="table display table-bordered table-hover" id="bulkTable" width="100%" cellspacing="0">
+
+                                <thead>
+                                  <tr>
+                                    <th><input type="checkbox" id="selectAllboxes" v-model="selectAllRoom" @change="bookAll"></th>
+                                    <th>id</th>
+                                    <th>Occupancy</th>
+                                    <th>Accomodation</th>
+                                    <th>Price</th>
+                                    <th>Room Number</th>
+                                    <th>Room Status</th>
+                                    <th>Hotel Location</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr v-for="row in allData" :key="row.room_id">
+                                    <td><input type="checkbox" :value="row.room_id" @change="booked(row)" class="checkBoxes"></td>
+                                    <td>
+                                      {{ row.room_id }}
+                                    </td>
+                                    <td>
+                                      {{ row.room_occupancy }}
+                                    </td>
+                                    <td>
+                                      {{ row.room_acc }}
+                                    </td>
+                                    <td>
+                                      {{ row.room_price }}
+                                    </td>
+                                    <td>
+                                      {{ row.room_number }}
+                                    </td>
+                                    <td>
+                                      {{ row.room_status }}
+                                    </td>
+                                    <td>
+                                      {{ row.room_location }}
+                                    </td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -315,6 +371,9 @@
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- <script src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script> -->
+
+  <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
   <script src="./js/t-datepicker.min.js"></script>
 
   <!-- data table plugin  -->
@@ -351,132 +410,82 @@
       data() {
         return {
           location: '',
+          room_quantity: '',
           roomType: '',
-          allData: '',
-          bookedRooms: [],
-          totalPrice: 0,
-          cart: [],
-          selectAllRoom: false,
-          selectBtn: false,
-          stayedNights: 0,
-          isPromoApplied: '',
-          promoCode: '',
-          oneClick: false,
-          kid: false,
-          teen: false,
           formData: {
-            res_firstname: '',
-            res_lastname: '',
-            res_phone: '',
-            res_email: '',
-            res_groupName: '',
-            res_paymentMethod: '',
-            res_paymentStatus: '',
-            res_promo: '',
-            res_specialRequest: '',
-            res_remark: '',
-            res_extraBed: false
+            group_name: '',
+            group_paymentStatus: '',
+            group_remark: '',
+            group_reason: ''
           },
-          tempRow: {},
-          res_adults: '',
-          res_teen: '',
-          res_kid: '',
+          bookedRooms: [],
+          selectAllRoom: false,
+          allData: ''
         }
 
       },
+
       methods: {
-        table(row) {
-          var selected = [];
-          $('#addReserveTable').DataTable({
-            destroy: true,
-            dom: 'lBfrtip',
-            buttons: [
-              'colvis',
-              'excel',
-              'print',
-              'csv'
-            ],
-            data: row,
-            text: "edit",
-            rowCallback: function(row, data) {
-              if ($.inArray(data.DT_RowId, selected) !== -1) {
-                $(row).addClass('selected');
-              }
-            },
-            columns: [{
-                data: 'room_id',
-              },
-              {
-                data: 'room_occupancy'
-              },
-              {
-                data: 'room_acc'
-              },
-              {
-                data: 'room_price'
-              },
-              {
-                data: 'room_number'
-              },
-              {
-                data: 'room_status'
-              },
-              {
-                data: 'room_location'
-              },
-              {
-                data: 'room_id',
-                render: function(data) {
-                  return `<input type="button" class="btn btn-primary" value="Select" data-row="${data}" id="selectRow">`
-                }
-              }
-            ],
-          });
+        bookAll() {
+
+          const checkBoxes = document.querySelectorAll('.checkBoxes')
+          const selectAllBoxes = document.querySelector('#selectAllboxes')
 
 
-          let vm = this
-          $(document).on('click', '#selectRow', function() {
+          if (this.selectAllRoom) {
+            this.bookedRooms = this.allData
+            checkBoxes.forEach(check => {
+              check.checked = true
+            })
+          } else {
+            this.bookedRooms = []
+            checkBoxes.forEach(check => {
+              check.checked = false
+            })
+          }
 
-            if (start && end) {
-              // get room id from the table
-              let ids = $(this).data("row")
-              let temprow = {}
-
-              // filter alldata which is equal to the room id
-              vm.allData.forEach(item => {
-                if (item.room_id == ids) {
-                  temprow = item
-                }
-              })
-
-              // assign to temp row
-              vm.tempRow = temprow
-              console.log("temp row", vm.tempRow);
-              $('#guest').modal('show')
-              
-            } else {
-              alert("Please Select Check In and Check Out Date");
-            }
-          })
-
-          $('#addReserveTable tbody').on('click', 'tr', function() {
-            if (start && end) {
-              var id = this.id;
-              var index = $.inArray(id, selected);
-
-              if (index === -1) {
-                selected.push(id);
-              } else {
-                selected.splice(index, 1);
-              }
-
-              $(this).toggleClass('selected');
-            }
-
-          });
+          console.log("booked rooms", this.bookedRooms);
+          console.log(this.allData);
+        },
+        booked(row) {
 
 
+          if (event.target.checked) {
+            console.log(row);
+            this.bookedRooms.push(row)
+          } else {
+            // let rowIndex = this.bookedRooms.indexOf(row)
 
+            // console.log(rowIndex);
+            // this.bookedRooms.splice(rowIndex, 1)
+            // console.log(this.bookedRooms);
+
+            this.bookedRooms = this.bookedRooms.filter(item => {
+              return item.room_id !== row.room_id
+            })
+
+            this.bookedRooms.forEach(item => {
+              console.log(item.room_id);
+            })
+            console.log("new line");
+          }
+          // this.fetchAll()
+        },
+        async addbulk() {
+
+          if (start && end) {
+
+            await axios.post('group_res.php', {
+              action: 'add',
+              checkin: start,
+              checkout: end,
+              rooms: this.bookedRooms,
+              form: this.formData
+            }).then(res => {
+              window.location.href = 'view_bulk_reservations.php'
+              console.log(res.data);
+            })
+          }
 
         },
         async fetchAll() {
@@ -485,172 +494,30 @@
             action: 'fetchAll'
           }).then(res => {
             this.allData = res.data
-            this.table(res.data)
+            // this.table(res.data)
             // console.log(this.allData);
           }).catch(err => console.log(err.message))
         },
-        deleteCart(item) {
-          let cartIndex = this.cart.indexOf(item)
-          this.cart.splice(cartIndex, 1)
-
-          console.log(this.cart);
-        },
-        booked() {
-
-          this.cart.forEach(item => {
-            console.log(item.room_id);
-          })
-          let guests = {
-            adults: this.res_adults,
-            teens: this.res_teen,
-            kids: this.res_kid,
-            ...this.tempRow,
-          }
-
-
-          this.cart.push(guests);
-
-
-          console.log("singleRoom", guests);
-          console.log("cart", this.cart);
-          guests = {}
-          this.res_adults = ''
-          this.res_teen = ''
-          this.res_kid = ''
-        },
-        // temp(row) {
-        //   this.tempRow = row
-        // },
-        checkAdult() {
-          if (this.res_adults == 2) {
-            this.teen = true
-            this.res_teen = 0
-          } else {
-            this.teen = false
-          }
-        },
-        checkTeen() {
-          if (this.res_teen == 2) {
-            console.log("more than two");
-            this.kid = true
-            this.res_kid = 0
-
-            console.log(this.res_kid);
-          } else {
-            this.kid = false
-            console.log(this.res_kid);
-          }
-        },
-        checkKid() {
-          if (this.res_kid == 2) {
-            console.log("more than two");
-            this.teen = true
-            this.res_teen = 0
-
-            console.log(this.res_teen);
-          } else {
-            this.teen = false
-            console.log(this.res_teen);
-          }
-        },
-
-        fetchPromo() {
-          this.oneClick = true
-
-          // console.log("top promo", this.isPromoApplied);
-          if (!localStorage.promoback) {
-            console.log("excuted");
-            axios.post('load_modal.php', {
-              action: 'promoCode',
-              data: this.formData.res_promo
-            }).then(res => {
-              let discount = this.totalPrice - ((res.data / 100) * this.totalPrice)
-
-              this.totalPrice = discount
-              // localStorage.totalBack = JSON.stringify(this.totalPrice)
-              console.log(res.data);
-
-            })
-            this.isPromoApplied = true
-            // localStorage.promoback = this.isPromoApplied
-          }
-
-          this.isPromoApplied = JSON.parse(localStorage.promoback || false)
-        },
-        async addReservation() {
-          console.log("Selected room", this.cart);
-          console.log("check in", start);
-          console.log("check out", end);
-          console.log("Form Data", this.formData);
-
-          await axios.post('load_modal.php', {
-            action: 'addReservation',
-            Form: this.formData,
-            checkin: start,
-            checkout: end,
-            rooms: this.cart,
-            // price: this.totalPrice
-          }).then(res => {
-            // window.location.href = 'view_all_reservations.php'
-            console.log(res.data);
-            this.totalPrice = res.data
-          })
-
-        },
-        selectAll() {
-
-          var checkin = new Date(start)
-          var checkout = new Date(end)
-
-          console.log(checkin);
-          console.log(checkout);
-          // To calculate the time difference of two dates
-          var Difference_In_Time = checkout.getTime() - checkin.getTime();
-
-          // To calculate the no. of days between two dates
-          var stayedNights = Difference_In_Time / (1000 * 3600 * 24);
-
-          if (!this.selectAllRoom) {
-            console.log("all");
-            for (data in this.allData) {
-              this.rowId.push(parseInt(this.allData[data].room_id))
-              this.bookedRooms = this.allData
-
-            }
-            this.bookedRooms.forEach(row => {
-              this.totalPrice += parseInt(row.room_price) * stayedNights
-            })
-
-
-            console.log("booked rooms", this.bookedRooms);
-            console.log("Total Price", this.totalPrice);
-            console.log("row ids", this.rowId);
-
-
-          } else {
-
-            this.rowId = []
-            this.bookedRooms = []
-            this.totalPrice = 0
-            console.log("booked rooms", this.bookedRooms);
-            console.log("Total Price", this.totalPrice);
-            console.log(this.rowId);
-          }
-
-        },
         async filterRooms() {
           console.log(this.location);
-          await axios.post('load_modal.php', {
-            action: 'filter',
-            location: this.location,
-            roomType: this.roomType,
-            checkin: start,
-            checkout: end
-          }).then(res => {
-            console.log(res.data);
-            this.allData = res.data
-            this.table(res.data)
-          }).catch(err => console.log(err.message))
+
+          if (start && end) {
+            if (this.room_quantity) {
+              await axios.post('group_res.php', {
+                action: 'filter',
+                location: this.location,
+                roomType: this.roomType,
+                roomQuantity: this.room_quantity,
+                checkin: start,
+                checkout: end
+              }).then(res => {
+                console.log(res.data);
+                this.allData = res.data
+                // this.table(res.data)
+              }).catch(err => console.log(err.message))
+            }
+          }
+
 
           console.log("filtered data", this.allData);
         },
@@ -659,16 +526,33 @@
           this.roomType = ''
           this.location = ''
         },
-
-
       },
       created() {
         this.fetchAll()
-        // $('.t-datepicker').tDatePicker({});
-      }
+      },
     })
 
     app.mount('#app')
+
+
+    // window.addEventListener('load', () => {
+
+    //   const checkBoxes = document.querySelectorAll('.checkBoxes')
+    //   const selectAllBoxes = document.querySelector('#selectAllboxes')
+    //   selectAllBoxes.addEventListener('click', function() {
+    //     if (this.checked) {
+    //       console.log("all");
+    //       checkBoxes.forEach(check => {
+    //         check.checked = true
+    //       })
+
+    //     } else {
+    //       checkBoxes.forEach(check => {
+    //         check.checked = false
+    //       })
+    //     }
+    //   })
+    // })
   </script>
 
 

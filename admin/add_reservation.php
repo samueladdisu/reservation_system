@@ -168,20 +168,23 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select name="adults" @change="checkAdult" v-model="res_adults" class="custom-select col-3">
+                              <select name="adults" v-model="res_adults" class="custom-select col-3">
                                 <option value="" disabled>Adults*</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
 
                               <select name="adults" @change="checkTeen" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
                                 <option value="" disabled>Teens(12-17)</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
 
                               <select name="adults" @change="checkKid" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
                                 <option value="" disabled>kid(6-11)</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
@@ -197,6 +200,52 @@
                     </div>
                   </div>
 
+                  <!-- Loft Modal  -->
+                  <!-- Modal -->
+                  <div class="modal fade" id="loftModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Add Guests</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="form-group">
+                            <label for="" class="text-dark">Room 1:</label>
+                            <div class="row">
+                              <select name="adults"  v-model="res_adults" class="custom-select col-3">
+                                <option value="" disabled>Guests</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                              </select>
+
+                              <select name="adults" @change="checkLoftTeen" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
+                                <option value="" disabled>Teens(12-17)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                              </select>
+
+                              <select name="adults" @change="checkLoftKid" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
+                                <option value="" disabled>kid(6-11)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                              </select>
+
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" @click="booked" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <div class="modal fade" id="cart">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -478,6 +527,8 @@
           oneClick: false,
           kid: false,
           teen: false,
+          loftKid: false,
+          loftTeen: false,
           formData: {
             res_firstname: '',
             res_lastname: '',
@@ -524,7 +575,10 @@
                 data: 'room_occupancy'
               },
               {
-                data: 'room_acc'
+                data: 'room_acc',
+                render: function(data) {
+                  return `<span data-acc="${data}" id="selectAcc"> ${data} </span>`
+                }
               },
               {
                 data: 'room_price'
@@ -540,8 +594,8 @@
               },
               {
                 data: 'room_id',
-                render: function(data) {
-                  return `<input type="button" class="btn btn-primary" value="Select" data-row="${data}" id="selectRow">`
+                render: function(data, type, row) {
+                  return `<input type="button" class="btn btn-primary" value="Select" data-id="${data}" data-row="${row}" id="selectRow">`
                 }
               }
             ],
@@ -552,10 +606,10 @@
           $(document).on('click', '#selectRow', function() {
 
             if (start && end) {
+              let acc = $('#selectAcc').data("acc")
               // get room id from the table
-              let ids = $(this).data("row")
+              let ids = $(this).data("id")
               let temprow = {}
-
               // filter alldata which is equal to the room id
               vm.allData.forEach(item => {
                 if (item.room_id == ids) {
@@ -566,7 +620,16 @@
               // assign to temp row
               vm.tempRow = temprow
               console.log("temp row", vm.tempRow);
-              $('#guest').modal('show')
+             
+
+              if (acc === "Loft Family Room") {
+                $('#loftModal').modal('show')
+              } else {
+                $('#guest').modal('show')
+              }
+
+
+
 
             } else {
               alert("Please Select Check In and Check Out Date");
@@ -632,15 +695,22 @@
           this.res_teen = ''
           this.res_kid = ''
         },
-        // temp(row) {
-        //   this.tempRow = row
-        // },
-        checkAdult() {
-          // if (this.res_adults == 2) {
-            
-          // } else {
-          //   this.teen = false
-          // }
+        checkLoftTeen() {
+          if ( this.res_teen == 1){
+            this.loftKid = true
+            this.res_kid = 0
+          }else {
+            this.loftKid = false
+          }
+        },
+        checkLoftKid() {
+          if (this.res_kid == 1){
+            this.loftTeen = true
+            this.res_teen = 0
+          }else {
+            this.loftTeen = false
+          }
+
         },
         checkTeen() {
           if (this.res_teen == 2 && this.res_adults == 2) {
@@ -658,9 +728,9 @@
         checkKid() {
           if (this.res_kid == 2 && this.res_adults == 2) {
             console.log("more than two");
-            this.teen = true
+            // this.teen = true
             alert(`2 adult, 2 kids and ${this.res_teen} teen can't stay in 1 room`)
-            this.res_teen = 0
+            this.res_kid = 0
             console.log(this.res_teen);
           } else {
             this.teen = false
@@ -682,7 +752,7 @@
             rooms: this.cart,
             // price: this.totalPrice
           }).then(res => {
-            window.location.href = 'view_all_reservations.php'
+            // window.location.href = 'view_all_reservations.php'
             console.log(res.data);
             this.totalPrice = res.data
           })

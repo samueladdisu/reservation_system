@@ -198,7 +198,7 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select name="adults" @change="checkAdult" v-model="res_adults" class="custom-select col-3">
+                              <select name="adults" v-model="res_adults" class="custom-select col-3">
                                 <option value="" disabled>Adults*</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -248,28 +248,36 @@
                                   <h5 class="mb-1">{{ item.room_acc }} - {{ item.room_number }}</h5>
                                   <small> ${{ item.room_price }} / night</small>
                                 </div>
-                                <p class="mb-1"> 
+                                <p class="mb-1">
                                   Adults:
-                                  <select name="adults" v-model="item.adults" class="custom-select col-2">
-                                <option value="" disabled>Adults*</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
+                                  <select name="adults" 
+                                  v-model="item.adults" class="custom-select col-2">
+                                    <option value="" disabled>Adults*</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                  </select>
                                 </p>
-                                <p class="mb-1"> 
-                                  Teens: 
-                                  <select name="adults" v-model="item.teens" class="custom-select col-2 offset-1">
-                                <option value="" disabled>Teens(12-17)</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
+                                <p class="mb-1">
+                                  Teens:
+                                  <select name="adults"
+                                  @change="checkItemTeen" v-model="item.teens" class="custom-select col-2 offset-1">
+                                    <option value="" disabled>Teens(12-17)</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                  </select>
                                 </p>
-                                <p class="mb-1"> Kids: {{  }}
-                                <select name="adults" v-model="item.kids" class="custom-select col-2 offset-1">
-                                <option value="" disabled>kid(6-11)</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select> </p>
+                                <p class="mb-1"> Kids: {{ }}
+                                  <select name="adults" 
+                                  @change="checkItemKid"
+                                  v-model="item.kids" class="custom-select col-2 offset-1">
+                                    <option value="" disabled>kid(6-11)</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                  </select>
+                                </p>
 
                                 <div class="d-flex w-100 justify-content-between">
                                   <small>{{ item.room_location }} </small>
@@ -401,7 +409,7 @@
 
 
                       <div class="form-group">
-                        <input type="submit" class="btn btn-primary" name="add_res" value="Add Reservation">
+                        <input type="submit" class="btn btn-primary" name="add_res" value="Update Reservation">
                       </div>
                     </div>
                   </div>
@@ -497,7 +505,7 @@
 
     console.log("cart ", cart);
 
-              console.log(res_id);
+    console.log(res_id);
 
     console.log("res checkin", editTemp[0].res_checkin)
 
@@ -627,42 +635,38 @@
 
           let vm = this
           $(document).on('click', '#selectRow', function() {
+            // get room id from the table
+            let ids = $(this).data("row")
+            let temprow = {}
 
-            if (start && end) {
-              // get room id from the table
-              let ids = $(this).data("row")
-              let temprow = {}
+            // filter alldata which is equal to the room id
+            vm.allData.forEach(item => {
+              if (item.room_id == ids) {
+                temprow = item
+              }
+            })
 
-              // filter alldata which is equal to the room id
-              vm.allData.forEach(item => {
-                if (item.room_id == ids) {
-                  temprow = item
-                }
-              })
+            // assign to temp row
+            vm.tempRow = temprow
+            console.log("temp row", vm.tempRow);
+            $('#guest').modal('show')
 
-              // assign to temp row
-              vm.tempRow = temprow
-              console.log("temp row", vm.tempRow);
-              $('#guest').modal('show')
 
-            } else {
-              alert("Please Select Check In and Check Out Date");
-            }
           })
 
           $('#addReserveTable tbody').on('click', 'tr', function() {
-            if (start && end) {
-              var id = this.id;
-              var index = $.inArray(id, selected);
 
-              if (index === -1) {
-                selected.push(id);
-              } else {
-                selected.splice(index, 1);
-              }
+            var id = this.id;
+            var index = $.inArray(id, selected);
 
-              $(this).toggleClass('selected');
+            if (index === -1) {
+              selected.push(id);
+            } else {
+              selected.splice(index, 1);
             }
+
+            $(this).toggleClass('selected');
+
 
           });
 
@@ -697,7 +701,7 @@
             console.log("cart room id", res.data);
           })
 
-          
+
         },
         booked() {
 
@@ -722,22 +726,38 @@
           this.res_teen = ''
           this.res_kid = ''
         },
-        // temp(row) {
-        //   this.tempRow = row
-        // },
-        checkAdult() {
-          if (this.res_adults == 2) {
-            this.teen = true
-            this.res_teen = 0
+        checkItemTeen() {
+          if (this.cart.teens == 2 && this.cart.adults == 2) {
+            console.log("more than two");
+            this.cart.teens = 0
+
+            alert("2 adult and 2 teens can't stay in 1 room")
+
+            console.log(this.cart.kids);
           } else {
-            this.teen = false
+            this.cart.kids = false
+            console.log(this.cart.kids);
+          }
+        },
+        
+        checkItemKid() {
+          if (this.cart.kids == 2 && this.cart.adults == 2) {
+            console.log("more than two");
+            this.teen = true
+            alert(`2 adult, 2 kids and ${this.cart.teens} teen can't stay in 1 room`)
+            this.cart.teens = 0
+            console.log(this.cart.teens);
+          } else {
+            this.cart.teens = false
+            console.log(this.cart.teens);
           }
         },
         checkTeen() {
-          if (this.res_teen == 2) {
+          if (this.res_teen == 2 && this.res_adults == 2) {
             console.log("more than two");
-            this.kid = true
-            this.res_kid = 0
+            this.res_teen = 0
+
+            alert("2 adult and 2 teens can't stay in 1 room")
 
             console.log(this.res_kid);
           } else {
@@ -746,11 +766,11 @@
           }
         },
         checkKid() {
-          if (this.res_kid == 2) {
+          if (this.res_kid == 2 && this.res_adults == 2) {
             console.log("more than two");
             this.teen = true
-            this.res_teen = 0
-
+            alert(`2 adult, 2 kids and ${this.res_teen} teen can't stay in 1 room`)
+            this.res_kid = 0
             console.log(this.res_teen);
           } else {
             this.teen = false
@@ -759,16 +779,25 @@
         },
 
         async addReservation() {
-          console.log("Selected room", this.cart);
-          console.log("check in", start);
-          console.log("check out", end);
-          console.log("Form Data", this.formData);
+          let arrival, departure
+
+          if (start && end) {
+            arrival = start
+            departure = end
+          } else {
+            arrival = this.editCheckin
+            departure = this.editCheckout
+          }
+
+          console.log("check in", arrival);
+          console.log("check out", departure);
 
           await axios.post('load_modal.php', {
             action: 'editReservation',
             Form: this.formData,
-            checkin: start,
-            checkout: end,
+            checkin: arrival,
+            checkout: departure,
+            res_id: res_id,
             rooms: this.cart,
             // price: this.totalPrice
           }).then(res => {
@@ -776,47 +805,6 @@
             console.log(res.data);
             this.totalPrice = res.data
           })
-
-        },
-        selectAll() {
-
-          var checkin = new Date(start)
-          var checkout = new Date(end)
-
-          console.log(checkin);
-          console.log(checkout);
-          // To calculate the time difference of two dates
-          var Difference_In_Time = checkout.getTime() - checkin.getTime();
-
-          // To calculate the no. of days between two dates
-          var stayedNights = Difference_In_Time / (1000 * 3600 * 24);
-
-          if (!this.selectAllRoom) {
-            console.log("all");
-            for (data in this.allData) {
-              this.rowId.push(parseInt(this.allData[data].room_id))
-              this.bookedRooms = this.allData
-
-            }
-            this.bookedRooms.forEach(row => {
-              this.totalPrice += parseInt(row.room_price) * stayedNights
-            })
-
-
-            console.log("booked rooms", this.bookedRooms);
-            console.log("Total Price", this.totalPrice);
-            console.log("row ids", this.rowId);
-
-
-          } else {
-
-            this.rowId = []
-            this.bookedRooms = []
-            this.totalPrice = 0
-            console.log("booked rooms", this.bookedRooms);
-            console.log("Total Price", this.totalPrice);
-            console.log(this.rowId);
-          }
 
         },
         async filterRooms() {

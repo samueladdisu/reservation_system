@@ -28,10 +28,10 @@
                             | <small class="text-gray-600"><?php echo $_SESSION['username']; ?></small>
                         </h1>
 
-                       
+
                         <div class="dropdown show">
                             <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-download fa-sm text-white-50"></i>
+                                <i class="fas fa-download fa-sm text-white-50"></i>
                                 Generate Report
                             </a>
 
@@ -61,7 +61,7 @@
 
                                                 <?php
                                                 $location = $_SESSION['user_location'];
-                                                if ($location == "admin") {
+                                                if ($location == "Boston") {
                                                     $query = "SELECT * FROM reservations";
                                                 } else {
                                                     $query = "SELECT * FROM reservations WHERE res_location = '$location' ";
@@ -94,7 +94,7 @@
                                                     Rooms</div>
                                                 <?php
 
-                                                if ($location == 'admin') {
+                                                if ($location == 'Boston') {
 
                                                     $query = "SELECT * FROM rooms";
                                                 } else {
@@ -155,7 +155,7 @@
                                                     Accomodation</div>
                                                 <?php
 
-                                                if ($location == 'admin') {
+                                                if ($location == 'Boston') {
                                                     $query = "SELECT * FROM room_type";
                                                 } else {
                                                     $query = "SELECT * FROM room_type WHERE type_location = '$location' ";

@@ -81,27 +81,80 @@
               </button>
             </div>
             <div class="modal-body">
+              <div v-if="guestInfo.length > 0">
+                <h1 class="my-2">Room Info</h1>
 
-              <table class="table table-bordered table-hover" width="100%" cellspacing="0">
-                <thead>
-                  <th>
-                    Name
-                  </th>
-                  <th>
-                    Value
-                  </th>
-                </thead>
-                <tbody>
-                  <tr v-for="(value, key) in tempRow">
-                    <td>
-                      {{ key }}
-                    </td>
-                    <td>
-                      {{ value }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <div class="card-group">
+
+                  <div class="card" style="width: 18rem;" v-for="row in guestInfo" :key="row.info_id">
+                    <div class="card-body">
+                      <h5 class="card-title font-weight-bold"> {{ row.info_room_acc }} </h5>
+
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item"> <strong>Adults:</strong>{{ row.info_adults }}</li>
+                      <li class="list-group-item"> <strong>Kids:</strong> {{ row.info_kids }}</li>
+                      <li class="list-group-item"> <strong>Teens:</strong> {{ row.info_teens }}</li>
+                      <li class="list-group-item"> <strong>Room Number:</strong> {{ row.info_room_number }}</li>
+                      <li class="list-group-item"> <strong>Room Location:</strong> {{ row.info_room_location }}</li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+
+              <h1 class="my-2">Detail Guest Info</h1>
+
+              <div class="card-group mt-4">
+                <div class="card" style="width: 18rem;">
+                  <ul class="list-group">
+                    <li class="list-group-item"> <strong>Full Name:</strong> {{ tempRow.res_firstname }} {{ tempRow.res_lastname }}</li>
+                    <li class="list-group-item"> <strong>Phone:</strong> {{ tempRow.res_phone }}</li>
+                    <li class="list-group-item"> <strong> Email: </strong>{{ tempRow.res_email }}</li>
+                    <li class="list-group-item"> <strong>Check in:</strong> {{ tempRow.res_checkin }}</li>
+                    <li class="list-group-item"> <strong>Check out:</strong> {{ tempRow.res_checkout }}</li>
+                    <li class="list-group-item"> <strong>Agent:</strong> {{ tempRow.res_agent }}</li>
+                  </ul>
+                </div>
+
+                <div class="card" style="width: 18rem;">
+
+                  <ul class="list-group">
+                    <li class="list-group-item"> <strong>Group Name:</strong> {{ tempRow.res_groupName }}</li>
+                    <li class="list-group-item"> <strong>Price:</strong> {{ tempRow.res_price }}</li>
+                    <li class="list-group-item"> <strong> Remark: </strong>{{ tempRow.res_remark }}</li>
+                    <li class="list-group-item"> <strong>Promo:</strong> {{ tempRow.res_promo }}</li>
+                    <li class="list-group-item"> <strong>Date of Birth:</strong> {{ tempRow.res_dob }}</li>
+                    <li class="list-group-item"> <strong>Member User name:</strong> {{ tempRow.res_member }}</li>
+                  </ul>
+                </div>
+
+              </div>
+
+              <div class="card-group  mt-4">
+                <div class="card" style="width: 18rem;">
+                  <ul class="list-group">
+                    <li class="list-group-item"> <strong>Location:</strong> {{ tempRow.res_location }}</li>
+                    <li class="list-group-item"> <strong>Confirm ID:</strong> {{ tempRow.res_confirmID }}</li>
+                    <li class="list-group-item"> <strong> Special Request: </strong>{{ tempRow.res_specialRequest }}</li>
+                    <li class="list-group-item"> <strong>Payment Status:</strong> {{ tempRow.res_paymentStatus }}</li>
+                    <li class="list-group-item"> <strong>Check out:</strong> {{ tempRow.res_checkout }}</li>
+                    <li class="list-group-item"> <strong>Agent:</strong> {{ tempRow.res_agent }}</li>
+                  </ul>
+                </div>
+                <div class="card" style="width: 18rem;">
+                  <ul class="list-group">
+                    <li class="list-group-item"> <strong>Contry:</strong> {{ tempRow.res_country }}</li>
+                    <li class="list-group-item"> <strong>Address:</strong> {{ tempRow.res_address }}</li>
+                    <li class="list-group-item"> <strong> City: </strong>{{ tempRow.res_city }}</li>
+                    <li class="list-group-item"> <strong>Zip Code:</strong> {{ tempRow.res_zipcode }}</li>
+                    <li class="list-group-item"> <strong>Payment Method:</strong> {{ tempRow.res_paymentMethod }}</li>
+                  </ul>
+                </div>
+
+
+
+              </div>
 
             </div>
 
@@ -112,25 +165,7 @@
       <!-- End of View Full Reservation Details -->
 
 
-      <!-- Delete Modal  -->
-      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Are you sure You want to Delete?</h5>
-              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">Select "Delete" to confirm deletion.</div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End of Delete Modal  -->
+
 
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
@@ -231,7 +266,8 @@
           phone: '',
           dob: '',
           remark: '',
-          tempDelete: {}
+          tempDelete: {},
+          guestInfo: []
         }
       },
       methods: {
@@ -243,6 +279,9 @@
               'excel',
               'print',
               'csv'
+            ],
+            order: [
+              [0, 'desc']
             ],
             data: row,
             columns: [{
@@ -300,7 +339,7 @@
 
           // $(document).on('click', '#edit', function(){
           //   let res_id = $(this).data("id")
-            
+
           // })
 
           $(document).on('click', '#delete', function() {
@@ -335,7 +374,8 @@
 
             // assign to temp row
             vm.tempRow = temprow
-            console.log("temp row", typeof(vm.tempRow));
+            console.log("temp row", vm.tempRow);
+            vm.fetchGuestinfo()
             $('#exampleModalLong').modal('show')
           })
 
@@ -357,11 +397,21 @@
             this.posts = res.data
             this.table(res.data)
           })
+        },
+        async fetchGuestinfo() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'guestInfo',
+            id: this.tempRow.res_id
+          }).then(res => {
+            console.log(res.data);
+
+            this.guestInfo = res.data
+          })
         }
       },
       created() {
         this.fetchData()
-        Pusher.logToConsole = true;
+        Pusher.logToConsole = false;
 
         const pusher = new Pusher('341b77d990ca9f10d6d9', {
           cluster: 'mt1',

@@ -11,7 +11,7 @@ $role = $_SESSION['user_role'];
 $data = array();
 $filterd_data = array();
 if ($incoming->action == 'fetchRes') {
-  if ($role == "SA" || ( $location == "Boston" && $role == 'RA')) {
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
     $query = "SELECT * FROM reservations ORDER BY res_id DESC";
   } else {
     $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";
@@ -82,60 +82,102 @@ if ($incoming->action == 'addSingleRes') {
 
   echo json_encode($roomId);
 }
+if ($incoming->action == "guestInfo") {
+  $res_id = $incoming->id;
 
+  $guest_query = "SELECT * FROM guest_info WHERE info_res_id = $res_id";
+  $guest_result = mysqli_query($connection, $guest_query);
+
+  while ($row = mysqli_fetch_assoc($guest_result)) {
+    $data[] = $row;
+  }
+  echo json_encode($data);
+}
 if ($incoming->action == "delete") {
   $res_id = $incoming->row->res_id;
+  $group_name = $incoming->row->res_groupName;
+  $group_id = $incoming->row->res_groupID;
   $rooms = array();
-  $select_rooms_query = "SELECT res_roomIDs FROM reservations WHERE res_id = $res_id";
-  $select_rooms_result = mysqli_query($connection, $select_rooms_query);
 
-  confirm($select_rooms_result);
+  if ($group_name == "") {
+    $select_rooms_query = "SELECT res_roomIDs FROM reservations WHERE res_id = $res_id";
+    $select_rooms_result = mysqli_query($connection, $select_rooms_query);
 
-  while ($row = mysqli_fetch_assoc($select_rooms_result)) {
-    foreach ($row as  $val) {
+    confirm($select_rooms_result);
 
-      $rooms = json_decode($val);
+    while ($row = mysqli_fetch_assoc($select_rooms_result)) {
+      foreach ($row as  $val) {
+
+        $rooms = json_decode($val);
+      }
     }
-  }
-  // echo json_encode();
 
-  if(gettype($rooms) == 'integer'){
-
-    // CHANGE ROOM STATUS TO NOT BOOKED 
-
-    $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$rooms'";
-    $change_status_result = mysqli_query($connection, $change_status_query);
-    confirm($change_status_result);
-
-      // REMOVE ROOMS FROM BOOKED ROOMS TABLE 
-    
-    $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_roomId = $val";
-    $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
-
-     confirm($delete_booked_rooms_result);
-  }else if(gettype($rooms) == 'array'){
-    
-    foreach ($rooms as  $val) {
+    if (gettype($rooms) == 'integer') {
 
       // CHANGE ROOM STATUS TO NOT BOOKED 
 
-      $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$val'";
+      $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$rooms'";
       $change_status_result = mysqli_query($connection, $change_status_query);
       confirm($change_status_result);
+    } else if (gettype($rooms) == 'array') {
 
-      // REMOVE ROOMS FROM BOOKED ROOMS TABLE 
+      foreach ($rooms as  $val) {
 
-      $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_roomId = $val";
-      $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
- 
-       confirm($delete_booked_rooms_result);
-      echo json_encode(confirm($delete_booked_rooms_result));
+        // CHANGE ROOM STATUS TO NOT BOOKED 
+
+        $change_status_query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = '$val'";
+        $change_status_result = mysqli_query($connection, $change_status_query);
+        confirm($change_status_result);
+      }
     }
+
+    $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
+    $delete_result = mysqli_query($connection, $delete_query);
+    confirm($delete_result);
+
+    $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
+    $guest_info_result = mysqli_query($connection, $guest_info_query);
+    confirm($guest_info_result);
+
+    $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_res_id = $res_id";
+    $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+
+    confirm($delete_booked_rooms_result);
+
+    echo json_encode(confirm($delete_booked_rooms_result));
+  } else {
+    echo json_encode($incoming->row);
+
+    $g_res_id    = $incoming->row->res_groupID;
+    $g_room_Id   = $incoming->row->res_roomIDs;
+    $g_room_acc  = $incoming->row->res_roomType;
+    $g_room_num  = $incoming->row->res_roomNo;
+    $g_room_loc  = $incoming->row->res_location;
+
+    // Update the group reservation availability
+
+    $group_query = "UPDATE group_reservation SET group_remainingRooms = group_remainingRooms + 1 WHERE group_id = $group_id";
+    $group_result = mysqli_query($connection, $group_query);
+    confirm($group_result);
+
+    // insert The room back to the group room table
+
+    $insert_group_query = "INSERT INTO group_rooms(g_res_id, g_room_id, g_room_acc, g_room_number, g_room_location) ";
+
+    $insert_group_query .= "VALUES ($g_res_id, $g_room_Id, '$g_room_acc', $g_room_num, '$g_room_loc')"; 
+
+    $insert_result = mysqli_query($connection, $insert_group_query);
+    confirm($insert_result);
+    // delete the reservation 
+    $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
+    $delete_result = mysqli_query($connection, $delete_query);
+    confirm($delete_result);
+
+    $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
+    $guest_info_result = mysqli_query($connection, $guest_info_query);
+    confirm($guest_info_result);
+
+
+
   }
-
-  $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
-  $delete_result = mysqli_query($connection, $delete_query);
-  confirm($delete_result);
-
- 
 }

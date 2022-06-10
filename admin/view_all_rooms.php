@@ -220,7 +220,7 @@ if (!isset($_SESSION['user_role'])) {
                   {
                     data: 'room_id',
                     render: function(data, type, row) {
-                      return `<a data-toggle="modal" data-row="${data}" data-target="#deleteModal" id="deleteRow">
+                      return `<a data-toggle="modal" data-row="${data}"  id="deleteRow">
 							<i style='color: red;' class='far fa-trash-alt'></i>
 						</a>`
                     }
@@ -231,24 +231,22 @@ if (!isset($_SESSION['user_role'])) {
                 },
               });
 
+              let vm = this
+
               $(document).on('click', '#deleteRow', function(){
-                let id = deleteR.dataset.row
+                let id = $(this).data("row")
                 console.log(id);
-                let temprow = this.allData.filter(item => {
-                  return item.room_id === id
-                })
-
-
-                function reducer(acc, cur) {
-                  return {
-                    ...cur
+                let temprow = {}
+                
+                vm.allData.forEach(item => {
+                  if(item.room_id == id){
+                    temprow = item
                   }
-                }
+                });
 
-                let objTemp = temprow.reduce(reducer, {})
-                console.log(objTemp);
-                this.tempDelete = objTemp
-
+                vm.tempDelete = temprow
+                console.log("temp row", vm.tempDelete);
+                $('#deleteModal').modal('show')
               })
 
             },

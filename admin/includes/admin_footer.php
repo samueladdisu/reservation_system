@@ -51,7 +51,7 @@
    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
    <!-- Core plugin JavaScript-->
    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script> -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
    <script src="vendor/chart.js/Chart.min.js"></script>
 
    <!-- data table plugin  -->
@@ -70,7 +70,7 @@
    <!-- Custom scripts for all pages-->
    <script src="js/sb-admin-2.min.js"></script>
    <script src="./js/load.js"></script>
-   <!-- <script src="./js/chart.js"></script> -->
+   <script src="./js/chart.js"></script>
 
 
 
