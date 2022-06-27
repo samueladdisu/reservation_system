@@ -6,9 +6,9 @@
 $received_data = json_decode(file_get_contents("php://input"));
 date_default_timezone_set('Africa/Addis_Ababa');
 
-$single_app_id = "1421840";
-$single_key = "399f6a3873a4061d829f";
-$single_secret = "62285e574e06cd7b99d3";
+$single_app_id = $_ENV['BACK_SINGLE_APP_ID'];
+$single_key = $_ENV['BACK_SINGLE_KEY'];
+$single_secret = $_ENV['BACK_SINGLE_SECRET'];
 $single_cluster = "mt1";
 
 $pusher = new Pusher\Pusher($single_key, $single_secret, $single_app_id, ['cluster' => $single_cluster]);
