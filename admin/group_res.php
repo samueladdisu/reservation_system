@@ -7,9 +7,9 @@ $received_data = json_decode(file_get_contents("php://input"));
 date_default_timezone_set('Africa/Addis_Ababa');
 
 
-$group_app_id = "1421841";
-$group_key = "afcb8aece0584791ae17";
-$group_secret = "2171b0be1c6afd14ceec";
+$group_app_id = $_ENV['BACK_GROUP_APP_ID'];
+$group_key = $_ENV['BACK_GROUP_KEY'];
+$group_secret = $_ENV['BACK_GROUP_SECRET'];
 $group_cluster = "mt1";
 
 $pusher = new Pusher\Pusher($group_key, $group_secret, $group_app_id, ['cluster' => $group_cluster]);

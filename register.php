@@ -39,9 +39,9 @@
   // Pusher library setup
 
 
-  $app_id = '1421838';
-  $app_key = 'd178c59a7edb1db43e11';
-  $app_secret = '031f19c804a70f720512';
+  $app_id = $_ENV['FRONT_APP_ID'];
+  $app_key = $_ENV['FRONT_KEY'];
+  $app_secret = $_ENV['FRONT_SECRET'];
   $app_cluster = 'mt1';
 
   $pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);

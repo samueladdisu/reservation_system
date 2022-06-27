@@ -509,7 +509,7 @@
       })
     });
 
-
+  
 
     const app = Vue.createApp({
       data() {
@@ -800,10 +800,15 @@
       created() {
         this.fetchAll()
         Pusher.logToConsole = true;
+
+        let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
+        let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
+        let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
         
         // Front end reservation notification channel from pusher
+        
 
-        const pusher = new Pusher('d178c59a7edb1db43e11', {
+        const pusher = new Pusher(fKey, {
           cluster: 'mt1',
           encrypted: true
         });
@@ -817,7 +822,7 @@
 
         // Back end reservation notification channel from pusher
 
-        const back_pusher = new Pusher('399f6a3873a4061d829f', {
+        const back_pusher = new Pusher(bKey, {
           cluster: 'mt1',
           encrypted: true
         });
@@ -832,7 +837,7 @@
 
         // Group reservation notification channel from pusher
 
-        const group_pusher = new Pusher('afcb8aece0584791ae17', {
+        const group_pusher = new Pusher(gKey, {
           cluster: 'mt1',
           encrypted: true
         });
