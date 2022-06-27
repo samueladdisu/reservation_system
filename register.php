@@ -500,12 +500,10 @@
         resetTimer() {
           /* Clear the previous interval */
           clearInterval(this.timer);
-
+          
           /* Reset the seconds of the timer */
           this.sec = '10';
           this.min = '0';
-
-
           /* Set a new interval */
           this.timer = setInterval(this.startIdleTimer, 1000);
         },
