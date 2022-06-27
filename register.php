@@ -93,68 +93,68 @@
 
       if ($days < 5) {
         echo "<script> alert('You can\'t reserve less than 5 days in advance');</script>";
-      }else {
+      } else {
 
         foreach ($id  as $value) {
 
           //  Select room details from room id 
-      
-      
+
+
           $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
-      
+
           $room_result = mysqli_query($connection, $room_query);
           confirm($room_result);
           $room_row = mysqli_fetch_assoc($room_result);
-      
-      
+
+
           // Insert into booked table
-      
+
           $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
           $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkIn}', '{$checkOut}')";
-      
+
           $booked_result = mysqli_query($connection, $booked_query);
-      
+
           confirm($booked_result);
         }
         $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
         $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$params['res_guestNo']}', 'website') ";
-  
+
         $result = mysqli_query($connection, $query);
         confirm($result);
-  
-  
+
+
         $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($id_int)";
         $result_status = mysqli_query($connection, $status_query);
         confirm($result_status);
         $data = true;
 
-      $pusher->trigger('front_notifications', 'front_reservation', $data);
-      header("Location: ./session_destory.php");
+        $pusher->trigger('front_notifications', 'front_reservation', $data);
+        header("Location: ./session_destory.php");
       }
     } else {
 
       foreach ($id  as $value) {
 
         //  Select room details from room id 
-    
-    
+
+
         $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
-    
+
         $room_result = mysqli_query($connection, $room_query);
         confirm($room_result);
         $room_row = mysqli_fetch_assoc($room_result);
-    
-    
+
+
         // Insert into booked table
-    
+
         $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
         $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkIn}', '{$checkOut}')";
-    
+
         $booked_result = mysqli_query($connection, $booked_query);
-    
+
         confirm($booked_result);
       }
-      
+
       $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
       $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$params['res_guestNo']}', 'website') ";
 
@@ -190,8 +190,6 @@
       // end
 
     }
-
-
   }
 
   ?>
@@ -311,8 +309,17 @@
               Rooms: <?php echo $_SESSION['rooms']; ?>
 
             </div>
-            <p class="text-muted" id="Timer">
+            <p class="text-muted" id="Timer" v-if="min > 10 && sec > 10 ">
               {{ min }}: {{sec}}min
+            </p>
+            <p class="text-muted" id="Timer" v-else-if="min > 10 && sec < 10 ">
+              {{ min }}: 0{{sec}}min
+            </p>
+            <p class="text-muted" id="Timer" v-else-if="min < 10 && sec > 10 ">
+              0{{ min }}: {{sec}}min
+            </p>
+            <p class="text-muted" id="Timer" v-else-if="min < 10 && sec < 10 ">
+              0{{ min }}: 0{{sec}}min
             </p>
           </div>
 
@@ -349,39 +356,6 @@
   <!-- <script src="./js/reserve.js">var color = "";</script> -->
 
 
-  <!-- <script>
-    let currSeconds, timer = 30;
-
-    function resetTimer() {
-      /* Clear the previous interval */
-      clearInterval(this.timer);
-      /* Reset the seconds of the timer */
-      this.currSeconds = 30;
-      /* Set a new interval */
-      this.timer =
-        setInterval(this.startIdleTimer, 3000);
-    }
-
-    function startIdleTimer() {
-
-      this.currSeconds--;
-      let Timershow = document.getElementById("Timer")
-      Timershow.innerHTML = "" + this.currSeconds + "Min";
-      if (this.currSeconds == 0) {
-        // alert("are you still there?")
-        $('#TimesUP').modal('show')
-      }
-
-
-    }
-
-    window.onload = resetTimer;
-    window.onmousemove = resetTimer;
-    window.onmousedown = resetTimer;
-    window.ontouchstart = resetTimer;
-    window.onclick = resetTimer;
-    window.onkeypress = resetTimer;
-  </script> -->
 
   <script>
     const register = Vue.createApp({
@@ -505,17 +479,22 @@
           localStorage.clear();
         },
         startIdleTimer() {
-          this.sec--;
-          console.log(this.sec);
-          if (this.sec == 0) {
-            this.min--;
-            if (this.min !== 0) {
-              this.sec = 60;
-            }
 
-            if (this.sec == 0 && this.min == 0) {
-              $("#TimesUP").modal("show");
+
+
+          if (this.sec >= 6) {
+            this.sec--;
+          } else if (this.sec == 0) {
+            if (this.min > 0) {
+              this.min--;
+            } else if (this.min == 0) {
+              this.clearOrder();
             }
+          } else if (this.sec == 5) {
+            this.sec--;
+            $("#TimesUP").modal("show");
+          } else if (this.sec <= 4) {
+            this.sec--;
           }
         },
         resetTimer() {
@@ -523,8 +502,8 @@
           clearInterval(this.timer);
 
           /* Reset the seconds of the timer */
-          this.sec = '60';
-          this.min = '30';
+          this.sec = '10';
+          this.min = '0';
 
 
           /* Set a new interval */
