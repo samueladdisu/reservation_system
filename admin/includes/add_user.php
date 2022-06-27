@@ -9,6 +9,8 @@ if (isset($_POST['create_user'])) {
   $user_role = escape($_POST['user_role']);
   $user_location = escape($_POST['user_location']);
 
+  $check_query = "SELECT * FROM users WHERE ";
+
 
   $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
 

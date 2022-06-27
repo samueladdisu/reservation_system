@@ -39,9 +39,9 @@
   // Pusher library setup
 
 
-  $app_id = '1329709';
-  $app_key = '341b77d990ca9f10d6d9';
-  $app_secret = '2e226aa040b0bc8c8e94';
+  $app_id = '1421838';
+  $app_key = 'd178c59a7edb1db43e11';
+  $app_secret = '031f19c804a70f720512';
   $app_cluster = 'mt1';
 
   $pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);
@@ -128,7 +128,7 @@
         confirm($result_status);
         $data = true;
 
-      $pusher->trigger('notifications', 'new_reservation', $data);
+      $pusher->trigger('front_notifications', 'front_reservation', $data);
       header("Location: ./session_destory.php");
       }
     } else {
@@ -185,7 +185,7 @@
       //  $data = array($params, $id);
       $data = true;
 
-      $pusher->trigger('notifications', 'new_reservation', $data);
+      $pusher->trigger('front_notifications', 'front_reservation', $data);
 
       // end
 
@@ -255,7 +255,6 @@
           </select>
         </div>
 
-
         <div class="col-12">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="book">
@@ -293,42 +292,28 @@
 
           </div>
           <div class="cart">
-            <?php
 
-            $cart = $_SESSION['cart'];
-            // print_r($cart);
-            foreach ($cart as $name => $value) {
-
-              $item[$name] = $value;
-              foreach ($item[$name] as $name1 => $val) {
-
-
-                $items[$name1] = $val;
-              } ?>
-              <div class="upper">
-                <h3><?php echo $items['room_acc']; ?> -
-                  <?php echo $items['room_location']; ?></h3>
-                <p class="text-muted">
-                  $<?php echo $items['room_price']; ?> / night
-                </p>
-              </div>
-            <?php }
-            ?>
-
-
-
+            <div class="upper" v-for="rows in cartCompleted" :key="rows.room_id">
+              <h3>{{rows.room_acc}} - {{rows.room_location}}
+              </h3>
+              <p class="text-muted">
+                ${{rows.room_price}} / night
+              </p>
+            </div>
 
           </div>
 
           <hr>
           <div class="cart-footer-lg">
 
-
-
             <div class="price">
               Total: $ <?php echo $total_price; ?> <br>
               Rooms: <?php echo $_SESSION['rooms']; ?>
+
             </div>
+            <p class="text-muted" id="Timer">
+              {{ min }}: {{sec}}min
+            </p>
           </div>
 
 
@@ -337,11 +322,240 @@
       </div>
     </div>
 
-
+    <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Kuriftu</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>are you still there.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="TimerExtend()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- <script src="./js/reserve.js"></script> -->
   <?php include_once './includes/footer.php' ?>
-  <script src="./js/reserve.js"></script>
+  <!-- <script src="./js/reserve.js">var color = "";</script> -->
+
+
+  <!-- <script>
+    let currSeconds, timer = 30;
+
+    function resetTimer() {
+      /* Clear the previous interval */
+      clearInterval(this.timer);
+      /* Reset the seconds of the timer */
+      this.currSeconds = 30;
+      /* Set a new interval */
+      this.timer =
+        setInterval(this.startIdleTimer, 3000);
+    }
+
+    function startIdleTimer() {
+
+      this.currSeconds--;
+      let Timershow = document.getElementById("Timer")
+      Timershow.innerHTML = "" + this.currSeconds + "Min";
+      if (this.currSeconds == 0) {
+        // alert("are you still there?")
+        $('#TimesUP').modal('show')
+      }
+
+
+    }
+
+    window.onload = resetTimer;
+    window.onmousemove = resetTimer;
+    window.onmousedown = resetTimer;
+    window.ontouchstart = resetTimer;
+    window.onclick = resetTimer;
+    window.onkeypress = resetTimer;
+  </script> -->
+
+  <script>
+    const register = Vue.createApp({
+      data() {
+        return {
+          cartCompleted: [],
+          arrival: "",
+          currSeconds: '30',
+          timer: '0',
+          min: 0,
+          sec: 0,
+          days: 559,
+          hours: 15,
+          minutes: 30,
+          seconds: 00,
+          dis: ''
+        };
+      },
+      methods: {
+
+        TimerExtend() {
+          $("#TimesUP").modal("hide");
+          this.resetTimer;
+        },
+        viewCart(CartIn) {
+          this.cartCompleted = CartIn
+
+        },
+        CheckFrom(availables, selectedCart) {
+          var temp = []
+          var notFound = []
+          // console.log("available:", availables)
+          // console.log("cart", selectedCart[0].room_acc)
+          selectedCart.forEach(cartItem => {
+            availables.forEach(item => {
+              newArray = item.filter(data => {
+                return data.room_acc == cartItem.room_acc && data.room_id == cartItem.room_id
+              })
+              if (newArray.length !== 0) {
+                temp.push(newArray)
+              }
+
+            })
+          })
+          if (temp.length !== 0) {
+            console.log("found", temp)
+
+            selectedCart.forEach(tempdata => {
+
+              checkLefted = temp.filter(data => {
+                return tempdata.room_acc == data.room_acc && tempdata.room_id == data.room_id
+              })
+              if (checkLefted.length !== 0) {
+                notFound.push(checkLefted)
+              }
+
+            })
+            if (notFound.length !== 0) {
+              console.log("needs No change")
+              this.resetTimer();
+              $("#TimesUP").modal("hide");
+
+            } else {
+
+              console.log("needs update", temp)
+              this.cartCompleted = temp
+            }
+
+          } else {
+            console.log("needs to be update update", notFound, temp)
+          }
+
+
+
+        },
+        checkExistance(CheckIn, CheckOut, cart) {
+
+
+          // console.log("CArt 2",cart2)
+          axios
+            .post("book.php", {
+              action: "fetchall",
+              checkIn: CheckIn,
+              checkOut: CheckOut,
+            })
+            .then((response) => {
+              console.log(response.data);
+              // var cart = 
+              console.log("Cart:", <?php echo json_encode($_SESSION['cart'])  ?>);
+              // let cartfetched = 
+              this.CheckFrom(response.data, <?php echo json_encode($_SESSION['cart'])  ?>);
+            });
+        },
+
+        clearOrder() {
+
+          var cartClear = <?php echo json_encode($_SESSION['cart']) ?>
+
+          cartClear.forEach(eachID => {
+            axios
+              .post("book.php", {
+                action: "ClearHold",
+                RoomId: eachID.room_id,
+
+              })
+              .then((response) => {
+
+                localStorage.clear();
+                window.location.href = "reserve.php";
+
+              });
+
+          })
+
+
+
+        },
+        clearCart() {
+          // localStorage.cart = [];
+          // localStorage.total = 0
+          localStorage.clear();
+        },
+        startIdleTimer() {
+          this.sec--;
+          console.log(this.sec);
+          if (this.sec == 0) {
+            this.min--;
+            if (this.min !== 0) {
+              this.sec = 60;
+            }
+
+            if (this.sec == 0 && this.min == 0) {
+              $("#TimesUP").modal("show");
+            }
+          }
+        },
+        resetTimer() {
+          /* Clear the previous interval */
+          clearInterval(this.timer);
+
+          /* Reset the seconds of the timer */
+          this.sec = '60';
+          this.min = '30';
+
+
+          /* Set a new interval */
+          this.timer = setInterval(this.startIdleTimer, 1000);
+        },
+      },
+
+      created() {
+        this.viewCart(<?php echo json_encode($_SESSION['cart'])  ?>)
+
+        window.onload = this.resetTimer;
+        window.onmousemove = this.resetTimer;
+        window.onmousedown = this.resetTimer;
+        window.ontouchstart = this.resetTimer;
+        window.onclick = this.resetTimer;
+        window.onkeypress = this.resetTimer;
+      },
+
+      watch: {
+        hours(value) {
+
+        },
+        minutes: 37,
+        seconds: 25,
+
+      }
+    });
+
+    register.mount("#regApp");
+  </script>
+
 
 </body>
 

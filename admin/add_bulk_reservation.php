@@ -375,6 +375,7 @@ if (!isset($_SESSION['user_role'])) {
 
   <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
   <script src="./js/t-datepicker.min.js"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
   <!-- data table plugin  -->
 
@@ -529,6 +530,52 @@ if (!isset($_SESSION['user_role'])) {
       },
       created() {
         this.fetchAll()
+        Pusher.logToConsole = true;
+        
+        // Front end reservation notification channel from pusher
+
+        const pusher = new Pusher('d178c59a7edb1db43e11', {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+        const channel = pusher.subscribe('front_notifications');
+        channel.bind('front_reservation', (data) => {
+          if (data) {
+            this.fetchAll()
+          }
+        })
+
+        // Back end reservation notification channel from pusher
+
+        const back_pusher = new Pusher('399f6a3873a4061d829f', {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+        const back_channel = back_pusher.subscribe('back_notifications');
+
+        back_channel.bind('backend_reservation', (data) => {
+          if (data) {
+            this.fetchAll()
+          }
+        })
+
+        // Group reservation notification channel from pusher
+
+        const group_pusher = new Pusher('afcb8aece0584791ae17', {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+
+        const group_channel = group_pusher.subscribe('group_notifications')
+
+        group_channel.bind('group_reservation', data => {
+          if (data) {
+            this.fetchAll()
+          }
+        })
       },
     })
 

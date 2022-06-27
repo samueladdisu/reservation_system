@@ -23,7 +23,13 @@ if (!isset($_SESSION['user_role'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kuriftu Resort - Dashboard</title>
+    <title><?php 
+    if(isset($currentPage)){ 
+        echo $currentPage;
+    } else {
+         echo "Dashboard";
+    }
+    ?> - Kuriftu Reservation System</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
@@ -34,6 +40,7 @@ if (!isset($_SESSION['user_role'])) {
     <!-- <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     -->
     <!-- Custom styles for this template-->
+    <link rel="shortcut icon" href="../../img/kuriftufavicon.svg" type="image/x-icon">
 
     <link rel="stylesheet" href="./css/t-datepicker.min.css">
 <link rel="stylesheet" href="./css/themes/t-datepicker-green.css">

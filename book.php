@@ -1,5 +1,7 @@
 <?php include  'config.php'; ?>
-<?php 
+
+
+<?php
 
 $received_data = json_decode(file_get_contents("php://input"));
 
@@ -11,24 +13,47 @@ $Not_booked = array();
 $booked = array();
 
 
-if($received_data->action == 'fetchall'){
-
+if ($received_data->action == 'fetchall') {
+  $count = 0;
+  $roomAcc_temp = '';
+  $roomLocation = '';
+  $dataCount = [];
   // $query2 = "SELECT * FROM rooms WHERE room_status = 'Not_booked'";
   // $query = "SELECT * FROM rooms GROUP BY room_acc";
-  $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked';";
+  //  $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms GROUP BY room_acc HAVING room_status = 'Not_booked';";
   // $result = mysqli_query($connection, $query);
+  // $query2 = "SELECT *, COUNT(room_acc) AS cnt FROM rooms WHERE room_status = 'Not_booked' GROUP BY room_acc;";
+  $query2 = "SELECT * FROM rooms WHERE room_status = 'Not_booked' ORDER BY room_acc;";
+
   $result2 = mysqli_query($connection, $query2);
 
   // confirm($result);
   confirm($result2);
-  while($row = mysqli_fetch_assoc($result2)){
-    $data[] = $row;
+  while ($row = mysqli_fetch_assoc($result2)) {
+
+    if ($roomAcc_temp == '' || $roomLocation == '') {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+    } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
+
+      array_push($data, $row);
+    } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+      array_push($dataCount, $data);
+      $data = [];
+      array_push($data, $row);
+      // goto here;
+    }
+  }
+  if (count($data) > 1) {
+    array_push($dataCount, $data);
   }
 
-  echo json_encode($data);
+  echo json_encode($dataCount);
 }
 
-if($received_data->action == 'promoCode'){
+if ($received_data->action == 'promoCode') {
   $code = $received_data->data;
   $promoData = array();
   $promo_query = "SELECT * FROM promo WHERE promo_code = '$code'";
@@ -36,56 +61,52 @@ if($received_data->action == 'promoCode'){
 
   confirm($promo_result);
 
-  while($row = mysqli_fetch_assoc($promo_result)){
+  while ($row = mysqli_fetch_assoc($promo_result)) {
     foreach ($row as $key => $value) {
       $params[$key] = $value;
     }
     date_default_timezone_set('Africa/Addis_Ababa');
     $current_date = date('m/d/Y h:i:s', time());
 
-    if($params['promo_time'] > $current_date && $params['promo_usage'] > 0){
+    if ($params['promo_time'] > $current_date && $params['promo_usage'] > 0) {
       $updated_usage = $params['promo_usage'] - 1;
       $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = {$params['promo_id']}";
 
       $update_promo_result = mysqli_query($connection, $update_promo);
       confirm($update_promo_result);
       echo json_encode($params['promo_amount']);
-    }else{
+    } else {
       echo json_encode(false);
     }
   }
-
-  
-
 }
-if($received_data->action == 'getData'){
+if ($received_data->action == 'getData') {
   $location = $received_data->desti;
   $checkin = $received_data->checkIn;
   $checkout = $received_data->checkOut;
 
- 
+
   $A_query = "SELECT *, COUNT(room_acc) AS cnt 
     FROM rooms
     GROUP BY room_acc
     HAVING room_status = 'Not_booked'
     AND room_location = '$location'";
 
-    $A_result = mysqli_query($connection, $A_query);
-    confirm($A_result);
+  $A_result = mysqli_query($connection, $A_query);
+  confirm($A_result);
 
-    $rows = mysqli_num_rows($A_result);
+  $rows = mysqli_num_rows($A_result);
 
-    
-    if (!empty($rows)) {
 
-      
-    
-      while ($avaliable_rooms = mysqli_fetch_assoc($A_result)) {
-        $Not_booked[] = $avaliable_rooms;
+  if (!empty($rows)) {
 
-      }
-      // echo json_encode($Not_booked);
-      $BR_query = "SELECT DISTINCT b_roomId
+
+
+    while ($avaliable_rooms = mysqli_fetch_assoc($A_result)) {
+      $Not_booked[] = $avaliable_rooms;
+    }
+    // echo json_encode($Not_booked);
+    $BR_query = "SELECT DISTINCT b_roomId
       FROM booked_rooms 
       WHERE b_checkout<= '$checkin' 
       AND b_roomLocation = '$location'
@@ -94,30 +115,28 @@ if($received_data->action == 'getData'){
       FROM booked_rooms
       WHERE b_checkin >= '$checkout'
       AND b_roomLocation = '$location'";
-      $result = mysqli_query($connection, $BR_query);
-      confirm($result);
+    $result = mysqli_query($connection, $BR_query);
+    confirm($result);
 
-      while($row3 = mysqli_fetch_assoc($result)){
-       $r_query = "SELECT *, COUNT(room_acc) AS cnt 
+    while ($row3 = mysqli_fetch_assoc($result)) {
+      $r_query = "SELECT *, COUNT(room_acc) AS cnt 
        FROM rooms
        GROUP BY room_acc
        HAVING room_id = {$row3['b_roomId']}";
-       $r_result = mysqli_query($connection, $r_query);
-       confirm($r_result);
+      $r_result = mysqli_query($connection, $r_query);
+      confirm($r_result);
 
-       while($row4 = mysqli_fetch_assoc($r_result)){
-          $booked[] = $row4;
-         
-        }
+      while ($row4 = mysqli_fetch_assoc($r_result)) {
+        $booked[] = $row4;
       }
-      
-      $all = array_merge($Not_booked, $booked);
+    }
 
-     echo json_encode($all);
+    $all = array_merge($Not_booked, $booked);
 
-    } else {
+    echo json_encode($all);
+  } else {
 
-      $BR_query = "SELECT DISTINCT b_roomId
+    $BR_query = "SELECT DISTINCT b_roomId
       FROM booked_rooms 
       WHERE b_checkout<= '$checkin' 
       AND b_roomLocation = '$location'
@@ -126,34 +145,35 @@ if($received_data->action == 'getData'){
       FROM booked_rooms
       WHERE b_checkin >= '$checkout'
       AND b_roomLocation = '$location'";
-      $result = mysqli_query($connection, $BR_query);
-      confirm($result);
+    $result = mysqli_query($connection, $BR_query);
+    confirm($result);
 
-      $BR_rows = mysqli_num_rows($result);
-      if(!empty($BR_rows)){
-        while($row1 = mysqli_fetch_assoc($result)){
-          $S_query = "SELECT *, COUNT(room_acc) AS cnt 
+    $BR_rows = mysqli_num_rows($result);
+    if (!empty($BR_rows)) {
+      while ($row1 = mysqli_fetch_assoc($result)) {
+        $S_query = "SELECT *, COUNT(room_acc) AS cnt 
           FROM rooms
           GROUP BY room_acc
           HAVING room_id = {$row1['b_roomId']}";
-          
-          $S_result = mysqli_query($connection, $S_query);
 
-          confirm($S_result);
+        $S_result = mysqli_query($connection, $S_query);
 
-          while($row2 = mysqli_fetch_assoc($S_result)){
-            $Not_booked[] = $row2;
-          }
+        confirm($S_result);
+
+        while ($row2 = mysqli_fetch_assoc($S_result)) {
+          $Not_booked[] = $row2;
         }
-        echo json_encode($Not_booked);
       }
+      echo json_encode($Not_booked);
     }
+  }
 
 
   // echo json_encode($filterd_data1);
 }
 
-if($received_data->action == 'insert'){
+
+if ($received_data->action == 'insert') {
 
   $_SESSION['checkIn'] = $checkIn = $received_data->checkIn;
   $_SESSION['checkOut'] = $checkOut = $received_data->checkOut;
@@ -162,6 +182,132 @@ if($received_data->action == 'insert'){
   $_SESSION['total'] = $received_data->total;
   $_SESSION['rooms'] = $received_data->totalroom;
 
+  foreach ($cart as $value) {
+    $id = intval($value->room_id);
+
+    $query = "UPDATE rooms SET room_status = 'Hold' WHERE room_id = $id";
+    $result = mysqli_query($connection, $query);
+
+    echo json_encode($result);
+  }
+}
+
+if ($received_data->action == 'ClearHold') {
+  $roomID = $received_data->RoomId;
+
+
+
+  $query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $roomID";
+  $result = mysqli_query($connection, $query);
+
+  echo json_encode($result);
+}
+
+
+if ($received_data->action == 'calculatePrice') {
+  $promo = '';
+
+  $price = 0.00;
+  $dbRack    = 0.00;
+  $dbWeekend = 0.00;
+  $dbWeekdays = 0.00;
+  $dbMember  = 0.00;
+  $arrayTemp = array();
+
+  // Single occupancy rate
+  $sRack     = 0.00;
+  $sWeekend  = 0.00;
+  $sWeekdays = 0.00;
+  $sMember = 0.00;
+
+  $checkIn = $received_data->checkIn;
+  $checkOut = $received_data->checkOut;
+
+
+
+  $days       = array();
+  $start      = new DateTime($checkIn);
+  $end        = new DateTime($checkOut);
+
+  for ($date = $start; $date < $end; $date->modify('+1 day')) {
+    $days[] = $date->format('l');
+  }
+  $cart = $received_data->data;
+  foreach ($cart as $val) {
+
+    $cartRoomType = $val->room_acc;
+    $ad = intval($val->adults);
+    $kid = intval($val->kids);
+    $teen = intval($val->teens);
+    $location = $val->room_location;
+
+
+    $query_type = "SELECT * FROM room_type WHERE type_name = '$cartRoomType'";
+    $result_type = mysqli_query($connection, $query_type);
+    confirm($result_type);
+
+
+    while ($row_type = mysqli_fetch_assoc($result_type)) {
+
+      // double occupancy rate
+      $type_location = $row_type['type_location'];
+
+
+
+      $dbRack    = doubleval($row_type['d_rack_rate']);
+      $dbWeekend = doubleval($row_type['d_weekend_rate']);
+      $dbWeekdays = doubleval($row_type['d_weekday_rate']);
+      $dbMember  = doubleval($row_type['d_member_rate']);
+
+      // Single occupancy rate
+      $sRack     = doubleval($row_type['s_rack_rate']);
+      $sWeekend  = doubleval($row_type['s_weekend_rate']);
+      $sWeekdays = doubleval($row_type['s_weekday_rate']);
+      $sMember  = doubleval($row_type['s_member_rate']);
+    }
+
+
+    if ($location == 'Bishoftu') {
+
+      foreach ($days as $day) {
+        if ($cartRoomType == "Loft Family Room") {
+          $price += calculateLoft($kid, $teen, $dbRack, $dbMember, $promo);
+        } else {
+          switch ($day) {
+            case 'Friday':
+              $price += calculatePrice($ad, $kid, $teen, $sWeekend, $dbWeekend, $dbMember, $sMember, $promo);
+              break;
+            case 'Saturday':
+              $price += calculatePrice($ad, $kid, $teen,  $sRack, $dbRack, $dbMember, $sMember, $promo);
+              break;
+            default:
+              // $price += doubleval($row_type['d_weekday_rate']);
+              $price += calculatePrice($ad, $kid, $teen, $sWeekdays, $dbWeekdays, $dbMember, $sMember, $promo);
+              break;
+          }
+        }
+      }
+    } else if ($location == 'Awash') {
+      foreach ($days as $day) {
+        switch ($day) {
+          case 'Friday':
+            $price += calculatePrice($ad, $kid, $teen, $sRack, $dbRack, $dbMember, $sMember,  $promo);
+            break;
+          case 'Saturday':
+            $price += calculatePrice($ad, $kid, $teen,  $sRack, $dbRack, $dbMember, $sMember, $promo);
+            break;
+          default:
+            $price += calculatePrice($ad, $kid, $teen, $sWeekdays, $dbWeekdays, $dbMember, $sMember, $promo);
+            break;
+        }
+      }
+    }
+
+    array_push($arrayTemp, $price);
+    $price = 0.00;
+  }
+
+  echo json_encode($arrayTemp);
 }
 
 ?>

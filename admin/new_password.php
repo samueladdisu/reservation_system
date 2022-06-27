@@ -59,10 +59,6 @@
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" name="login">
 
                                     </form>
-                                    <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="forgot-password.php">Forgot Password?</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -74,51 +70,6 @@
         </div>
 
     </div>
-
-    
-<?php 
-
-if(isset($_POST['login'])){
-  $user_email =  escape($_POST['user_email']);
-  $user_password = escape($_POST['user_password']);
-
-  $query = "SELECT * FROM users WHERE user_email = '$user_email' ";
-  $select_user = mysqli_query($connection, $query);
-
-  confirm($select_user);
-
-  $row = mysqli_num_rows($select_user);
-
-  if(!empty($row)){
-    while($data = mysqli_fetch_assoc($select_user)){
-      if(password_verify($user_password,$data['user_pwd'])){
-        $_SESSION['username'] = $data['user_name'];
-        $_SESSION['firstname'] = $data['user_firstName'];
-        $_SESSION['lastname'] = $data['user_lastName'];
-        $_SESSION['user_role'] = $data['user_role'];
-        $_SESSION['user_location'] = $data['user_location'];
-        
-        header("Location: ./dashboard.php");
-        
-      }else{
-        echo "<script> alert('Incorrect password') </script>";
-      }
-    }
-  }else{
-    echo "<script> alert('Incorrect Email or password') </script>";
-  }
-
-  
-
-}
-
-
-
-
-
-
-?>
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

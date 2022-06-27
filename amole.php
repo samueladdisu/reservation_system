@@ -88,8 +88,8 @@
       <?php
 
       $cart = $_SESSION['cart'];
-      // $total_price = $_SESSION['total'];
-      $total_price = 30;
+      $total_price = $_SESSION['total'];
+
       $quantity = 1;
       $item_name = 1;
       $item_number = 1;

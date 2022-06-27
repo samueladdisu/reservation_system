@@ -6,6 +6,13 @@
 $received_data = json_decode(file_get_contents("php://input"));
 date_default_timezone_set('Africa/Addis_Ababa');
 
+$single_app_id = "1421840";
+$single_key = "399f6a3873a4061d829f";
+$single_secret = "62285e574e06cd7b99d3";
+$single_cluster = "mt1";
+
+$pusher = new Pusher\Pusher($single_key, $single_secret, $single_app_id, ['cluster' => $single_cluster]);
+
 $location = $_SESSION['user_location'];
 $role = $_SESSION['user_role'];
 $filterd_data = array();
@@ -456,6 +463,9 @@ if ($received_data->action == 'addReservation') {
 
   $result = mysqli_query($connection, $query);
   confirm($result);
+
+  $data = true;
+  $pusher->trigger('back_notifications', 'backend_reservation', $data);
 }
 
 if ($received_data->action == 'promoCode') {

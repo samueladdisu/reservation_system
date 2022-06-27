@@ -6,6 +6,14 @@
 $received_data = json_decode(file_get_contents("php://input"));
 date_default_timezone_set('Africa/Addis_Ababa');
 
+
+$group_app_id = "1421841";
+$group_key = "afcb8aece0584791ae17";
+$group_secret = "2171b0be1c6afd14ceec";
+$group_cluster = "mt1";
+
+$pusher = new Pusher\Pusher($group_key, $group_secret, $group_app_id, ['cluster' => $group_cluster]);
+
 $location = $_SESSION['user_location'];
 $role = $_SESSION['user_role'];
 $filterd_data = array();
@@ -143,6 +151,10 @@ if ($received_data->action == "addSingleRes") {
 
   $update_result = mysqli_query($connection, $update_query);
   confirm($update_result);
+
+  $data = true;
+
+  $pusher->trigger('group_notifications', 'group_reservation', $data);
 }
 
 if ($received_data->action == 'delete') {
@@ -468,4 +480,8 @@ if ($received_data->action === 'add') {
 
   $result = mysqli_query($connection, $query);
   confirm($result);
+
+  $data = true;
+
+  $pusher->trigger('group_notifications', 'group_reservation', $data);
 }

@@ -411,15 +411,48 @@
       },
       created() {
         this.fetchData()
-        Pusher.logToConsole = false;
+        Pusher.logToConsole = true;
 
-        const pusher = new Pusher('341b77d990ca9f10d6d9', {
+        // Front end reservation notification channel from pusher
+
+        const pusher = new Pusher('d178c59a7edb1db43e11', {
           cluster: 'mt1',
           encrypted: true
         });
 
-        const channel = pusher.subscribe('notifications');
-        channel.bind('new_reservation', (data) => {
+        const channel = pusher.subscribe('front_notifications');
+        channel.bind('front_reservation', (data) => {
+          if (data) {
+            this.fetchData()
+          }
+        })
+
+        // Back end reservation notification channel from pusher
+
+        const back_pusher = new Pusher('399f6a3873a4061d829f', {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+        const back_channel = back_pusher.subscribe('back_notifications');
+
+        back_channel.bind('backend_reservation', (data) => {
+          if (data) {
+            this.fetchData()
+          }
+        })
+
+        // Group reservation notification channel from pusher
+
+        const group_pusher = new Pusher('afcb8aece0584791ae17', {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+
+        const group_channel = group_pusher.subscribe('group_notifications')
+
+        group_channel.bind('group_reservation', data => {
           if (data) {
             this.fetchData()
           }

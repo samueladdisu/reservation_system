@@ -1,3 +1,4 @@
+<?php $currentPage = "Rooms"; ?>
 <?php include './includes/admin_header.php'; ?>
 
 <body id="page-top">

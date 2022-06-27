@@ -59,7 +59,7 @@ function calculatePrice($ad, $kid, $teen, $single, $double, $dMember, $sMemeber,
       }
     }
   } else if ($promo == "") {
-    echo json_encode("None");
+    // echo json_encode("None");
     if ($ad == 1) {
       if ($kid == 0 && $teen == 0) {
         // Single occupancy

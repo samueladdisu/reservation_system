@@ -1,3 +1,4 @@
+<?php $currentPage = "Users"; ?>
 <?php include './includes/admin_header.php'; ?>
 
 

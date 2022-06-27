@@ -17,21 +17,23 @@
 
     if(!empty($row)){
       while($data = mysqli_fetch_assoc($select_user)){
-        // echo $user_password . "=";
-        // echo $data['user_pwd'];
         if(password_verify($user_password,$data['user_pwd'])){
           $_SESSION['username'] = $data['user_name'];
           $_SESSION['firstname'] = $data['user_firstName'];
           $_SESSION['lastname'] = $data['user_lastName'];
           $_SESSION['user_role'] = $data['user_role'];
           $_SESSION['user_location'] = $data['user_location'];
+          
           header("Location: ../dashboard.php");
+          
         }else{
+          echo "<script> alert('Incorrect password') </script>";
           header("Location: ../index.php");
         }
       }
     }else{
-      echo "not";
+      echo "<script> alert('Incorrect Email or password') </script>";
+      header("Location: ../dashboard.php");
     }
 
     

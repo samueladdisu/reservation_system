@@ -5,7 +5,6 @@
 
 
 $recieved = json_decode(file_get_contents("php://input"));
-
 date_default_timezone_set("Africa/Addis_Ababa");
 
 
@@ -149,18 +148,18 @@ if ($recieved->action == 'recover') {
 
   if (mysqli_num_rows($result) == 1) {
     if (!isset($_COOKIE['_unp_'])) {
-  
+
       $token =  getToken(32);
       $encode_token = base64_encode(urlencode($token));
       $expire_date = date("Y-m-d H:i:s", time() + 60 * 20);
       $expire_date = base64_encode(urlencode($expire_date));
       $email = base64_encode(urlencode($recover_email));
-  
+
       // RECIPIENT 
       $mail->addAddress($recover_email);
-  
+
       $query = "UPDATE members SET m_validationKey = '$token' WHERE m_email = '$recover_email' AND is_active = 1";
-  
+
       $query_con = mysqli_query($connection, $query);
       confirm($query_con);
       $mail->Subject = "Password reset request";
