@@ -309,8 +309,17 @@
               Rooms: <?php echo $_SESSION['rooms']; ?>
 
             </div>
-            <p class="text-muted" id="Timer">
+            <p class="text-muted" id="Timer" v-if="min > 10 && sec > 10 ">
               {{ min }}: {{sec}}min
+            </p>
+            <p class="text-muted" id="Timer" v-else-if="min > 10 && sec < 10 ">
+              {{ min }}: 0{{sec}}min
+            </p>
+            <p class="text-muted" id="Timer" v-else-if="min < 10 && sec > 10 ">
+              0{{ min }}: {{sec}}min
+            </p>
+            <p class="text-muted" id="Timer" v-else-if="min < 10 && sec < 10 ">
+              0{{ min }}: 0{{sec}}min
             </p>
           </div>
 
@@ -347,39 +356,6 @@
   <!-- <script src="./js/reserve.js">var color = "";</script> -->
 
 
-  <!-- <script>
-    let currSeconds, timer = 30;
-
-    function resetTimer() {
-      /* Clear the previous interval */
-      clearInterval(this.timer);
-      /* Reset the seconds of the timer */
-      this.currSeconds = 30;
-      /* Set a new interval */
-      this.timer =
-        setInterval(this.startIdleTimer, 3000);
-    }
-
-    function startIdleTimer() {
-
-      this.currSeconds--;
-      let Timershow = document.getElementById("Timer")
-      Timershow.innerHTML = "" + this.currSeconds + "Min";
-      if (this.currSeconds == 0) {
-        // alert("are you still there?")
-        $('#TimesUP').modal('show')
-      }
-
-
-    }
-
-    window.onload = resetTimer;
-    window.onmousemove = resetTimer;
-    window.onmousedown = resetTimer;
-    window.ontouchstart = resetTimer;
-    window.onclick = resetTimer;
-    window.onkeypress = resetTimer;
-  </script> -->
 
   <script>
     const register = Vue.createApp({
@@ -503,20 +479,22 @@
           localStorage.clear();
         },
         startIdleTimer() {
-          this.sec--;
-          console.log(this.sec);
-          if (this.sec == 0) {
-            this.min--;
-            if (this.min !== "00") {
-              this.sec = 10;
-            } else if (this.sec == 0 && this.min == 0) {
-              $("#TimesUP").modal("show");
-            }else{
-              $("#TimesUP").modal("show");
 
+
+
+          if (this.sec >= 6) {
+            this.sec--;
+          } else if (this.sec == 0) {
+            if (this.min > 0) {
+              this.min--;
+            } else if (this.min == 0) {
+              this.clearOrder();
             }
-
-
+          } else if (this.sec == 5) {
+            this.sec--;
+            $("#TimesUP").modal("show");
+          } else if (this.sec <= 4) {
+            this.sec--;
           }
         },
         resetTimer() {
@@ -525,7 +503,7 @@
 
           /* Reset the seconds of the timer */
           this.sec = '10';
-          this.min = '00';
+          this.min = '0';
 
 
           /* Set a new interval */
