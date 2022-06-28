@@ -1,0 +1,494 @@
+.welcome {
+  .welcome-wrapper {
+    background: #c2874a;
+    margin-top: 5rem;
+    padding: 2rem;
+    // display: grid;
+    // place-items: center;
+
+    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.06);
+    z-index: 99999;
+    .container {
+      .item-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .member-title {
+          h3 {
+            color: #f1f1ea;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+          }
+          p {
+            margin-top: 1rem;
+            color: #f1f1ea;
+            // color: ;
+            margin-top: 4rem;
+            font-size: 0.8rem;
+          }
+        }
+        .icon {
+          margin-top: 8rem;
+          margin-right: -1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+
+          .bell {
+            img {
+              width: 5rem;
+            }
+          }
+          .circle {
+            background: #808080;
+            padding: 0.5rem;
+            border-radius: 25rem;
+
+            p {
+              color: #f1f1ea;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@include responsive($md) {
+  .welcome {
+    .welcome-wrapper {
+      .container {
+        .item-wrapper {
+          .member-title {
+            h3 {
+              font-size: 2rem;
+            }
+            p {
+              margin-top: 3rem;
+            }
+          }
+          .icon {
+            margin-top: 6rem;
+            .bell {
+              width: 1.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@include responsive($xl) {
+  .welcome {
+    .welcome-wrapper {
+      .container {
+        .item-wrapper {
+          .member-title {
+            h3 {
+              width: 40rem;
+              font-size: 2.5rem;
+            }
+            p {
+              margin-top: 1rem;
+              font-size: 1rem;
+            }
+          }
+          .icon {
+            margin-top: 2rem;
+            gap: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+.activities {
+  margin-top: 2rem;
+  .container {
+    .wrapper {
+      .activ-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        .main-title {
+          h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+          }
+        }
+        .min-title {
+          p {
+            color: #a82f2f;
+            text-transform: uppercase;
+            text-align: right;
+            font-size: 1rem;
+            font-weight: 600;
+          }
+          .star {
+            width: 8rem;
+          }
+        }
+      }
+      .activity-list {
+        position: relative;
+        .destination {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-top: 3rem;
+          .de-title,
+          .room-detail,
+          .duration,
+          .payment {
+            margin-top: 1rem;
+            h4 {
+              text-align: center;
+              font-weight: 600;
+              font-size: 1.13rem;
+            }
+            hr {
+              margin-top: -0.8rem;
+              width: 8rem;
+              border-style: solid;
+              opacity: 0.025;
+            }
+            display: grid;
+            align-items: center;
+            gap: 1rem;
+          }
+          .de-title,
+          .room-detail {
+            p {
+              text-align: center;
+              color: #45b75c;
+            }
+          }
+          .duration {
+            p {
+              font-size: 0.8rem;
+              text-align: center;
+              color: #18c6e0;
+            }
+          }
+          .payment {
+            p {
+              text-align: center;
+              color: #a82f2f;
+            }
+          }
+        }
+        .see-more {
+          position: absolute;
+          right: 0;
+          display: flex;
+          gap: 1rem;
+          margin-top: 2rem;
+          p {
+            text-transform: uppercase;
+            font-size: 1rem;
+            font-weight: 600;
+          }
+          .see {
+            width: 1rem;
+          }
+        }
+      }
+    }
+    .offer-wrapper {
+      .offer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 7rem;
+        .offer-title {
+          h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+          }
+        }
+        .offermin-title {
+          display: grid;
+          gap: 0.3rem;
+
+          .min-offer {
+            color: #a82f2f;
+            text-transform: uppercase;
+            text-align: right;
+            font-size: 1rem;
+            font-weight: 600;
+          }
+          .min-txt {
+            font-size: 0.8rem;
+            text-transform: lowercase;
+            color: #808080;
+          }
+        }
+      }
+    }
+    .offer-box {
+      margin-top: 2rem;
+      position: relative;
+      .offer-img {
+      }
+      .offer-table {
+        background: #fafaf9;
+        padding: 1rem;
+        height: 20rem;
+
+        .offer-room {
+          h3 {
+            font-size: 1.13rem;
+            color: #c2874a;
+            font-weight: 500;
+          }
+          .min-t {
+            font-size: 0.8rem;
+            text-transform: lowercase;
+            color: #808080;
+          }
+          .offer-amin {
+            margin-top: 2rem;
+            .single-amin {
+              margin-top: 0.5rem;
+              display: flex;
+              gap: 1rem;
+              p {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+        .btn6 {
+          position: absolute;
+          right: 1rem;
+        }
+      }
+    }
+  }
+}
+@include responsive($md) {
+  .activities {
+    .container {
+      .wrapper {
+        .activ-title {
+        }
+        .activity-list {
+          .destination {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            .duration {
+              p {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@include responsive($lg) {
+  .activities {
+    .container {
+      display: flex;
+      gap: 2rem;
+      .wrapper {
+        width: 75%;
+        .activity-list {
+          .destination {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            margin-top: 3rem;
+            .duration,
+            .room-detail,
+            .de-title,
+            .payment {
+              p {
+                font-size: 0.82rem;
+              }
+            }
+          }
+        }
+      }
+      .offer-wrapper {
+        .offer {
+          margin-top: 0rem;
+        }
+      }
+    }
+  }
+}
+@include responsive($xl) {
+  .activities {
+    margin-top: 6rem;
+    .container {
+      gap: 3.5rem;
+      .wrapper {
+        .activity-list {
+          .destination {
+            .duration,
+            .room-detail,
+            .de-title,
+            .payment {
+              p {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+      .offer-wrapper {
+        width: 30%;
+      }
+    }
+  }
+}
+.middle-image {
+  margin-top: 4rem;
+  background:url("../img/kuriftu\ entoto\ edit-5908-min.jpg")rgba(128, 128, 128, 0.2);
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  height: 45vh;
+  object-fit: cover;
+  position: relative;
+
+  .container {
+    .green-destination-card {
+      position: absolute;
+      bottom: -10rem;
+      background: #45b75c;
+      padding: 1rem;
+      width: 20rem;
+
+      box-shadow: 0px 4px 30px rgba(34, 171, 79, 0.33);
+
+      .long-line {
+        border-style: solid;
+        width: 10rem;
+        opacity: 1;
+        color: #f1f1ea;
+      }
+      .short-line {
+        border-style: solid;
+        width: 5rem;
+        opacity: 1;
+        color: #f1f1ea;
+        margin-top: 2rem;
+        margin-left: 12rem;
+      }
+      h3 {
+        margin-top: 2rem;
+        font-size: 1.13rem;
+        color: #f1f1ea;
+      }
+      ul {
+        margin-top: 1rem;
+        margin-left: 0.5rem;
+        li {
+          list-style: inside;
+          margin-top: 0.5rem;
+          color: #f1f1ea;
+          a {
+            color: #f1f1ea;
+          }
+        }
+      }
+    }
+  }
+}
+@include responsive($md) {
+  .middle-image {
+    height: 17vh;
+  }
+}
+@include responsive($lg) {
+  .middle-image {
+    margin-top: 8rem;
+    .container {
+      .green-destination-card {
+        right: 5rem;
+        top: -3rem;
+        bottom: -3rem;
+      }
+    }
+  }
+}
+@include responsive($xl) {
+  .middle-image {
+    height: 23vh;
+    margin-top: 12rem;
+    .container {
+      .green-destination-card {
+        right: 7rem;
+        top: -2rem;
+        bottom: -2rem;
+      }
+    }
+  }
+}
+.list-amin {
+  margin-top: 13rem;
+
+  .container {
+    .list-wrapper {
+      .single-list {
+        display: grid;
+        place-items: center;
+        align-items: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        img {
+          width: 4rem;
+        }
+        p {
+          margin-top: 1rem;
+
+          color: #c2874a;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+@include responsive($md) {
+  .list-amin {
+    margin-top: 8rem;
+
+    .container {
+      .list-wrapper {
+        display: flex;
+        gap: 1rem;
+       
+      }
+    }
+  }
+}
+@include responsive($lg) {
+  .list-amin {
+
+    .container {
+      .list-wrapper {
+        display: flex;
+        gap: 5rem;
+      
+      }
+    }
+  }
+}
+@include responsive($xl) {
+  .list-amin {
+  margin-top: 10rem;
+  }
+}
+.bottom-image{
+  margin-top: 4rem;
+  background:url("../img/waterparkbackground.jpg")rgba(128, 128, 128, 0.2);
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  height: 20vh;
+  object-fit: cover;
+  position: relative;  
+}

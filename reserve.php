@@ -279,24 +279,24 @@
           </div>
 
           <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Kuriftu</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Kuriftu</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>are you still there.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="TimerExtend()">Yes</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="modal-body">
-            <p>are you still there.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="TimerExtend()">Yes</button>
-          </div>
-        </div>
-      </div>
-    </div>
           <!-- <div class="add-guest">
             <div class="icon">
               <img src="./img/guests.svg" alt="">
@@ -556,166 +556,7 @@
     </div>
   </div>
 
-  <div class="pop-up">
-    <div class="container">
-      <div class="close-button">
-        <img class="close-img" src="./img/close2.svg" alt="">
-      </div>
-      <div class="pop-wrapper">
-        <div class="pop-title">
-          <p>Deluxe Lake Front Double King Size Bed</p>
-        </div>
-        <div class="room-all">
-          <div class="room-img">
-            <img class="single-room" src="./admin/room_img/Top lake view King (4)-min.jpg" alt="">
-            <!-- <div class="diff-images">
-              <img src="./admin/room_img/Top lake view King (9)-min.jpg" alt="">
-              <img src="./admin/room_img/Top lake view King (4)-min.jpg" alt="">
-              <img src="./admin/room_img/Top lake view King (9)-min.jpg" alt="">
-            </div> -->
-          </div>
-          <div class="room-desc">
-            <div class="amenties">
-              <h3>Executive Room with Lounge Access</h3>
-              <div class="amenities-icon">
-                <div class="icon-wrapper">
-                  <img src="./img/wifi2.svg" alt="">
-                  <p>wifi</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/tv.svg" alt="">
-                  <p>television</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/bath.svg" alt="">
-                  <p>bath</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/room_service.svg" alt="">
-                  <p>service</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/bell.svg" alt="">
-                  <p>Lobby</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/laudary.svg" alt="">
-                  <p>laudary</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/location2.svg" alt="">
-                  <p>location</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/parking.svg" alt="">
-                  <p>parking</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/swim.svg" alt="">
-                  <p>swimming</p>
-                </div>
 
-                <div class="icon-wrapper">
-                  <img src="./img/telephone.svg" alt="">
-                  <p>telephone</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/service.svg" alt="">
-                  <p>room</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/view2.svg" alt="">
-                  <p>view</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/voice.svg" alt="">
-                  <p>soundproof</p>
-                </div>
-
-              </div>
-              <div class="room-detail">
-                <h3>Room Details</h3>
-                <p>Room Size 30 m²<br><br>
-                  Comfy beds, 8 – Based on 14 reviews <br><br>
-                  This double room features air conditioning, TV, high speed wireless internet, mini-bar and electric kettle.
-                  This room also includes access to the Business lounge, complimentary bottled water, private bathroom and bathtub.</p>
-              </div>
-              <div class="view-detail">
-                <h3>View</h3>
-                <div class="view-all">
-                  <img class="check" src="./img/check.svg" alt="">
-                  <p>Lake View</p>
-                </div>
-
-              </div>
-              <div class="room-faci">
-
-                <h3>Room Facilities</h3>
-                <div class="all-facilities">
-
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Floors accessible</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Linens</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Refrigerator</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Walk-in closet</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Tea/Coffee maker</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Air conditioning</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Flat-screen TV</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Socket near the bed</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Soundproof</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Satellite channels</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Telephone</p>
-                  </div>
-                  <div class="single-facility">
-                    <img class="check" src="./img/check.svg" alt="">
-                    <p>Electric kettle</p>
-                  </div>
-                </div>
-                <div class="other-services">
-                  <h3>Parking</h3>
-                  <p>Free public parking is possible on site</p>
-                </div>
-
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <?php include_once './includes/footer.php' ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -808,12 +649,12 @@
           this.takeOneEach(this.allData)
 
         },
-        
+
         TimerExtend() {
           $("#TimesUP").modal("hide");
           this.resetTimer;
         },
-         clearOrder() {
+        clearOrder() {
 
 
           this.cart.forEach(eachID => {
@@ -1022,114 +863,114 @@
           row = this.roww
 
           axios.post('book.php', {
-              action: 'hold',
-              roomID: this.roww.room_id,
-              
-            }).then((res) => {
-              console.log(res.data);
-            
+            action: 'hold',
+            roomID: this.roww.room_id,
 
-           
-
-           
-
-          if (user) {
-
-            if (row.cnt > 0) {
-
-              this.row.adults = this.res_guest[0],
-                this.row.teens = this.res_guest[1],
-                this.row.kids = this.res_guest[2],
-
-                this.cart.push(row)
-              this.cart.forEach(val => {
-                total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+          }).then((res) => {
+            console.log(res.data);
 
 
-              })
-              this.totalprice = total
-              localStorage.total = JSON.stringify(this.totalprice)
-              localStorage.cart = JSON.stringify(this.cart)
 
-              row.cnt--
-            }
-          } else {
 
-            if (row.cnt > 0) {
 
-              let guests = {
-                checkin: start,
-                checkout: end,
-                adults: this.res_guest[0],
-                teens: this.res_guest[1],
-                kids: this.res_guest[2],
-              }
-              // console.log("row size:" + Object.keys(row).length);
 
-              let PutTogeter = Object.assign(row, guests)
-              this.cart.push(PutTogeter);
-              let temparray = [];
+            if (user) {
 
-              axios.post('book.php', {
-                action: 'calculatePrice',
-                checkIn: start,
-                checkOut: end,
-                data: this.cart
-              }).then((res) => {
-                console.log(res.data);
-                this.PriceArray = res.data;
-              }).then((res) => {
-                this.PriceArray.forEach(val => {
-                  total += val;
+              if (row.cnt > 0) {
+
+                this.row.adults = this.res_guest[0],
+                  this.row.teens = this.res_guest[1],
+                  this.row.kids = this.res_guest[2],
+
+                  this.cart.push(row)
+                this.cart.forEach(val => {
+                  total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+
 
                 })
-
-
-                this.totalprice = total.toFixed(2);
+                this.totalprice = total
                 localStorage.total = JSON.stringify(this.totalprice)
                 localStorage.cart = JSON.stringify(this.cart)
-                localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+
                 row.cnt--
+              }
+            } else {
 
-                this.popOutSelected(row)
+              if (row.cnt > 0) {
+
+                let guests = {
+                  checkin: start,
+                  checkout: end,
+                  adults: this.res_guest[0],
+                  teens: this.res_guest[1],
+                  kids: this.res_guest[2],
+                }
+                // console.log("row size:" + Object.keys(row).length);
+
+                let PutTogeter = Object.assign(row, guests)
+                this.cart.push(PutTogeter);
+                let temparray = [];
+
+                axios.post('book.php', {
+                  action: 'calculatePrice',
+                  checkIn: start,
+                  checkOut: end,
+                  data: this.cart
+                }).then((res) => {
+                  console.log(res.data);
+                  this.PriceArray = res.data;
+                }).then((res) => {
+                  this.PriceArray.forEach(val => {
+                    total += val;
+
+                  })
 
 
-              })
-              // this.cart.forEach((val) => {
-              //   // console.log(val);
-              //   total += parseInt(val.room_price) * this.nights;
+                  this.totalprice = total.toFixed(2);
+                  localStorage.total = JSON.stringify(this.totalprice)
+                  localStorage.cart = JSON.stringify(this.cart)
+                  localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                  row.cnt--
+
+                  this.popOutSelected(row)
+
+
+                })
+                // this.cart.forEach((val) => {
+                //   // console.log(val);
+                //   total += parseInt(val.room_price) * this.nights;
 
 
 
 
-              // })
-              // console.log(this.PriceArray);
-              // this.totalprice = total;
-              // var sum = 0.00;
-              // for (let i = 0; i < temparray.length; i++) {
-              //   sum += temparray[i];
-              //   console.log("hello")
-              // }
+                // })
+                // console.log(this.PriceArray);
+                // this.totalprice = total;
+                // var sum = 0.00;
+                // for (let i = 0; i < temparray.length; i++) {
+                //   sum += temparray[i];
+                //   console.log("hello")
+                // }
 
-              // temparray.forEach(val => {
-              //  this.totalprice += val;
-              // console.log(val);
-              // total += val.Iprice;
-              // this.totalprice += val.Iprice;
-              // })
-              // console.log(sum);
-              // this.totalprice = total
-              // console.log(total);
+                // temparray.forEach(val => {
+                //  this.totalprice += val;
+                // console.log(val);
+                // total += val.Iprice;
+                // this.totalprice += val.Iprice;
+                // })
+                // console.log(sum);
+                // this.totalprice = total
+                // console.log(total);
 
+              }
             }
-          }
 
-          }).then (res => {
-             window.onmousemove = this.resetTimer;
-        window.onmousedown = this.resetTimer;
-        window.ontouchstart = this.resetTimer;
-        window.onclick = this.resetTimer;
-        window.onkeypress = this.resetTimer;
+          }).then(res => {
+            window.onmousemove = this.resetTimer;
+            window.onmousedown = this.resetTimer;
+            window.ontouchstart = this.resetTimer;
+            window.onclick = this.resetTimer;
+            window.onkeypress = this.resetTimer;
           })
           guests = {}
           this.res_adults = "0"
@@ -1150,71 +991,71 @@
           let deleteTotal = 0;
 
           axios.post('book.php', {
-              action: 'clearHold',
-              roomID: row.room_id,
-              
-            }).then((res) => {
-              console.log(res.data);
-            
+            action: 'clearHold',
+            roomID: row.room_id,
 
-          if (user) {
-            let cartIndex = this.cart.indexOf(row)
-            this.cart.splice(cartIndex, 1)
-            this.cart.forEach(val => {
-              deleteTotal += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
-
-            })
+          }).then((res) => {
+            console.log(res.data);
 
 
-            this.totalprice = deleteTotal
-            localStorage.cart = JSON.stringify(this.cart)
+            if (user) {
+              let cartIndex = this.cart.indexOf(row)
+              this.cart.splice(cartIndex, 1)
+              this.cart.forEach(val => {
+                deleteTotal += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+
+              })
 
 
-            row.cnt++
-          } else {
-            let found = false;
-            let cartIndex = this.cart.indexOf(row)
-            this.cart.splice(cartIndex, 1)
-            PriceCon.splice(cartIndex, 1)
-            PriceCon.forEach(val => {
-              deleteTotal += val;
+              this.totalprice = deleteTotal
+              localStorage.cart = JSON.stringify(this.cart)
 
-            })
 
-            this.allData.forEach(item => {
-              for (let key2 in item) {
-                console.log(key2)
-                if (item[0].room_acc == row.room_acc) {
-                  found = true;
-                  console.log(item[0])
-                  row.cnt--
-                  item.push(row)
-                  break;
+              row.cnt++
+            } else {
+              let found = false;
+              let cartIndex = this.cart.indexOf(row)
+              this.cart.splice(cartIndex, 1)
+              PriceCon.splice(cartIndex, 1)
+              PriceCon.forEach(val => {
+                deleteTotal += val;
+
+              })
+
+              this.allData.forEach(item => {
+                for (let key2 in item) {
+                  console.log(key2)
+                  if (item[0].room_acc == row.room_acc) {
+                    found = true;
+                    console.log(item[0])
+                    row.cnt--
+                    item.push(row)
+                    break;
+
+                  }
 
                 }
 
+              })
+              if (found == false) {
+                let TempoArray = []
+                row.cnt--
+                TempoArray.push(row)
+                this.allData[this.allData.length++] = TempoArray
               }
+              this.takeOneEach(this.allData)
+              console.log(" Delete new Array", this.allData)
 
-            })
-            if (found == false) {
-              let TempoArray = []
-              row.cnt--
-              TempoArray.push(row)
-              this.allData[this.allData.length++] = TempoArray
+              this.totalprice = deleteTotal
+              localStorage.total = JSON.stringify(this.totalprice)
+              localStorage.cart = JSON.stringify(this.cart)
+              localStorage.setItem("priceContainer", JSON.stringify(PriceCon))
+              // row.cnt++
+
+
+
             }
-            this.takeOneEach(this.allData)
-            console.log(" Delete new Array", this.allData)
-
-            this.totalprice = deleteTotal
-            localStorage.total = JSON.stringify(this.totalprice)
-            localStorage.cart = JSON.stringify(this.cart)
-            localStorage.setItem("priceContainer", JSON.stringify(PriceCon))
-            // row.cnt++
-
-
-
-          }
-        })
+          })
         },
         fetchAllData() {
           axios.post('book.php', {
@@ -1250,33 +1091,31 @@
         },
         startIdleTimer() {
 
+          if (this.sec >= 6) {
+            this.sec--;
+          } else if (this.sec == 0) {
+            if (this.min > 0) {
+              this.min--;
+            } else if (this.min == 0) {
+              this.clearOrder();
+            }
+          } else if (this.sec == 5) {
+            this.sec--;
+            $("#TimesUP").modal("show");
+          } else if (this.sec <= 4) {
+            this.sec--;
+          }
+        },
+        resetTimer() {
+          /* Clear the previous interval */
+          clearInterval(this.timer);
 
-
-if (this.sec >= 6) {
-  this.sec--;
-} else if (this.sec == 0) {
-  if (this.min > 0) {
-    this.min--;
-  } else if (this.min == 0) {
-    this.clearOrder();
-  }
-} else if (this.sec == 5) {
-  this.sec--;
-  $("#TimesUP").modal("show");
-} else if (this.sec <= 4) {
-  this.sec--;
-}
-},
-resetTimer() {
-/* Clear the previous interval */
-clearInterval(this.timer);
-
-/* Reset the seconds of the timer */
-this.sec = '10';
-this.min = '0';
-/* Set a new interval */
-this.timer = setInterval(this.startIdleTimer, 1000);
-},
+          /* Reset the seconds of the timer */
+          this.sec = '10';
+          this.min = '0';
+          /* Set a new interval */
+          this.timer = setInterval(this.startIdleTimer, 1000);
+        },
 
         checkAvailablity() {
           axios.post('book.php', {
@@ -1307,6 +1146,20 @@ this.timer = setInterval(this.startIdleTimer, 1000);
             alert('Please fill all fields')
           }
         },
+        checkLocalStorage() {
+
+
+          if (localStorage.cart) {
+            window.onload = this.resetTimer;
+            window.onmousemove = this.resetTimer;
+            window.onmousedown = this.resetTimer;
+            window.ontouchstart = this.resetTimer;
+            window.onclick = this.resetTimer;
+            window.onkeypress = this.resetTimer;
+
+          }
+
+        }
         // amenities(am) {
 
         //   let amt = JSON.parse(JSON.parse(am))
@@ -1333,13 +1186,9 @@ this.timer = setInterval(this.startIdleTimer, 1000);
         this.fetchAllData()
         this.cart = JSON.parse(localStorage.cart || '[]')
         this.totalprice = JSON.parse(localStorage.total || '[]')
+        this.checkLocalStorage()
 
-        if(localStorage.cart){
-        // window.onload = this.resetTimer;
-        // console.log("here")
-       
-        }
-        
+
 
 
         Pusher.logToConsole = true;
