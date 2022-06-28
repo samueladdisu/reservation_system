@@ -277,6 +277,26 @@
 
 
           </div>
+
+          <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Kuriftu</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>are you still there.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="TimerExtend()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
           <!-- <div class="add-guest">
             <div class="icon">
               <img src="./img/guests.svg" alt="">
@@ -788,6 +808,33 @@
           this.takeOneEach(this.allData)
 
         },
+        
+        TimerExtend() {
+          $("#TimesUP").modal("hide");
+          this.resetTimer;
+        },
+         clearOrder() {
+
+
+          this.cart.forEach(eachID => {
+            axios
+              .post("book.php", {
+                action: "ClearHold",
+                RoomId: eachID.room_id,
+
+              })
+              .then((response) => {
+
+                localStorage.clear();
+                window.location.href = "reserve.php";
+
+              });
+
+          })
+
+
+
+        },
 
         CheckGuest() {
 
@@ -955,7 +1002,7 @@
           if (start && end) {
             this.roww = row;
 
-
+            console.log(row.room_id)
             $('#guest').modal('show')
 
           } else {
@@ -974,7 +1021,17 @@
 
           row = this.roww
 
+          axios.post('book.php', {
+              action: 'hold',
+              roomID: this.roww.room_id,
+              
+            }).then((res) => {
+              console.log(res.data);
+            
 
+           
+
+           
 
           if (user) {
 
@@ -1067,8 +1124,13 @@
             }
           }
 
-
-
+          }).then (res => {
+             window.onmousemove = this.resetTimer;
+        window.onmousedown = this.resetTimer;
+        window.ontouchstart = this.resetTimer;
+        window.onclick = this.resetTimer;
+        window.onkeypress = this.resetTimer;
+          })
           guests = {}
           this.res_adults = "0"
           this.res_teen = "0"
@@ -1086,6 +1148,15 @@
           var retrievedData = localStorage.getItem("priceContainer");
           var PriceCon = JSON.parse(retrievedData);
           let deleteTotal = 0;
+
+          axios.post('book.php', {
+              action: 'clearHold',
+              roomID: row.room_id,
+              
+            }).then((res) => {
+              console.log(res.data);
+            
+
           if (user) {
             let cartIndex = this.cart.indexOf(row)
             this.cart.splice(cartIndex, 1)
@@ -1143,6 +1214,7 @@
 
 
           }
+        })
         },
         fetchAllData() {
           axios.post('book.php', {
@@ -1176,6 +1248,35 @@
 
 
         },
+        startIdleTimer() {
+
+
+
+if (this.sec >= 6) {
+  this.sec--;
+} else if (this.sec == 0) {
+  if (this.min > 0) {
+    this.min--;
+  } else if (this.min == 0) {
+    this.clearOrder();
+  }
+} else if (this.sec == 5) {
+  this.sec--;
+  $("#TimesUP").modal("show");
+} else if (this.sec <= 4) {
+  this.sec--;
+}
+},
+resetTimer() {
+/* Clear the previous interval */
+clearInterval(this.timer);
+
+/* Reset the seconds of the timer */
+this.sec = '10';
+this.min = '0';
+/* Set a new interval */
+this.timer = setInterval(this.startIdleTimer, 1000);
+},
 
         checkAvailablity() {
           axios.post('book.php', {
@@ -1232,6 +1333,13 @@
         this.fetchAllData()
         this.cart = JSON.parse(localStorage.cart || '[]')
         this.totalprice = JSON.parse(localStorage.total || '[]')
+
+        if(localStorage.cart){
+        // window.onload = this.resetTimer;
+        // console.log("here")
+       
+        }
+        
 
 
         Pusher.logToConsole = true;

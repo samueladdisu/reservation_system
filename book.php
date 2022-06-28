@@ -192,6 +192,27 @@ if ($received_data->action == 'insert') {
   }
 }
 
+if ($received_data->action == 'hold'){
+
+  $id = intval($received_data->roomID);
+
+  $query = "UPDATE rooms SET room_status = 'Hold' WHERE room_id = $id";
+  $result = mysqli_query($connection, $query);
+
+  echo json_encode($result);
+}
+
+if ($received_data->action == 'clearHold'){
+
+  $id = intval($received_data->roomID);
+
+  $query = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $id";
+  $result = mysqli_query($connection, $query);
+
+  echo json_encode($result);
+}
+
+
 if ($received_data->action == 'ClearHold') {
   $roomID = $received_data->RoomId;
 
