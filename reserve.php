@@ -133,7 +133,11 @@
                 </div>
               </div>
             </div>
+
+
           </div>
+
+
           <!-- <div class="add-guest">
             <div class="icon">
               <img src="./img/guests.svg" alt="">
@@ -172,7 +176,7 @@
             </div>
           </div>
           <button type="submit" class="btn btn-primary1">
-            Availability
+            Check Availability
           </button>
         </form>
       </div>
@@ -391,7 +395,52 @@
 
       </div>
     </div>
+    <div class="modal fade" id="guest">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Guests</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="" class="text-dark">Room 1:</label>
+              <div class="row">
+                <select name="adults" v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
+                  <option value="" disabled>Adults*</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
+
+                <select name="adults" @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
+                  <option value="" disabled>Teens(12-17)</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
+
+                <select name="adults" @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
+                  <option value="" disabled>kid(6-11)</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" @click="nextBook" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
 
 
   <?php include_once './includes/footer.php' ?>
@@ -927,8 +976,6 @@
         },
         startIdleTimer() {
 
-
-
           if (this.sec >= 6) {
             this.sec--;
           } else if (this.sec == 0) {
@@ -984,6 +1031,20 @@
             alert('Please fill all fields')
           }
         },
+        checkLocalStorage() {
+
+
+          if (localStorage.cart) {
+            window.onload = this.resetTimer;
+            window.onmousemove = this.resetTimer;
+            window.onmousedown = this.resetTimer;
+            window.ontouchstart = this.resetTimer;
+            window.onclick = this.resetTimer;
+            window.onkeypress = this.resetTimer;
+
+          }
+
+        }
         // amenities(am) {
 
         //   let amt = JSON.parse(JSON.parse(am))
@@ -1010,20 +1071,20 @@
         this.fetchAllData()
         this.cart = JSON.parse(localStorage.cart || '[]')
         this.totalprice = JSON.parse(localStorage.total || '[]')
+        this.checkLocalStorage()
 
-        if (localStorage.cart) {
-          // window.onload = this.resetTimer;
-          // console.log("here")
-
-        }
 
 
 
         Pusher.logToConsole = true;
 
+        let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
+        let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
+        let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
+
         // Front end reservation notification channel from pusher
 
-        const pusher = new Pusher('d178c59a7edb1db43e11', {
+        const pusher = new Pusher(fKey, {
           cluster: 'mt1',
           encrypted: true
         });
@@ -1037,7 +1098,7 @@
 
         // Back end reservation notification channel from pusher
 
-        const back_pusher = new Pusher('399f6a3873a4061d829f', {
+        const back_pusher = new Pusher(bKey, {
           cluster: 'mt1',
           encrypted: true
         });
@@ -1052,7 +1113,7 @@
 
         // Group reservation notification channel from pusher
 
-        const group_pusher = new Pusher('afcb8aece0584791ae17', {
+        const group_pusher = new Pusher(gKey, {
           cluster: 'mt1',
           encrypted: true
         });

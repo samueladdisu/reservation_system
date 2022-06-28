@@ -2963,79 +2963,6 @@ body {
   }
 }
 
-.kuriftu-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.53);
-  display: grid;
-  place-items: center;
-  z-index: 999999;
-}
-
-.kuriftu-modal .close-circle, .kuriftu-modal .success-circle {
-  position: relative;
-  top: -3.44rem;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  width: 4.69rem;
-  height: 4.69rem;
-  display: grid;
-  place-items: center;
-}
-
-.kuriftu-modal .close-circle {
-  background: #a82f2f;
-}
-
-.kuriftu-modal .success-circle {
-  background: #45b75c;
-}
-
-.kuriftu-modal .kuriftu-modal-content {
-  background: #fff;
-  max-width: 24.44rem;
-  width: 18.94rem;
-  height: 16.31rem;
-  max-height: 20.69rem;
-  box-shadow: 2px 2px 15px -2px rgba(0, 0, 0, 0.15);
-  border-radius: 0.44rem;
-}
-
-.kuriftu-modal .kuriftu-modal-content .kmodal-body {
-  text-align: center;
-}
-
-.kuriftu-modal .kuriftu-modal-content .kmodal-body .k-modalHeader {
-  font-family: 'HelveticaNeue';
-  font-weight: bold;
-  font-size: 2.25rem;
-  line-height: 2.69rem;
-  margin-top: -1.5rem;
-}
-
-.kuriftu-modal .kuriftu-modal-content .kmodal-body .k-modalBody {
-  color: #636363;
-  margin: 1.75rem auto 0;
-  width: 15.31rem;
-}
-
-.kuriftu-modal .kuriftu-modal-content .kmodal-body .k-modalBody .ver {
-  color: #6945a8;
-  text-decoration: underline;
-}
-
-.kuriftu-modal .kuriftu-modal-content .kmodal-body .k-modalBody .ver:hover {
-  text-decoration: none;
-}
-
-.kuriftu-modal .kuriftu-modal-content .kmodal-body button {
-  margin-top: 1.75rem;
-}
-
 .main-body .caps {
   color: #a82f2f;
   margin-top: 5.19rem;
@@ -3272,6 +3199,456 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
   }
+}
+
+.welcome .welcome-wrapper {
+  background: #c2874a;
+  margin-top: 5rem;
+  padding: 2rem;
+  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.06);
+  z-index: 99999;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper .member-title h3 {
+  color: #f1f1ea;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper .member-title p {
+  margin-top: 1rem;
+  color: #f1f1ea;
+  margin-top: 4rem;
+  font-size: 0.8rem;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper .icon {
+  margin-top: 8rem;
+  margin-right: -1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper .icon .bell img {
+  width: 5rem;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper .icon .circle {
+  background: #808080;
+  padding: 0.5rem;
+  border-radius: 25rem;
+}
+
+.welcome .welcome-wrapper .container .item-wrapper .icon .circle p {
+  color: #f1f1ea;
+}
+
+@media screen and (min-width: 768px) {
+  .welcome .welcome-wrapper .container .item-wrapper .member-title h3 {
+    font-size: 2rem;
+  }
+  .welcome .welcome-wrapper .container .item-wrapper .member-title p {
+    margin-top: 3rem;
+  }
+  .welcome .welcome-wrapper .container .item-wrapper .icon {
+    margin-top: 6rem;
+  }
+  .welcome .welcome-wrapper .container .item-wrapper .icon .bell {
+    width: 1.8rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .welcome .welcome-wrapper .container .item-wrapper .member-title h3 {
+    width: 40rem;
+    font-size: 2.5rem;
+  }
+  .welcome .welcome-wrapper .container .item-wrapper .member-title p {
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+  .welcome .welcome-wrapper .container .item-wrapper .icon {
+    margin-top: 2rem;
+    gap: 0.5rem;
+  }
+}
+
+.activities {
+  margin-top: 2rem;
+}
+
+.activities .container .wrapper .activ-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.activities .container .wrapper .activ-title .main-title h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.activities .container .wrapper .activ-title .min-title p {
+  color: #a82f2f;
+  text-transform: uppercase;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.activities .container .wrapper .activ-title .min-title .star {
+  width: 8rem;
+}
+
+.activities .container .wrapper .activity-list {
+  position: relative;
+}
+
+.activities .container .wrapper .activity-list .destination {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.activities .container .wrapper .activity-list .destination .de-title,
+.activities .container .wrapper .activity-list .destination .room-detail,
+.activities .container .wrapper .activity-list .destination .duration,
+.activities .container .wrapper .activity-list .destination .payment {
+  margin-top: 1rem;
+  display: grid;
+  align-items: center;
+  gap: 1rem;
+}
+
+.activities .container .wrapper .activity-list .destination .de-title h4,
+.activities .container .wrapper .activity-list .destination .room-detail h4,
+.activities .container .wrapper .activity-list .destination .duration h4,
+.activities .container .wrapper .activity-list .destination .payment h4 {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.13rem;
+}
+
+.activities .container .wrapper .activity-list .destination .de-title hr,
+.activities .container .wrapper .activity-list .destination .room-detail hr,
+.activities .container .wrapper .activity-list .destination .duration hr,
+.activities .container .wrapper .activity-list .destination .payment hr {
+  margin-top: -0.8rem;
+  width: 8rem;
+  border-style: solid;
+  opacity: 0.025;
+}
+
+.activities .container .wrapper .activity-list .destination .de-title p,
+.activities .container .wrapper .activity-list .destination .room-detail p {
+  text-align: center;
+  color: #45b75c;
+}
+
+.activities .container .wrapper .activity-list .destination .duration p {
+  font-size: 0.8rem;
+  text-align: center;
+  color: #18c6e0;
+}
+
+.activities .container .wrapper .activity-list .destination .payment p {
+  text-align: center;
+  color: #a82f2f;
+}
+
+.activities .container .wrapper .activity-list .see-more {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.activities .container .wrapper .activity-list .see-more p {
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.activities .container .wrapper .activity-list .see-more .see {
+  width: 1rem;
+}
+
+.activities .container .offer-wrapper .offer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 7rem;
+}
+
+.activities .container .offer-wrapper .offer .offer-title h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.activities .container .offer-wrapper .offer .offermin-title {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.activities .container .offer-wrapper .offer .offermin-title .min-offer {
+  color: #a82f2f;
+  text-transform: uppercase;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.activities .container .offer-wrapper .offer .offermin-title .min-txt {
+  font-size: 0.8rem;
+  text-transform: lowercase;
+  color: #808080;
+}
+
+.activities .container .offer-box {
+  margin-top: 2rem;
+  position: relative;
+}
+
+.activities .container .offer-box .offer-table {
+  background: #fafaf9;
+  padding: 1rem;
+  height: 20rem;
+}
+
+.activities .container .offer-box .offer-table .offer-room h3 {
+  font-size: 1.13rem;
+  color: #c2874a;
+  font-weight: 500;
+}
+
+.activities .container .offer-box .offer-table .offer-room .min-t {
+  font-size: 0.8rem;
+  text-transform: lowercase;
+  color: #808080;
+}
+
+.activities .container .offer-box .offer-table .offer-room .offer-amin {
+  margin-top: 2rem;
+}
+
+.activities .container .offer-box .offer-table .offer-room .offer-amin .single-amin {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.activities .container .offer-box .offer-table .offer-room .offer-amin .single-amin p {
+  font-size: 1rem;
+}
+
+.activities .container .offer-box .offer-table .btn6 {
+  position: absolute;
+  right: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .activities .container .wrapper .activity-list .destination {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: flex-start;
+  }
+  .activities .container .wrapper .activity-list .destination .duration p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .activities .container {
+    display: flex;
+    gap: 2rem;
+  }
+  .activities .container .wrapper {
+    width: 75%;
+  }
+  .activities .container .wrapper .activity-list .destination {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: flex-start;
+    margin-top: 3rem;
+  }
+  .activities .container .wrapper .activity-list .destination .duration p,
+  .activities .container .wrapper .activity-list .destination .room-detail p,
+  .activities .container .wrapper .activity-list .destination .de-title p,
+  .activities .container .wrapper .activity-list .destination .payment p {
+    font-size: 0.82rem;
+  }
+  .activities .container .offer-wrapper .offer {
+    margin-top: 0rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .activities {
+    margin-top: 6rem;
+  }
+  .activities .container {
+    gap: 3.5rem;
+  }
+  .activities .container .wrapper .activity-list .destination .duration p,
+  .activities .container .wrapper .activity-list .destination .room-detail p,
+  .activities .container .wrapper .activity-list .destination .de-title p,
+  .activities .container .wrapper .activity-list .destination .payment p {
+    font-size: 1rem;
+  }
+  .activities .container .offer-wrapper {
+    width: 30%;
+  }
+}
+
+.middle-image {
+  margin-top: 4rem;
+  background: url("../img/kuriftu entoto edit-5908-min.jpg") rgba(128, 128, 128, 0.2);
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  height: 45vh;
+  object-fit: cover;
+  position: relative;
+}
+
+.middle-image .container .green-destination-card {
+  position: absolute;
+  bottom: -10rem;
+  background: #45b75c;
+  padding: 1rem;
+  width: 20rem;
+  box-shadow: 0px 4px 30px rgba(34, 171, 79, 0.33);
+}
+
+.middle-image .container .green-destination-card .long-line {
+  border-style: solid;
+  width: 10rem;
+  opacity: 1;
+  color: #f1f1ea;
+}
+
+.middle-image .container .green-destination-card .short-line {
+  border-style: solid;
+  width: 5rem;
+  opacity: 1;
+  color: #f1f1ea;
+  margin-top: 2rem;
+  margin-left: 12rem;
+}
+
+.middle-image .container .green-destination-card h3 {
+  margin-top: 2rem;
+  font-size: 1.13rem;
+  color: #f1f1ea;
+}
+
+.middle-image .container .green-destination-card ul {
+  margin-top: 1rem;
+  margin-left: 0.5rem;
+}
+
+.middle-image .container .green-destination-card ul li {
+  list-style: inside;
+  margin-top: 0.5rem;
+  color: #f1f1ea;
+}
+
+.middle-image .container .green-destination-card ul li a {
+  color: #f1f1ea;
+}
+
+@media screen and (min-width: 768px) {
+  .middle-image {
+    height: 17vh;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .middle-image {
+    margin-top: 8rem;
+  }
+  .middle-image .container .green-destination-card {
+    right: 5rem;
+    top: -3rem;
+    bottom: -3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .middle-image {
+    height: 23vh;
+    margin-top: 12rem;
+  }
+  .middle-image .container .green-destination-card {
+    right: 7rem;
+    top: -2rem;
+    bottom: -2rem;
+  }
+}
+
+.list-amin {
+  margin-top: 13rem;
+}
+
+.list-amin .container .list-wrapper .single-list {
+  display: grid;
+  place-items: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.list-amin .container .list-wrapper .single-list img {
+  width: 4rem;
+}
+
+.list-amin .container .list-wrapper .single-list p {
+  margin-top: 1rem;
+  color: #c2874a;
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .list-amin {
+    margin-top: 8rem;
+  }
+  .list-amin .container .list-wrapper {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .list-amin .container .list-wrapper {
+    display: flex;
+    gap: 5rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .list-amin {
+    margin-top: 10rem;
+  }
+}
+
+.bottom-image {
+  margin-top: 4rem;
+  background: url("../img/waterparkbackground.jpg") rgba(128, 128, 128, 0.2);
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  height: 20vh;
+  object-fit: cover;
+  position: relative;
 }
 
 .promo {
