@@ -1564,7 +1564,7 @@ body {
   background-position: center center;
   background-size: cover;
   background-blend-mode: overlay;
-  height: 29.81rem;
+  height: 38rem;
   position: relative;
 }
 
@@ -1574,7 +1574,7 @@ body {
 }
 
 .header .profile .profile-icon {
-  background: #C4C4C4;
+  background: #c4c4c4;
   border-radius: 50%;
   width: 3.94rem;
   height: 3.94rem;
@@ -1605,10 +1605,56 @@ body {
 }
 
 .header .nav-center {
-  padding-top: 2.63rem;
+  padding-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.login {
+  position: absolute;
+  display: grid;
+  gap: 1rem;
+  place-items: center;
+  right: 1.5rem;
+  bottom: 9rem;
+}
+
+.login .log,
+.login .sign {
+  width: 8rem;
+  text-align: center;
+}
+
+.login2 {
+  display: none;
+}
+
+@media screen and (min-width: 992px) {
+  .login {
+    position: absolute;
+    display: none;
+    gap: 1rem;
+    place-items: center;
+    right: 1.5rem;
+    bottom: 9rem;
+  }
+  .login .log,
+  .login .sign {
+    width: 8rem;
+    text-align: center;
+  }
+  .login2 {
+    gap: 1rem;
+    display: flex;
+    place-items: center;
+    gap: .5rem;
+  }
+  .login2 .log,
+  .login2 .sign {
+    width: 7rem;
+    text-align: center;
+  }
 }
 
 .header .nav-center .menu > div {
@@ -1624,23 +1670,389 @@ body {
 
 .header .container .side-socials {
   position: absolute;
-  top: 50%;
-  transform: translateY(-20%);
+  top: 60%;
+  transform: translateY(-5%);
 }
 
 .header .container .side-socials img {
-  margin-bottom: 1.94rem;
+  margin-bottom: 1rem;
 }
 
-.container .myform {
-  padding: 1.75rem 2.38rem;
-  border-radius: .63rem;
-  margin-top: 2rem;
+@media screen and (min-width: 768px) {
+  .form-wrapper .myform {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .room-option {
+    padding: 1rem;
+  }
+}
+
+.form-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 1rem;
+  z-index: 99999;
+  padding: 1rem;
+  background: #f1f1ea;
+  margin-top: -4rem;
+  box-shadow: 0px 4px 2px rgba(196, 196, 196, 0.3);
+  border-radius: 20px;
+}
+
+.form-wrapper .myform {
+  display: grid;
+  place-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.form-wrapper .myform .guest-option .gu-icon {
+  display: flex;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all {
+  display: grid;
+  place-items: center;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option {
+  background: #fff;
+  width: 19rem;
+  padding: 0.5rem;
+  border-style: none;
+  border-width: 1px;
+  border-radius: 4px;
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.25);
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table th {
+  color: #191e19;
+  font-size: 1.13rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding: 1rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table th p {
+  color: #808080;
+  font-size: 0.6rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td {
+  padding: 1rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper {
+  display: flex;
+  place-items: center;
+  align-items: center;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper input {
+  margin-top: 0;
+  width: 1.3em;
+  padding: 0.2rem;
+  background: none;
+  border-radius: 3px;
+  border: 1px solid #dfdfdf;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button {
+  position: absolute;
+  display: block;
+  align-items: center;
+  place-items: center;
+  right: 0;
+  height: 18px;
+  width: 18px;
+  border: 0;
+  border-radius: 10px;
+  border: 0.8px solid #c2874a;
+  background-color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button span img {
+  width: 2rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button:focus {
+  transform: scale(0.95);
+  transition: none;
+  box-shadow: none;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  outline: 0;
+  border: 1px solid #b57a3d;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button.inc {
+  right: 10px;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button.dec {
+  right: -15px;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option .action-btn {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-left: 2.5rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option .add-child .container .single-line {
+  width: 100%;
+  color: #dddcdc;
+  border-style: solid;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option .add-child .container .child-wrapper h3 {
+  margin-bottom: 0.5rem;
+  color: #c2874a;
+  font-size: 1.13rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option .add-child .container .child-wrapper p {
+  color: #808080;
+  font-size: 0.8rem;
+}
+
+.form-wrapper .myform .guest-option .roomoption-all .room-option .add-child .container .child-wrapper .selecter {
+  width: 6rem;
+  border: 1px solid #ededed;
+  margin-top: 1rem;
+  padding: 0.3rem;
+}
+
+@media screen and (min-width: 768px) {
+  .form-wrapper .myform .guest-option .roomoption-all .room-option {
+    background: #fff;
+    padding: 1rem;
+    border-width: 1px;
+    border-style: none;
+    width: auto;
+    top: 85px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 9998;
+    padding: 10px 0;
+    border-radius: 4px;
+    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.25);
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table th {
+    width: 10rem;
+    color: #191e19;
+    font-size: 1.13rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table th p {
+    font-size: 0.7rem;
+    color: #808080;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr {
+    align-items: center;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td {
+    width: 10rem;
+    padding: 1rem;
+    color: #191e19;
+    font-weight: 700;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper {
+    display: flex;
+    place-items: center;
+    align-items: center;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper input {
+    margin-top: 0;
+    width: 2.13em;
+    padding: 0.3rem;
+    background: none;
+    border-radius: 3px;
+    border: 1px solid #dfdfdf;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button {
+    position: absolute;
+    display: block;
+    align-items: center;
+    place-items: center;
+    right: 0;
+    height: 18px;
+    width: 18px;
+    border: 0;
+    border-radius: 10px;
+    border: 0.8px solid #c2874a;
+    background-color: #fff;
+    text-align: center;
+    cursor: pointer;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button span img {
+    width: 2rem;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button:hover {
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button:focus {
+    transform: scale(0.95);
+    transition: none;
+    box-shadow: none;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    outline: 0;
+    border: 1px solid #b57a3d;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button.inc {
+    right: 133px;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option table tr td .increment-wrapper .all-btn-wrapper .button.dec {
+    right: 70px;
+  }
+  .form-wrapper .myform .guest-option .roomoption-all .room-option .action-btn {
+    margin-left: 16rem;
+  }
+}
+
+.form-wrapper .myform .guest-option .all-option {
+  display: none;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper {
+  position: relative;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper label {
+  display: block;
+  margin-left: 1rem;
+  font-size: 1rem;
+  width: 4rem;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper input {
+  position: relative;
+  display: block;
+  width: 2.5em;
+  padding: 0.6rem;
+  background: none;
+  border-radius: 3px;
+  border: 1px solid #dfdfdf;
+  margin-left: 4.5rem;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper .button {
+  position: absolute;
+  display: block;
+  place-items: center;
+  right: 0;
+  height: 20px;
+  width: 20px;
+  border: 0;
+  border-radius: 10px;
+  background-color: #c2874a;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper .button span img {
+  width: 0.5rem;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper .button:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper .button:focus {
+  transform: scale(0.95);
+  transition: none;
+  box-shadow: none;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  outline: 0;
+  border: 1px solid #b57a3d;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper .button.inc {
+  right: 100px;
+}
+
+.form-wrapper .myform .guest-option .all-option .increment-wrapper .button.dec {
+  right: 55px;
+}
+
+.form-wrapper .myform .guest-option:hover .guest-option {
+  display: none;
+}
+
+.form-wrapper .myform .guest-option:hover .all-option {
+  display: block;
+}
+
+.form-wrapper .myform .desti-location,
+.form-wrapper .myform .add-guest {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ededed;
+  border-radius: 5px;
+  width: 17rem;
+}
+
+.form-wrapper .myform .desti-location .icon img,
+.form-wrapper .myform .add-guest .icon img {
+  margin-right: 1rem;
+  width: 1.5rem;
+}
+
+.form-wrapper .myform .desti-location .icon img p,
+.form-wrapper .myform .add-guest .icon img p {
+  margin-left: 1rem;
+}
+
+@media screen and (min-width: 992px) {
+  .desti-location {
+    width: 20rem;
+    padding: 0.5rem;
+  }
+  .add-guest {
+    padding: 0.7rem;
+    width: 20rem;
+  }
 }
 
 @media screen and (min-width: 768px) {
   .container .myform {
-    display: flex;
     gap: 1rem;
     width: 100%;
     align-items: center;
@@ -1648,36 +2060,46 @@ body {
   }
 }
 
-@media screen and (min-width: 1440px) {
+@media screen and (min-width: 1040px) {
+  .form-wrapper {
+    padding: 0rem;
+  }
   .container .myform {
-    display: flex;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     margin: 0 auto;
-    margin-top: 1rem;
     z-index: 9999;
     align-items: center;
     padding: 1.75rem 2.38rem;
   }
   .myform .mySelect,
   .myform input {
+    margin-top: 0rem;
     background: none;
-    border: 1px solid #bebebe;
-    width: 100%;
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
+    border-style: none;
   }
 }
 
 .myform .mySelect,
 .myform input {
-  border: 1px solid #bebebe;
+  border-style: none;
+}
+
+.myform .mySelect2,
+.myform input {
+  border-style: none;
+}
+
+.myform .mySelect2 {
+  appearance: none;
+  background: url(../img/Add.svg) 96%/5% no-repeat;
+  width: 17rem;
 }
 
 .myform .mySelect {
   appearance: none;
   background: url(../img/down.svg) 96%/5% no-repeat;
-  width: 14rem;
-  padding: 12px 15px;
+  width: 17rem;
 }
 
 .mySelect::-ms-expand {
@@ -1686,23 +2108,70 @@ body {
 
 .btn-primary1 {
   border-radius: 0;
-  background: #C2874A;
-  border: 1px solid #C2874A;
-  color: #F1F1EA;
+  background: #c2874a;
+  border: 1px solid #c2874a;
+  color: #f1f1ea;
   padding: 0.63rem 1.63rem;
   cursor: pointer;
 }
 
 .btn-primary1:hover {
   background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
+  border: 1px solid #c2874a;
+  color: #c2874a;
+}
+
+.btn-primarygreen {
+  border-radius: 0;
+  margin-top: 1.5rem;
+  background: #45b75c;
+  border: 1px solid #45b75c;
+  color: #f1f1ea;
+  padding: 0.63rem 1.63rem;
+  cursor: pointer;
+}
+
+.btn-primarygreen:hover {
+  background: transparent;
+  border: 1px solid #45b75c;
+  color: #45b75c;
+}
+
+.btn-primaryred {
+  border-radius: 0;
+  margin-top: 1.5rem;
+  background: #a82f2f;
+  border: 1px solid #a82f2f;
+  color: #f1f1ea;
+  padding: 0.63rem 1.63rem;
+  cursor: pointer;
+}
+
+.btn-primaryred:hover {
+  background: transparent;
+  border: 1px solid #a82f2f;
+  color: #a82f2f;
+}
+
+.btn-primary3 {
+  border-radius: 0;
+  background: #c2874a;
+  border: 1px solid #c2874a;
+  color: #f1f1ea;
+  padding: 0.63rem 1.63rem;
+  cursor: pointer;
+}
+
+.btn-primary3:hover {
+  background: transparent;
+  border: 1px solid #c2874a;
+  color: #c2874a;
 }
 
 .btn-primary2 {
   border-radius: 0;
-  background: #A82F2F;
-  color: #F1F1EA;
+  background: #a82f2f;
+  color: #f1f1ea;
   padding: 0.63rem 1.63rem;
   cursor: pointer;
 }
@@ -1718,13 +2187,14 @@ body {
 
 .btn-secondary2:hover {
   border: none;
-  background: #C2874A;
+  background: #c2874a;
   color: #fff;
 }
 
 .btn-container1 {
   display: flex;
-  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
 }
 
 .mycard {
@@ -1734,7 +2204,6 @@ body {
 }
 
 .mycard .mycard-img-top {
-  width: 18.94rem;
   height: 14.63rem;
   object-fit: cover;
 }
@@ -1750,7 +2219,7 @@ body {
 @media screen and (min-width: 1440px) {
   .mycard {
     display: flex;
-    max-width: 56.50rem;
+    max-width: 56.5rem;
     gap: 1.69rem;
   }
   .mycard .mycard-img-top {
@@ -1760,25 +2229,53 @@ body {
   }
 }
 
+.mycard .mycard-body .amenities-icon {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 2rem;
+}
+
+.mycard .mycard-body .amenities-icon .icon-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.mycard .mycard-body .amenities-icon .icon-wrapper img {
+  width: 1rem;
+}
+
+.mycard .mycard-body .amenities-icon .icon-wrapper p {
+  font-size: 0.7rem;
+}
+
+.text-red {
+  font-size: 0.8rem;
+  color: #a82f2f;
+  margin-left: -3rem;
+}
+
 .mycard .mycard-body .mycard-title {
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: capitalize;
   margin: 1.3rem 0;
-  color: #191E19;
+  color: #191e19;
 }
 
 .mycard .mycard-body .mycard-price {
   display: flex;
-  justify-content: space-between;
+  gap: 10rem;
   margin-bottom: 1.19rem;
   font-size: 1.13rem;
 }
 
 .mycard .mycard-body .mycard-text {
   font-size: 1rem;
-  font-family: 'Myriad Pro Regular';
-  color: #191E19;
+  font-family: "Myriad Pro Regular";
+  color: #191e19;
   line-height: 1.63rem;
   margin-bottom: 1.88rem;
 }
@@ -1792,9 +2289,10 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 99999;
   align-items: center;
-  background: #191E19;
-  color: #F1F1EA;
+  background: #191e19;
+  color: #f1f1ea;
   padding: 1.56rem 1.25rem;
 }
 
@@ -1832,6 +2330,13 @@ body {
   align-items: center;
 }
 
+@media screen and (min-width: 1440px) {
+  .cart-container {
+    display: block;
+    width: 28rem;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   .bottom-cart {
     display: none;
@@ -1844,12 +2349,17 @@ body {
     position: sticky;
     top: 10rem;
     display: block;
-    background: #fff;
+    background: #f8f7f7;
     height: auto;
-    padding: 2rem 1.63rem;
+    width: 20rem;
+  }
+  .cart-wrapper {
+    padding: 1rem 1.63rem;
   }
   .cart-container .cart-title {
-    font-size: 2.13rem;
+    font-size: 2.5rem;
+    color: #808080;
+    font-weight: 500;
     margin-bottom: 2rem;
   }
   .cart-container .cart-date {
@@ -1858,7 +2368,7 @@ body {
     margin-bottom: 1rem;
   }
   .cart-container .cart-date .u-checkin .t-chkin {
-    margin-bottom: .88rem;
+    margin-bottom: 0.88rem;
   }
   .cart-container .cart {
     margin-bottom: 1rem;
@@ -1866,7 +2376,7 @@ body {
   .cart-container .cart .upper {
     display: flex;
     justify-content: space-between;
-    margin-bottom: .88rem;
+    margin-bottom: 0.88rem;
   }
   .cart-container .cart-footer-lg {
     display: flex;
@@ -1875,8 +2385,202 @@ body {
   }
 }
 
+.guest-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.guest-info .check-out,
+.guest-info .check-in,
+.guest-info .guests {
+  margin-bottom: 1rem;
+}
+
+.guest-info .check-out h3,
+.guest-info .check-in h3,
+.guest-info .guests h3 {
+  color: #808080;
+}
+
+.guest-info .check-out p,
+.guest-info .check-in p,
+.guest-info .guests p {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #808080;
+}
+
+.cl-icon {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.cl-icon .bi-trash {
+  color: #a82f2f;
+}
+
+.cl-icon .edit-icon {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cl-icon .edit-icon img {
+  width: 0.8rem;
+}
+
+.cl-icon .edit-icon .edit-p {
+  color: #45b75c;
+}
+
+.cl-icon .add-icon {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.cl-icon .add-icon img {
+  width: 1rem;
+}
+
+.cl-icon .add-icon .add-p {
+  font-size: 1rem;
+  color: #18c6e0;
+}
+
+@media screen and (min-width: 992px) {
+  .pop-up .container {
+    padding: 2rem;
+  }
+}
+
+.pop-up {
+  margin-top: 5rem;
+  z-index: 999;
+}
+
+.pop-up .container {
+  display: grid;
+  place-items: center;
+  background: #f8f7f7;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 2px rgba(196, 196, 196, 0.3);
+  position: relative;
+}
+
+.pop-up .container .close-button .close-img {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 1.5rem;
+}
+
+.pop-up .container .pop-wrapper {
+  margin-top: 2rem;
+}
+
+.pop-up .container .pop-wrapper .pop-title p {
+  text-align: left;
+  color: #c2874a;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-img {
+  margin-top: 1rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-img .single-room {
+  width: 90rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-img .diff-images {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-img .diff-images img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc h3 {
+  color: #191e19;
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc p {
+  word-spacing: .2rem;
+  color: #808080;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .amenities-icon {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 2rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .amenities-icon .icon-wrapper {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .amenities-icon .icon-wrapper img {
+  width: 1rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .amenities-icon .icon-wrapper p {
+  font-size: 0.8rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .view-detail .view-all {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .view-detail .view-all .check {
+  width: 1.5rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .room-faci .all-facilities {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .room-faci .all-facilities .single-facility {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pop-up .container .pop-wrapper .room-all .room-desc .room-faci .all-facilities .single-facility .check {
+  width: 1.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .pop-up .container .pop-wrapper .room-all {
+    display: flex;
+    gap: 4rem;
+  }
+}
+
 .footer {
-  background: #191E19;
+  background: #191e19;
   /* height: 40vh; */
   margin-top: 7.81rem;
 }
@@ -1887,11 +2591,11 @@ body {
 }
 
 .desti-title {
-  font-family: 'HelveticaNeue';
+  font-family: "HelveticaNeue";
   font-size: 1.13rem;
   text-transform: uppercase;
   font-weight: bold;
-  color: #C2874A;
+  color: #c2874a;
   text-align: center;
   margin-bottom: 1.88rem;
   margin-top: 1.88rem;
@@ -1922,7 +2626,7 @@ body {
 }
 
 .footer hr {
-  color: #C2874A;
+  color: #c2874a;
 }
 
 .footer .lower {
@@ -1959,7 +2663,7 @@ body {
     text-align: right;
   }
   .footer-link-container {
-    max-width: 29.50rem;
+    max-width: 29.5rem;
     margin: 0 auto;
     margin-top: 3.56rem;
   }
@@ -1979,7 +2683,7 @@ body {
 @media screen and (min-width: 1024px) {
   .footer-link-container {
     display: flex;
-    max-width: 90.00rem;
+    max-width: 90rem;
     margin: 0;
     flex: 1;
   }
@@ -2016,7 +2720,7 @@ body {
   margin-top: 2.38rem;
   margin-bottom: 1rem;
   font-size: 1.13rem;
-  font-family: 'HelveticaNeue';
+  font-family: "HelveticaNeue";
   font-weight: bold;
 }
 
@@ -2037,10 +2741,10 @@ body {
 }
 
 .register-title {
-  font-family: 'HelveticaNeue';
-  font-size: 1.50rem;
+  font-family: "HelveticaNeue";
+  font-size: 1.5rem;
   font-weight: 800;
-  color: #A82f2f;
+  color: #a82f2f;
   margin: 2.13rem 0 1rem;
 }
 
@@ -2058,9 +2762,13 @@ body {
 
 .paypal-form .btn-primary2 {
   border-radius: 0;
-  background: #A82F2F;
-  color: #F1F1EA;
+  background: #a82f2f;
+  color: #f1f1ea;
   padding: 0.63rem 1.63rem;
+}
+
+.ti {
+  height: 100vh;
 }
 
 .footer {
