@@ -85,91 +85,117 @@ if ($received_data->action == 'getData') {
   $checkin = $received_data->checkIn;
   $checkout = $received_data->checkOut;
 
-
-  $A_query = "SELECT *, COUNT(room_acc) AS cnt 
-    FROM rooms
-    GROUP BY room_acc
-    HAVING room_status = 'Not_booked'
-    AND room_location = '$location'";
+  $count = 0;
+  $roomAcc_temp = '';
+  $roomLocation = '';
+  $dataCount = [];
+  $A_query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location' ORDER BY room_acc";
+  // $A_query = "SELECT *, COUNT(room_acc) AS cnt 
+  //   FROM rooms
+  //   GROUP BY room_acc
+  //   HAVING room_status = 'Not_booked'
+  //   AND room_location = '$location'";
 
   $A_result = mysqli_query($connection, $A_query);
   confirm($A_result);
 
   $rows = mysqli_num_rows($A_result);
 
+  while ($row = mysqli_fetch_assoc($A_result)) {
 
-  if (!empty($rows)) {
+    if ($roomAcc_temp == '') {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+    } else if ($roomAcc_temp == $row["room_acc"]) {
 
-
-
-    while ($avaliable_rooms = mysqli_fetch_assoc($A_result)) {
-      $Not_booked[] = $avaliable_rooms;
-    }
-    // echo json_encode($Not_booked);
-    $BR_query = "SELECT DISTINCT b_roomId
-      FROM booked_rooms 
-      WHERE b_checkout<= '$checkin' 
-      AND b_roomLocation = '$location'
-      UNION
-      SELECT DISTINCT b_roomId
-      FROM booked_rooms
-      WHERE b_checkin >= '$checkout'
-      AND b_roomLocation = '$location'";
-    $result = mysqli_query($connection, $BR_query);
-    confirm($result);
-
-    while ($row3 = mysqli_fetch_assoc($result)) {
-      $r_query = "SELECT *, COUNT(room_acc) AS cnt 
-       FROM rooms
-       GROUP BY room_acc
-       HAVING room_id = {$row3['b_roomId']}";
-      $r_result = mysqli_query($connection, $r_query);
-      confirm($r_result);
-
-      while ($row4 = mysqli_fetch_assoc($r_result)) {
-        $booked[] = $row4;
-      }
-    }
-
-    $all = array_merge($Not_booked, $booked);
-
-    echo json_encode($all);
-  } else {
-
-    $BR_query = "SELECT DISTINCT b_roomId
-      FROM booked_rooms 
-      WHERE b_checkout<= '$checkin' 
-      AND b_roomLocation = '$location'
-      UNION
-      SELECT DISTINCT b_roomId
-      FROM booked_rooms
-      WHERE b_checkin >= '$checkout'
-      AND b_roomLocation = '$location'";
-    $result = mysqli_query($connection, $BR_query);
-    confirm($result);
-
-    $BR_rows = mysqli_num_rows($result);
-    if (!empty($BR_rows)) {
-      while ($row1 = mysqli_fetch_assoc($result)) {
-        $S_query = "SELECT *, COUNT(room_acc) AS cnt 
-          FROM rooms
-          GROUP BY room_acc
-          HAVING room_id = {$row1['b_roomId']}";
-
-        $S_result = mysqli_query($connection, $S_query);
-
-        confirm($S_result);
-
-        while ($row2 = mysqli_fetch_assoc($S_result)) {
-          $Not_booked[] = $row2;
-        }
-      }
-      echo json_encode($Not_booked);
+      array_push($data, $row);
+    } else if ($roomAcc_temp !== $row["room_acc"]) {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+      array_push($dataCount, $data);
+      $data = [];
+      array_push($data, $row);
+      // goto here;
     }
   }
+  if (count($data) > 1) {
+    array_push($dataCount, $data);
+  }
+
+  echo json_encode($dataCount);
+
+  // if (!empty($rows)) {
 
 
-  // echo json_encode($filterd_data1);
+
+  //   while ($avaliable_rooms = mysqli_fetch_assoc($A_result)) {
+  //     $Not_booked[] = $avaliable_rooms;
+  //   }
+  //   // echo json_encode($Not_booked);
+  //   $BR_query = "SELECT DISTINCT b_roomId
+  //     FROM booked_rooms 
+  //     WHERE b_checkout<= '$checkin' 
+  //     AND b_roomLocation = '$location'
+  //     UNION
+  //     SELECT DISTINCT b_roomId
+  //     FROM booked_rooms
+  //     WHERE b_checkin >= '$checkout'
+  //     AND b_roomLocation = '$location'";
+  //   $result = mysqli_query($connection, $BR_query);
+  //   confirm($result);
+
+  //   while ($row3 = mysqli_fetch_assoc($result)) {
+  //     $r_query = "SELECT *, COUNT(room_acc) AS cnt 
+  //      FROM rooms
+  //      GROUP BY room_acc
+  //      HAVING room_id = {$row3['b_roomId']}";
+  //     $r_result = mysqli_query($connection, $r_query);
+  //     confirm($r_result);
+
+  //     while ($row4 = mysqli_fetch_assoc($r_result)) {
+  //       $booked[] = $row4;
+  //     }
+  //   }
+
+  //   $all = array_merge($Not_booked, $booked);
+
+  //   echo json_encode($all);
+  // } else {
+
+  //   $BR_query = "SELECT DISTINCT b_roomId
+  //     FROM booked_rooms 
+  //     WHERE b_checkout<= '$checkin' 
+  //     AND b_roomLocation = '$location'
+  //     UNION
+  //     SELECT DISTINCT b_roomId
+  //     FROM booked_rooms
+  //     WHERE b_checkin >= '$checkout'
+  //     AND b_roomLocation = '$location'";
+  //   $result = mysqli_query($connection, $BR_query);
+  //   confirm($result);
+
+  //   $BR_rows = mysqli_num_rows($result);
+  //   if (!empty($BR_rows)) {
+  //     while ($row1 = mysqli_fetch_assoc($result)) {
+  //       $S_query = "SELECT *, COUNT(room_acc) AS cnt 
+  //         FROM rooms
+  //         GROUP BY room_acc
+  //         HAVING room_id = {$row1['b_roomId']}";
+
+  //       $S_result = mysqli_query($connection, $S_query);
+
+  //       confirm($S_result);
+
+  //       while ($row2 = mysqli_fetch_assoc($S_result)) {
+  //         $Not_booked[] = $row2;
+  //       }
+  //     }
+  //     echo json_encode($Not_booked);
+  //   }
+  // }
+
+
+  // // echo json_encode($filterd_data1);
 }
 
 
@@ -192,7 +218,7 @@ if ($received_data->action == 'insert') {
   }
 }
 
-if ($received_data->action == 'hold'){
+if ($received_data->action == 'hold') {
 
   $id = intval($received_data->roomID);
 
@@ -202,7 +228,7 @@ if ($received_data->action == 'hold'){
   echo json_encode($result);
 }
 
-if ($received_data->action == 'clearHold'){
+if ($received_data->action == 'clearHold') {
 
   $id = intval($received_data->roomID);
 

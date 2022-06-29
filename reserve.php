@@ -541,7 +541,6 @@
         },
         clearOrder() {
 
-
           this.cart.forEach(eachID => {
             axios
               .post("book.php", {
@@ -569,6 +568,9 @@
 
             if ((this.res_teen == "2" && this.res_kid == "2") || (this.res_teen == "2" && this.res_kid == "1") || (this.res_teen == "1" && this.res_kid == "2")) {
               alert("you cant");
+              this.adults = 0;
+              this.teens = 0;
+              this.kids = 0;
             } else {
               this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
 
@@ -723,8 +725,6 @@
 
         },
         addRoom(row) {
-
-
           if (start && end) {
             this.roww = row;
 
@@ -738,9 +738,6 @@
 
 
         },
-
-
-
         nextBook() {
           let rooms = 0;
           var total = 0.00;
@@ -753,11 +750,6 @@
 
           }).then((res) => {
             console.log(res.data);
-
-
-
-
-
 
             if (user) {
 
@@ -931,7 +923,7 @@
               this.takeOneEach(this.allData)
               console.log(" Delete new Array", this.allData)
 
-              this.totalprice = deleteTotal
+              this.totalprice = deleteTotal.toFixed(2)
               localStorage.total = JSON.stringify(this.totalprice)
               localStorage.cart = JSON.stringify(this.cart)
               localStorage.setItem("priceContainer", JSON.stringify(PriceCon))
@@ -965,30 +957,30 @@
               this.roomName.push(data1[0])
             }
 
-
-
-
-
           })
 
 
 
         },
         startIdleTimer() {
+          if (localStorage.cart !== 2) {
 
-          if (this.sec >= 6) {
-            this.sec--;
-          } else if (this.sec == 0) {
-            if (this.min > 0) {
-              this.min--;
-            } else if (this.min == 0) {
-              this.clearOrder();
+
+
+            if (this.sec >= 6) {
+              this.sec--;
+            } else if (this.sec == 0) {
+              if (this.min > 0) {
+                this.min--;
+              } else if (this.min == 0) {
+                this.clearOrder();
+              }
+            } else if (this.sec == 5) {
+              this.sec--;
+              $("#TimesUP").modal("show");
+            } else if (this.sec <= 4) {
+              this.sec--;
             }
-          } else if (this.sec == 5) {
-            this.sec--;
-            $("#TimesUP").modal("show");
-          } else if (this.sec <= 4) {
-            this.sec--;
           }
         },
         resetTimer() {
@@ -1012,8 +1004,6 @@
         },
 
 
-
-
         async submitData() {
 
           if (start && end) {
@@ -1024,6 +1014,7 @@
               desti: this.desti
             }).then(res => {
               this.allData = res.data
+              this.takeOneEach(this.allData)
             }).catch(err => {
               console.log(err);
             })
