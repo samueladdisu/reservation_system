@@ -87,17 +87,13 @@ if (!isset($_SESSION['user_role'])) {
                 <div class="col-12">
                   <!------------------------- t-date picker  --------------------->
 
-
-
-
-
-
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
                       <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
                     </div>
                     <div class="card-body d-flex justify-content-center">
                       <div class="col-6 row">
+                        <label> Select Dates * </label>
                         <div class="t-datepicker col-12 form-group  my-2">
                           <div class="t-check-in">
                             <div class="t-dates t-date-check-in">
@@ -119,30 +115,111 @@ if (!isset($_SESSION['user_role'])) {
                         </div>
 
                         <div class="form-group col-6">
-                          <input type="text" placeholder="Group Name *" class="form-control" v-model="formData.group_name">
+                          <label> Group Name * </label>
+                          <input type="text" class="form-control" v-model="formData.group_name" required>
                         </div>
 
                         <div class="form-group col-6">
-                          <select v-model="formData.group_paymentStatus" class="custom-select" id="">
-                            <option value="">Payment Status*</option>
-                            <option value="payed">Payed</option>
+                        <label> Payment Status * </label>
+                          <select v-model="formData.group_paymentStatus" class="custom-select" required>
+                          <option disabled value="">-select-</option>
+                            <option value="payed">Paid</option>
                             <option value="pending_payment">pending payment</option>
                           </select>
                         </div>
 
+
                         <div class="form-group col-6">
-                          <select v-model="formData.group_reason" class="custom-select" id="">
-                            <option value="">Reason*</option>
+                        <label> Number of Guests * </label>
+                          <input type="text" class="form-control" v-model="formData.group_GNum" @change='SetGuests' required>
+                        </div>
+
+                        <div class="form-group col-6">
+                          <label for="">Select Room</label> <br>
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" required>
+                            Select Room
+                          </button>
+                        </div>
+                        <div class="form-group col-6">
+                        <label> Event Type * </label>
+                          <select v-model="formData.group_reason" class="custom-select" required>
+                          <option disabled value="">-select-</option>
                             <option value="con">Conference</option>
                             <option value="wed">Wedding</option>
                           </select>
                         </div>
 
                         <div class="form-group col-6">
+                        <label> Pricing * </label>
+                          <select v-model="formData.group_status" @change="customChecker" class="custom-select" required>
+                            <option disabled value="">-select-</option>
+                            <option value="def">Default Pricing</option>
+                            <option value="cus">Custom Pricing</option>
+                          </select>
+                        </div>
 
-                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                            Select Room
-                          </button>
+                        <div class="form-group col-6" v-if="custom">
+                          <label for="">Weekends Price *</label> 
+                          <input type="text" class="form-control" v-model="formData.Weekends" required>
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                        <label for="">Weekdays Price *</label> 
+                          <input type="text" class="form-control" v-model="formData.Weekdays" required>
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                        <label for="">Breakfast Price</label> 
+                          <input type="text" class="form-control" v-model="formData.custom_Breakfast">
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                          <label> Extrabed Price</label>
+                          <input type="text" class="form-control" v-model="formData.custom_Extrabed">
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                          <label>Lunch Price</label>
+                          <input type="text" class="form-control" v-model="formData.custom_Lunch">
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                        <label>Dinner Price</label>
+                          <input type="text" class="form-control" v-model="formData.custom_Dinner">
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                        <label>BBQ Price</label>
+                          <input type="text" class="form-control" v-model="formData.custom_BBQ">
+                        </div>
+
+                        <div class="form-group col-6" v-if="custom">
+                        <label>TeaBreak Price</label>
+                          <input type="text" class="form-control" v-model="formData.custom_TeaBreak">
+                        </div>
+
+                        <div class="form-group col-6">
+                        <label>Lunch Guests</label>
+                          <input type="text" class="form-control" v-model="formData.group_Lunch">
+                        </div>
+
+                        <div class="form-group col-6">
+                          <label>Dinner Guests </label>
+                          <input type="text" class="form-control" v-model="formData.group_Dinner">
+                        </div>
+
+                        <div class="form-group col-6">
+                        <label>BBQ Guests </label>
+                          <input type="text" class="form-control" v-model="formData.group_BBQ" value="formData.group_BBQ">
+                        </div>
+
+                        <div class="form-group col-6">
+                          <label for="">Tea Break*</label>
+                          <select type="text" class="custom-select" v-model="formData.group_TeaBreak" required>
+                            <option disabled value="">-select-</option>
+                            <option value="1">1 (Morning or Afternoon)</option>
+                            <option value="2">2 (Both Morning and Afternoon)</option>
+                          </select>
                         </div>
 
                         <div class="form-group col-12">
@@ -150,10 +227,19 @@ if (!isset($_SESSION['user_role'])) {
                         </div>
 
 
+
+
                         <div class="form-group">
                           <input type="submit" class="btn btn-primary" name="add_res" value="Submit">
                         </div>
+                        <!-- <div class="card-footer py-3">
+                                                    <h6 class="m-0 font-weight-bold text-primary">Fill in Gue</h6>
+                                                </div> -->
+
                       </div>
+                    </div>
+                    <div class="card-footer">
+                   
                     </div>
                   </div>
 
@@ -217,8 +303,6 @@ if (!isset($_SESSION['user_role'])) {
                                 </div>
                               <?php } else { ?>
                                 <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
-
-
                               <?php  }
 
 
@@ -300,6 +384,11 @@ if (!isset($_SESSION['user_role'])) {
                                 </tbody>
                               </table>
                             </div>
+
+
+                          </div>
+                          <div class="modal-footer">
+                            <input type="submit" name="Submit" class="btn btn-primary" value="Submit" @click.prevent="closePopOut">
                           </div>
                         </div>
                       </div>
@@ -413,20 +502,69 @@ if (!isset($_SESSION['user_role'])) {
           location: '',
           room_quantity: '',
           roomType: '',
+          custom: false,
+          chekedList: false,
+          defualt_value: '',
           formData: {
             group_name: '',
             group_paymentStatus: '',
             group_remark: '',
-            group_reason: ''
+            group_reason: '',
+            group_GNum: '',
+            group_TeaBreak: '',
+            group_BBQ: '',
+            group_Dinner: '',
+            group_Lunch: '',
+            Weekends: '',
+            Weekdays: '',
+            group_status: '',
+            custom_TeaBreak: '',
+            custom_BBQ: '',
+            custom_Dinner: '',
+            custom_Lunch: '',
+            custom_Breakfast: '',
+            custom_Extrabed: '',
+
           },
           bookedRooms: [],
           selectAllRoom: false,
-          allData: ''
+          allData: '',
+
         }
 
       },
 
       methods: {
+        SetGuests() {
+
+
+          this.formData.group_BBQ = this.formData.group_GNum;
+          this.formData.group_Dinner = this.formData.group_GNum;
+          this.formData.group_Lunch = this.formData.group_GNum;
+          this.formData.defualt_value = this.formData.group_GNum;;
+
+        },
+        closePopOut() {
+          console.log("Selected Rooms", this.bookedRooms);
+          $("#exampleModalCenter").modal("hide");
+
+
+        },
+        IfChecked() {
+          if (this.bookedRooms.length == 0) {
+            this.chekedList = false;
+          } else if (this.bookedRooms.length !== 0) {
+            this.chekedList = true;
+          }
+
+        },
+        customChecker() {
+          if (this.formData.group_status == 'cus') {
+            this.custom = true
+          } else {
+            this.custom = false
+          }
+        },
         bookAll() {
 
           const checkBoxes = document.querySelectorAll('.checkBoxes')
@@ -470,22 +608,45 @@ if (!isset($_SESSION['user_role'])) {
             })
             console.log("new line");
           }
+
+          // if(this.bookedRooms.length == 0 ){
+          //     this.chekedList = false;
+          // }else if (this.bookedRooms.length !== 0){
+          //     this.chekedList = true;
+          // }
           // this.fetchAll()
         },
         async addbulk() {
 
+          let capacity = this.bookedRooms.length * 3
           if (start && end) {
 
-            await axios.post('group_res.php', {
-              action: 'add',
-              checkin: start,
-              checkout: end,
-              rooms: this.bookedRooms,
-              form: this.formData
-            }).then(res => {
-              window.location.href = 'view_bulk_reservations.php'
-              console.log(res.data);
-            })
+            if(this.formData.group_GNum >= this.bookedRooms.length ){
+
+              if(capacity >= this.formData.group_GNum ){
+
+                await axios.post('group_res.php', {
+                  action: 'Newadd',
+                  checkin: start,
+                  checkout: end,
+                  rooms: this.bookedRooms,
+                  form: this.formData,
+                  RoomNum: this.room_quantity,
+                  location: this.location
+                }).then(res => {
+                  // window.location.href = 'view_bulk_reservations.php'
+                  console.log(res.data);
+                })
+              }else {
+                alert("Rooms capacity exceeded reduce guest number!")
+              }
+
+            }else {
+              alert("Rooms cannot exceed guest number!")
+            }
+
+          }else {
+            alert('Please Select Dates!')
           }
 
         },
@@ -531,10 +692,14 @@ if (!isset($_SESSION['user_role'])) {
       created() {
         this.fetchAll()
         Pusher.logToConsole = true;
-        
+
+        let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
+        let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
+        let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
+
         // Front end reservation notification channel from pusher
 
-        const pusher = new Pusher('d178c59a7edb1db43e11', {
+        const pusher = new Pusher(fKey, {
           cluster: 'mt1',
           encrypted: true
         });
@@ -548,7 +713,7 @@ if (!isset($_SESSION['user_role'])) {
 
         // Back end reservation notification channel from pusher
 
-        const back_pusher = new Pusher('399f6a3873a4061d829f', {
+        const back_pusher = new Pusher(bKey, {
           cluster: 'mt1',
           encrypted: true
         });
@@ -563,7 +728,7 @@ if (!isset($_SESSION['user_role'])) {
 
         // Group reservation notification channel from pusher
 
-        const group_pusher = new Pusher('afcb8aece0584791ae17', {
+        const group_pusher = new Pusher(gKey, {
           cluster: 'mt1',
           encrypted: true
         });

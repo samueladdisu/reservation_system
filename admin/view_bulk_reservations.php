@@ -339,6 +339,9 @@
               'print',
               'csv'
             ],
+            order: [
+              [0, 'desc']
+            ],
             data: row,
             columns: [{
                 data: 'group_id'
@@ -540,13 +543,50 @@
         this.fetchData()
         Pusher.logToConsole = true;
 
-        const pusher = new Pusher('341b77d990ca9f10d6d9', {
+        let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
+        let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
+        let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
+
+        // Front end reservation notification channel from pusher
+
+        const pusher = new Pusher(fKey, {
           cluster: 'mt1',
           encrypted: true
         });
 
-        const channel = pusher.subscribe('notifications');
-        channel.bind('new_reservation', (data) => {
+        const channel = pusher.subscribe('front_notifications');
+        channel.bind('front_reservation', (data) => {
+          if (data) {
+            this.fetchData()
+          }
+        })
+
+        // Back end reservation notification channel from pusher
+
+        const back_pusher = new Pusher(bKey, {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+        const back_channel = back_pusher.subscribe('back_notifications');
+
+        back_channel.bind('backend_reservation', (data) => {
+          if (data) {
+            this.fetchData()
+          }
+        })
+
+        // Group reservation notification channel from pusher
+
+        const group_pusher = new Pusher(gKey, {
+          cluster: 'mt1',
+          encrypted: true
+        });
+
+
+        const group_channel = group_pusher.subscribe('group_notifications')
+
+        group_channel.bind('group_reservation', data => {
           if (data) {
             this.fetchData()
           }

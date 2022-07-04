@@ -2,25 +2,92 @@
 if (isset($_POST['create_user'])) {
   $user_name = escape($_POST['user_name']);
   $user_pwd = escape($_POST['user_password']);
-  // $user_Cpwd = escape($_POST['user_Cpassword']);
+  $user_Cpwd = escape($_POST['user_Cpassword']);
   $user_firstname = escape($_POST['user_firstname']);
   $user_lastname = escape($_POST['user_lastname']);
   $user_email = escape($_POST['user_email']);
   $user_role = escape($_POST['user_role']);
   $user_location = escape($_POST['user_location']);
 
-  $check_query = "SELECT * FROM users WHERE ";
+  $pattern_fn = "/^[a-zA-Z ]{3,12}$/";
+
+  // first name validation
+  if(!preg_match($pattern_fn, $user_firstname)){
+    $errFn = "Must be atleast 3 character long, letter and space allowed";
+  }
+
+  //last name validation
+
+  if(!preg_match($pattern_fn, $user_lastname)){
+    $errLn = "Must be atleast 3 character long, letter and space allowed";
+  }
+
+  //user name validation
+  //at least 3 character, letter, number and underscore allowed
+
+  $pattern_un = "/^[a-zA-Z0-9_]{3,16}$/";
+  if (!preg_match($pattern_un, $user_name)) {
+    $errUn = "Must be atleast 3 character long, letter, number and underscore allowed";
+  }
+
+  //email validation
+
+  // filter_var($user_email, FILTER_VALIDATE_EMAIL)
+
+  $pattern_ue = "/^([a-z0-9\+_\-]+)(\.[a-z0-9]\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/i";
+
+  if(!preg_match($pattern_ue, $user_email)){
+    $errUe = "Invalid Email";
+  }
 
 
-  $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
+  if($user_pwd == $user_Cpwd){
+    $pattern_up = "/^.*(?=.{4,56})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/";
 
-  $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role) ";
-  $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role') ";
+    if(!preg_match($pattern_up, $user_pwd)){
+      $errPass = "Must be atleast 4 character long, 1 upper case, 1 lower case letter and 1 number";
 
-  $user_result = mysqli_query($connection, $query);
+    }
+  }
+  
 
-  confirm($user_result);
-  header("Location: ./users.php");
+  if(!isset($errFn) && !isset($errLn) && !isset($errUn) && !isset($errUe) && !isset($errPass)) {
+    $email_query = "SELECT * FROM users WHERE user_email = '$user_email'";
+    $email_result = mysqli_query($connection, $email_query);
+    confirm($email_result);
+
+    $email_count = mysqli_num_rows($email_result);
+
+    if(!empty($email_count)){
+      echo '<script> alert("Email already exist") </script>';
+    }
+
+    $userName_query = "SELECT * FROM users WHERE user_name = '$user_name'";
+    $userName_result= mysqli_query($connection, $userName_query);
+
+    confirm($userName_result);
+
+    $username_count = mysqli_num_rows($userName_result);
+
+    if(!empty($username_count)){
+      echo '<script> alert("User Name already exist") </script>';
+    }
+
+  
+    if(empty($email_count) && empty($username_count)){
+
+      echo "inserted";
+      $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
+    
+      $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date) ";
+      $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role', now()) ";
+    
+      $user_result = mysqli_query($connection, $query);
+    
+      confirm($user_result);
+      // header("Location: ./users.php");
+    }
+  }
 }
 
 
@@ -36,21 +103,24 @@ if (isset($_POST['create_user'])) {
 
   <div class="form-group">
     <label for="user_firstname"> First Name*</label>
-    <input type="text" class="form-control" v-model="fname" name="user_firstname">
-    <div v-if="msg.fname" class="mt-1 text-danger">{{ msg.fname }} </div>
+    <input type="text" class="form-control" value="<?php echo isset($user_firstname) ? $user_firstname: ""; ?>" name="user_firstname">
+    <!-- <div v-if="msg.fname" class="mt-1 text-danger">{{ msg.fname }} </div> -->
+    <?php echo isset($errFn) ? "<div class='mt-1 text-danger'>{$errFn} </div>": ""; ?>
   </div>
 
   <div class="form-group">
     <label for="user_lastname"> Last Name*</label>
-    <input type="text" class="form-control" v-model="lname" name="user_lastname">
-    <div v-if="msg.lname" class="mt-1 text-danger">{{ msg.lname }} </div>
+    <input type="text" class="form-control" value="<?php echo isset($user_lastname) ? $user_lastname: ""; ?>" name="user_lastname">
+    <!-- <div v-if="msg.lname" class="mt-1 text-danger">{{ msg.lname }} </div> -->
+    <?php echo isset($errLn) ? "<div class='mt-1 text-danger'>{$errLn} </div>": ""; ?>
+    
   </div>
   <?php 
     if($_SESSION['user_role'] == 'SA'){
       ?>
       <div class="form-group ">
           <label for="user_lastname"> User Location*</label>
-          <select name="user_location" class="custom-select">
+          <select name="user_location" value="<?php echo isset($user_location) ? $user_location: ""; ?>" class="custom-select">
             <option value="">Select Option</option>
             <?php
 
@@ -77,7 +147,7 @@ if (isset($_POST['create_user'])) {
  
   <div class="form-group">
     <label for="post_status"> User Role*</label>
-    <select name="user_role" class="custom-select" id="">
+    <select name="user_role" value="<?php echo isset($user_role) ? $user_role: ""; ?>" class="custom-select" id="">
       <option value="RA">Reservation Agent</option>
       <option value="PA">Property Admin</option>
       <option value="SA">Super Admin</option>
@@ -86,16 +156,19 @@ if (isset($_POST['create_user'])) {
   </div>
   <div class="form-group">
     <label for="post_status"> User Name*</label>
-    <input type="text" v-model="uname" class="form-control" name="user_name">
-    <div v-if="msg.uname || msg.Luname" class="mt-1 text-danger">{{ msg.uname }} {{ msg.Luname }} </div>
+    <input type="text" value="<?php echo isset($user_name) ? $user_name: ""; ?>" class="form-control" name="user_name">
+    <!-- <div v-if="msg.uname || msg.Luname" class="mt-1 text-danger">{{ msg.uname }} {{ msg.Luname }} </div> -->
+    <?php echo isset($errUn) ? "<div class='mt-1 text-danger'>{$errUn} </div>": ""; ?>
   </div>
 
   <div class="form-group">
     <label for="post_status"> User Email*</label>
-    <input type="text" v-model="uemail" class="form-control" name="user_email" required>
-    <div v-if="msg.email" class="mt-1 text-danger">
+    <input type="text" value="<?php echo isset($user_email) ? $user_email: ""; ?>" class="form-control" name="user_email">
+    <!-- <div v-if="msg.email" class="mt-1 text-danger">
       {{ msg.email }}
-    </div>
+    </div> -->
+    <?php echo isset($errUe) ? "<div class='mt-1 text-danger'>{$errUe} </div>": ""; ?>
+
   </div>
 
   <div class="form-group">
@@ -113,6 +186,8 @@ if (isset($_POST['create_user'])) {
         {{ msg.password }}
       </span>
     </div>
+
+    <?php echo isset($errPass) ? "<div class='mt-1 text-danger'>{$errPass} </div>": ""; ?>
   </div>
 
   <div class="form-group">
@@ -122,5 +197,7 @@ if (isset($_POST['create_user'])) {
   </div>
   <div class="form-group">
     <input type="submit" :disabled="button" class="btn btn-primary" name="create_user" value="Add User">
+
+    <!-- <input type="submit" class="btn btn-primary" name="create_user" value="Add User"> -->
   </div>
 </form>

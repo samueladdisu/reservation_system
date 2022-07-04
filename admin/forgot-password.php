@@ -2,7 +2,7 @@
 <?php include  './includes/functions.php'; ?>
 <?php session_start(); ?>
 
-<?php 
+<?php
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -11,6 +11,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 $gmail_pwd = $_ENV['GMAIL_PASSWORD'];
@@ -21,13 +22,12 @@ $mail->isSMTP();
 $mail->SMTPAuth = true;
 $mail->Host = "smtp.gmail.com";
 $mail->Port = "465";
-$mail->SMTPSecure = "ssl";
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 
-$mail->Username = "samueladdisu9@gmail.com";
-$mail->Password = "$gmail_pwd";
+$mail->Username = "auth.kuriftu@gmail.com";
+$mail->Password = "joimgmpdobpfmjwq";
 
-$mail->setFrom("samueladdisu9@gmail.com");
-$mail->addReplyTo("no-reply@samuel.com");
+$mail->setFrom("auth.kuriftu@gmail.com", 'Dev Ninja Youtube');
 $mail->isHTML();
 
 ?>
@@ -70,60 +70,57 @@ $mail->isHTML();
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                                        <p class="mb-4">We get it, stuff happens. Just enter your email address below
-                                            and we'll send you a link to reset your password!</p>
+                                        <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
                                     </div>
 
-                                    <?php 
+                                    <?php
 
-                                        if(isset($_POST['reset_password'])){ 
-                                            $recover_email = escape($_POST['email']);
+                                    if (isset($_POST['reset_password'])) {
+                                        $recover_email = escape($_POST['email']);
 
-                                            $query = "SELECT * FROM users WHERE user_email = '$recover_email'";
-                                            $result = mysqli_query($connection, $query);
+                                        $query = "SELECT * FROM users WHERE user_email = '$recover_email'";
+                                        $result = mysqli_query($connection, $query);
 
-                                            confirm($result);
+                                        confirm($result);
 
-                                            if(mysqli_num_rows($result) == 1) {
-                                                echo "<script> alert('User Found')</script>";
-                                                if (!isset($_COOKIE['_unp_'])) {
+                                        if (mysqli_num_rows($result) == 1) {
+                                            echo "<script> alert('User Found')</script>";
+                                            if (!isset($_COOKIE['_unp_'])) {
 
-                                                    $token =  getToken(32);
-                                                    $encode_token = base64_encode(urlencode($token));
-                                                    $expire_date = date("Y-m-d H:i:s", time() + 60 * 20);
-                                                    $expire_date = base64_encode(urlencode($expire_date));
-                                                    $email = base64_encode(urlencode($recover_email));
-                                              
-                                                    // RECIPIENT 
-                                                    $mail->addAddress($recover_email);
-                                              
-                                                    $query = "UPDATE users SET user_validation = '$token' WHERE user_email = '$recover_email'";
-                                              
-                                                    $query_con = mysqli_query($connection, $query);
-                                                    confirm($query_con);
-                                                    $mail->Subject = "Password reset request";
-                                                    $mail->Body = "
-                                                          <h2> Follow the link to reset password</h2>
-                                                          <a href='http://localhost/reservation_system/admin/new_password.php?eid={$email}&token={$encode_token}&exd={$expire_date}'> Click here to create new password</a>
-                                                          <p> This link is valid for 20 minutes </p>";
-                                                    if ($mail->send()) {
-                                                      setcookie('_unp_', getToken(16), time() + 60 * 20, '', '', '', true);
-                                                      echo json_encode("new_pwd");
-                                                    }
-                                                  } else {
-                                                    echo json_encode("20");
-                                                  }
-                                                
-                                            }else {
-                                                echo "<script> alert('User Not Found')</script>";
+                                                $token =  getToken(32);
+                                                $encode_token = base64_encode(urlencode($token));
+                                                $expire_date = date("Y-m-d H:i:s", time() + 60 * 20);
+                                                $expire_date = base64_encode(urlencode($expire_date));
+                                                $email = base64_encode(urlencode($recover_email));
+
+                                                // RECIPIENT 
+                                                $mail->addAddress($recover_email);
+
+                                                $query = "UPDATE users SET user_validation = '$token' WHERE user_email = '$recover_email'";
+
+                                                $query_con = mysqli_query($connection, $query);
+                                                confirm($query_con);
+                                                $mail->Subject = "Password reset request";
+                                                $mail->Body = "
+            <h2> Follow the link to reset password</h2>
+            <a href='http://localhost/reservation_system/admin/new_password.php?eid={$email}&token={$encode_token}&exd={$expire_date}'> Click here to create new password</a>
+            <p> This link is valid for 20 minutes </p>";
+                                                if ($mail->send()) {
+                                                    setcookie('_unp_', getToken(16), time() + 60 * 20, '', '', '', true);
+                                                    echo json_encode("new_pwd");
+                                                }
+                                            } else {
+                                                echo json_encode("20");
                                             }
+                                        } else {
+                                            echo "<script> alert('User Not Found')</script>";
                                         }
-                                    
+                                    }
+
                                     ?>
                                     <form class="user" action="" method="POST">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                            name="email" placeholder="Enter Email Address...">
+                                            <input type="email" class="form-control form-control-user" name="email" placeholder="Enter Email Address...">
                                         </div>
 
                                         <div class="form-group">
