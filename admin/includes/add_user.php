@@ -85,7 +85,7 @@ if (isset($_POST['create_user'])) {
       $user_result = mysqli_query($connection, $query);
     
       confirm($user_result);
-      // header("Location: ./users.php");
+      header("Location: ./users.php");
     }
   }
 }
