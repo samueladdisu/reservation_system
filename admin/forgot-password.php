@@ -25,7 +25,7 @@ $mail->Port = "465";
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 
 $mail->Username = "auth.kuriftu@gmail.com";
-$mail->Password = "joimgmpdobpfmjwq";
+$mail->Password = $gmail_pwd;
 
 $mail->setFrom("auth.kuriftu@gmail.com", 'Dev Ninja Youtube');
 $mail->isHTML();

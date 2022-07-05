@@ -32,11 +32,11 @@ if (isset($_POST['create_user'])) {
 
   //email validation
 
-  // filter_var($user_email, FILTER_VALIDATE_EMAIL)
+  
 
-  $pattern_ue = "/^([a-z0-9\+_\-]+)(\.[a-z0-9]\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/i";
+  // $pattern_ue = "/^([a-z0-9\+_\-]+)(\.[a-z0-9]\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/";
 
-  if(!preg_match($pattern_ue, $user_email)){
+  if(!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
     $errUe = "Invalid Email";
   }
 
@@ -76,7 +76,7 @@ if (isset($_POST['create_user'])) {
   
     if(empty($email_count) && empty($username_count)){
 
-      echo "inserted";
+      echo '<script> alert("User Successfully Added!") </script>';
       $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
     
       $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date) ";
