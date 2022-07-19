@@ -64,6 +64,16 @@
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
             </a>
+
+            <?php 
+                $id = $_SESSION['user_id'] ;
+            
+            ?>
+            
+            <a class="dropdown-item" href="./check_password.php?&change=<?php echo $id; ?>">
+                <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                Change Password
+            </a>
         </div>
     </li>
 

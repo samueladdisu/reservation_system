@@ -1,5 +1,4 @@
 <?php
-
 function confirm($result)
 {
 
@@ -8,6 +7,77 @@ function confirm($result)
     die('QUERY FAILED ' . mysqli_error($connection));
   }
 }
+
+function CheckAndCutPromo($price, $promo)
+{
+  global $connection;
+
+  $promo_query = "SELECT * FROM promo WHERE promo_code = '$promo' AND promo_active = 'yes' LIMIT 1";
+  $promo_result = mysqli_query($connection, $promo_query);
+
+  confirm($promo_result);
+  
+  $row = mysqli_fetch_assoc($promo_result);
+
+
+  $PromoId = $row['promo_id'];
+  $usage = $row['promo_usage'];
+
+
+  if ($row['promo_time'] == '' && $row['promo_usage'] == '') {
+    $Discount = $price * ($row['promo_amount'] / 100);
+    return $price - $Discount;
+  } else if ($row['promo_time'] == '' && $row['promo_usage'] !== '') {
+
+    if ($row['promo_usage'] == 0) {
+      return $price;
+    } else {
+      $updated_usage = intval($usage)  - 1;
+      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
+      $promo_result = mysqli_query($connection, $update_promo);
+      confirm($promo_result);
+
+      $Discount = $price * ($row['promo_amount'] / 100);
+      return $price - $Discount;
+    }
+  } else if ($row['promo_time'] !== '' && $row['promo_usage'] == '') {
+
+    $expireDate = strtotime($row['promo_time']);
+    $today = strtotime(date('Y-m-d H:i:s'));
+
+    if ($today >= $expireDate) {
+      return $price;
+    } else {
+      $Discount = $price * ($row['promo_amount'] / 100);
+      return $price - $Discount;
+    }
+  } else if ($row['promo_time'] !== '' && $row['promo_usage'] !== '') {
+    $expireDate = strtotime($row['promo_time']);
+    $today = strtotime(date('Y-m-d H:i:s'));
+    $usage = $row['promo_usage'];
+
+
+    if (($today < $expireDate) && ($usage !== 0)) {
+
+      $updated_usage = intval($usage) - 1;
+      if ($updated_usage == 0) {
+        $update_promo = "UPDATE promo SET promo_usage = $updated_usage, promo_active = 'No' WHERE promo_id = '$PromoId'";
+      } else {
+        $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
+      }
+      $promo_result = mysqli_query($connection, $update_promo);
+      confirm($promo_result);
+
+      $Discount = $price * ($row['promo_amount'] / 100);
+      return $price - $Discount;
+    } else {
+      // The Promo code is expired
+      return $price;
+    }
+  }
+}
+
+
 function escape($string)
 {
 
@@ -86,8 +156,44 @@ function calculatePrice($ad, $kid, $teen, $single, $double, $dMember, $sMemeber,
         $price = $double + 38;
       }
     }
-  }
+  }else if ($promo !== "" && $promo !== "member") {
 
+    if ($ad == 1) {
+      if ($kid == 0 && $teen == 0) {
+        // Single occupancy
+        $price = $single;
+      } else if ($kid == 1 && $teen == 1) {
+        $price = $double + 10;
+      } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+        $price = $double;
+      } else if ($kid == 2 && $teen == 0) {
+        $price = $double + 10;
+      } else if ($kid == 0 && $teen == 2) {
+        $price = $double + 38;
+      }
+    } else if ($ad == 2) {
+      if ($kid == 0 && $teen == 0) {
+        $price = $double;
+      } else if ($kid == 1 && $teen == 0) {
+        $price = $double + 10;
+      } else if ($kid == 1 && $teen == 1) {
+        $price = $double + 48;
+      } else if ($kid == 2 && $teen == 0) {
+        $price = $double + 20;
+      } else if ($kid == 0 && $teen == 1) {
+        $price = $double + 38;
+      }
+    }
+    $DiscountPrice = CheckAndCutPromo($price, $promo);
+    if ($DiscountPrice == $price) {
+      return $price;
+    } else if ($DiscountPrice > $price) {
+      return $price;
+    } else {
+      $price = $DiscountPrice;
+      return $price;
+    }
+  }
 
   return $price;
 }

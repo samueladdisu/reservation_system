@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'b0fee68c58491ea195b0d6873220498c5c1c4c28',
+        'reference' => '141d7a9aba02ea2647556e80d870f292f39a3039',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'b0fee68c58491ea195b0d6873220498c5c1c4c28',
+            'reference' => '141d7a9aba02ea2647556e80d870f292f39a3039',
             'dev_requirement' => false,
         ),
         'graham-campbell/result-type' => array(
@@ -53,6 +53,15 @@
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(),
             'reference' => '089edd38f5b8abba6cb01567c2a8aaa47cec4c72',
+            'dev_requirement' => false,
+        ),
+        'mailchimp/transactional' => array(
+            'pretty_version' => '1.0.47',
+            'version' => '1.0.47.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../mailchimp/transactional',
+            'aliases' => array(),
+            'reference' => 'b8bae372d888194788e662e0ff7ff23047f99b3c',
             'dev_requirement' => false,
         ),
         'paragonie/random_compat' => array(

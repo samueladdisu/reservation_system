@@ -336,18 +336,18 @@
                   <div class="card-body d-flex justify-content-center">
                     <div class="col-6 row">
                       <div class="form-group col-6">
-                        <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname">
+                        <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname" required>
                       </div>
                       <div class="form-group col-6">
-                        <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname">
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone">
+                        <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname" required>
                       </div>
 
                       <div class="form-group col-6">
-                        <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email">
+                        <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone" required>
+                      </div>
+
+                      <div class="form-group col-6">
+                        <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email" required>
                       </div>
 
 
@@ -355,7 +355,7 @@
 
 
                       <div class="form-group col-6">
-                        <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" id="">
+                        <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" required>
                           <option value="">Payment Method*</option>
                           <option value="bank_transfer">Bank Transfer</option>
                           <option value="cash">Cash</option>
@@ -368,7 +368,7 @@
 
 
                       <div class="form-group col-6">
-                        <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" id="">
+                        <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" required>
                           <option value="">Payment Status*</option>
                           <option value="payed">Payed</option>
                           <option value="pending_payment">pending payment</option>
@@ -378,7 +378,7 @@
 
 
                       <div class="form-group col-6">
-                        <input type="text" placeholder="Special Request*" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
+                        <input type="text" placeholder="Special Request" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
                         <!-- <textarea name="res_specialRequest" id="" cols="30" rows="10" placeholder="Special Request" class="form-control"></textarea> -->
                       </div>
 
@@ -397,7 +397,7 @@
                       </div>
 
                       <div class="form-group col-12">
-                        <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark*" id="" cols="30" rows="10" class="form-control"></textarea>
+                        <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark" id="" cols="30" rows="10" class="form-control"></textarea>
                       </div>
 
 
@@ -746,18 +746,24 @@
           console.log("check out", end);
           console.log("Form Data", this.formData);
 
-          await axios.post('load_modal.php', {
-            action: 'addReservation',
-            Form: this.formData,
-            checkin: start,
-            checkout: end,
-            rooms: this.cart,
-            // price: this.totalPrice
-          }).then(res => {
-            // window.location.href = 'view_all_reservations.php'
-            console.log(res.data);
-            this.totalPrice = res.data
-          })
+          if(this.cart && start && end){
+            
+            await axios.post('load_modal.php', {
+              action: 'addReservation',
+              Form: this.formData,
+              checkin: start,
+              checkout: end,
+              rooms: this.cart,
+              // price: this.totalPrice
+            }).then(res => {
+              // window.location.href = 'view_all_reservations.php'
+              console.log(res.data);
+              this.totalPrice = res.data
+            })
+          }else {
+            alert('Cart is empty please select room(s)')
+          }
+
 
         },
         async filterRooms() {

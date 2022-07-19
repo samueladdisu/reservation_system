@@ -1,51 +1,55 @@
-<?php include './includes/admin_header.php'; ?>
+<?php
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\SMTP;
+// use PHPMailer\PHPMailer\Exception;
 
-<body id="page-top">
+// //Load Composer's autoloader
+// require './vendor/autoload.php';
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
+// //Create an instance; passing `true` enables exceptions
+// $mail = new PHPMailer(true);
 
-    <!-- Sidebar -->
-    <?php include './includes/sidebar.php'; ?>
-    <!-- End of Sidebar -->
+// try {
+//   //Server settings
+//   $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+//   $mail->isSMTP();                                            //Send using SMTP
+//   $mail->Host       = 'smtp.mandrillapp.com';                     //Set the SMTP server to send through
+//   $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+//   $mail->Username   = 'ADDIS UPDATES';                     //SMTP username
+//   $mail->Password   = 'G-p-dC0zdEdKMmiIxF-85A';                               //SMTP password
+//   // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+//   $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-    // Using Awesome https://github.com/PHPMailer/PHPMailer
-    <?php
-    require 'PHPMailerAutoload.php';
-    require __DIR__ . '/vendor/autoload.php';
-    
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-    $mail = new PHPMailer;
+//   //Recipients
+//   $mail->setFrom('no-reply@kurifturesorts.com');
+//   // $mail->addAddress('samueladdisu7@gmail.com', 'Joe User');     //Add a recipient
+//   $mail->addAddress("samueladdisu7@gmail.com", "Samuel");
 
-    $mail->isSMTP();                                      // Set mailer to use SMTP
-    $mail->Host = 'smtp.mailgun.org';                     // Specify main and backup SMTP servers
-    $mail->SMTPAuth = true;                               // Enable SMTP authentication
-    $mail->Username = 'postmaster@sandboxefb3d4b1bf4046be9baaca591cbd83b4.mailgun.org';   // SMTP username
-    $mail->Password = '91aeaef9e6bc9c7b8e27fcc1d6a62510-1b8ced53-bdc68d98';                           // SMTP password
-    $mail->SMTPSecure = 'tls';                            // Enable encryption, only 'tls' is accepted
+//   //Content
+//   $mail->isHTML(true);                                  //Set email format to HTML
+//   $mail->Subject = 'Here is the subject';
+//   $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+//   $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-    $mail->From = 'YOU@YOUR_DOMAIN_NAME';
-    $mail->FromName = 'Mailer';
-    $mail->addAddress('bar@example.com');                 // Add a recipient
+//   $mail->send();
+//   echo 'Message has been sent';
+// } catch (Exception $e) {
+//   echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+// }
+require_once('../vendor/mailchimp/MailchimpTransactional/vendor/autoload.php');
 
-    $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+$mailchimp = new MailchimpTransactional\ApiClient();
+$mailchimp->setApiKey('G-p-dC0zdEdKMmiIxF-85A');
 
-    $mail->Subject = 'Hello';
-    $mail->Body    = 'Testing some Mailgun awesomness';
-
-    if (!$mail->send()) {
-      echo 'Message could not be sent.';
-      echo 'Mailer Error: ' . $mail->ErrorInfo;
-    } else {
-      echo 'Message has been sent';
-    }
-    ?>
-
-  </div>
-  <!-- /.container-fluid -->
-
-  </div>
-  <!-- End of Main Content -->
-
-  <?php include './includes/admin_footer.php'; ?>
+$response = $mailchimp->messages->send(["message" => [
+  'subject' => 'Lorem Ipsum',
+  'from_email' => 'user@example.com',
+  'from_name'  => 'Example User',
+  'to'   => 'user@example.com',
+  'global_merge_vars' => ['name' => 'Chuck Norris'],
+  'track_opens' => true,
+  'track_clicks' => true
+]]);
+print_r($response);

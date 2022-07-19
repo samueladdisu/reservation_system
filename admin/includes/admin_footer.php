@@ -2,7 +2,7 @@
    <footer class="sticky-footer bg-white">
        <div class="container my-auto">
            <div class="copyright text-center my-auto">
-               <span>Copyright &copy; Kuriftu resorts 2021. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+               <span>Copyright &copy; Kuriftu resorts 2022. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
            </div>
        </div>
    </footer>
@@ -59,7 +59,7 @@
 
 
    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 
 
@@ -75,6 +75,39 @@
 
 
    <script src="./js/room.js"></script>
+   <div class="modal fade" id="ReportModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+       <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <h5 class="modal-title" id="exampleModalLongTitle"> Report options</h5>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+               </div>
+               <form name="myForm" id="myForm" target="_myFrame" action="includes/GenerateReport.php" method="POST">
+                   <div class="modal-body">
+                       <h5 class="m-0 font-weight-bold text-primary">
+                           Choose options for report
+
+                       </h5>
+                       <div>
+                           <div class="date_pickerStyle">
+                               <p>Start Date: <input class="dateReportInput" type="text" name="StartDate" id="datepickerStart" autocomplete="off"></p>
+                           </div>
+
+                           <div class="date_pickerStyle">
+                               <p>End Date: <input class="dateReportInput" type="text" name="EndDate" id="datepickerEnd" autocomplete="off"></p>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                       <button type="submit" class="btn btn-primary" value="Report" name="report">Generate Report</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
 
    </body>
 

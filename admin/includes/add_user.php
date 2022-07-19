@@ -76,7 +76,6 @@ if (isset($_POST['create_user'])) {
   
     if(empty($email_count) && empty($username_count)){
 
-      echo '<script> alert("User Successfully Added!") </script>';
       $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
     
       $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date) ";
@@ -120,8 +119,8 @@ if (isset($_POST['create_user'])) {
       ?>
       <div class="form-group ">
           <label for="user_lastname"> User Location*</label>
-          <select name="user_location" value="<?php echo isset($user_location) ? $user_location: ""; ?>" class="custom-select">
-            <option value="">Select Option</option>
+          <select name="user_location" class="custom-select">
+          <option value="<?php echo isset($user_location) ? $user_location: ""; ?>"><?php echo isset($user_location) ? $user_location: "-Select-"; ?></option>
             <?php
 
             $query = "SELECT * FROM locations";
@@ -131,8 +130,10 @@ if (isset($_POST['create_user'])) {
             while ($row = mysqli_fetch_assoc($result)) {
               $location_id = $row['location_id'];
               $location_name = $row['location_name'];
+              if($location_name != $user_location){
 
-              echo "<option value='$location_name'>{$location_name}</option>";
+                echo "<option value='$location_name'>{$location_name}</option>";
+              }
             }
             ?>
           </select>
@@ -147,10 +148,47 @@ if (isset($_POST['create_user'])) {
  
   <div class="form-group">
     <label for="post_status"> User Role*</label>
-    <select name="user_role" value="<?php echo isset($user_role) ? $user_role: ""; ?>" class="custom-select" id="">
-      <option value="RA">Reservation Agent</option>
-      <option value="PA">Property Admin</option>
-      <option value="SA">Super Admin</option>
+    <select name="user_role" class="custom-select" id="">
+      <option value="<?php echo isset($user_role) ? $user_role: ""; ?>">
+      <?php 
+      if(isset($user_role)){
+        if($user_role == 'RA'){
+          echo "Reservation Agent";
+        }else if($user_role == 'PA'){
+          echo "Property Admin";
+        }else if($user_role == 'SA'){
+          echo "Super Admin";
+        }
+      }else{
+          echo "-Select-";
+        }
+      ?>
+      </option>
+      <?php 
+
+        // if(empty($user_role)){
+          
+        // }
+
+        if($user_role == 'RA'){
+          echo '<option value="PA">Property Admin</option>';
+          echo '<option value="SA">Super Admin</option>';
+        }else if($user_role == 'PA'){
+          echo '<option value="RA">Reservation Agent</option>';
+          echo '<option value="SA">Super Admin</option>';
+        }else if($user_role == 'SA'){
+          echo '<option value="RA">Reservation Agent</option>';
+          echo '<option value="PA">Property Admin</option>';
+        }else{
+          echo '<option value="RA">Reservation Agent</option>';
+          echo '<option value="PA">Property Admin</option>';
+          echo '<option value="SA">Super Admin</option>';
+        }
+      
+      ?>
+      
+      
+      
 
     </select>
   </div>

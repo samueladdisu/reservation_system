@@ -36,6 +36,7 @@ class ComposerStaticInit760f538f7c4153317fc6e2fe101402b6
         'M' => 
         array (
             'MyApp\\' => 6,
+            'MailchimpTransactional\\' => 23,
         ),
         'G' => 
         array (
@@ -91,6 +92,10 @@ class ComposerStaticInit760f538f7c4153317fc6e2fe101402b6
         'MyApp\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'MailchimpTransactional\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mailchimp/transactional/lib',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

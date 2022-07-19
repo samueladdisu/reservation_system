@@ -28,7 +28,7 @@
                             | <small class="text-gray-600"><?php echo $_SESSION['username']; ?></small>
                         </h1>
 
-
+                        <!-- 
                         <div class="dropdown show">
                             <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-download fa-sm text-white-50"></i>
@@ -40,6 +40,11 @@
                                 <a class="dropdown-item" href="./export.php?report=reservation">Reservation</a>
                                 <a class="dropdown-item" href="./export.php?report=members">Members</a>
                             </div>
+                        </div> -->
+
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+                            <button data-toggle="modal" data-target="#ReportModalCenter" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Sales Report</button>
                         </div>
 
 
