@@ -56,9 +56,6 @@
 
    <!-- data table plugin  -->
 
-
-
-   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 
@@ -79,7 +76,7 @@
        <div class="modal-dialog modal-dialog-centered" role="document">
            <div class="modal-content">
                <div class="modal-header">
-                   <h5 class="modal-title" id="exampleModalLongTitle"> Report options</h5>
+                   <h5 class="modal-title" id="exampleModalLongTitle">Report options</h5>
                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                        <span aria-hidden="true">&times;</span>
                    </button>
@@ -88,14 +85,13 @@
                    <div class="modal-body">
                        <h5 class="m-0 font-weight-bold text-primary">
                            Choose options for report
-
                        </h5>
                        <div>
-                           <div class="date_pickerStyle">
+                           <div>
                                <p>Start Date: <input class="dateReportInput" type="text" name="StartDate" id="datepickerStart" autocomplete="off"></p>
                            </div>
 
-                           <div class="date_pickerStyle">
+                           <div>
                                <p>End Date: <input class="dateReportInput" type="text" name="EndDate" id="datepickerEnd" autocomplete="off"></p>
                            </div>
                        </div>
@@ -108,6 +104,33 @@
            </div>
        </div>
    </div>
+   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+   <script>
+       $(function() {
+
+           var dateFormat = "mm/dd/yy";
+           var minDatefrom;
+
+           $("#datepickerStart").datepicker().on("change", function() {
+               console.log(getDate(this));
+               to.datepicker("option", "minDate", getDate(this));
+           });
+           to = $("#datepickerEnd").datepicker();
+
+
+           function getDate(element) {
+               var date;
+               try {
+                   date = $.datepicker.parseDate(dateFormat, element.value);
+               } catch (error) {
+                   date = null;
+               }
+
+               return date;
+           }
+
+       });
+   </script>
 
    </body>
 

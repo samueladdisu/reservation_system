@@ -136,7 +136,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
       $response = curl_exec($ch);
       $response = json_decode($response, true);
       $customer_ip = $response["ip"];
-     
+
       $arrayVariable = array(
         "access_key"  => "bf0d90b4542b3b2b91ad73049ad08abc",
         "profile_id"  => "0CD052F3-59A9-44AD-B4B3-54053477F7DA",
@@ -149,7 +149,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
         "reference_number" => "1643727245076",
         "amount" => $total_price,
         "currency" => "USD",
-        "device_fingerprint_id" => 'amole_kuritfu_01'.$session_id,
+        "device_fingerprint_id" => 'amole_kuritfu_01' . $session_id,
         "customer_ip_address" => $customer_ip
       );
 
