@@ -162,9 +162,9 @@ function cutFromPromo($promo, $price)
 
 
 
-
   // pusher setup end
   $cart = $_SESSION['cart'];
+  setcookie('cart', $cart, time() + (86400 * 30), "/");
   $location = $_SESSION['location'];
   $checkIn =  $_SESSION['checkIn'];
   $checkOut = $_SESSION['checkOut'];

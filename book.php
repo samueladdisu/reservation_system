@@ -276,6 +276,7 @@ if ($received_data->action == 'getData') {
 
 if ($received_data->action == 'insert') {
 
+  
   $_SESSION['checkIn'] = $checkIn = $received_data->checkIn;
   $_SESSION['checkOut'] = $checkOut = $received_data->checkOut;
   $_SESSION['location'] = $location = $received_data->location;

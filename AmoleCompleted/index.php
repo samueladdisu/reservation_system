@@ -11,13 +11,17 @@ $jsonl = json_decode($Response, true);
 $decision = $jsonl["decision"];
 $reason = $jsonl["reason_code"];
 
-$cart = $_SESSION['cart'];
+if(isset($_COOKIE['cart'])){
+
+    $cart = $_COOKIE['cart'];
+}
+var_dump($cart);
 $id = array();
-$location = $_SESSION['location'];
-$checkIn =  $_SESSION['checkIn'];
-$checkOut = $_SESSION['checkOut'];
-$total_price = $_SESSION['total'];
-$slocation = $_SESSION['Selectedlocation'];
+echo $location = $_SESSION['location'];
+echo $checkIn =  $_SESSION['checkIn'];
+echo $checkOut = $_SESSION['checkOut'];
+echo $total_price = $_SESSION['total'];
+echo $slocation = $_SESSION['Selectedlocation'];
 
 
 function getName($n)
