@@ -92,6 +92,11 @@ $trans: all 0.5s ease-in-out;
   margin: 0 auto;
   // overflow: hidden;
 }
+.container-sm{
+
+  max-width: 1440px;
+  margin: 0 auto;
+}
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -225,6 +230,17 @@ $trans: all 0.5s ease-in-out;
 .btn-blue {
   color: $kuriftu-white;
   background: $kuriftu-blue;
+}
+.btn-black {
+  background:  $kuriftu-black;;
+  color: $kuriftu-white;
+
+  border-radius: 0px;
+  font-size: .9rem;
+  &:hover{
+  color: #fff;
+  }
+
 }
 .btn-rounded-secondary {
   @extend .btn-rounded;

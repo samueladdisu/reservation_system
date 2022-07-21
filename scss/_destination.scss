@@ -1,0 +1,148 @@
+.reserve-header {
+  .nav-center {
+    display: grid;
+    place-items: center;
+    .logo {
+      img {
+        margin-top: 1rem;
+        width: 10rem;
+      }
+    }
+    .line {
+      @include responsive($xl) {
+        margin-top: 2rem;
+      }
+      .container1 {
+        display: grid;
+        place-items: center;
+        margin-top: 1rem;
+        .line1 {
+          color: #d7d7d7;
+          width: 20rem;
+          opacity: 0.5;
+          border-style: solid;
+
+          @include responsive($xl) {
+            width: 80rem;
+          }
+          @include responsive($xxl) {
+            width: 90rem;
+          }
+        }
+        .justify-list {
+          display: flex;
+          gap: 2rem;
+        }
+        .link-text {
+          text-align: center;
+          color: $kuriftu-grey;
+        }
+        .line2 {
+          color: #d7d7d7;
+          border-style: solid;
+          opacity: 0.5;
+          width: 20rem;
+          @include responsive($xl) {
+            width: 80rem;
+          }
+          @include responsive($xxl) {
+            width: 90rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.Destinations-list {
+  margin-top: 3rem;
+  .container {
+    h2 {
+      font-size: 2rem;
+    }
+    .wrapper {
+      @include responsive($md) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      @include responsive($xl) {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .single-destination {
+        margin-top: 2rem;
+        img {
+          width: 100%;
+          height: 18rem;
+          object-fit: cover;
+        }
+        .desc {
+          background: #fff;
+          border: 1px solid #d7d7d7;
+          //  height: 15rem;
+
+          .desc-wrapper {
+            padding: 1rem;
+            h4 {
+              font-size: 1.5rem;
+            }
+            .location-txt {
+              margin-top: 0.5rem;
+              color: $kuriftu-grey;
+            }
+          }
+          .sep-line {
+            .line3 {
+              margin-top: 3rem;
+              width: 19rem;
+              @include responsive($xl) {
+                width: 24rem;
+              }
+            }
+          }
+          .details {
+            display: grid;
+            place-items: center;
+
+            .text-detail {
+              height: 2rem;
+              color: $kuriftu-grey;
+              text-align: center;
+              font-size: 0.88rem;
+            }
+            .btn-detail {
+              width: 18rem;
+              height: 3rem;
+              margin-top: 2rem;
+
+              @include responsive($xl) {
+                width: 24rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+footer {
+  background: #fff;
+  margin-top: 3rem;
+  .container {
+    @include responsive($xl) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    img {
+      padding: 1rem;
+      width: 8rem;
+    }
+    p {
+      font-size: 0.8rem;
+      padding: 1rem;
+      color: $kuriftu-grey;
+    }
+  }
+}

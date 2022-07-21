@@ -1,47 +1,62 @@
-.header {
-  background: url(../img/reserve.jpg) rgba(0, 0, 0, 0.3) no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-blend-mode: overlay;
-  height: 38rem;
-  position: relative;
+.reserve-header {
+  .nav-center {
+    display: grid;
+    place-items: center;
 
-  // z-index: -9999;
-  .profile {
-    position: relative;
-    height: auto;
-
-    .profile-icon {
-      background: #c4c4c4;
-      border-radius: 50%;
-      width: 3.94rem;
-      height: 3.94rem;
-      display: grid;
-      place-items: center;
-
-      cursor: pointer;
-
-      .profile-name {
-        font-size: 1.5rem;
-        font-weight: 600;
+    .logo {
+      img {
+        margin-top: 1rem;
+        width: 10rem;
       }
     }
 
-    .drop-down {
-      background: #fff;
-      border-radius: 5px;
-      position: absolute;
-      top: 110%;
-      right: 50%;
-      transform: translateX(50%);
-      z-index: 9999;
-      width: 7rem;
-      padding: 0.66rem 1rem;
+    .line {
+      @include responsive($xl) {
+        margin-top: 2rem;
+      }
 
-      ul {
-        li {
-          &:first-child {
-            padding-bottom: 1rem;
+      .container1 {
+        display: grid;
+        place-items: center;
+        margin-top: 1rem;
+
+        .line1 {
+          color: #d7d7d7;
+          width: 20rem;
+          opacity: 0.5;
+          border-style: solid;
+
+          @include responsive($xl) {
+            width: 80rem;
+          }
+
+          @include responsive($xxl) {
+            width: 90rem;
+          }
+        }
+
+        .justify-list {
+          display: flex;
+          gap: 2rem;
+        }
+
+        .link-text {
+          text-align: center;
+          color: $kuriftu-grey;
+        }
+
+        .line2 {
+          color: #d7d7d7;
+          border-style: solid;
+          opacity: 0.5;
+          width: 20rem;
+
+          @include responsive($xl) {
+            width: 80rem;
+          }
+
+          @include responsive($xxl) {
+            width: 90rem;
           }
         }
       }
@@ -49,12 +64,27 @@
   }
 }
 
-.header .nav-center {
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.resort-wall {
+  img {
+    width: 100%;
 
+    object-fit: cover;
+
+    @include responsive($md) {
+      height: 30vh;
+    }
+
+    @include responsive($xl) {
+      height: 40vh;
+    }
+  }
+}
+
+@include responsive($lg) {
+  .lg-xl-wide {
+    display: flex;
+    gap: 1rem;
+  }
 }
 
 .login {
@@ -77,7 +107,6 @@
 }
 
 @include responsive($lg) {
-
   .login {
     position: absolute;
 
@@ -95,12 +124,10 @@
   }
 
   .login2 {
-
     gap: 1rem;
     display: flex;
     place-items: center;
-    gap: .5rem;
-
+    gap: 0.5rem;
 
     .log,
     .sign {
@@ -110,7 +137,7 @@
   }
 }
 
-.header .nav-center .menu>div {
+.header .nav-center .menu > div {
   height: 2px;
   margin-bottom: 0.63rem;
   width: 2.31rem;
@@ -131,40 +158,50 @@
   margin-bottom: 1rem;
 }
 
-@media screen and (min-width: 1440px) {}
-
-@media screen and (min-width: 768px) {
-  .form-wrapper {
-    .myform {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-}
-
 @include responsive($xl) {
   .room-option {
     padding: 1rem;
   }
 }
 
+@include responsive($md) {
+  .flex-lg {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
 .form-wrapper {
   position: relative;
   display: grid;
-  place-items: center;
+
+  // @include responsive($xl){
+  //   margin-left: 1rem;
+  // }
+
+  // place-items: center;
+  margin-top: 2rem;
   gap: 1rem;
-  z-index: 99999;
+  z-index: 999;
   padding: 1rem;
-  background: #f1f1ea;
-  margin-top: -4rem;
-  box-shadow: 0px 4px 2px rgba(196, 196, 196, 0.3);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid #ccc;
+
+  @include responsive($md) {
+    max-width: 40rem;
+  }
 
   .myform {
     display: grid;
     place-content: center;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+
+    @include responsive($md) {
+      display: flex;
+      padding: 1rem;
+    }
 
     .guest-option {
       .gu-icon {
@@ -543,9 +580,9 @@
     .add-guest {
       display: flex;
       align-items: center;
-      border: 1px solid #ededed;
+
       // padding: .5rem;
-      border-radius: 5px;
+
       width: 17rem;
 
       .icon {
@@ -573,8 +610,8 @@
 @include responsive($lg) {
   .desti-location {
     // width: 35rem;
-    width: 20rem;
-    padding: 0.5rem;
+    // width: 20rem;
+    // padding: 0.5rem;
   }
 
   .add-guest {
@@ -769,6 +806,46 @@
   margin-bottom: 1.88rem;
   max-width: 28.63rem;
   margin: 0 auto;
+  padding: 1rem 1rem 1rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0px;
+
+  @include responsive($md) {
+    display: flex;
+    gap: 1rem;
+    max-width: 100%;
+  }
+}
+
+.pop-btn {
+  color: #6c757d;
+
+  .btn-line {
+    margin-top: -0.01rem;
+    width: 5.5rem;
+  }
+}
+
+.price-style {
+  font-size: 0.8rem;
+  color: #313131;
+  margin-bottom: 1rem;
+
+  @include responsive($md) {
+    text-align: right;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .price-txt {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #313131;
+
+    @include responsive($md) {
+      text-align: right;
+    }
+  }
 }
 
 .mycard .mycard-img-top {
@@ -779,8 +856,8 @@
 
 @media screen and (min-width: 768px) {
   .mycard .mycard-img-top {
-    width: 28.63rem;
-    height: 22.13rem;
+    width: 20.63rem;
+    height: 18.13rem;
     object-fit: cover;
   }
 }
@@ -825,32 +902,103 @@
   }
 }
 
+.text-muted {
+  font-size: 0.8rem;
+}
+
 .text-red {
   font-size: 0.8rem;
-  color: #a82f2f;
-  margin-left: -3rem;
+  color: #6c757d;
+}
+
+.divide-line {
+  width: 100%;
+}
+
+.btn-black {
+  width: 100%;
+}
+.BAlert {
+  width: 30%;
+}
+.aminties-list {
+  padding: 1rem;
+  margin-top: -1rem;
+  @include responsive($lg) {
+    margin-top: 0rem;
+    padding: 2rem;
+  }
+
+  h4 {
+    padding: 0.3rem;
+    margin-left: -1.3rem;
+    font-family: "Myriad Pro Light";
+
+    color: $kuriftu-black;
+
+    .btn-line2 {
+      margin-top: -0.09rem;
+      width: 8rem;
+    }
+  }
+
+  li {
+    font-family: "Myriad Pro Light";
+    color: $kuriftu-black;
+    list-style-type: disc;
+    font-size: 0.8rem;
+    @include responsive($xl) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.aminties-list1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+
+  li {
+    font-family: "Myriad Pro Light";
+    color: $kuriftu-black;
+    list-style-type: disc;
+    font-size: 0.8rem;
+  }
 }
 
 .mycard .mycard-body .mycard-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-transform: capitalize;
-  margin: 1.3rem 0;
+  margin: 0;
+  color: #333;
+  font-family: "Myriad Pro Light";
+  font-size: 1.4rem;
+  font-weight: 300;
+  margin-top: 1.5rem;
+
+  text-transform: none;
+  line-height: 1.3;
   color: #191e19;
+
+  @include responsive($md) {
+    margin-top: 0rem;
+  }
 }
 
 .mycard .mycard-body .mycard-price {
   display: flex;
-  gap: 10rem;
-  margin-bottom: 1.19rem;
+  gap: 1rem;
+  margin-top: 0.5rem;
+
   font-size: 1.13rem;
 }
 
 .mycard .mycard-body .mycard-text {
   font-size: 1rem;
   font-family: "Myriad Pro Regular";
-  color: #191e19;
+  color: $kuriftu-black;
   line-height: 1.63rem;
+  @include responsive($xl) {
+    line-height: 2.5rem;
+  }
   margin-bottom: 1.88rem;
 }
 
@@ -869,6 +1017,13 @@
   color: #f1f1ea;
   padding: 1.56rem 1.25rem;
 }
+
+// .modal-body {
+//   z-index: 9999999999 !important;
+// }
+// .modal-backdrop {
+//   z-index:  9999999998!important;
+// }
 
 .summary-title {
   font-size: 1.5rem;
@@ -926,17 +1081,18 @@
     // margin-right: -1rem;
     top: 10rem;
     display: block;
-    background: #f8f7f7;
+    background: #fdfaf6;
+    padding: 1rem;
+    border: 1px solid #282828;
     height: auto;
     width: 20rem;
   }
 
   .cart-wrapper {
-    padding: 1rem 1.63rem;
   }
 
   .cart-container .cart-title {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     color: #808080;
     font-weight: 500;
     margin-bottom: 2rem;
@@ -1111,7 +1267,7 @@
           }
 
           p {
-            word-spacing: .2rem;
+            word-spacing: 0.2rem;
             color: #808080;
           }
 
@@ -1365,7 +1521,7 @@
   font-size: 1.5rem;
   font-weight: 800;
   color: #a82f2f;
-  margin: 2.13rem 0 1rem;
+  margin: 1.13rem 0 1rem;
 }
 
 .register-subtitle {
@@ -1389,4 +1545,293 @@
 
 .ti {
   height: 100vh;
+}
+
+footer {
+  background: #fff;
+  margin-top: 3rem;
+
+  @include responsive($xl) {
+    margin-bottom: 0rem;
+  }
+
+  .container {
+    @include responsive($xl) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    img {
+      padding: 1rem;
+      width: 8rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+      padding: 1rem;
+      color: $kuriftu-grey;
+    }
+  }
+}
+
+.button {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 99999;
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 10px auto;
+  @include responsive($md) {
+    margin: 250px auto;
+  }
+  @include responsive($lg) {
+    margin: 200px auto;
+    width: 80%;
+    padding: 1rem;
+  }
+  @include responsive($xxl) {
+    margin: 180px auto;
+    width: 65%;
+    padding: 2rem;
+  }
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid #d7d7d7;
+  width: 90%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.pop-img {
+  margin-top: 1.5rem;
+  width: 20rem;
+
+  @include responsive($md) {
+    width: 30rem;
+  }
+}
+
+@include responsive($md) {
+  .popup-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+.padding-top2 {
+  margin-top: 1rem;
+}
+
+.popup h2 {
+  margin: 0;
+  font-family: "Myriad Pro Light";
+  font-size: 1.4rem;
+  font-weight: 300;
+  text-transform: none;
+  line-height: 1.3;
+  color: #191e19;
+  margin-top: 2rem;
+}
+
+.amenities-txt {
+  margin: 0;
+  font-family: "Myriad Pro Light";
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-transform: none;
+  line-height: 1.3;
+  color: #191e19;
+  margin-top: 0.5rem;
+}
+
+.popup .close {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.5rem;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+.add-guest-popup {
+  .popup-wrapper {
+    h4 {
+      font-size: 1.5rem;
+    }
+
+    .add-guest-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.popup1 {
+  margin: 10px auto;
+
+  @include responsive($md) {
+    margin: 250px auto;
+  }
+
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid #d7d7d7;
+
+  width: 90%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+@include responsive($md) {
+  .popup-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+.padding-top2 {
+  margin-top: 1rem;
+}
+
+.popup1 h2 {
+  margin: 0;
+  font-family: "Myriad Pro Light";
+  font-size: 1.4rem;
+  font-weight: 300;
+  text-transform: none;
+  line-height: 1.3;
+  color: #191e19;
+  margin-top: 2rem;
+}
+
+.amenities-txt {
+  margin: 0;
+  font-family: "Myriad Pro Light";
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-transform: none;
+  line-height: 1.3;
+  color: #191e19;
+  margin-top: 1rem;
+}
+
+.popup1 .close {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.5rem;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.popup1 .content {
+  max-height: 30%;
+  overflow: auto;
+}
+.complete-cont {
+  margin-top: 2rem;
+  @include responsive($lg) {
+    margin-top: 4rem;
+  }
+  display: grid;
+  place-content: center;
+}
+.check-box-wrapper {
+  display: grid;
+  place-content: center;
+  padding: 1rem;
+  background-color: #fdfaf6;
+  border-color: #282828;
+
+  border: 1px solid #b7b7b7;
+  .check-icon {
+    display: grid;
+    place-items: center;
+
+    img {
+      width: 6rem;
+    }
+    p {
+      margin-top: 1.5rem;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+}
+.width-imp {
+  width: 18rem;
+}
+.form-center {
+  display: grid;
+  place-content: center;
+}
+.modal-header {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  text-transform: uppercase !important;
+  .close {
+    background-color: #fff;
+    border: 0px;
+    font-size: 2.5rem;
+    color: $kuriftu-red;
+    font-weight: 700;
+  }
+}
+.modal-body {
+  margin-right: -2rem !important;
+}
+.text-dark {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content {
+  border-radius: 0rem !important;
+  padding: 0.8rem;
+  padding-top: 0.5rem;
+}
+
+.custom-select {
+  height: 2rem !important;
+  width: 5rem !important;
+  border-radius: 0rem;
+  border: 1px solid #ced4da;
+  font-size: 1.2rem !important;
+  padding: 0.2rem 0.7rem;
 }

@@ -1,4 +1,69 @@
 <?php include  'config.php'; ?>
+<?php
+
+function cutFromPromo($promo, $price)
+{
+
+  global $connection;
+
+  $promo_query = "SELECT * FROM promo WHERE promo_code = '$promo' AND promo_active = 'yes' LIMIT 1";
+  $promo_result = mysqli_query($connection, $promo_query);
+
+  confirm($promo_result);
+  $row = mysqli_fetch_assoc($promo_result);
+  $PromoId = $row['promo_id'];
+  $usage = $row['promo_usage'];
+  // echo json_encode($price);
+
+  if ($row['promo_time'] == null && $row['promo_usage'] == null) {
+    $Discount = $price * ($row['promo_amount'] / 100);
+    return ($price - $Discount);
+  } else if ($row['promo_time'] == null && $row['promo_usage'] !== null) {
+
+    if ($row['promo_usage'] == 0) {
+      return ("Expired");
+    } else {
+      $updated_usage = intval($usage - 1);
+      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
+      $promo_result = mysqli_query($connection, $update_promo);
+      confirm($promo_result);
+
+      $Discount = $price * ($row['promo_amount'] / 100);
+      return ($price - $Discount);
+    }
+  } else if ($row['promo_time'] !== null && $row['promo_usage'] == null) {
+
+    $expireDate = strtotime($row['promo_time']);
+    $today = strtotime(date('Y-m-d H:i:s'));
+
+    if ($today >= $expireDate) {
+      return ("expired");
+    } else {
+      $Discount = $price * ($row['promo_amount'] / 100);
+      return ($price - $Discount);
+    }
+  } else if ($row['promo_time'] !== null && $row['promo_usage'] !== null) {
+    $expireDate = strtotime($row['promo_time']);
+    $today = strtotime(date('Y-m-d H:i:s'));
+    $usage = $row['promo_usage'];
+
+
+    if ($today < $expireDate && $usage !== 0) {
+
+      $updated_usage = intval($usage - 1);
+      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
+      $promo_result = mysqli_query($connection, $update_promo);
+      confirm($promo_result);
+
+      $Discount = $price * ($row['promo_amount'] / 100);
+      return ($price - $Discount);
+    } else {
+      // The Promo code is expired
+      return ("promocode expired");
+    }
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,24 +77,73 @@
   <title>register</title>
 </head>
 
-<body style="background: #E5E5E5;">
-  <header class="header">
+<body>
+  <header class="header reserve-header">
     <div class="container">
       <nav class="nav-center">
-        <div class="menu">
-          <div class="line1"></div>
-          <div class="line2"></div>
-        </div>
+
         <div class="logo">
-          <img src="./img/Kuriftu_logo.svg" alt="">
+          <img src="./img/black_logo.svg" alt="">
         </div>
+        <div class="line">
+          <div class="container1">
+            <hr class="line1">
+            <ul class="justify-list">
+
+              <li>
+                <a class="link-text" href="">Back to Resorts</a>
+              </li>
+              <li>
+                <a class="link-text" href="">Sign Up</a>
+              </li>
+              <li>
+                <a class="link-text" href="">Login</a>
+              </li>
+            </ul>
+
+
+            <hr class="line2">
+          </div>
+        </div>
+
+
+        <?php
+
+        if (isset($_SESSION['m_username'])) {
+          $user_name =  $_SESSION['m_username'];
+        ?>
+          <div class="profile">
+            <div @click="showDropdown" class="profile-icon">
+              <h1 class="profile-name">
+                SA
+              </h1>
+
+            </div>
+
+            <div v-if="dropdown" class="drop-down">
+              <ul>
+                <li><a href="./profile.php"> <i class="fa-solid fa-user"></i> Profile</a></li>
+                <li> <a href="./logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log out</a></li>
+              </ul>
+            </div>
+          </div>
+
+        <?php
+        } else {
+          $user_name = null;
+        ?>
+
+
+
+        <?php
+        }
+
+        ?>
+
+
       </nav>
 
-      <div class="side-socials">
-        <img src="./img/facebook.svg" alt="">
-        <img src="./img/instagram.svg" alt="">
-        <img src="./img/youtube.svg" alt="">
-      </div>
+
 
     </div>
   </header>
@@ -55,8 +169,11 @@
   $checkIn =  $_SESSION['checkIn'];
   $checkOut = $_SESSION['checkOut'];
   $total_price = $_SESSION['total'];
-  $id = array();
+  $slocation = $_SESSION['Selectedlocation'];
 
+
+
+  $id = array();
   function getName($n)
   {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -72,7 +189,7 @@
 
   $res_confirmID = getName(8);
   foreach ($cart as  $val) {
-    $id[]     = $val->room_id;
+    $id[] = $val->room_id;
   }
   $id_sql = json_encode($id);
   $id_int = implode(',', $id);
@@ -83,8 +200,15 @@
 
     foreach ($_POST as $name => $value) {
       $params[$name] = escape($value);
+      $_SESSION[$name] = escape($value);
     }
-
+    if (isset($_POST['res_guestNo'])) {
+      if ($_SESSION["promoApp"] == false) {
+        $total_price = cutFromPromo($_POST['res_guestNo'], $total_price);
+        $_SESSION['total'] = "$total_price";
+        $_SESSION["promoApp"] = true;
+      }
+    }
     if ($params['res_paymentMethod'] == 'arrival') {
       $firstDate = new DateTime($checkIn);
       $today = new DateTime();
@@ -98,7 +222,6 @@
         foreach ($id  as $value) {
 
           //  Select room details from room id 
-
 
           $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
 
@@ -116,8 +239,8 @@
 
           confirm($booked_result);
         }
-        $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
-        $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$params['res_guestNo']}', 'website') ";
+        $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, 	res_agent) ";
+        $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', 'website') ";
 
         $result = mysqli_query($connection, $query);
         confirm($result);
@@ -143,8 +266,6 @@
         $room_result = mysqli_query($connection, $room_query);
         confirm($room_result);
         $room_row = mysqli_fetch_assoc($room_result);
-
-
         // Insert into booked table
 
         $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
@@ -173,7 +294,6 @@
           break;
         case 'paypal':
           header("Location: ./paypal.php");
-          // header("Location: ./websocket.php");
           break;
         case 'telebirr':
           header("Location: ./telebirr.php");
@@ -182,7 +302,7 @@
 
       // pusher trigger notification
 
-      //  $data = array($params, $id);
+      $data = array($params, $id);
       $data = true;
 
       $pusher->trigger('front_notifications', 'front_reservation', $data);
@@ -199,52 +319,52 @@
       Feel out the form below inorder to book a room
     </p>
     <div class="row">
-      <form class="row my-form col-lg-6 g-3" action="" method="post">
+      <form class="row my-form col-lg-8 g-3 mt-lg-n2 " action="" method="post">
 
 
-        <div class="col-md-6">
+        <div class="col-md-6 ">
 
-          <input type="text" placeholder="First Name" name="res_firstname" value="<?php echo isset($params['res_firstname']) ? $params['res_firstname'] : '';   ?>" class="form-control" id="inputEmail4">
+          <input required type="text" placeholder="First Name" name="res_firstname" value="<?php echo isset($params['res_firstname']) ? $params['res_firstname'] : '';   ?>" class="form-control" id="inputEmail4">
         </div>
         <div class="col-md-6">
 
-          <input type="text" placeholder="Last Name" value="<?php echo isset($params['res_lastname']) ? $params['res_lastname'] : '';   ?>" name="res_lastname" class="form-control" id="inputPassword4">
+          <input required type="text" placeholder="Last Name" value="<?php echo isset($params['res_lastname']) ? $params['res_lastname'] : '';   ?>" name="res_lastname" class="form-control" id="inputPassword4">
         </div>
         <div class="col-md-6">
-          <input type="phone" placeholder="Phone No." value="<?php echo isset($params['res_phone']) ? $params['res_phone'] : '';   ?>" name="res_phone" class="form-control" id="inputAddress">
+          <input required type="phone" placeholder="Phone No." value="<?php echo isset($params['res_phone']) ? $params['res_phone'] : '';   ?>" name="res_phone" class="form-control" id="inputAddress">
         </div>
         <div class="col-md-6">
 
-          <input type="email" placeholder="Email" value="<?php echo isset($params['res_email']) ? $params['res_email'] : '';   ?>" name="res_email" class="form-control" id="inputAddress2">
-        </div>
-
-        <div class="col-md-6">
-
-          <input type="text" placeholder="Country" value="<?php echo isset($params['res_country']) ? $params['res_country'] : '';   ?>" class="form-control" name="res_country" id="inputCity">
+          <input required type="email" placeholder="Email" value="<?php echo isset($params['res_email']) ? $params['res_email'] : '';   ?>" name="res_email" class="form-control" id="inputAddress2">
         </div>
 
         <div class="col-md-6">
-          <input type="text" value="<?php echo isset($params['res_address']) ? $params['res_address'] : '';   ?>" placeholder="Address" class="form-control" name="res_address" id="inputCity">
+
+          <input required type="text" placeholder="Country" value="<?php echo isset($params['res_country']) ? $params['res_country'] : '';   ?>" class="form-control" name="res_country" id="inputCity">
+        </div>
+
+        <div class="col-md-6">
+          <input required type="text" value="<?php echo isset($params['res_address']) ? $params['res_address'] : '';   ?>" placeholder="Address" class="form-control" name="res_address" id="inputCity">
         </div>
 
 
         <div class="col-md-6">
 
-          <input type="text" placeholder="No. of Guests" value="<?php echo isset($params['res_guestNo']) ? $params['res_guestNo'] : '';   ?>" class="form-control" name="res_guestNo" id="inputCity">
+          <input type="text" placeholder="Promo Code" value="<?php echo isset($params['res_guestNo']) ? $params['res_guestNo'] : '';   ?>" class="form-control" name="res_guestNo" id="inputCity">
         </div>
         <div class="col-md-6">
-          <input type="text" placeholder="City" value="<?php echo isset($params['res_city']) ? $params['res_city'] : '';   ?>" class="form-control" name="res_city" id="inputCity">
+          <input required type="text" placeholder="City" value="<?php echo isset($params['res_city']) ? $params['res_city'] : '';   ?>" class="form-control" name="res_city" id="inputCity">
         </div>
         <div class="col-md-6">
           <input type="text" placeholder="Special Request" value="<?php echo isset($params['res_specialRequest']) ? $params['res_specialRequest'] : '';   ?>" class="form-control" name="res_specialRequest" id="inputCity">
         </div>
         <div class="col-md-6">
 
-          <input type="text" value="<?php echo isset($params['res_zip']) ? $params['res_zip'] : '';   ?>" placeholder="Zip/Postal Code" class="form-control" name="res_zip" id="inputCity">
+          <input required type="text" value="<?php echo isset($params['res_zip']) ? $params['res_zip'] : '';   ?>" placeholder="Zip/Postal Code" class="form-control" name="res_zip" id="inputCity">
         </div>
         <div class="col-md-6">
           <label for="inputState" class="form-label payment">Payment Platform</label>
-          <select id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
+          <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
             <option value="paypal">Pay Pal</option>
             <option value="amole">Amole</option>
@@ -255,9 +375,9 @@
 
         <div class="col-12">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="book">
+            <input required class="form-check-input" type="checkbox" id="book">
             <label class="form-check-label" for="book">
-              I agree with <a href="#"> Booking Coditions </a>
+              I agree with <a href="#"> Booking Term and Conditions </a>
             </label>
           </div>
           <div class="form-check">
@@ -273,9 +393,20 @@
         </div>
       </form>
 
-      <div class="col-lg-4 offset-lg-2">
+      <div class="col-lg-3 ">
         <div class="cart-container">
-          <h2 class="cart-title">Your Stay At Kuriftu</h2>
+
+          <?php
+          if ($slocation == "Bishoftu") { ?>
+            <img src="./img/2.webp" alt="">
+          <?php } else if ($slocation == "awash") { ?>
+            <img src="./img/awash-cover.webp" alt="">
+          <?php } else if ($slocation == "entoto") { ?>
+            <img src="./img/Glamping.webp" alt="">
+          <?php } else if ($slocation == "Tana") { ?>
+            <img src="./img/Tana.webp" alt="">
+          <?php } ?>
+          <h2 class="cart-title mt-2">Your Stay At Kuriftu</h2>
 
           <div class="cart-date">
             <div class="u-checkin">
@@ -302,10 +433,13 @@
           </div>
 
           <hr>
-          <div class="cart-footer-lg">
 
+          <div class="footer-btn promo mb-3">
             <div class="price">
-              Total: $ <?php echo $total_price; ?> <br>
+              Total: $
+
+              {{totalPtice}}
+              <br>
               Rooms: <?php echo $_SESSION['rooms']; ?>
 
             </div>
@@ -323,11 +457,59 @@
             </p>
           </div>
 
-
-
         </div>
       </div>
     </div>
+
+    <div class="bottom-cart">
+
+      <div class="bottom-cart-modal" v-if="toggleModal">
+        <div class="cart-header">
+          <h3 class="summary-title">Booking Summary</h3>
+          <div class="close" @click="openModal">
+            <img src="./img/close2.svg" alt="">
+            <!-- <i class="bi bi-x"></i> -->
+          </div>
+
+        </div>
+        <hr>
+
+        <div class="cart-content" v-for="items in cartCompleted" :key="items.room_id">
+          <div class="upper">
+            <h3>{{ items.room_acc }} - {{ items.room_location}}</h3>
+
+          </div>
+
+          <div class="lower">
+            <p class="text-muted">
+            </p>
+
+            <p class="text-muted">
+              ${{ items.room_price }}
+            </p>
+          </div>
+
+          <hr>
+
+
+        </div>
+
+      </div>
+
+      <div class="cart-footer">
+        <div class="price">
+          <div>
+            Total: ${{ totalPtice }} <br>
+            Rooms: <?php echo $_SESSION['rooms']; ?>
+          </div>
+
+          <div @click="openModal">
+            <i class="bi bi-chevron-up"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
       <div class="modal-dialog" role="document">
@@ -349,7 +531,13 @@
       </div>
     </div>
   </div>
+  <footer>
+    <div class="container">
+      <img src="./img/black_logo.svg" alt="">
+      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa</p>
+    </div>
 
+  </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <!-- <script src="./js/reserve.js"></script> -->
   <?php include_once './includes/footer.php' ?>
@@ -371,10 +559,37 @@
           hours: 15,
           minutes: 30,
           seconds: 00,
-          dis: ''
+          dis: '',
+          totalPtice: <?php echo $total_price; ?>,
+          oneClick: false,
+          isPromoApplied: false,
+          toggleModal: false
         };
       },
       methods: {
+
+        openModal() {
+          this.toggleModal = !this.toggleModal
+
+        },
+        fetchPromo() {
+          this.oneClick = true
+          if (!localStorage.promo) {
+
+            axios.post('book.php', {
+              action: 'promoCode',
+              data: this.promoCode,
+              TotalPrice: <?php echo $total_price; ?>
+            }).then(res => {
+              console.log(res.data)
+              this.totalPtice = res.data.toFixed(2)
+              localStorage.total = JSON.stringify(this.totalPtice)
+            })
+            this.isPromoApplied = true
+            localStorage.promo = this.isPromoApplied
+          }
+          this.isPromoApplied = JSON.parse(localStorage.promo || false)
+        },
 
         TimerExtend() {
           $("#TimesUP").modal("hide");
@@ -382,13 +597,10 @@
         },
         viewCart(CartIn) {
           this.cartCompleted = CartIn
-
         },
         CheckFrom(availables, selectedCart) {
           var temp = []
           var notFound = []
-          // console.log("available:", availables)
-          // console.log("cart", selectedCart[0].room_acc)
           selectedCart.forEach(cartItem => {
             availables.forEach(item => {
               newArray = item.filter(data => {
@@ -402,7 +614,6 @@
           })
           if (temp.length !== 0) {
             console.log("found", temp)
-
             selectedCart.forEach(tempdata => {
 
               checkLefted = temp.filter(data => {
@@ -414,7 +625,6 @@
 
             })
             if (notFound.length !== 0) {
-              console.log("needs No change")
               this.resetTimer();
               $("#TimesUP").modal("hide");
 
@@ -425,7 +635,7 @@
             }
 
           } else {
-            console.log("needs to be update update", notFound, temp)
+            console.log("needs to be update", notFound, temp)
           }
 
 
@@ -464,24 +674,18 @@
               .then((response) => {
 
                 localStorage.clear();
-                window.location.href = "reserve.php";
+                window.location.href = "reserve.php?location=<?php echo $slocation; ?>";
 
               });
 
           })
 
-
-
         },
         clearCart() {
-          // localStorage.cart = [];
-          // localStorage.total = 0
+          console.log("here is hem too")
           localStorage.clear();
         },
         startIdleTimer() {
-
-
-
           if (this.sec >= 6) {
             this.sec--;
           } else if (this.sec == 0) {
@@ -500,9 +704,9 @@
         resetTimer() {
           /* Clear the previous interval */
           clearInterval(this.timer);
-          
+
           /* Reset the seconds of the timer */
-          this.sec = '10';
+          this.sec = '50';
           this.min = '0';
           /* Set a new interval */
           this.timer = setInterval(this.startIdleTimer, 1000);

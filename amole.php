@@ -145,7 +145,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
         "unsigned_field_names"  => "",
         "signed_date_time"  => gmdate("Y-m-d\TH:i:s\Z"),
         "locale"  => "en",
-        "transaction_type" => "authorization",
+        "transaction_type" => "sale",
         "reference_number" => "1643727245076",
         "amount" => $total_price,
         "currency" => "USD",

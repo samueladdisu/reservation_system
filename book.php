@@ -53,30 +53,105 @@ if ($received_data->action == 'fetchall') {
   echo json_encode($dataCount);
 }
 
+if ($received_data->action == 'fetchallLocation') {
+
+  $location = $received_data->location;
+
+  $count = 0;
+  $roomAcc_temp = '';
+  $roomLocation = '';
+  $dataCount = [];
+  $query2 = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location' ORDER BY room_acc;";
+
+  $result2 = mysqli_query($connection, $query2);
+  confirm($result2);
+
+  while ($row = mysqli_fetch_assoc($result2)) {
+
+    if ($roomAcc_temp == '' || $roomLocation == '') {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+    } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
+
+      array_push($data, $row);
+    } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+      array_push($dataCount, $data);
+      $data = [];
+      array_push($data, $row);
+      // goto here;
+    }
+  }
+  if (count($data) > 1) {
+    array_push($dataCount, $data);
+  }
+
+
+  echo json_encode($dataCount);
+}
+
 if ($received_data->action == 'promoCode') {
-  $code = $received_data->data;
-  $promoData = array();
-  $promo_query = "SELECT * FROM promo WHERE promo_code = '$code'";
+  $promo = $received_data->data;
+  $price = $received_data->TotalPrice;
+  // $price = floatval($recprice);
+
+  global $connection;
+
+  $promo_query = "SELECT * FROM promo WHERE promo_code = '$promo' AND promo_active = 'yes' LIMIT 1";
   $promo_result = mysqli_query($connection, $promo_query);
 
   confirm($promo_result);
+  $row = mysqli_fetch_assoc($promo_result);
+  $PromoId = $row['promo_id'];
+  $usage = $row['promo_usage'];
+  // echo json_encode($price);
 
-  while ($row = mysqli_fetch_assoc($promo_result)) {
-    foreach ($row as $key => $value) {
-      $params[$key] = $value;
-    }
-    date_default_timezone_set('Africa/Addis_Ababa');
-    $current_date = date('m/d/Y h:i:s', time());
+  if ($row['promo_time'] == null && $row['promo_usage'] == null) {
+    $Discount = $price * ($row['promo_amount'] / 100);
+    echo json_encode($price - $Discount);
+  } else if ($row['promo_time'] == null && $row['promo_usage'] !== null) {
 
-    if ($params['promo_time'] > $current_date && $params['promo_usage'] > 0) {
-      $updated_usage = $params['promo_usage'] - 1;
-      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = {$params['promo_id']}";
-
-      $update_promo_result = mysqli_query($connection, $update_promo);
-      confirm($update_promo_result);
-      echo json_encode($params['promo_amount']);
+    if ($row['promo_usage'] == 0) {
+      echo json_encode("Expired");
     } else {
-      echo json_encode(false);
+      $updated_usage = intval($usage - 1);
+      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
+      $promo_result = mysqli_query($connection, $update_promo);
+      confirm($promo_result);
+
+      $Discount = $price * ($row['promo_amount'] / 100);
+      echo json_encode($price - $Discount);
+    }
+  } else if ($row['promo_time'] !== null && $row['promo_usage'] == null) {
+
+    $expireDate = strtotime($row['promo_time']);
+    $today = strtotime(date('Y-m-d H:i:s'));
+
+    if ($today >= $expireDate) {
+      echo json_encode("expired");
+    } else {
+      $Discount = $price * ($row['promo_amount'] / 100);
+      echo json_encode($price - $Discount);
+    }
+  } else if ($row['promo_time'] !== null && $row['promo_usage'] !== null) {
+    $expireDate = strtotime($row['promo_time']);
+    $today = strtotime(date('Y-m-d H:i:s'));
+    $usage = $row['promo_usage'];
+
+
+    if ($today < $expireDate && $usage !== 0) {
+
+      $updated_usage = intval($usage - 1);
+      $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
+      $promo_result = mysqli_query($connection, $update_promo);
+      confirm($promo_result);
+
+      $Discount = $price * ($row['promo_amount'] / 100);
+      echo json_encode($price - $Discount);
+    } else {
+      // The Promo code is expired
+      echo json_encode("promocode expired");
     }
   }
 }
@@ -204,13 +279,14 @@ if ($received_data->action == 'insert') {
   $_SESSION['checkIn'] = $checkIn = $received_data->checkIn;
   $_SESSION['checkOut'] = $checkOut = $received_data->checkOut;
   $_SESSION['location'] = $location = $received_data->location;
+  $_SESSION['Selectedlocation'] = $location = $received_data->selectedLocation;
   $_SESSION['cart'] = $cart = $received_data->data;
   $_SESSION['total'] = $received_data->total;
   $_SESSION['rooms'] = $received_data->totalroom;
+  $_SESSION['promoApp'] = false;
 
   foreach ($cart as $value) {
     $id = intval($value->room_id);
-
     $query = "UPDATE rooms SET room_status = 'Hold' WHERE room_id = $id";
     $result = mysqli_query($connection, $query);
 
@@ -266,20 +342,10 @@ if ($received_data->action == 'calculatePrice') {
   $sWeekend  = 0.00;
   $sWeekdays = 0.00;
   $sMember = 0.00;
-
-  $checkIn = $received_data->checkIn;
-  $checkOut = $received_data->checkOut;
-
-
-
-  $days       = array();
-  $start      = new DateTime($checkIn);
-  $end        = new DateTime($checkOut);
-
-  for ($date = $start; $date < $end; $date->modify('+1 day')) {
-    $days[] = $date->format('l');
-  }
   $cart = $received_data->data;
+  // $checkIn = $received_data->checkIn;
+  // $checkOut = $received_data->checkOut;
+
   foreach ($cart as $val) {
 
     $cartRoomType = $val->room_acc;
@@ -287,6 +353,14 @@ if ($received_data->action == 'calculatePrice') {
     $kid = intval($val->kids);
     $teen = intval($val->teens);
     $location = $val->room_location;
+
+    $days       = array();
+    $start      = new DateTime($val->checkin);
+    $end        = new DateTime($val->checkout);
+  
+    for ($date = $start; $date < $end; $date->modify('+1 day')) {
+      $days[] = $date->format('l');
+    }
 
 
     $query_type = "SELECT * FROM room_type WHERE type_name = '$cartRoomType'";
@@ -298,8 +372,6 @@ if ($received_data->action == 'calculatePrice') {
 
       // double occupancy rate
       $type_location = $row_type['type_location'];
-
-
 
       $dbRack    = doubleval($row_type['d_rack_rate']);
       $dbWeekend = doubleval($row_type['d_weekend_rate']);

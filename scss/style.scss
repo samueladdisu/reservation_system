@@ -1,21 +1,22 @@
-@import 'fonts';
-@import 'reboot';
-@import 'mixins';
-@import 'utilities';
-@import 'reserve';
-@import 'footer';
-@import 'signup';
-@import 'profile';
-@import 'members';
+@import "fonts";
+@import "reboot";
+@import "mixins";
+@import "utilities";
+@import "reserve";
+@import "footer";
+@import "signup";
+@import "profile";
+@import "members";
+@import "destination";
+@import "room";
 
-
-.promo{
+.promo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  .input-group{
+  .input-group {
     .input-group-append {
-      span{
+      span {
         background: $kuriftu-grey;
         color: #fff;
         cursor: pointer;
@@ -23,4 +24,3 @@
     }
   }
 }
-

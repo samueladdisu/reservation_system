@@ -1,4 +1,15 @@
 <?php include  'config.php'; ?>
+<?php
+$RoomType = '';
+$Location = '';
+if (isset($_GET['location'])) {
+  $Location = $_GET['location'];
+}
+if (isset($_GET['roomType'])) {
+  $RoomType = $_GET['roomType'];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,20 +29,35 @@
 </head>
 
 <body>
+
+
   <div id="app">
-    <header class="header">
+    <header class="header reserve-header">
       <div class="container">
         <nav class="nav-center">
-          <div class="menu">
-            <div class="line1"></div>
-            <div class="line2"></div>
-          </div>
+
           <div class="logo">
-            <img src="./img/Kuriftu_logo.svg" alt="">
+            <img src="./img/black_logo.svg" alt="">
           </div>
-          <div class="login2">
-            <a href="./signIn.php" class="btn-primary1 log mx-2">Log In</a>
-            <a href="./signUp.php" class="btn-secondary2 sign">Sign Up</a>
+          <div class="line">
+            <div class="container1">
+              <hr class="line1">
+              <ul class="justify-list">
+
+                <li>
+                  <a class="link-text" href="./">Back to Resorts</a>
+                </li>
+                <li>
+                  <a class="link-text" href="">Sign Up</a>
+                </li>
+                <li>
+                  <a class="link-text" href="">Login</a>
+                </li>
+              </ul>
+
+
+              <hr class="line2">
+            </div>
           </div>
 
 
@@ -70,50 +96,27 @@
 
 
         </nav>
-        <div class="login">
-          <a href="./signIn.php" class="btn-primary1 log mx-2">Log In</a>
-          <a href="./signUp.php" class="btn-secondary2 sign">Sign Up</a>
-        </div>
-        <div class="side-socials">
-          <img src="./img/facebook.svg" alt="">
-          <img src="./img/instagram.svg" alt="">
-          <img src="./img/youtube.svg" alt="">
-        </div>
+
+
 
       </div>
     </header>
-
-    <div class="container">
+    <section class="resort-wall">
+      <?php
+      if ($Location == "Bishoftu") { ?>
+        <img src="./img/2.webp" alt="">
+      <?php } else if ($Location == "awash") { ?>
+        <img src="./img/awash-cover.webp" alt="">
+      <?php } else if ($Location == "entoto") { ?>
+        <img src="./img/Glamping.webp" alt="">
+      <?php } else if ($Location == "Tana") { ?>
+        <img src="./img/Tana.webp" alt="">
+      <?php } ?>
+    </section>
+    <div class="container-sm" v-if="haveData">
       <div class="form-wrapper">
 
         <form class="myform" @submit.prevent="submitData">
-
-          <div class="desti-location">
-            <div class="icon">
-              <img src="./img/location.svg" alt="">
-            </div>
-            <select class="mySelect" v-model="desti">
-              <option disabled value="">
-                <p>Choose Destination</p>
-              </option>
-              <?php
-
-              $query = "SELECT * FROM locations";
-              $result = mysqli_query($connection, $query);
-
-              confirm($result);
-
-              while ($row = mysqli_fetch_assoc($result)) {
-                $location_id = $row['location_id'];
-                $location_name = $row['location_name'];
-              ?>
-                <option value='<?php echo $location_name ?>'><?php echo $location_name ?></option>
-              <?php  }
-
-              ?>
-            </select>
-
-          </div>
 
           <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
             <div class="modal-dialog" role="document">
@@ -129,33 +132,11 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="TimerExtend()">Yes</button>
+                  <button type="button" class="btn btn-red BAlert" data-dismiss="modal" @click="TimerExtend()">Yes</button>
                 </div>
               </div>
             </div>
-
-
           </div>
-
-
-          <!-- <div class="add-guest">
-            <div class="icon">
-              <img src="./img/guests.svg" alt="">
-            </div>
-            <select class="mySelect2" v-model="desti">
-              <option class="myoption" disabled value="">
-                Single Guests</option>
-              <option class="insideoption" value="">
-                <p>   Kids</p>
-           
-                  
-             
-              </option>
-
-              <option value=" ">Adults</option>
-            </select>
-
-          </div> -->
           <div class="t-datepicker ">
             <div class="t-check-in">
               <div class="t-dates t-date-check-in">
@@ -175,36 +156,36 @@
               <input type="hidden" class="t-input-check-out" name="end">
             </div>
           </div>
-          <button type="submit" class="btn btn-primary1">
+          <button type="submit" class="btn btn-black">
             Check Availability
           </button>
         </form>
       </div>
 
 
-      <div class="row">
+      <div class="lg-xl-wide">
 
 
         <!-- available rooms -->
 
-        <div class="col-lg-8 mt-5">
-          <div class="mycard mt-5" v-for="rows in roomName" :key="rows.room_id">
+        <div class=" mt-3 single-room-detail">
+          <div class="mycard mt-5 mt-lg-3" v-for="rows in roomName" :key="rows.room_id">
             <!-- <div  v-if="rows.room_acc === 'Deluxe Lake Front King Size Bed'"> -->
-
 
             <img :src="'./admin/room_img/' + rows.room_image" class="mycard-img-top" alt="...">
             <div class="mycard-body">
               <h5 class="mycard-title">
-                {{ rows.room_acc }} - {{ rows.room_location}}
+                {{ rows.room_acc }}
               </h5>
-              <p class="mycard-price">
+              <p class="mycard-price padding-top">
                 <small class="text-muted">
-                  ${{ rows.room_price }} Per Night
-                  {{ rows.room_id }}
+
+                  {{ rows.room_location}}
                 </small>
 
+
                 <small class="text-red">
-                  only {{ rows.cnt }} left
+                  Only {{ rows.cnt }} left
                 </small>
               </p>
               <p class="mycard-text">
@@ -214,60 +195,58 @@
                 </li> -->
               </ul>
               </p>
-              <div class="amenities-icon">
-                <div class="icon-wrapper">
-                  <img src="./img/wifi.svg" alt="">
-                  <p>wifi</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/tv.svg" alt="">
-                  <p>television</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/bath.svg" alt="">
-                  <p>bath</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/room_service.svg" alt="">
-                  <p>service</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/bell.svg" alt="">
-                  <p>Lobby</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/laudary.svg" alt="">
-                  <p>laudary</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/location2.svg" alt="">
-                  <p>location</p>
-                </div>
-                <div class="icon-wrapper">
-                  <img src="./img/parking.svg" alt="">
-                  <p>parking</p>
-                </div>
-              </div>
               <p class="mycard-text">
-                {{ rows.room_desc.substring(0,155)+".."}}
+                {{ rows.room_desc.substring(0,147)+("...")}}
               </p>
-              <div class="btn-container1">
-                <a href="" @click.prevent="addRoom(rows)" class="btn btn-primary1">Select Room</a>
-                <a href="" @click.prevent="addRoom(rows)" class="pop-btn btn btn-primary1">Room Detail</a>
+              <a href="#popup1" class="pop-btn button ">Room Detail
+                <hr class="btn-line ">
+              </a>
+              <hr class="divide-line" />
+              <div class="flex-lg">
+                <ul class="aminties-list">
+                  <h4>Amenities</h4>
+                  <li>Bathroom with a Shower</li>
+                  <li>Wifi</li>
+                  <li> COVID Kit</li>
+
+                </ul>
+                <div>
+
+                  <div class="price-style">
+                    <p class="price-txt">
+                      ${{ rows.room_price }}
+
+                    </p> Per Night
+                  </div>
+
+                  <div class="btn-container1">
+                    <a @click.prevent="addRoom(rows)" class="btn btn-black">Select Room</a>
+
+                  </div>
+                </div>
               </div>
+
+
+
+
+
             </div>
             <!-- </div> -->
           </div>
         </div>
 
-        <div class="col-lg-4 mt-5">
-          <div v-if="cart.length != 0" class="cart-container mt-5">
+        <div class="">
+          <div v-if="cart.length != 0" class="cart-container ">
             <div class="cart-image">
               <img src="./admin/room_img/kuriftu.jpg" alt="">
             </div>
-            <div class="cart-wrapper">
+            <div class="cart-wrapper mt-lg-5">
               <h2 class="cart-title">Your Stay At Kuriftu</h2>
               <div class="cart" v-for="items of cart" :key="items.id">
+                <div class="upper">
+                  <h3>{{ items.room_acc }} - {{ items.room_location}}</h3>
+
+                </div>
                 <div class="guest-info">
                   <div class="check-out">
                     <h3>Check Out</h3>
@@ -282,10 +261,7 @@
                     <p>{{ items.adults }} Adults {{ items.teens }} Teens {{ items.kids }} Kids</p>
                   </div>
                 </div>
-                <div class="upper">
-                  <h3>{{ items.room_acc }} - {{ items.room_location}}</h3>
 
-                </div>
                 <div class="lower">
                   <p class="text-muted">
                   </p>
@@ -312,19 +288,11 @@
 
               <hr>
               <div class="footer-btn promo mb-3">
-
-                <div class="input-group">
-                  <input type="text" placeholder="Apply Promo Code" name="res_promo" v-model="promoCode" class="form-control">
-                  <div class="input-group-append">
-                    <button :disabled="oneClick" @click="fetchPromo" class="input-group-text">Apply</button>
-
-                  </div>
-                </div>
               </div>
               <div class="cart-footer-lg" v-if="cart.length != 0">
 
                 <div class="footer-btn">
-                  <a @click.prevent="completeCart" class="btn btn-primary3"> BOOK NOW</a>
+                  <a @click.prevent="completeCart" class="btn btn-black"> BOOK NOW</a>
                 </div>
 
                 <div class="price">
@@ -348,8 +316,6 @@
             </div>
 
           </div>
-
-
           <hr>
 
           <div class="cart-content" v-for="items in cart" :key="items.id">
@@ -375,6 +341,7 @@
           </div>
 
         </div>
+
         <div class="cart-footer">
           <div class="price">
             <div>
@@ -393,6 +360,19 @@
           </div>
         </div>
 
+
+      </div>
+    </div>
+    <div v-else>
+      <div class="centerSAD">
+        <div class="container-sm complete-cont  ">
+          <div class="check-box-wrapper">
+            <div class="check-icon">
+              <img src="./img/sad2.svg" alt="">
+              <p>No room available!</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="modal fade" id="guest">
@@ -400,16 +380,16 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Add Guests</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button btn" class="close" data-dismiss="modal" aria-label="Close" @click.prevent="closeGuestModal">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="" class="text-dark">Room 1:</label>
+              <label for="" class="text-dark">Guest Number</label>
               <div class="row">
                 <select name="adults" v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
-                  <option value="" disabled>Adults*</option>
+                  <option value="" disabled>Adults *</option>
                   <option value="0">0</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -423,25 +403,103 @@
                 </select>
 
                 <select name="adults" @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
-                  <option value="" disabled>kid(6-11)</option>
+                  <option value="" disabled>Kid (6-11)</option>
                   <option value="0">0</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                 </select>
-
-
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" @click="nextBook" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+            <button type="button" @click="nextBook" data-dismiss="modal" class="btn btn-black">Add Room</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div id="popup1" class="overlay">
+    <div class="popup" v-for="items in cart" :key="items.id">
+      <a class="close" href="#">&times;</a>
+      <div class="content">
+        <h2>
+          <!-- {{ rows.room_desc.substring(0,147)+("...")}} -->
+          Deluxe Lake Front King Size Bed
+        </h2>
+        <div class="popup-content-wrapper">
+          <img src="./admin/room_img/bed_king.jpg" class="mycard-img-top pop-img" alt="...">
+          <div>
+            <p class="mycard-price padding-top2">
+              <small class="text-muted ">
+                <!-- {{ rows.room_location}} --> Bishoftu
+              </small>
+              <small class="text-red">
+                <!-- Only {{ rows.cnt }} left -->-
+                Only 5 left
+              </small>
+            </p>
+            <p class="mycard-text  padding-top2">
+            <ul>
+              <!-- <li v-for="am in amenities(row.room_amenities)" :key="am">
+                  {{ am }}
+                </li> -->
+            </ul>
+            </p>
+            <p class="mycard-text">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores ipsam vel quae temporibus maiores excepturi explicabo, sit neque blanditiis deleniti alias obcaecati repudiandae rem similique deserunt, provident esse reprehenderit? Tenetur.
+            </p>
+          </div>
+        </div>
+
+        <div class="mycard-body">
+
+
+          <h4 class="amenities-txt">Room Amenities
+          </h4>
+          <hr class="divide-line" />
+          <ul class="aminties-list1">
+
+
+            <li>Wifi</li>
+            <li> PBX Phone</li>
+            <li>Hair-dryer</li>
+            <li> Adapters</li>
+
+            <li>COVID Kit</li>
+            <li>32” HDTV</li>
+            <li>Slippers</li>
+            <li>Mini Fridge</li>
+            <li> Luggage Rack</li>
+            <li>Umbrella</li>
+            <li> Ironing Board</li>
+            <li>Bathrobe</li>
+            <li>Tea and Coffee Maker</li>
+
+            <li>Safety Deposit Box</li>
+            <li> Private Balcony with Day Bed</li>
+            <li>Private bathroom with a shower</li>
+
+          </ul>
+
+
+
+
+
+
         </div>
       </div>
     </div>
   </div>
 
+  </div>
+  <footer>
+    <div class="container">
+      <img src="./img/black_logo.svg" alt="">
+      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa</p>
+    </div>
 
+  </footer>
 
   <?php include_once './includes/footer.php' ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -477,6 +535,8 @@
       },
       data() {
         return {
+          haveData: true,
+          guestModal: false,
           checkIn: '',
           checkOut: '',
           desti: '',
@@ -505,6 +565,11 @@
       },
 
       methods: {
+
+        closeGuestModal() {
+          this.guestModal = false
+          $('#guest').modal('hide')
+        },
 
         popOutSelected(row) {
 
@@ -546,28 +611,20 @@
               .post("book.php", {
                 action: "ClearHold",
                 RoomId: eachID.room_id,
-
               })
               .then((response) => {
-
                 localStorage.clear();
-                window.location.href = "reserve.php";
-
+                window.location.href = "reserve.php?location=<?php echo $Location; ?>";
               });
 
           })
-
-
-
         },
 
         CheckGuest() {
-
-
           if (this.res_adults == "1") {
 
             if ((this.res_teen == "2" && this.res_kid == "2") || (this.res_teen == "2" && this.res_kid == "1") || (this.res_teen == "1" && this.res_kid == "2")) {
-              alert("you cant");
+              alert("This combination of guest numbers is not possible.");
               this.adults = 0;
               this.teens = 0;
               this.kids = 0;
@@ -580,14 +637,18 @@
           } else if (this.res_adults == "2") {
 
             if ((this.res_teen == "2" && this.res_kid == "2") || (this.res_teen == "2" && this.res_kid == "0") || (this.res_teen == "1" && this.res_kid == "2")) {
-              alert("you cant");
+              alert("This combination of guest numbers is not possible.");
+              this.adults = 0;
+              this.teens = 0;
+              this.kids = 0;
             } else {
-
               this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
-
             }
           } else if (this.res_adults == "0") {
             alert("adult cant be 0");
+            this.adults = 0;
+            this.teens = 0;
+            this.kids = 0;
           } else {
             alert("booked");
             this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
@@ -676,31 +737,22 @@
         },
         fetchPromo() {
           this.oneClick = true
-
-
           if (!localStorage.promo) {
 
             axios.post('book.php', {
               action: 'promoCode',
-              data: this.promoCode
+              data: this.promoCode,
+              TotalPrice: JSON.parse(localStorage.total)
             }).then(res => {
-              let discount = this.totalprice - ((res.data / 100) * this.totalprice)
-
-              this.totalprice = discount
+              console.log(res.data)
+              // let discount = this.totalprice - ((res.data / 100) * this.totalprice)
+              this.totalprice = res.data.toFixed(2)
               localStorage.total = JSON.stringify(this.totalprice)
-
-
             })
             this.isPromoApplied = true
             localStorage.promo = this.isPromoApplied
           }
-
           this.isPromoApplied = JSON.parse(localStorage.promo || false)
-
-          // console.log("bottom promo", this.isPromoApplied);
-
-
-          // console.log("total price", this.totalprice);
         },
         completeCart() {
 
@@ -711,6 +763,7 @@
               checkIn: start,
               checkOut: end,
               location: this.desti,
+              selectedLocation: '<?php echo $Location; ?>',
               data: this.cart,
               total: this.totalprice,
               totalroom: this.cart.length
@@ -730,6 +783,7 @@
 
             console.log(row.room_id)
             $('#guest').modal('show')
+            this.guestModal = true
 
           } else {
             alert("Please Select Dates")
@@ -741,119 +795,85 @@
         nextBook() {
           let rooms = 0;
           var total = 0.00;
-
           row = this.roww
+          console.log(this.adults)
+          if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
+            alert("Adult can not be 0")
+          } else {
+            axios.post('book.php', {
+              action: 'hold',
+              roomID: this.roww.room_id,
+            }).then((res) => {
 
-          axios.post('book.php', {
-            action: 'hold',
-            roomID: this.roww.room_id,
+              if (user) {
 
-          }).then((res) => {
-            console.log(res.data);
+                if (row.cnt > 0) {
 
-            if (user) {
-
-              if (row.cnt > 0) {
-
-                this.row.adults = this.res_guest[0],
-                  this.row.teens = this.res_guest[1],
-                  this.row.kids = this.res_guest[2],
-
-                  this.cart.push(row)
-                this.cart.forEach(val => {
-                  total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
-
-
-                })
-                this.totalprice = total
-                localStorage.total = JSON.stringify(this.totalprice)
-                localStorage.cart = JSON.stringify(this.cart)
-
-                row.cnt--
-              }
-            } else {
-
-              if (row.cnt > 0) {
-
-                let guests = {
-                  checkin: start,
-                  checkout: end,
-                  adults: this.res_guest[0],
-                  teens: this.res_guest[1],
-                  kids: this.res_guest[2],
-                }
-                // console.log("row size:" + Object.keys(row).length);
-
-                let PutTogeter = Object.assign(row, guests)
-                this.cart.push(PutTogeter);
-                let temparray = [];
-
-                axios.post('book.php', {
-                  action: 'calculatePrice',
-                  checkIn: start,
-                  checkOut: end,
-                  data: this.cart
-                }).then((res) => {
-                  console.log(res.data);
-                  this.PriceArray = res.data;
-                }).then((res) => {
-                  this.PriceArray.forEach(val => {
-                    total += val;
-
+                  this.row.adults = this.res_guest[0],
+                    this.row.teens = this.res_guest[1],
+                    this.row.kids = this.res_guest[2],
+                    this.cart.push(row)
+                  this.cart.forEach(val => {
+                    total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
                   })
-
-
-                  this.totalprice = total.toFixed(2);
+                  this.totalprice = total
                   localStorage.total = JSON.stringify(this.totalprice)
                   localStorage.cart = JSON.stringify(this.cart)
-                  localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+
                   row.cnt--
+                }
+              } else {
 
-                  this.popOutSelected(row)
+                if (row.cnt > 0) {
 
+                  let guests = {
+                    checkin: start,
+                    checkout: end,
+                    adults: this.res_guest[0],
+                    teens: this.res_guest[1],
+                    kids: this.res_guest[2],
+                  }
+                  // console.log("row size:" + Object.keys(row).length);
 
-                })
-                // this.cart.forEach((val) => {
-                //   // console.log(val);
-                //   total += parseInt(val.room_price) * this.nights;
+                  let PutTogeter = Object.assign(row, guests)
+                  this.cart.push(PutTogeter);
+                  let temparray = [];
 
+                  axios.post('book.php', {
+                    action: 'calculatePrice',
+                    data: this.cart
+                  }).then((res) => {
+                    console.log(res.data);
+                    this.PriceArray = res.data;
+                  }).then((res) => {
+                    this.PriceArray.forEach(val => {
+                      total += val;
+                    })
+                    this.totalprice = total.toFixed(2);
+                    localStorage.total = JSON.stringify(this.totalprice)
+                    localStorage.cart = JSON.stringify(this.cart)
+                    localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                    row.cnt--
 
+                    this.popOutSelected(row)
+                  })
 
-
-                // })
-                // console.log(this.PriceArray);
-                // this.totalprice = total;
-                // var sum = 0.00;
-                // for (let i = 0; i < temparray.length; i++) {
-                //   sum += temparray[i];
-                //   console.log("hello")
-                // }
-
-                // temparray.forEach(val => {
-                //  this.totalprice += val;
-                // console.log(val);
-                // total += val.Iprice;
-                // this.totalprice += val.Iprice;
-                // })
-                // console.log(sum);
-                // this.totalprice = total
-                // console.log(total);
-
+                }
               }
-            }
 
-          }).then(res => {
-            window.onmousemove = this.resetTimer;
-            window.onmousedown = this.resetTimer;
-            window.ontouchstart = this.resetTimer;
-            window.onclick = this.resetTimer;
-            window.onkeypress = this.resetTimer;
-          })
-          guests = {}
-          this.res_adults = "0"
-          this.res_teen = "0"
-          this.res_kid = "0"
-          $('#guest').modal('hide')
+            }).then(res => {
+              window.onmousemove = this.resetTimer;
+              window.onmousedown = this.resetTimer;
+              window.ontouchstart = this.resetTimer;
+              window.onclick = this.resetTimer;
+              window.onkeypress = this.resetTimer;
+            })
+            guests = {}
+            this.res_adults = "0"
+            this.res_teen = "0"
+            this.res_kid = "0"
+            $('#guest').modal('hide')
+          }
         },
 
         booked() {
@@ -870,11 +890,8 @@
           axios.post('book.php', {
             action: 'clearHold',
             roomID: row.room_id,
-
           }).then((res) => {
             console.log(res.data);
-
-
             if (user) {
               let cartIndex = this.cart.indexOf(row)
               this.cart.splice(cartIndex, 1)
@@ -882,12 +899,8 @@
                 deleteTotal += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
 
               })
-
-
               this.totalprice = deleteTotal
               localStorage.cart = JSON.stringify(this.cart)
-
-
               row.cnt++
             } else {
               let found = false;
@@ -901,7 +914,7 @@
 
               this.allData.forEach(item => {
                 for (let key2 in item) {
-                  console.log(key2)
+
                   if (item[0].room_acc == row.room_acc) {
                     found = true;
                     console.log(item[0])
@@ -932,37 +945,86 @@
 
 
             }
+            var legth = JSON.parse(localStorage.cart)
+            console.log(legth)
+            if (legth == 0) {
+              console.log("hey")
+              localStorage.clear();
+              clearInterval(this.timer);
+              window.onload = '';
+              window.onmousemove = '';
+              window.onmousedown = '';
+              window.ontouchstart = '';
+              window.onclick = '';
+              window.onkeypress = '';
+
+
+            }
           })
+
         },
         fetchAllData() {
-          axios.post('book.php', {
-            action: 'fetchall'
-          }).then(res => {
-            this.allData = res.data
-            this.takeOneEach(this.allData)
+          <?php
+          if ($Location == '' && $RoomType == '') {
+          ?>
+            axios.post('book.php', {
+              action: 'fetchall',
+
+            }).then(res => {
+              this.allData = res.data
+              this.takeOneEach(this.allData)
 
 
-          })
+            })
+          <?php } else if ($Location !== '' && $RoomType == '') { ?>
+
+            axios.post('book.php', {
+              action: 'fetchallLocation',
+              location: '<?php echo $Location; ?>'
+
+            }).then(res => {
+              this.allData = res.data
+              this.takeOneEach(this.allData)
+              console.log(res.data);
+            })
+
+
+          <?php } else if ($Location !== '' && $RoomType !== '') { ?>
+
+            axios.post('book.php', {
+              action: 'fetchallLocRom',
+              location: '<?php echo $Location; ?>',
+              roomType: '<?php echo $RoomType; ?>'
+            }).then(res => {
+              this.allData = res.data
+              this.takeOneEach(this.allData)
+            })
+
+          <?php } ?>
         },
 
         takeOneEach(dataToShorten) {
 
-          this.roomName = []
-          dataToShorten.forEach(data1 => {
+          if (dataToShorten.length == 0) {
+            this.haveData = false
+          } else {
+            this.roomName = []
+            dataToShorten.forEach(data1 => {
 
-            let i = 0;
-            if (data1.length !== 0) {
-              // break;
-              data1[i]["cnt"] = data1.length;
-              this.roomName.push(data1[0])
-            }
+              let i = 0;
+              if (data1.length !== 0) {
+                // break;
+                data1[i]["cnt"] = data1.length;
+                this.roomName.push(data1[0])
+              }
 
-          })
+            })
 
 
-
+          }
         },
         startIdleTimer() {
+          console.log("ideal")
           if (localStorage.cart !== 2) {
 
 
@@ -973,11 +1035,11 @@
               if (this.min > 0) {
                 this.min--;
               } else if (this.min == 0) {
-                this.clearOrder();
+                // this.clearOrder();
               }
             } else if (this.sec == 5) {
               this.sec--;
-              $("#TimesUP").modal("show");
+              $('#TimesUP').appendTo("body").modal('show');
             } else if (this.sec <= 4) {
               this.sec--;
             }
@@ -989,7 +1051,7 @@
 
           /* Reset the seconds of the timer */
           this.sec = '10';
-          this.min = '0';
+          this.min = '1';
           /* Set a new interval */
           this.timer = setInterval(this.startIdleTimer, 1000);
         },
@@ -1063,9 +1125,6 @@
         this.cart = JSON.parse(localStorage.cart || '[]')
         this.totalprice = JSON.parse(localStorage.total || '[]')
         this.checkLocalStorage()
-
-
-
 
         Pusher.logToConsole = true;
 
@@ -1160,6 +1219,9 @@
     //   console.log("Updated Original Data: ", app.allData);
     // }
   </script>
+
+
+
 </body>
 
 </html>
