@@ -1,6 +1,9 @@
-<?php include  '../config.php'; ?>
-
 <?php
+ob_start();
+session_start();
+require  '../admin/includes/db.php';
+require  '../admin/includes/functions.php';
+require '../vendor/autoload.php';
 
 $cybsResponse = $_REQUEST;
 $Response = json_encode($cybsResponse);
