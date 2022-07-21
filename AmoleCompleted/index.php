@@ -11,9 +11,9 @@ $jsonl = json_decode($Response, true);
 $decision = $jsonl["decision"];
 $reason = $jsonl["reason_code"];
 
-if(isset($_COOKIE['cart'])){
+if (isset($_COOKIE['cart'])) {
 
-    $cart = $_COOKIE['cart'];
+    $cart = json_decode($_COOKIE['cart']);
 }
 var_dump($cart);
 $id = array();
