@@ -11,6 +11,9 @@ $jsonl = json_decode($Response, true);
 $decision = $jsonl["decision"];
 $reason = $jsonl["reason_code"];
 
+file_put_contents("Lemlem.txt", $_COOKIE['cart'] . PHP_EOL . PHP_EOL, FILE_APPEND);
+
+
 if (isset($_COOKIE['cart'])) {
 
     $cart = json_decode($_COOKIE['cart']);
