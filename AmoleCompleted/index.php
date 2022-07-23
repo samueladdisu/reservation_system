@@ -39,8 +39,9 @@ $zipCode = $temp_row['zipCode'];
 $specReq = $temp_row['specialRequest'];
 $promoCode = $temp_row['promoCode'];
 $total = $temp_row['total'];
-$cart = json_decode($temp_row['cart']);
+$cart2 = $temp_row['cart'];
 $PayMethod = $temp_row['paymentMethod'];
+$cart = json_decode($cart2);
 
 
 file_put_contents("Lemlem.txt", $cart . PHP_EOL . PHP_EOL, FILE_APPEND);
@@ -92,7 +93,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
 
 
             $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $roomID";
-            
+
 
             $room_result = mysqli_query($connection, $room_query);
             confirm($room_result);
