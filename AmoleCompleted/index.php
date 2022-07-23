@@ -44,7 +44,8 @@ $PayMethod = $temp_row['paymentMethod'];
 $cart = json_decode($cart2);
 
 
-file_put_contents("Lemlem.txt", $firstName . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", $cart2 . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", $PayerId . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 
 function getName($n)
