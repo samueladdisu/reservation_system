@@ -43,7 +43,7 @@ $cart = json_decode($temp_row['cart']);
 $PayMethod = $temp_row['paymentMethod'];
 
 
-file_put_contents("Lemlem.txt", $_COOKIE['cart'] . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", $cart . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 
 function getName($n)
