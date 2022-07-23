@@ -41,7 +41,7 @@ $promoCode = $temp_row['promoCode'];
 $total = $temp_row['total'];
 $cart2 = $temp_row['cart'];
 $PayMethod = $temp_row['paymentMethod'];
-$cart = json_decode($cart2);
+$cart = json_decode($cart2, true);
 
 
 file_put_contents("Lemlem.txt", $cart2 . PHP_EOL . PHP_EOL, FILE_APPEND);
@@ -125,6 +125,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
             $data = true;
         }
     }
+    $data = true;
     $pusher->trigger('front_notifications', 'front_reservation', $data);
 } elseif ($reason == "481") {
 
