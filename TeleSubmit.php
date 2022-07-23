@@ -80,7 +80,7 @@ function cancelLitsener($Money)
 
     $appKey = '9ab41241241c4e889f6b58120976c22e';
     $data = [
-        'outTradeNo' => getName(10),
+        'outTradeNo' => getName(10).$_SESSION['Rtemp'],
         'subject' => 'coffee',
         'totalAmount' => $Money,
         'shortCode' =>  '220162',

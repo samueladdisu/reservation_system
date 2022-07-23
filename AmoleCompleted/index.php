@@ -11,20 +11,39 @@ $jsonl = json_decode($Response, true);
 $decision = $jsonl["decision"];
 $reason = $jsonl["reason_code"];
 
-file_put_contents("Lemlem.txt", $_COOKIE['cart'] . PHP_EOL . PHP_EOL, FILE_APPEND);
-
-
-if (isset($_COOKIE['cart'])) {
-
-    $cart = json_decode($_COOKIE['cart']);
+function returnid(array $CHARS)
+{
+    $IDfromUID = "";
+    for ($x = 13; $x <= sizeof($CHARS); $x++) {
+        $IDfromUID .= $CHARS[$x];
+    }
+    return $IDfromUID;
 }
-var_dump($cart);
-$id = array();
-echo $location = $_SESSION['location'];
-echo $checkIn =  $_SESSION['checkIn'];
-echo $checkOut = $_SESSION['checkOut'];
-echo $total_price = $_SESSION['total'];
-echo $slocation = $_SESSION['Selectedlocation'];
+$intoArray = str_split($jsonl["req_transaction_uuid"]);
+$PayerId = returnid($intoArray);
+
+$queryFetch = "SELECT * FROM temp_res WHERE temp_ID = '$PayerId'";
+$temp_res = mysqli_query($connection, $queryFetch);
+
+confirm($temp_res);
+$temp_row = mysqli_fetch_assoc($temp_res);
+
+$firstName = $temp_row['firstName'];
+$lastName = $temp_row['lastName'];
+$email = $temp_row['email'];
+$address = $temp_row['resAddress'];
+$city = $temp_row['city'];
+$country = $temp_row['country'];
+$phonNum = $temp_row['phoneNum'];
+$zipCode = $temp_row['zipCode'];
+$specReq = $temp_row['specialRequest'];
+$promoCode = $temp_row['promoCode'];
+$total = $temp_row['total'];
+$cart = json_decode($temp_row['cart']);
+$PayMethod = $temp_row['paymentMethod'];
+
+
+file_put_contents("Lemlem.txt", $_COOKIE['cart'] . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 
 function getName($n)
@@ -40,7 +59,10 @@ function getName($n)
     return $randomString;
 }
 
-$res_confirmID = getName(8);
+$checkinDate = "";
+$checkoutDate = "";
+$id = array();
+
 foreach ($cart as  $val) {
     $id[] = $val->room_id;
 }
@@ -56,49 +78,51 @@ $app_cluster = 'mt1';
 $pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);
 
 if ($decision == "ACCEPT" && $reason == "100") {
-    foreach ($id  as $value) {
-
-        //  Select room details from room id 
+    foreach ($cart as  $singleRoom) {
 
 
-        $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
+        if (($checkinDate == $singleRoom->checkin && $checkoutDate == $singleRoom->checkout) || ($checkinDate == '' && $checkoutDate == '')) {
+            $checkinDate = $singleRoom->checkin;
+            $checkoutDate = $singleRoom->checkout;
+            $roomID = $singleRoom->room_id;
+            $location = $singleRoom->room_location;
+            $guestNum = [$singleRoom->adults, $singleRoom->kid, $singleRoom->teen];
+            $guestNumS = json_encode($guestNum);
+            //  Select room details from room id 
 
-        $room_result = mysqli_query($connection, $room_query);
-        confirm($room_result);
-        $room_row = mysqli_fetch_assoc($room_result);
+
+            $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $roomID";
+            
+
+            $room_result = mysqli_query($connection, $room_query);
+            confirm($room_result);
+            $room_row = mysqli_fetch_assoc($room_result);
 
 
-        // Insert into booked table
+            // Insert into booked table
 
-        $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
-        $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkIn}', '{$checkOut}')";
+            $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
+            $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkinDate}', '{$checkoutDate}')";
 
-        $booked_result = mysqli_query($connection, $booked_query);
+            $booked_result = mysqli_query($connection, $booked_query);
 
-        confirm($booked_result);
+            confirm($booked_result);
+
+
+            $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
+            $query .= "VALUES('$firstName', '$lastName', '$phoneNum', '$email', '$checkinDate', '$checkoutDate', '$country', '$address', '$city', '$zipCode', '$PayMethod', '$roomID', '{$total}', '{$location}', '{$res_confirmID}', '$specReq', '$guestNumS', 'website') ";
+
+            $result = mysqli_query($connection, $query);
+            confirm($result);
+
+
+            $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($roomID)";
+            $result_status = mysqli_query($connection, $status_query);
+            confirm($result_status);
+
+            $data = true;
+        }
     }
-
-    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
-    $query .= "VALUES('{$params['res_firstname']}', '{$_SESSION['res_lastname']}', '{$_SESSION['res_phone']}', '{$_SESSION['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$_SESSION['res_address']}', '{$_SESSION['res_city']}', '{$_SESSION['res_zip']}', '{$_SESSION['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$_SESSION['res_specialRequest']}', '{$_SESSION['res_guestNo']}', 'website') ";
-
-    $result = mysqli_query($connection, $query);
-    confirm($result);
-
-
-    $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($id_int)";
-    $result_status = mysqli_query($connection, $status_query);
-    confirm($result_status);
-
-    $data = true;
-
-
-    $_SESSION['cart']       = null;
-    $_SESSION['slocation']   = null;
-    $_SESSION['location']   = null;
-    $_SESSION['checkIn']    = null;
-    $_SESSION['checkOut']   = null;
-    $_SESSION['total']      = 0;
-
     $pusher->trigger('front_notifications', 'front_reservation', $data);
 } elseif ($reason == "481") {
 

@@ -188,6 +188,8 @@ function cutFromPromo($promo, $price)
     return $randomString;
   }
 
+  $GID =  getName(5);
+
   $res_confirmID = getName(8);
   foreach ($cart as  $val) {
     $id[] = $val->room_id;
@@ -210,6 +212,7 @@ function cutFromPromo($promo, $price)
         $_SESSION["promoApp"] = true;
       }
     }
+
     if ($params['res_paymentMethod'] == 'arrival') {
       $firstDate = new DateTime($checkIn);
       $today = new DateTime();
@@ -257,59 +260,38 @@ function cutFromPromo($promo, $price)
       }
     } else {
 
-      foreach ($id  as $value) {
-
-        //  Select room details from room id 
-
-
-        $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
-
-        $room_result = mysqli_query($connection, $room_query);
-        confirm($room_result);
-        $room_row = mysqli_fetch_assoc($room_result);
-        // Insert into booked table
-
-        $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
-        $booked_query .= "VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkIn}', '{$checkOut}')";
-
-        $booked_result = mysqli_query($connection, $booked_query);
-
-        confirm($booked_result);
-      }
-
-      $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent) ";
-      $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$params['res_guestNo']}', 'website') ";
+      $query = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID ) ";
+      $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '{$GID}') ";
 
       $result = mysqli_query($connection, $query);
       confirm($result);
 
 
-      $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($id_int)";
-      $result_status = mysqli_query($connection, $status_query);
-      confirm($result_status);
+      // get id of the regestered and send to payment provaider 
+
+      $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
+      $result = mysqli_query($connection, $querySelect);
+      confirm($result);
+      $resultNum = mysqli_num_rows($result);
+      if ($resultNum == 1) {
+        $temprec = mysqli_fetch_assoc($result);
 
 
-      switch ($params['res_paymentMethod']) {
-        case 'amole':
-          header("Location: ./amole.php");
-          break;
-        case 'paypal':
-          header("Location: ./paypal.php");
-          break;
-        case 'telebirr':
-          header("Location: ./telebirr.php");
-          break;
+        $_SESSION['Rtemp'] = $temprec['temp_ID'];
+
+        switch ($params['res_paymentMethod']) {
+          case 'amole':
+            header("Location: ./amole.php");
+            break;
+          case 'paypal':
+            header("Location: ./paypal.php");
+            break;
+          case 'telebirr':
+            header("Location: ./telebirr.php");
+            break;
+        }
+      } else {
       }
-
-      // pusher trigger notification
-
-      $data = array($params, $id);
-      $data = true;
-
-      $pusher->trigger('front_notifications', 'front_reservation', $data);
-
-      // end
-
     }
   }
 

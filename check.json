@@ -1,0 +1,74 @@
+{
+  "auth_cv_result": "M",
+  "req_locale": "en",
+  "req_payer_authentication_indicator": "01",
+  "req_card_type_selection_indicator": "1",
+  "auth_trans_ref_no": "6583042281026074703001",
+  "payer_authentication_enroll_veres_enrolled": "U",
+  "req_bill_to_surname": "ababa",
+  "req_card_expiry_date": "03-2024",
+  "merchant_advice_code": "01",
+  "card_type_name": "Visa",
+  "auth_amount": "791.46",
+  "auth_response": "00",
+  "req_payment_method": "card",
+  "req_payer_authentication_merchant_name": "Moneta Technologies, SC",
+  "auth_time": "2022-07-20T080349Z",
+  "payer_authentication_enroll_e_commerce_indicator": "internet",
+  "transaction_id": "6583042281026074703001",
+  "req_card_type": "001",
+  "payer_authentication_transaction_id": "SColyZCKWDAPDu4frLI0",
+  "auth_avs_code": "Y",
+  "auth_code": "831000",
+  "payer_authentication_specification_version": "2.1.0",
+  "req_bill_to_address_country": "AR",
+  "auth_cv_result_raw": "M",
+  "bin_lookup_reason_code": "153",
+  "req_profile_id": "0CD052F3-59A9-44AD-B4B3-54053477F7DA",
+  "signed_date_time": "2022-07-20T08:03:49Z",
+  "req_bill_to_address_line1": "Addis abeba",
+  "req_card_number": "xxxxxxxxxxxx1111",
+  "signature": "h7qCz2aiiIvOGwggSnpDOqwjUv+kL8IuSL7Xn6KVWcU=",
+  "req_bill_to_address_city": "Addis ababa",
+  "auth_cavv_result": "2",
+  "req_bill_to_address_postal_code": "1000",
+  "reason_code": "100",
+  "req_bill_to_forename": "Abeba",
+  "req_payer_authentication_acs_window_size": "03",
+  "request_token": "Axj/7wSTZN4QXCPwZ/SZAJ4s2auGbBoyZOGLBk2YN2jdgzYMGKft0YdWegKft0YdWe6QRmpURMwyaSZejFuRqPAnJsm8ILhH4M/pMgAA8xoB",
+  "req_device_fingerprint_id": "17ac2cf5437a45f2a4bf29e8543b46f3",
+  "auth_cavv_result_raw": "2",
+  "req_amount": "791.46",
+  "req_bill_to_email": "aklilegetachew@gmail.com",
+  "payer_authentication_reason_code": "100",
+  "auth_avs_code_raw": "Y",
+  "req_currency": "USD",
+  "bin_lookup_message": "One or more of the following merchant configuration fields not enabled: bin_lookup_enabled or/and push_payment_enabled.Please contact customer support.",
+  "decision": "ACCEPT",
+  "message": "Request was processed successfully.",
+  "signed_field_names": "auth_cv_result,req_locale,req_payer_authentication_indicator,req_card_type_selection_indicator,auth_trans_ref_no,payer_authentication_enroll_veres_enrolled,req_bill_to_surname,req_card_expiry_date,merchant_advice_code,card_type_name,auth_amount,auth_response,req_payment_method,req_payer_authentication_merchant_name,auth_time,payer_authentication_enroll_e_commerce_indicator,transaction_id,req_card_type,payer_authentication_transaction_id,auth_avs_code,auth_code,payer_authentication_specification_version,req_bill_to_address_country,auth_cv_result_raw,bin_lookup_reason_code,req_profile_id,req_bill_to_address_line1,req_card_number,req_bill_to_address_city,auth_cavv_result,req_bill_to_address_postal_code,reason_code,req_bill_to_forename,req_payer_authentication_acs_window_size,request_token,req_device_fingerprint_id,auth_cavv_result_raw,req_amount,req_bill_to_email,payer_authentication_reason_code,auth_avs_code_raw,req_currency,bin_lookup_message,decision,message,req_transaction_uuid,req_transaction_type,req_access_key,req_reference_number,req_bill_to_address_state,auth_reconciliation_reference_number,signed_field_names,signed_date_time",
+  "req_transaction_uuid": "62d7b675ed72a",
+  "req_transaction_type": "authorization",
+  "req_access_key": "bf0d90b4542b3b2b91ad73049ad08abc",
+  "req_reference_number": "1643727245076",
+  "req_bill_to_address_state": "Canada",
+  "auth_reconciliation_reference_number": "220108165648"
+}
+
+
+adults: "2"
+checkin: "2022-07-22"
+checkout: "2022-07-24"
+cnt: 2
+kids: "0"
+room_acc: "Top Lake View King Size Bed"
+room_amenities: "[\"wifi\",\"sauna\"]" 
+room_desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+room_id: "86"
+room_image: "Kuriftu1_room.jpg"
+room_location: "Bishoftu"
+room_number: "244"
+room_occupancy: "2"
+room_price: "198.99"
+room_status: "Not_booked"
+teens: "0"
