@@ -14,7 +14,7 @@ $reason = $jsonl["reason_code"];
 function returnid(array $CHARS)
 {
     $IDfromUID = "";
-    for ($x = 13; $x <= sizeof($CHARS); $x++) {
+    for ($x = 13; $x < sizeof($CHARS); $x++) {
         $IDfromUID .= $CHARS[$x];
     }
     return $IDfromUID;
