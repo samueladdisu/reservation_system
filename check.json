@@ -55,7 +55,8 @@
   "auth_reconciliation_reference_number": "220108165648"
 }
 
-{"room_id":"120",
+{
+"room_id":"120",
 "room_occupancy":"2",
 "room_acc":"Top View King Size Bed",
 "room_price":"198.99",
@@ -63,7 +64,7 @@
 "room_number":"209",
 "room_status":"Not_booked",
 "room_location":"Bishoftu",
-"room_amenities":"["wifi","sauna"]",
+"room_amenities":"[wifi,sauna]",
 "room_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 "cnt":0,
 "checkin":"2022-07-23",

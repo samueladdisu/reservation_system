@@ -80,15 +80,16 @@ $app_cluster = 'mt1';
 $pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);
 
 if ($decision == "ACCEPT" && $reason == "100") {
-    foreach ($cart as  $singleRoom) {
+    $singleRoom = $cart;
+    // foreach ($cart as  $singleRoom) {
 
 
-        if (($checkinDate == $singleRoom->checkin && $checkoutDate == $singleRoom->checkout) || ($checkinDate == '' && $checkoutDate == '')) {
-            $checkinDate = $singleRoom->checkin;
-            $checkoutDate = $singleRoom->checkout;
-            $roomID = $singleRoom->room_id;
-            $location = $singleRoom->room_location;
-            $guestNum = [$singleRoom->adults, $singleRoom->kid, $singleRoom->teen];
+        if (($checkinDate == $singleRoom['checkin'] && $checkoutDate == $singleRoom["checkout"]) || ($checkinDate == '' && $checkoutDate == '')) {
+            $checkinDate = $singleRoom["checkin"];
+            $checkoutDate = $singleRoom["checkout"];
+            $roomID = $singleRoom["room_id"];
+            $location = $singleRoom["room_location"];
+            $guestNum = [$singleRoom["adults"], $singleRoom["kid"], $singleRoom["teen"]];
             $guestNumS = json_encode($guestNum);
             //  Select room details from room id 
 
@@ -124,7 +125,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
 
             $data = true;
         }
-    }
+    // }
     $data = true;
     $pusher->trigger('front_notifications', 'front_reservation', $data);
 } elseif ($reason == "481") {
