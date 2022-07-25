@@ -170,7 +170,6 @@ function cutFromPromo($promo, $price)
   // pusher setup end
   $cart = $_SESSION['cart'];
   $cartString = json_encode($cart);
-  setcookie('cart', $cartString, time() + (86400 * 30), "/");
   $location = $_SESSION['location'];
   $checkIn =  $_SESSION['checkIn'];
   $checkOut = $_SESSION['checkOut'];
@@ -264,7 +263,7 @@ function cutFromPromo($promo, $price)
       }
     } else {
 
-      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID) VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '{$GID}')";
+      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID) VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);
