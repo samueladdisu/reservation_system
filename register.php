@@ -173,7 +173,7 @@ function cutFromPromo($promo, $price)
   $location = $_SESSION['location'];
   $checkIn =  $_SESSION['checkIn'];
   $checkOut = $_SESSION['checkOut'];
-  $total_price = $_SESSION['total'];
+  $total_price = floatval($_SESSION['total']);
   $slocation = $_SESSION['Selectedlocation'];
 
 
@@ -263,7 +263,8 @@ function cutFromPromo($promo, $price)
       }
     } else {
       echo "Hello TEST";
-      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID) VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID')";
+      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID, promoCode) 
+      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);
