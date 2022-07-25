@@ -21,7 +21,7 @@ function cutFromPromo($promo, $price)
   } else if ($row['promo_time'] == null && $row['promo_usage'] !== null) {
 
     if ($row['promo_usage'] == 0) {
-      return ("Expired");
+      return $price;
     } else {
       $updated_usage = intval($usage - 1);
       $update_promo = "UPDATE promo SET promo_usage = $updated_usage WHERE promo_id = '$PromoId'";
@@ -37,7 +37,7 @@ function cutFromPromo($promo, $price)
     $today = strtotime(date('Y-m-d H:i:s'));
 
     if ($today >= $expireDate) {
-      return ("expired");
+      return $price;
     } else {
       $Discount = $price * ($row['promo_amount'] / 100);
       return ($price - $Discount);
@@ -59,7 +59,7 @@ function cutFromPromo($promo, $price)
       return ($price - $Discount);
     } else {
       // The Promo code is expired
-      return ("promocode expired");
+      return $price;
     }
   }
 }
