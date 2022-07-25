@@ -47,7 +47,7 @@ $cart = json_decode($cart2);
 file_put_contents("Lemlem.txt", gettype($cart2) . PHP_EOL . PHP_EOL, FILE_APPEND);
 // file_put_contents("Lemlem.txt", $cart2['adults'] . PHP_EOL . PHP_EOL, FILE_APPEND);
 file_put_contents("Lemlem.txt", $cart['adults'] . PHP_EOL . PHP_EOL, FILE_APPEND);
-file_put_contents("Lemlem.txt", gettype($cart['adults'])  . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", gettype($cart)  . PHP_EOL . PHP_EOL, FILE_APPEND);
 file_put_contents("Lemlem.txt", $PayerId . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 
