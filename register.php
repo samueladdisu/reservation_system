@@ -201,8 +201,6 @@ function cutFromPromo($promo, $price)
   $id_sql = json_encode($id);
   $id_int = implode(',', $id);
 
-
-
   if (isset($_POST['complete_book'])) {
 
     foreach ($_POST as $name => $value) {
