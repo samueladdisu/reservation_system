@@ -10,6 +10,11 @@ function cutFromPromo($promo, $price)
   $promo_result = mysqli_query($connection, $promo_query);
 
   confirm($promo_result);
+
+  $resultNum = mysqli_num_rows($promo_result);
+  if ($resultNum == 0) {
+    return $price;
+  }
   $row = mysqli_fetch_assoc($promo_result);
   $PromoId = $row['promo_id'];
   $usage = $row['promo_usage'];
