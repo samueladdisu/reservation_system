@@ -262,12 +262,12 @@ function cutFromPromo($promo, $price)
         header("Location: ./session_destory.php");
       }
     } else {
-
+      echo "Hello TEST";
       $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID) VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);
-      echo "Hello TEST";
+
 
       // get id of the regestered and send to payment provaider 
 
