@@ -16,7 +16,7 @@ function CheckAndCutPromo($price, $promo)
   $promo_result = mysqli_query($connection, $promo_query);
 
   confirm($promo_result);
-  
+
   $row = mysqli_fetch_assoc($promo_result);
 
 
@@ -156,7 +156,7 @@ function calculatePrice($ad, $kid, $teen, $single, $double, $dMember, $sMemeber,
         $price = $double + 38;
       }
     }
-  }else if ($promo !== "" && $promo !== "member") {
+  } else if ($promo !== "" && $promo !== "member") {
 
     if ($ad == 1) {
       if ($kid == 0 && $teen == 0) {
@@ -225,3 +225,80 @@ function calculateLoft($kid, $teen, $dbRack, $dMember, $promo)
   return $price;
 }
 
+function calculatePriceAwash($ad, $kid, $teen, $loca, $Bored, $days, $selectedDB)
+{
+  foreach ($days as $day) {
+    switch ($day) {
+      case 'Friday':
+        if($Bored == "fullBoard"){
+
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price = $selectedDB['s_fb_we'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price = $selectedDB['d_fb_we'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price = $selectedDB['d_fb_we'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price = $selectedDB['d_fb_we'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price = $selectedDB['d_fb_we'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price = $selectedDB['d_fb_we'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price = $selectedDB['d_fb_we'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price = $selectedDB['d_fb_we'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price = $selectedDB['d_fb_we'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price = $selectedDB['d_fb_we'] + 38;
+            }
+          }
+      
+
+        }else if($Bored == "Half Board"){
+
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price = $selectedDB['s_hb_we'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price = $selectedDB['d_hb_we'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price = $selectedDB['d_hb_we'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price = $selectedDB['d_hb_we'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price = $selectedDB['d_hb_we'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price = $selectedDB['d_hb_we'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price = $selectedDB['d_hb_we'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price = $selectedDB['d_hb_we'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price = $selectedDB['d_hb_we'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price = $selectedDB['d_hb_we'] + 38;
+            }
+          }
+
+        }else if ($Bored == "BedBreakfast"){
+
+          
+
+        }
+        break;
+      case 'Saturday':
+        break;
+      default:
+        break;
+    }
+  }
+}

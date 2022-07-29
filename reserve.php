@@ -207,8 +207,7 @@ if (isset($_GET['roomType'])) {
                   <h4>Amenities</h4>
                   <li>Bathroom with a Shower</li>
                   <li>Wifi</li>
-                  <li> COVID Kit</li>
-
+                  <li>COVID Kit</li>
                 </ul>
                 <div>
 

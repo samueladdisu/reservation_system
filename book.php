@@ -35,7 +35,6 @@ if ($received_data->action == 'fetchall') {
       $roomAcc_temp = $row["room_acc"];
       $roomLocation = $row["room_location"];
     } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
-
       array_push($data, $row);
     } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
       $roomAcc_temp = $row["room_acc"];
@@ -330,7 +329,6 @@ if ($received_data->action == 'ClearHold') {
 
 if ($received_data->action == 'calculatePrice') {
   $promo = '';
-
   $price = 0.00;
   $dbRack    = 0.00;
   $dbWeekend = 0.00;
