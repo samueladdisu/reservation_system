@@ -147,9 +147,6 @@ function cutFromPromo($promo, $price)
 
 
       </nav>
-
-
-
     </div>
   </header>
 
@@ -179,6 +176,13 @@ function cutFromPromo($promo, $price)
 
 
   $id = array();
+  $guestInfoAll = array();
+  $roomNum = array();
+  $roomAcc = array();
+  $roomLoca = array();
+  $CinCoutInfo = array();
+  $CICOAll  = array();
+
   function getName($n)
   {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -197,6 +201,13 @@ function cutFromPromo($promo, $price)
   $res_confirmID = getName(8);
   foreach ($cart as  $val) {
     $id[] = $val->room_id;
+    $guestInfo = [$val->adults, $val->teens, $val->kids];
+    array_push($guestInfoAll, $guestInfo);
+    $roomNum[] = $val->room_number;
+    $roomAcc[] = $val->room_acc;
+    $roomLoca[] =  $val->room_location;
+    $CinCoutInfo = [$val->checkin, $val->checkout];
+    array_push($CICOAll, $CinCoutInfo);
   }
   $id_sql = json_encode($id);
   $id_int = implode(',', $id);
@@ -260,9 +271,17 @@ function cutFromPromo($promo, $price)
         header("Location: ./session_destory.php");
       }
     } else {
-      echo "Hello TEST";
-      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID, promoCode) 
-      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}')";
+
+      $roomID = json_encode($id);
+      $guestInfoAlls = json_encode($guestInfoAll);
+      $roomNums = json_encode($roomNum);
+      $roomAccs =  json_encode($roomAcc);
+      $roomLocas = json_encode($roomLoca);
+      $CICOAlls  = json_encode($CICOAll);
+
+
+      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo) 
+      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);

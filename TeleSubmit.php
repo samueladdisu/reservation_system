@@ -1,3 +1,4 @@
+<?php include  'config.php'; ?>
 <?php
 
 
@@ -59,14 +60,66 @@ function getName($n)
     return $randomString;
 }
 
+
+function CurrencyConverter()
+{
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.apilayer.com/exchangerates_data/convert?to=ETB&from=USD&amount=1",
+        CURLOPT_HTTPHEADER => array(
+            "Content-Type: text/plain",
+            "apikey: LTihJp3B4eDMs0JZQE1acsH4y4Iq15oh"
+        ),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET"
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    $result = json_decode($response, true);
+
+    if ($result['success'] == true) {
+        return $result['result'];
+    } else {
+        return 20;
+    }
+}
+
+function converttoETB($price)
+{
+    $todaydate = date('y-m-d');
+
+    global $connection;
+    $queryRate = "SELECT * FROM convertusd WHERE rate_id = 1";
+    $rate_result = mysqli_query($connection, $queryRate);
+    confirm($rate_result);
+    $row = mysqli_num_rows($rate_result);
+    $rate_find = mysqli_fetch_assoc($rate_result);
+    if (strtotime($rate_find['dateUpdated']) == strtotime($todaydate)) {
+        return $rate_find['rate'] * $price;
+    } else {
+        $todayrate = CurrencyConverter();
+        $rate_value = round($todayrate, 2);
+        $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
+        $rate_result = mysqli_query($connection, $rate_query);
+        confirm($rate_result);
+        return $price * $rate_value;
+    }
+}
+
 function getTime()
 {
-
     $milliseconds = round(microtime(true) / 1000);
     return $milliseconds;
 }
-//'http://196.188.123.12:8080/TomocaBot2/eshiTele/'
-// https://www.versavvymedia.com/tomocaBot/eshiTele
+
 
 if ($received->action == 'submit') {
 
@@ -74,15 +127,13 @@ if ($received->action == 'submit') {
 }
 function cancelLitsener($Money)
 {
-
-
-    // http://196.188.123.12:8080/TomocaBot2/eshiTele/
+    $ConvertedMoney = converttoETB($Money);
 
     $appKey = '9ab41241241c4e889f6b58120976c22e';
     $data = [
-        'outTradeNo' => getName(10).$_SESSION['Rtemp'],
+        'outTradeNo' => getName(10) . $_SESSION['Rtemp'],
         'subject' => 'coffee',
-        'totalAmount' => $Money,
+        'totalAmount' => $ConvertedMoney,
         'shortCode' =>  '220162',
         'notifyUrl' => 'https://www.versavvymedia.com/tomocaBot/eshiTele/',
         'returnUrl' => 'https://t.me/TomTomChan',
@@ -107,16 +158,8 @@ function cancelLitsener($Money)
             $StringA = $StringA . '&' . $k . '=' . $v;
         }
     }
-    // echo $StringA . "\n\n";
-
-
     $StringB = hash("sha256", $StringA);
     $sign = strtoupper($StringB);
-
-
-
-
-
 
     $appId = 'c0704d7ddcf34a49b5e6408a836987fc';
     $requestMessage = [
@@ -125,15 +168,10 @@ function cancelLitsener($Money)
         'ussd' => $ussd
     ];
 
-
-
-
-
     $api = "http://196.188.120.3:11443/service-openup/toTradeWebPay";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $api);
-
 
 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -141,7 +179,6 @@ function cancelLitsener($Money)
 
     curl_setopt($ch, CURLOPT_POST, TRUE);
 
-    // curl_setopt($ch, CURLOPT_HEADER, FALSE);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestMessage));
 
     curl_setopt(
@@ -149,7 +186,6 @@ function cancelLitsener($Money)
         CURLOPT_HTTPHEADER,
         array('Content-Type:application/json;charset=utf-8')
     );
-    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);

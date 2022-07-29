@@ -84,8 +84,7 @@ $pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_c
 
 if ($decision == "ACCEPT" && $reason == "100") {
     $singleRoom = $cart;
-    // foreach ($cart as  $singleRoom) {
-
+    
     if (($checkinDate == $singleRoom['checkin'] && $checkoutDate == $singleRoom["checkout"]) || ($checkinDate == '' && $checkoutDate == '')) {
         $checkinDate = $singleRoom["checkin"];
         $checkoutDate = $singleRoom["checkout"];

@@ -100,11 +100,6 @@
             $item_number = 1;
             $amount = 1;
 
-
-
-
-
-
             ?>
             <script type="text/javascript">
                 const SubmitPay = document.querySelector('#submit')
