@@ -224,3 +224,4 @@ function calculateLoft($kid, $teen, $dbRack, $dMember, $promo)
 
   return $price;
 }
+

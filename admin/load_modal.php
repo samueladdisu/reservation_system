@@ -306,7 +306,7 @@ if ($received_data->action == 'addReservation') {
 
     $guest_info_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location) ";
 
-    $guest_info_query .= "VALUES ($last_id, $adults, $kids, $teens, $value->room_id, $value->room_number, '$value->room_acc', '$value->room_location')";
+    $guest_info_query .= "VALUES ($last_id, $adults, $kids, $teens, $value->room_id, '$value->room_number', '$value->room_acc', '$value->room_location')";
 
     $guest_info_result = mysqli_query($connection, $guest_info_query);
     confirm($guest_info_result);
@@ -328,6 +328,25 @@ if ($received_data->action == 'addReservation') {
 
     $update_result = mysqli_query($connection, $update_query);
     confirm($update_result);
+
+    switch ($value->room_location) {
+      case 'Bishoftu':
+        $query = "SELECT * FROM room_type WHERE type_name = '$value->room_acc'";
+        break;
+      case 'awash':
+        $query = "SELECT * FROM awash_price WHERE name = '$value->room_acc'";
+        break;
+      case 'entoto':
+        $query = "SELECT * FROM entoto_price WHERE name = '$value->room_acc'";
+        break;
+      case 'Lake tana':
+        $query = "SELECT * FROM tana_price WHERE name = '$value->room_acc'";
+        break;
+      
+      default:
+        # code...
+        break;
+    }
   }
 
 
@@ -728,4 +747,27 @@ if ($received_data->action == 'editReservation') {
 
   $result = mysqli_query($connection, $query);
   confirm($result);
+}
+
+if ($received_data->action == 'fetchTypes') {
+  $loc = $received_data->location;
+  $types = array();
+  if ($loc === 'Awash') {
+    $query = "SELECT * FROM awash_price";
+  }else if ($loc === 'Bishoftu') {
+    $query = "SELECT * FROM room_type";
+  }else if ($loc === 'Entoto') {
+    $query = "SELECT * FROM entoto_price";
+  }else if ($loc === 'Lake Tana') {
+    $query = "SELECT * FROM tana_price";
+  }
+
+  $result = mysqli_query($connection, $query);
+  confirm($result);
+
+  while ($row = mysqli_fetch_assoc($result)){
+    $types[] = $row;
+  }
+
+  echo json_encode($types);
 }

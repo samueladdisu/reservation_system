@@ -29,28 +29,26 @@
 
           </div>
           <!-- Content Row -->
-          <div class="row">
-            <?php
-            if (isset($_GET['source'])) {
-              $source = escape($_GET['source']);
-            } else {
-              $source = '';
-            }
-            switch ($source) {
-              case 'add_room':
-                include "./includes/add_room.php";
-                break;
-              case 'edit_room':
-                include "./includes/edit_room.php";
-                break;
-              default:
-                header("Location: ./view_all_rooms.php");
-                break;
-            }
+          <?php
+          if (isset($_GET['source'])) {
+            $source = escape($_GET['source']);
+          } else {
+            $source = '';
+          }
+          switch ($source) {
+            case 'add_room':
+              include "./includes/add_room.php";
+              break;
+            case 'edit_room':
+              include "./includes/edit_room.php";
+              break;
+            default:
+              header("Location: ./view_all_rooms.php");
+              break;
+          }
 
 
-            ?>
-          </div>
+          ?>
 
         </div>
         <!-- /.container-fluid -->
