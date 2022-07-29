@@ -225,84 +225,275 @@ function calculateLoft($kid, $teen, $dbRack, $dMember, $promo)
   return $price;
 }
 
-function calculatePriceAwash($ad, $kid, $teen, $loca, $Bored, $days, $selectedDB)
+function calculatePriceAwash($ad, $kid, $teen, $Bored, $days, $selectedDB)
 {
+  $price = 0.00;
   foreach ($days as $day) {
     switch ($day) {
       case 'Friday':
-        if($Bored == "fullBoard"){
+        if ($Bored == "fullBoard") {
 
           if ($ad == 1) {
             if ($kid == 0 && $teen == 0) {
               // Single occupancy
-              $price = $selectedDB['s_fb_we'];
+              $price += $selectedDB['s_fb_we'];
             } else if ($kid == 1 && $teen == 1) {
-              $price = $selectedDB['d_fb_we'] + 10;
+              $price += $selectedDB['d_fb_we'] + 10;
             } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
-              $price = $selectedDB['d_fb_we'];
+              $price += $selectedDB['d_fb_we'];
             } else if ($kid == 2 && $teen == 0) {
-              $price = $selectedDB['d_fb_we'] + 10;
+              $price += $selectedDB['d_fb_we'] + 10;
             } else if ($kid == 0 && $teen == 2) {
-              $price = $selectedDB['d_fb_we'] + 38;
+              $price += $selectedDB['d_fb_we'] + 38;
             }
           } else if ($ad == 2) {
             if ($kid == 0 && $teen == 0) {
-              $price = $selectedDB['d_fb_we'];
+              $price += $selectedDB['d_fb_we'];
             } else if ($kid == 1 && $teen == 0) {
-              $price = $selectedDB['d_fb_we'] + 10;
+              $price += $selectedDB['d_fb_we'] + 10;
             } else if ($kid == 1 && $teen == 1) {
-              $price = $selectedDB['d_fb_we'] + 48;
+              $price += $selectedDB['d_fb_we'] + 48;
             } else if ($kid == 2 && $teen == 0) {
-              $price = $selectedDB['d_fb_we'] + 20;
+              $price += $selectedDB['d_fb_we'] + 20;
             } else if ($kid == 0 && $teen == 1) {
-              $price = $selectedDB['d_fb_we'] + 38;
+              $price += $selectedDB['d_fb_we'] + 38;
             }
           }
-      
-
-        }else if($Bored == "Half Board"){
+        } else if ($Bored == "Half Board") {
 
           if ($ad == 1) {
             if ($kid == 0 && $teen == 0) {
               // Single occupancy
-              $price = $selectedDB['s_hb_we'];
+              $price += $selectedDB['s_hb_we'];
             } else if ($kid == 1 && $teen == 1) {
-              $price = $selectedDB['d_hb_we'] + 10;
+              $price += $selectedDB['d_hb_we'] + 10;
             } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
-              $price = $selectedDB['d_hb_we'];
+              $price += $selectedDB['d_hb_we'];
             } else if ($kid == 2 && $teen == 0) {
-              $price = $selectedDB['d_hb_we'] + 10;
+              $price += $selectedDB['d_hb_we'] + 10;
             } else if ($kid == 0 && $teen == 2) {
-              $price = $selectedDB['d_hb_we'] + 38;
+              $price += $selectedDB['d_hb_we'] + 38;
             }
           } else if ($ad == 2) {
             if ($kid == 0 && $teen == 0) {
-              $price = $selectedDB['d_hb_we'];
+              $price += $selectedDB['d_hb_we'];
             } else if ($kid == 1 && $teen == 0) {
-              $price = $selectedDB['d_hb_we'] + 10;
+              $price += $selectedDB['d_hb_we'] + 10;
             } else if ($kid == 1 && $teen == 1) {
-              $price = $selectedDB['d_hb_we'] + 48;
+              $price += $selectedDB['d_hb_we'] + 48;
             } else if ($kid == 2 && $teen == 0) {
-              $price = $selectedDB['d_hb_we'] + 20;
+              $price += $selectedDB['d_hb_we'] + 20;
             } else if ($kid == 0 && $teen == 1) {
-              $price = $selectedDB['d_hb_we'] + 38;
+              $price += $selectedDB['d_hb_we'] + 38;
             }
           }
-
-        }else if ($Bored == "BedBreakfast"){
-
-          
-
+        } else if ($Bored == "BedBreakfast") {
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_bb_we'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_bb_we'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_bb_we'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_bb_we'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_bb_we'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_bb_we'] + 38;
+            }
+          }
         }
         break;
       case 'Saturday':
+        if ($Bored == "fullBoard") {
+
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_fb_we'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_fb_we'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_fb_we'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_fb_we'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_fb_we'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_fb_we'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_fb_we'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_fb_we'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_fb_we'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_fb_we'] + 38;
+            }
+          }
+        } else if ($Bored == "Half Board") {
+
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_hb_we'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_hb_we'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_hb_we'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_hb_we'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_hb_we'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_hb_we'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_hb_we'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_hb_we'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_hb_we'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_hb_we'] + 38;
+            }
+          }
+        } else if ($Bored == "BedBreakfast") {
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_bb_we'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_bb_we'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_bb_we'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_bb_we'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_bb_we'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_bb_we'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_bb_we'] + 38;
+            }
+          }
+        }
         break;
       default:
+        if ($Bored == "fullBoard") {
+
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_bb_wd'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_fb_wd'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_fb_wd'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_fb_wd'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_fb_wd'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_fb_wd'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_fb_wd'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_fb_wd'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_fb_wd'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_fb_wd'] + 38;
+            }
+          }
+        } else if ($Bored == "Half Board") {
+
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_hb_wd'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_hb_wd'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_hb_wd'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_hb_wd'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_hb_wd'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_hb_wd'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_hb_wd'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_hb_wd'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_hb_wd'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_hb_wd'] + 38;
+            }
+          }
+        } else if ($Bored == "BedBreakfast") {
+          if ($ad == 1) {
+            if ($kid == 0 && $teen == 0) {
+              // Single occupancy
+              $price += $selectedDB['s_bb_wd'];
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_bb_wd'] + 10;
+            } else if (($kid == 1 && $teen == 0) || ($kid == 0 && $teen == 1)) {
+              $price += $selectedDB['d_bb_wd'];
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_bb_wd'] + 10;
+            } else if ($kid == 0 && $teen == 2) {
+              $price += $selectedDB['d_bb_wd'] + 38;
+            }
+          } else if ($ad == 2) {
+            if ($kid == 0 && $teen == 0) {
+              $price += $selectedDB['d_bb_wd'];
+            } else if ($kid == 1 && $teen == 0) {
+              $price += $selectedDB['d_bb_wd'] + 10;
+            } else if ($kid == 1 && $teen == 1) {
+              $price += $selectedDB['d_bb_wd'] + 48;
+            } else if ($kid == 2 && $teen == 0) {
+              $price += $selectedDB['d_bb_wd'] + 20;
+            } else if ($kid == 0 && $teen == 1) {
+              $price += $selectedDB['d_bb_wd'] + 38;
+            }
+          }
+        }
         break;
     }
   }
+  return $price;
 }
-function calculateEntoto($ad, $kid, $teen, $double, $single, $promo){
+function calculateEntoto($ad, $kid, $teen, $double, $single, $promo)
+{
   $price = 0.00;
   if ($promo == "") {
     // echo json_encode("None");
@@ -332,7 +523,7 @@ function calculateEntoto($ad, $kid, $teen, $double, $single, $promo){
         $price = $double + 38;
       }
     }
-  }else if ($promo !== "" && $promo !== "member") {
+  } else if ($promo !== "" && $promo !== "member") {
 
     if ($ad == 1) {
       if ($kid == 0 && $teen == 0) {
@@ -371,6 +562,6 @@ function calculateEntoto($ad, $kid, $teen, $double, $single, $promo){
     }
   }
 
-  
+
   return $price;
 }
