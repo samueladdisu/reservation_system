@@ -85,7 +85,7 @@
                     </div>
                     <div class="card-body">
                       <div class="row py-1">
-                        <div class="col-12">
+                        <div class="col-12" v-if="editCheckin">
                           CheckIn: {{ editCheckin }} - Checkout: {{ editCheckout }}
                         </div>
 
@@ -377,7 +377,7 @@
                       <div class="form-group col-6">
                         <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" id="">
                           <option value="">Payment Status*</option>
-                          <option value="payed">Payed</option>
+                          <option value="paid">paid</option>
                           <option value="pending_payment">pending payment</option>
                         </select>
                       </div>

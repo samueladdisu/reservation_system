@@ -186,7 +186,15 @@ if (!isset($_SESSION['user_role'])) {
                   {
                     data: 'room_image',
                     render: function(data, type, row) {
-                      return '<img width="100" src="./room_img/' + data + '">'
+                      if (row.room_location === 'entoto'){
+                        return '<img width="100" src="./room_img/entoto/' + data + '">'
+                      }else if (row.room_location === 'awash'){
+                        return '<img width="100" src="./room_img/awash/' + data + '">'
+                      }else if (row.room_location === 'Lake tana'){
+                        return '<img width="100" src="./room_img/tana/' + data + '">'
+                      }else {
+                        return '<img width="100" src="./room_img/' + data + '">'
+                      }
 
                     }
                   },

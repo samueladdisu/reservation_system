@@ -40,16 +40,6 @@
 
                 <h1 class="mb-4">Make Reservation</h1>
 
-                <div class="col-12 row">
-
-                  <!-- <div class="input-group mb-3 col-2">
-        <input type="text" placeholder="Promo Code" name="res_promo" v-model="formData.res_promo" class="form-control">
-        <div class="input-group-append">
-          <button :disabled="oneClick" @click="fetchPromo" class="input-group-text">Apply</button>
-
-        </div>
-      </div> -->
-                </div>
 
 
 
@@ -89,7 +79,7 @@
 
                         ?>
                           <div class="form-group mt-2 col-2">
-                            <select name="room_location" class="custom-select" v-model="location" id="">
+                            <select name="room_location" class="custom-select" v-model="location" @change="checkLocation" id="">
                               <option disabled value="">Resort Location</option>
                               <?php
 
@@ -101,7 +91,10 @@
                                 $location_id = $row['location_id'];
                                 $location_name = $row['location_name'];
 
-                                echo "<option value='$location_name'>{$location_name}</option>";
+                                if ($location_name != 'Boston') {
+
+                                  echo "<option value='$location_name'>{$location_name}</option>";
+                                }
                               }
                               ?>
                             </select>
@@ -116,21 +109,19 @@
                         ?>
 
                         <div class="form-group mt-2 col-2">
-                          <select name="room_location" class="custom-select" v-model="roomType" id="">
+
+                          <select class="custom-select" v-model="roomType" id="">
                             <option disabled value="">Room Type</option>
-                            <?php
+                            
+                              <option value="type.name" v-if="location !== 'Bishoftu'" v-for="type in types">
+                                {{ type.name }}
+                              </option>
 
-                            $query = "SELECT * FROM room_type";
-                            $result = mysqli_query($connection, $query);
-                            confirm($result);
-
-                            while ($row = mysqli_fetch_assoc($result)) {
-                              $type_name = $row['type_name'];
-                              $type_location = $row['type_location'];
-
-                              echo "<option value='$type_name'>{$type_name}</option>";
-                            }
-                            ?>
+                              <option value="type.type_name" v-if="location === 'Bishoftu'" v-for="type in types">
+                                {{ type.type_name }}
+                              </option>
+                         
+                            
                           </select>
                         </div>
 
@@ -169,21 +160,21 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select name="adults" v-model="res_adults" class="custom-select col-3">
+                              <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
                                 <option value="" disabled>Adults*</option>
                                 <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
 
-                              <select name="adults" @change="checkTeen" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
+                              <select @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
                                 <option value="" disabled>Teens(12-17)</option>
                                 <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
 
-                              <select name="adults" @change="checkKid" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
+                              <select @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
                                 <option value="" disabled>kid(6-11)</option>
                                 <option value="0">0</option>
                                 <option value="1">1</option>
@@ -216,7 +207,7 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select name="adults"  v-model="res_adults" class="custom-select col-3">
+                              <select name="adults" v-model="res_adults" class="custom-select col-3">
                                 <option value="" disabled>Guests</option>
                                 <option value="0">0</option>
                                 <option value="1">1</option>
@@ -370,7 +361,7 @@
                       <div class="form-group col-6">
                         <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" required>
                           <option value="">Payment Status*</option>
-                          <option value="payed">Payed</option>
+                          <option value="paid">Paid</option>
                           <option value="pending_payment">pending payment</option>
                         </select>
                       </div>
@@ -509,13 +500,14 @@
       })
     });
 
-  
+
 
     const app = Vue.createApp({
       data() {
         return {
           search_data: [],
           location: '',
+          types: [],
           roomType: '',
           allData: '',
           bookedRooms: [],
@@ -552,13 +544,26 @@
 
       },
       methods: {
+
+        async checkLocation() {
+          console.log("location", this.location);
+
+          await axios.post('load_modal.php', {
+            action: 'fetchTypes',
+            location: this.location
+          }).then(res => {
+            console.log("respose", res.data);
+            this.types = res.data
+          })
+
+        },
         table(row) {
           var selected = [];
           $('#addReserveTable').DataTable({
             destroy: true,
             dom: 'lBfrtip',
             buttons: [
-              'colvis',
+              // 'colvis',
               'excel',
               'print',
               'csv'
@@ -622,7 +627,7 @@
               // assign to temp row
               vm.tempRow = temprow
               console.log("temp row", vm.tempRow);
-             
+
 
               if (acc === "Loft Family Room") {
                 $('#loftModal').modal('show')
@@ -698,20 +703,53 @@
           this.res_kid = ''
         },
         checkLoftTeen() {
-          if ( this.res_teen == 1){
+          if (this.res_teen == 1) {
             this.loftKid = true
             this.res_kid = 0
-          }else {
+          } else {
             this.loftKid = false
           }
         },
         checkLoftKid() {
-          if (this.res_kid == 1){
+          if (this.res_kid == 1) {
             this.loftTeen = true
             this.res_teen = 0
-          }else {
+          } else {
             this.loftTeen = false
           }
+
+        },
+        CheckGuest() {
+          console.log("adults", typeof(this.res_adults));
+          console.log("teen", typeof(this.res_teen));
+          console.log("kid", typeof(this.res_kid));
+          if (this.res_adults === "1") {
+
+            if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "1") || (this.res_teen === "1" && this.res_kid === "2")) {
+              alert("This combination of guest numbers is not possible.");
+             
+              this.res_teen = 0;
+              this.res_kid = 0;
+            }
+
+
+          } else if (this.res_adults === "2") {
+
+            if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "0") || (this.res_teen === "1" && this.res_kid === "2")) {
+              // alert("This combination of guest numbers is not possible.");
+              console.log("2 adult 2 teen");
+              this.res_teen = 0;
+              this.res_kid = 0;
+            } 
+          } else if (this.res_adults === "0") {
+            alert("adult cant be 0");
+            this.res_teen = 0;
+            this.res_kid = 0;
+          } 
+            
+
+        },
+        checkAdult() {
 
         },
         checkTeen() {
@@ -722,9 +760,13 @@
             alert("2 adult and 2 teens can't stay in 1 room")
 
             console.log(this.res_kid);
-          } else {
-            this.kid = false
-            console.log(this.res_kid);
+          } else if (this.res_teen == 2 && this.res_kid == 2 ){
+            if (this.res_adults == 2){
+              alert("2 adult and 2 teens 2 kids can't stay in 1 room")
+
+              this.res_teen = 0
+              this.res_kid = 0
+            }
           }
         },
         checkKid() {
@@ -746,8 +788,8 @@
           console.log("check out", end);
           console.log("Form Data", this.formData);
 
-          if(this.cart && start && end){
-            
+          if (this.cart && start && end) {
+
             await axios.post('load_modal.php', {
               action: 'addReservation',
               Form: this.formData,
@@ -760,7 +802,7 @@
               console.log(res.data);
               this.totalPrice = res.data
             })
-          }else {
+          } else {
             alert('Cart is empty please select room(s)')
           }
 
@@ -810,9 +852,9 @@
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
         let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
-        
+
         // Front end reservation notification channel from pusher
-        
+
 
         const pusher = new Pusher(fKey, {
           cluster: 'mt1',

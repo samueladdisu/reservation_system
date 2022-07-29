@@ -482,11 +482,6 @@ if (isset($_GET['roomType'])) {
 
           </ul>
 
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -624,10 +619,10 @@ if (isset($_GET['roomType'])) {
           if (this.res_adults == "1") {
 
             if ((this.res_teen == "2" && this.res_kid == "2") || (this.res_teen == "2" && this.res_kid == "1") || (this.res_teen == "1" && this.res_kid == "2")) {
-              alert("This combination of guest numbers is not possible.");
               this.adults = 0;
               this.teens = 0;
               this.kids = 0;
+              alert("This combination of guest numbers is not possible.");
             } else {
               this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
 
@@ -637,18 +632,18 @@ if (isset($_GET['roomType'])) {
           } else if (this.res_adults == "2") {
 
             if ((this.res_teen == "2" && this.res_kid == "2") || (this.res_teen == "2" && this.res_kid == "0") || (this.res_teen == "1" && this.res_kid == "2")) {
+              this.res_teens = 0;
+              this.res_kids = 0;
               alert("This combination of guest numbers is not possible.");
-              this.adults = 0;
-              this.teens = 0;
-              this.kids = 0;
+
             } else {
               this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
             }
           } else if (this.res_adults == "0") {
             alert("adult cant be 0");
-            this.adults = 0;
-            this.teens = 0;
-            this.kids = 0;
+
+            // this.teens = 0;
+            // this.kids = 0;
           } else {
             alert("booked");
             this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
