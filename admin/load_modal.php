@@ -355,8 +355,21 @@ if ($received_data->action == 'addReservation') {
         }
 
         foreach ($days as $day) {
-          if ($value == "Loft Family Room") {
+          if ($value->room_acc == "Loft Family Room") {
             $price += calculateLoft($guests[$index][1], $guests[$index][2], $dbRack, $dbMember, $form_data->res_promo);
+          } else if($value->room_acc == "Presidential Suite Family Room"){
+            switch ($day) {
+              case 'Friday':
+                $price += calculatePre($guests[$index][1], $guests[$index][2], $dbWeekend, $dbMember, $form_data->res_promo);
+                break;
+              case 'Saturday':
+                $price += calculatePre($guests[$index][1], $guests[$index][2],$dbRack, $dbMember, $form_data->res_promo);
+                break;
+              default:
+                // $price += doubleval($row_type['d_weekday_rate']);
+                $price += calculatePre($guests[$index][1], $guests[$index][2], $dbWeekdays, $dbMember, $form_data->res_promo);
+                break;
+            }
           } else {
             switch ($day) {
               case 'Friday':
@@ -373,9 +386,9 @@ if ($received_data->action == 'addReservation') {
           }
         }
 
-        echo json_encode($guests[$index][0]);
-        echo json_encode($guests[$index][1]);
-        echo json_encode($guests[$index][2]);
+        // echo json_encode($guests[$index][0]);
+        // echo json_encode($guests[$index][1]);
+        // echo json_encode($guests[$index][2]);
         $index++;
         break;
 
@@ -400,12 +413,13 @@ if ($received_data->action == 'addReservation') {
         }
 
         foreach ($days as $day) {
-          $price += calculateEntoto($guests[$index][0], $guests[$index][1], $guests[$index][2], $double, $single, $form_data->res_promo);
-        }
+          if($value->room_acc == "Presidential Family Room" ){
+            $price += calculatePreEntoto($guests[$index][1], $guests[$index][2], $double, $form_data->res_promo);
+          }else {
 
-        echo json_encode($guests[$index][0]);
-        echo json_encode($guests[$index][1]);
-        echo json_encode($guests[$index][2]);
+            $price += calculateEntoto($guests[$index][0], $guests[$index][1], $guests[$index][2], $double, $single, $form_data->res_promo);
+          }
+        }
         $index++;
         break;
       case 'Lake tana':
@@ -425,9 +439,6 @@ if ($received_data->action == 'addReservation') {
           $price += calculateEntoto($guests[$index][0], $guests[$index][1], $guests[$index][2], $double, $single, $form_data->res_promo);
         }
 
-        echo json_encode($guests[$index][0]);
-        echo json_encode($guests[$index][1]);
-        echo json_encode($guests[$index][2]);
         $index++;
         break;
 

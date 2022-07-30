@@ -629,7 +629,7 @@
               console.log("temp row", vm.tempRow);
 
 
-              if (acc === "Loft Family Room") {
+              if (acc === "Loft Family Room" || acc === "Presidential Family Room" || acc === "Presidential Suite Family Room") {
                 $('#loftModal').modal('show')
               } else {
                 $('#guest').modal('show')

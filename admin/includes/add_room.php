@@ -14,33 +14,47 @@ $incoming = json_decode(file_get_contents("php://input"));
 if (isset($_POST['bishoftu_room'])) {
   $room_acc         =  escape($_POST['b_room_acc']);
   $room_number      =  escape($_POST['b_room_number']);
-  $room_desc        =  escape($_POST['b_room_desc']);
 
-  $acc_query  = "SELECT * FROM room_type WHERE type_name = '$room_acc'";
-  $acc_result = mysqli_query($connection, $acc_query);
+  $query_dup = "SELECT * FROM rooms WHERE room_acc = '$room_acc' AND room_number = '$room_number' AND room_location = 'Bishoftu'";
 
-  confirm($acc_result);
+  $result_dup = mysqli_query($connection, $query_dup);
+  confirm($result_dup);
+  $row = mysqli_num_rows($result_dup);
 
-  while ($row = mysqli_fetch_assoc($acc_result)) {
-    $occ = $row['occupancy'];
-    $price = $row['d_rack_rate'];
-    $img = $row['room_image'];
-    $loc = $row['type_location'];
+  if($row > 0){
+    echo "<script> alert('This room already exits!') </script>";
+    // $row2 = mysqli_fetch_assoc($result_dup);
+
+    // var_dump($row2);
+  }else {
+    // echo "can";
+    $acc_query  = "SELECT * FROM room_type WHERE type_name = '$room_acc'";
+    $acc_result = mysqli_query($connection, $acc_query);
+  
+    confirm($acc_result);
+  
+    while ($row = mysqli_fetch_assoc($acc_result)) {
+      $occ = $row['occupancy'];
+      $price = $row['d_rack_rate'];
+      $img = $row['room_image'];
+      $loc = $row['type_location'];
+      $room_desc = escape($row['room_desc']);
+    }
+  
+  
+    $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$occ', '$room_acc', '$price', '$img', '$room_number', 'Not_booked', '$loc', '$room_desc');";
+  
+  
+    $result = mysqli_query($connection, $query);
+  
+    confirm($result);
   }
 
-
-  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$occ', '$room_acc', '$price', '$img', '$room_number', 'Not_booked', '$loc', '$room_desc');";
-
-
-  $result = mysqli_query($connection, $query);
-
-  confirm($result);
 }
 
 if (isset($_POST['awash_room'])) {
   $room_acc         =  escape($_POST['a_room_acc']);
   $room_number      =  escape($_POST['a_room_number']);
-  $room_desc        =  escape($_POST['a_room_desc']);
 
   $acc_query  = "SELECT * FROM awash_price WHERE name = '$room_acc'";
   $acc_result = mysqli_query($connection, $acc_query);
@@ -51,6 +65,7 @@ if (isset($_POST['awash_room'])) {
     $occ = $row['occupancy'];
     $price = $row['d_bb_we'];
     $img = $row['room_img'];
+    $room_desc = $row['room_desc'];
   }
 
 
@@ -65,7 +80,6 @@ if (isset($_POST['awash_room'])) {
 if (isset($_POST['entoto_room'])) {
   $room_acc         =  escape($_POST['e_room_acc']);
   $room_number      =  escape($_POST['e_room_number']);
-  $room_desc        =  escape($_POST['e_room_desc']);
 
   $acc_query  = "SELECT * FROM entoto_price WHERE name = '$room_acc'";
   $acc_result = mysqli_query($connection, $acc_query);
@@ -76,6 +90,7 @@ if (isset($_POST['entoto_room'])) {
     $occ = $row['occupancy'];
     $price = $row['double_occ'];
     $img = $row['room_img'];
+    $room_desc = $row['room_desc'];
   }
 
 
@@ -90,7 +105,6 @@ if (isset($_POST['entoto_room'])) {
 if (isset($_POST['tana_room'])) {
   $room_acc         =  escape($_POST['t_room_acc']);
   $room_number      =  escape($_POST['t_room_number']);
-  $room_desc        =  escape($_POST['t_room_desc']);
 
   $acc_query  = "SELECT * FROM tana_price WHERE name = '$room_acc'";
   $acc_result = mysqli_query($connection, $acc_query);
@@ -101,6 +115,7 @@ if (isset($_POST['tana_room'])) {
     $occ = $row['occupancy'];
     $price = $row['double_occ'];
     $img = $row['room_img'];
+    $room_desc = $row['room_desc'];
   }
 
 
@@ -154,11 +169,6 @@ if (isset($_POST['tana_room'])) {
       <div class="form-group">
         <label for="post_tags"> Room Number </label>
         <input type="text" class="form-control" name="b_room_number" required>
-      </div>
-
-      <div class="form-group">
-        <label for="post_content"> Room Description</label>
-        <textarea name="b_room_desc" id="" cols="30" rows="10" class="form-control" required></textarea>
       </div>
 
 
