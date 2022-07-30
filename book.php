@@ -342,8 +342,7 @@ if ($received_data->action == 'calculatePrice') {
   $sWeekdays = 0.00;
   $sMember = 0.00;
   $cart = $received_data->data;
-  // $checkIn = $received_data->checkIn;
-  // $checkOut = $received_data->checkOut;
+  $Bored = $received_data->dataBin;
 
   foreach ($cart as $val) {
 
@@ -352,7 +351,7 @@ if ($received_data->action == 'calculatePrice') {
     $kid = intval($val->kids);
     $teen = intval($val->teens);
     $location = $val->room_location;
-    $Bored = "fullBoard";
+
 
     $days       = array();
     $start      = new DateTime($val->checkin);

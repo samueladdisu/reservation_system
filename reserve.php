@@ -408,6 +408,36 @@ if (isset($_GET['roomType'])) {
                   <option value="2">2</option>
                 </select>
               </div>
+              <?php
+              if ($Location == "awash") {
+              ?>
+                <form>
+                  <div class="row BBModal">
+                    <div class="form-check col-3">
+                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="BedBreakfast" v-model="res_BB" required>
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Bed and Breakfast
+                      </label>
+                    </div>
+                    <div class="form-check col-3">
+                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="Half Board" v-model="res_BB" required>
+                      <label class="form-check-label" for="flexRadioDefault2">
+                        Half board
+                      </label>
+                    </div>
+
+                    <div class="form-check col-3">
+                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="fullBoard" v-model="res_BB" required>
+                      <label class="form-check-label" for="flexRadioDefault3">
+                        full board
+                      </label>
+                    </div>
+                  </div>
+                </form>
+              <?php
+              }
+              ?>
+
             </div>
           </div>
           <div class="modal-footer">
@@ -440,9 +470,6 @@ if (isset($_GET['roomType'])) {
             </p>
             <p class="mycard-text  padding-top2">
             <ul>
-              <!-- <li v-for="am in amenities(row.room_amenities)" :key="am">
-                  {{ am }}
-                </li> -->
             </ul>
             </p>
             <p class="mycard-text">
@@ -529,6 +556,7 @@ if (isset($_GET['roomType'])) {
       },
       data() {
         return {
+          res_BB: '',
           haveData: true,
           guestModal: false,
           checkIn: '',
@@ -790,84 +818,171 @@ if (isset($_GET['roomType'])) {
           let rooms = 0;
           var total = 0.00;
           row = this.roww
-          console.log(this.adults)
-          if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
-            alert("Adult can not be 0")
-          } else {
-            axios.post('book.php', {
-              action: 'hold',
-              roomID: this.roww.room_id,
-            }).then((res) => {
+          console.log(this.res_BB)
+          <?php if ($Location == "awash") { ?>
+            if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
+              alert("Adult can not be 0")
+            } else if (this.res_BB == '') {
+              alert("Please select between the given options")
+            } else {
+              axios.post('book.php', {
+                action: 'hold',
+                roomID: this.roww.room_id,
+              }).then((res) => {
 
-              if (user) {
+                if (user) {
 
-                if (row.cnt > 0) {
+                  if (row.cnt > 0) {
 
-                  this.row.adults = this.res_guest[0],
-                    this.row.teens = this.res_guest[1],
-                    this.row.kids = this.res_guest[2],
-                    this.cart.push(row)
-                  this.cart.forEach(val => {
-                    total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
-                  })
-                  this.totalprice = total
-                  localStorage.total = JSON.stringify(this.totalprice)
-                  localStorage.cart = JSON.stringify(this.cart)
-
-                  row.cnt--
-                }
-              } else {
-
-                if (row.cnt > 0) {
-
-                  let guests = {
-                    checkin: start,
-                    checkout: end,
-                    adults: this.res_guest[0],
-                    teens: this.res_guest[1],
-                    kids: this.res_guest[2],
-                  }
-                  // console.log("row size:" + Object.keys(row).length);
-
-                  let PutTogeter = Object.assign(row, guests)
-                  this.cart.push(PutTogeter);
-                  let temparray = [];
-
-                  axios.post('book.php', {
-                    action: 'calculatePrice',
-                    data: this.cart
-                  }).then((res) => {
-                    console.log(res.data);
-                    this.PriceArray = res.data;
-                  }).then((res) => {
-                    this.PriceArray.forEach(val => {
-                      total += val;
+                    this.row.adults = this.res_guest[0],
+                      this.row.teens = this.res_guest[1],
+                      this.row.kids = this.res_guest[2],
+                      this.cart.push(row)
+                    this.cart.forEach(val => {
+                      total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
                     })
-                    this.totalprice = total.toFixed(2);
+                    this.totalprice = total
                     localStorage.total = JSON.stringify(this.totalprice)
                     localStorage.cart = JSON.stringify(this.cart)
-                    localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                    localStorage.BB = JSON.stringify(this.res_BB)
+
                     row.cnt--
+                  }
+                } else {
 
-                    this.popOutSelected(row)
-                  })
+                  if (row.cnt > 0) {
 
+                    let guests = {
+                      checkin: start,
+                      checkout: end,
+                      adults: this.res_guest[0],
+                      teens: this.res_guest[1],
+                      kids: this.res_guest[2],
+                    }
+                    // console.log("row size:" + Object.keys(row).length);
+
+                    let PutTogeter = Object.assign(row, guests)
+                    this.cart.push(PutTogeter);
+                    let temparray = [];
+
+                    axios.post('book.php', {
+                      action: 'calculatePrice',
+                      data: this.cart,
+                      dataBin: this.res_BB
+                    }).then((res) => {
+                      console.log(res.data);
+                      this.PriceArray = res.data;
+                    }).then((res) => {
+                      this.PriceArray.forEach(val => {
+                        total += val;
+                      })
+                      this.totalprice = total.toFixed(2);
+                      localStorage.total = JSON.stringify(this.totalprice)
+                      localStorage.cart = JSON.stringify(this.cart)
+                      localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                      row.cnt--
+
+                      this.popOutSelected(row)
+                    })
+
+                  }
                 }
-              }
 
-            }).then(res => {
-              window.onmousemove = this.resetTimer;
-              window.onmousedown = this.resetTimer;
-              window.ontouchstart = this.resetTimer;
-              window.onclick = this.resetTimer;
-              window.onkeypress = this.resetTimer;
-            })
-            guests = {}
-            this.res_adults = "0"
-            this.res_teen = "0"
-            this.res_kid = "0"
-            $('#guest').modal('hide')
-          }
+              }).then(res => {
+                window.onmousemove = this.resetTimer;
+                window.onmousedown = this.resetTimer;
+                window.ontouchstart = this.resetTimer;
+                window.onclick = this.resetTimer;
+                window.onkeypress = this.resetTimer;
+              })
+              guests = {}
+              this.res_adults = "0"
+              this.res_teen = "0"
+              this.res_kid = "0"
+              $('#guest').modal('hide')
+            }
+
+          <?php } else { ?>
+            if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
+              alert("Adult can not be 0")
+            } else {
+              axios.post('book.php', {
+                action: 'hold',
+                roomID: this.roww.room_id,
+              }).then((res) => {
+
+                if (user) {
+
+                  if (row.cnt > 0) {
+
+                    this.row.adults = this.res_guest[0],
+                      this.row.teens = this.res_guest[1],
+                      this.row.kids = this.res_guest[2],
+                      this.cart.push(row)
+                    this.cart.forEach(val => {
+                      total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
+                    })
+                    this.totalprice = total
+                    localStorage.total = JSON.stringify(this.totalprice)
+                    localStorage.cart = JSON.stringify(this.cart)
+                    localStorage.BB = JSON.stringify(this.res_BB)
+
+                    row.cnt--
+                  }
+                } else {
+
+                  if (row.cnt > 0) {
+
+                    let guests = {
+                      checkin: start,
+                      checkout: end,
+                      adults: this.res_guest[0],
+                      teens: this.res_guest[1],
+                      kids: this.res_guest[2],
+                    }
+                    // console.log("row size:" + Object.keys(row).length);
+
+                    let PutTogeter = Object.assign(row, guests)
+                    this.cart.push(PutTogeter);
+                    let temparray = [];
+
+                    axios.post('book.php', {
+                      action: 'calculatePrice',
+                      data: this.cart,
+                      dataBin: this.res_BB
+                    }).then((res) => {
+                      console.log(res.data);
+                      this.PriceArray = res.data;
+                    }).then((res) => {
+                      this.PriceArray.forEach(val => {
+                        total += val;
+                      })
+                      this.totalprice = total.toFixed(2);
+                      localStorage.total = JSON.stringify(this.totalprice)
+                      localStorage.cart = JSON.stringify(this.cart)
+                      localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                      row.cnt--
+
+                      this.popOutSelected(row)
+                    })
+
+                  }
+                }
+
+              }).then(res => {
+                window.onmousemove = this.resetTimer;
+                window.onmousedown = this.resetTimer;
+                window.ontouchstart = this.resetTimer;
+                window.onclick = this.resetTimer;
+                window.onkeypress = this.resetTimer;
+              })
+              guests = {}
+              this.res_adults = "0"
+              this.res_teen = "0"
+              this.res_kid = "0"
+              $('#guest').modal('hide')
+            }
+          <?php } ?>
         },
 
         booked() {
