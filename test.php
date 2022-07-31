@@ -1,146 +1,57 @@
-<table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+<!DOCTYPE html>
+<html lang="en">
 
-  <thead>
-    <tr>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
 
-      <th>Id</th>
-      <th>Occupancy</th>
-      <th>Accomodation</th>
-      <th>Price</th>
-      <th>Room Number</th>
-      <th>Room Status</th>
-      <th>Hotel Location</th>
-    </tr>
-  </thead>
-  <tbody class="insert-data">
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  <title>test</title>
+</head>
 
-    <?php
-    include  'config.php';
+<body>
 
-    $location = 'Awash';
-    $checkin = "2022-02-27";
-    $checkout = "2022-03-01";
+  <input type="text" name="daterange" id="date" value="" />
 
-    $A_query = "SELECT *, COUNT(room_acc) AS cnt 
-    FROM rooms
-    GROUP BY room_acc
-    HAVING room_status = 'Not_booked'
-    AND room_location = '$location'";
+  <script type="text/javascript">
+    let start, end
+    // let today = new Date().toISOString().slice(0, 10)
+    // const getTomorrow = () =>  new Date.setDate(new Date.getDate() + 1);
+    // let tomorrow = getTomorrow()
 
-    $A_result = mysqli_query($connection, $A_query);
-    confirm($A_result);
+    // const today = new Date().toISOString().slice(0, 10)
+    // const tomorrow = new Date(today)
+    // tomorrow.setDate(tomorrow.getDate() + 1)
+    // console.log(today)
+    // console.log(tomorrow)
 
-    $rows = mysqli_num_rows($A_result);
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
 
-    
-    if (!empty($rows)) {
+    let tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
 
-      
-      $all = array();
-      $booked_avalibale = array();
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    const td = String(tomorrow.getDate()).padStart(2, '0');
+    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const ty = tomorrow.getFullYear();
 
-      while ($avaliable_rooms = mysqli_fetch_assoc($A_result)) {
-        echo "<tr>";
-     
-        foreach ($avaliable_rooms as  $key => $value) {
-          echo "<td>";
-          if ($key == 'room_desc') {
-            $value = "";
-          }
-          echo $value;
-          echo "</td>";
-        }
-        echo "</tr>";
-      }
-     
-      $BR_query = "SELECT DISTINCT b_roomId
-      FROM booked_rooms 
-      WHERE b_checkout<= '$checkin' 
-      AND b_roomLocation = '$location'
-      UNION
-      SELECT DISTINCT b_roomId
-      FROM booked_rooms
-      WHERE b_checkin >= '$checkout'
-      AND b_roomLocation = '$location'";
-      $result = mysqli_query($connection, $BR_query);
-      confirm($result);
+    today = mm + '/' + dd + '/' + yyyy;
+    tomorrow = tm + '/' + td + '/' + ty;
+    console.log(today)
+    console.log(tomorrow)
 
-      while($row3 = mysqli_fetch_assoc($result)){
-       $r_query = "SELECT *, COUNT(room_acc) AS cnt 
-       FROM rooms
-       GROUP BY room_acc
-       HAVING room_id = {$row3['b_roomId']}";
-       $r_result = mysqli_query($connection, $r_query);
-       confirm($r_result);
+    $('#date').daterangepicker();
+    $('#date').data('daterangepicker').setStartDate(today);
+    $('#date').data('daterangepicker').setEndDate(tomorrow);
+  </script>
+</body>
 
-       while($row4 = mysqli_fetch_assoc($r_result)){
-        
-         
-         
-      echo "<tr>";
-     
-      foreach ($row4 as  $key => $value) {
-        echo "<td>";
-        if ($key == 'room_desc') {
-          $value = "";
-        }
-        echo $value;
-        echo "</td>";
-      }
-      echo "</tr>";
-         
-        }
-      }
-
-      
-     
-
-    } else {
-
-      $BR_query = "SELECT DISTINCT b_roomId
-      FROM booked_rooms 
-      WHERE b_checkout<= '$checkin' 
-      AND b_roomLocation = '$location'
-      UNION
-      SELECT DISTINCT b_roomId
-      FROM booked_rooms
-      WHERE b_checkin >= '$checkout'
-      AND b_roomLocation = '$location'";
-      $result = mysqli_query($connection, $BR_query);
-      confirm($result);
-
-      $BR_rows = mysqli_num_rows($result);
-      if(!empty($BR_rows)){
-        while($row1 = mysqli_fetch_assoc($result)){
-          $S_query = "SELECT * 
-          FROM rooms
-          WHERE room_id = {$row1['b_roomId']}";
-          $S_result = mysqli_query($connection, $S_query);
-
-          confirm($S_result);
-
-          while($row2 = mysqli_fetch_assoc($S_result)){
-            echo "<tr>";
-            foreach ($row2 as $key => $value) {
-              echo "<td>";
-              if ($key == 'room_desc') {
-                $value = "";
-              }
-              echo $value;
-              echo "</td>";
-            }
-            echo "</tr>";
-          }
-
-
-        }
-      }
-    }
-
-
-
-
-
-    ?>
-  </tbody>
-</table>
+</html>

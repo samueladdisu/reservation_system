@@ -35,7 +35,6 @@ if ($received_data->action == 'fetchall') {
       $roomAcc_temp = $row["room_acc"];
       $roomLocation = $row["room_location"];
     } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
-
       array_push($data, $row);
     } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
       $roomAcc_temp = $row["room_acc"];
@@ -71,6 +70,7 @@ if ($received_data->action == 'fetchallLocation') {
     if ($roomAcc_temp == '' || $roomLocation == '') {
       $roomAcc_temp = $row["room_acc"];
       $roomLocation = $row["room_location"];
+      array_push($data, $row);
     } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
 
       array_push($data, $row);
@@ -81,9 +81,10 @@ if ($received_data->action == 'fetchallLocation') {
       $data = [];
       array_push($data, $row);
       // goto here;
+      
     }
   }
-  if (count($data) > 1) {
+  if (count($data) >= 1) {
     array_push($dataCount, $data);
   }
 
@@ -276,7 +277,7 @@ if ($received_data->action == 'getData') {
 
 if ($received_data->action == 'insert') {
 
-  
+
   $_SESSION['checkIn'] = $checkIn = $received_data->checkIn;
   $_SESSION['checkOut'] = $checkOut = $received_data->checkOut;
   $_SESSION['location'] = $location = $received_data->location;
@@ -330,7 +331,6 @@ if ($received_data->action == 'ClearHold') {
 
 if ($received_data->action == 'calculatePrice') {
   $promo = '';
-
   $price = 0.00;
   $dbRack    = 0.00;
   $dbWeekend = 0.00;
@@ -344,8 +344,7 @@ if ($received_data->action == 'calculatePrice') {
   $sWeekdays = 0.00;
   $sMember = 0.00;
   $cart = $received_data->data;
-  // $checkIn = $received_data->checkIn;
-  // $checkOut = $received_data->checkOut;
+  $Bored = $received_data->dataBin;
 
   foreach ($cart as $val) {
 
@@ -355,39 +354,41 @@ if ($received_data->action == 'calculatePrice') {
     $teen = intval($val->teens);
     $location = $val->room_location;
 
+
     $days       = array();
     $start      = new DateTime($val->checkin);
     $end        = new DateTime($val->checkout);
-  
+
     for ($date = $start; $date < $end; $date->modify('+1 day')) {
       $days[] = $date->format('l');
     }
 
 
-    $query_type = "SELECT * FROM room_type WHERE type_name = '$cartRoomType'";
-    $result_type = mysqli_query($connection, $query_type);
-    confirm($result_type);
-
-
-    while ($row_type = mysqli_fetch_assoc($result_type)) {
-
-      // double occupancy rate
-      $type_location = $row_type['type_location'];
-
-      $dbRack    = doubleval($row_type['d_rack_rate']);
-      $dbWeekend = doubleval($row_type['d_weekend_rate']);
-      $dbWeekdays = doubleval($row_type['d_weekday_rate']);
-      $dbMember  = doubleval($row_type['d_member_rate']);
-
-      // Single occupancy rate
-      $sRack     = doubleval($row_type['s_rack_rate']);
-      $sWeekend  = doubleval($row_type['s_weekend_rate']);
-      $sWeekdays = doubleval($row_type['s_weekday_rate']);
-      $sMember  = doubleval($row_type['s_member_rate']);
-    }
 
 
     if ($location == 'Bishoftu') {
+      $query_type = "SELECT * FROM room_type WHERE type_name = '$cartRoomType'";
+      $result_type = mysqli_query($connection, $query_type);
+      confirm($result_type);
+
+
+      while ($row_type = mysqli_fetch_assoc($result_type)) {
+
+        // double occupancy rate
+        $type_location = $row_type['type_location'];
+
+        $dbRack    = doubleval($row_type['d_rack_rate']);
+        $dbWeekend = doubleval($row_type['d_weekend_rate']);
+        $dbWeekdays = doubleval($row_type['d_weekday_rate']);
+        $dbMember  = doubleval($row_type['d_member_rate']);
+
+        // Single occupancy rate
+        $sRack     = doubleval($row_type['s_rack_rate']);
+        $sWeekend  = doubleval($row_type['s_weekend_rate']);
+        $sWeekdays = doubleval($row_type['s_weekday_rate']);
+        $sMember  = doubleval($row_type['s_member_rate']);
+      }
+
 
       foreach ($days as $day) {
         if ($cartRoomType == "Loft Family Room") {
@@ -407,22 +408,15 @@ if ($received_data->action == 'calculatePrice') {
           }
         }
       }
-    } else if ($location == 'Awash') {
-      foreach ($days as $day) {
-        switch ($day) {
-          case 'Friday':
-            $price += calculatePrice($ad, $kid, $teen, $sRack, $dbRack, $dbMember, $sMember,  $promo);
-            break;
-          case 'Saturday':
-            $price += calculatePrice($ad, $kid, $teen,  $sRack, $dbRack, $dbMember, $sMember, $promo);
-            break;
-          default:
-            $price += calculatePrice($ad, $kid, $teen, $sWeekdays, $dbWeekdays, $dbMember, $sMember, $promo);
-            break;
-        }
-      }
-    }
+    } else if ($location == 'awash') {
+      $query_type = "SELECT * FROM awash_price WHERE name = '$cartRoomType'";
+      $result_type = mysqli_query($connection, $query_type);
+      confirm($result_type);
 
+      $row_type = mysqli_fetch_assoc($result_type);
+
+      $price = calculatePriceAwash($ad, $kid, $teen, $Bored, $days, $row_type);
+    }
     array_push($arrayTemp, $price);
     $price = 0.00;
   }

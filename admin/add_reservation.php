@@ -112,16 +112,16 @@
 
                           <select class="custom-select" v-model="roomType" id="">
                             <option disabled value="">Room Type</option>
-                            
-                              <option value="type.name" v-if="location !== 'Bishoftu'" v-for="type in types">
-                                {{ type.name }}
-                              </option>
 
-                              <option value="type.type_name" v-if="location === 'Bishoftu'" v-for="type in types">
-                                {{ type.type_name }}
-                              </option>
-                         
-                            
+                            <option value="type.name" v-if="location !== 'Bishoftu'" v-for="type in types">
+                              {{ type.name }}
+                            </option>
+
+                            <option value="type.type_name" v-if="location === 'Bishoftu'" v-for="type in types">
+                              {{ type.type_name }}
+                            </option>
+
+
                           </select>
                         </div>
 
@@ -238,6 +238,74 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Awash Modal -->
+                  <div class="modal fade" id="awashModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Add Guests</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="form-group">
+                            <label for="" class="text-dark">Room 1:</label>
+                            <div class="row">
+                              <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
+                                <option value="" disabled>Adults*</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
+
+                              <select @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
+                                <option value="" disabled>Teens(12-17)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
+
+                              <select @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
+                                <option value="" disabled>kid(6-11)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
+
+
+                            </div>
+                              <div class="row mt-3 d-flex justify-content-center BBModal">
+                                <div class="form-check col-3">
+                                  <input class="form-check-input costom" type="radio" id="flexRadioDefault1" value="BedBreakfast" v-model="res_BB" required>
+                                  <label class="form-check-label" for="flexRadioDefault1">
+                                    B&B
+                                  </label>
+                                </div>
+                                <div class="form-check col-3">
+                                  <input class="form-check-input costom" type="radio" id="flexRadioDefault2" value="Half Board" v-model="res_BB" required>
+                                  <label class="form-check-label" for="flexRadioDefault2">
+                                    HB
+                                  </label>
+                                </div>
+
+                                <div class="form-check col-3">
+                                  <input class="form-check-input costom" type="radio" id="flexRadioDefault3" value="fullBoard" v-model="res_BB" required>
+                                  <label class="form-check-label" for="flexRadioDefault3">
+                                    FB
+                                  </label>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" @click="booked" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End of Awash Modal  -->
 
                   <div class="modal fade" id="cart">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -505,6 +573,7 @@
     const app = Vue.createApp({
       data() {
         return {
+          res_BB: '',
           search_data: [],
           location: '',
           types: [],
@@ -612,6 +681,7 @@
           let vm = this
           $(document).on('click', '#selectRow', function() {
 
+
             if (start && end) {
               let acc = $('#selectAcc').data("acc")
               // get room id from the table
@@ -626,14 +696,20 @@
 
               // assign to temp row
               vm.tempRow = temprow
-              console.log("temp row", vm.tempRow);
+              console.log("temp row", vm.tempRow.room_location);
 
 
-              if (acc === "Loft Family Room" || acc === "Presidential Family Room" || acc === "Presidential Suite Family Room") {
-                $('#loftModal').modal('show')
+              if (vm.tempRow.room_location === "awash") {
+                $('#awashModal').modal('show')
               } else {
-                $('#guest').modal('show')
+                if (acc === "Loft Family Room" || acc === "Presidential Family Room" || acc === "Presidential Suite Family Room") {
+                  $('#loftModal').modal('show')
+                } else {
+                  $('#guest').modal('show')
+                }
+
               }
+
 
 
 
@@ -684,11 +760,25 @@
           this.cart.forEach(item => {
             console.log(item.room_id);
           })
-          let guests = {
+
+          let loc = this.tempRow.room_location
+          let guests 
+          if (loc == "awash"){
+            guests = {
             adults: this.res_adults,
             teens: this.res_teen,
             kids: this.res_kid,
             ...this.tempRow,
+            board: this.res_BB
+          }
+          } else {
+
+            guests = {
+              adults: this.res_adults,
+              teens: this.res_teen,
+              kids: this.res_kid,
+              ...this.tempRow,
+            }
           }
 
 
@@ -701,6 +791,7 @@
           this.res_adults = ''
           this.res_teen = ''
           this.res_kid = ''
+          this.res_BB = ''
         },
         checkLoftTeen() {
           if (this.res_teen == 1) {
@@ -727,7 +818,7 @@
 
             if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "1") || (this.res_teen === "1" && this.res_kid === "2")) {
               alert("This combination of guest numbers is not possible.");
-             
+
               this.res_teen = 0;
               this.res_kid = 0;
             }
@@ -740,13 +831,13 @@
               console.log("2 adult 2 teen");
               this.res_teen = 0;
               this.res_kid = 0;
-            } 
+            }
           } else if (this.res_adults === "0") {
             alert("adult cant be 0");
             this.res_teen = 0;
             this.res_kid = 0;
-          } 
-            
+          }
+
 
         },
         checkAdult() {
@@ -760,8 +851,8 @@
             alert("2 adult and 2 teens can't stay in 1 room")
 
             console.log(this.res_kid);
-          } else if (this.res_teen == 2 && this.res_kid == 2 ){
-            if (this.res_adults == 2){
+          } else if (this.res_teen == 2 && this.res_kid == 2) {
+            if (this.res_adults == 2) {
               alert("2 adult and 2 teens 2 kids can't stay in 1 room")
 
               this.res_teen = 0

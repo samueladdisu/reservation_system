@@ -17,24 +17,7 @@ $session_id = session_id();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://unpkg.com/vue@3.0.2"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script>
-    // let getIp = async () => {
 
-    //   let ip = await axios.get('https://api.bigdatacloud.net/data/ip-geolocation?key=bdc_1f4147859340439ca926eeddc18401e1')
-    //     .then((res) => {
-    //       return res.data.ip
-
-    //     })
-
-    //   return ip
-    // }
-
-    // const extractIp = async () => {
-    //   return await getIp()
-    // }
-
-    // console.log(extractIp());
-  </script>
   <title>Amole</title>
 </head>
 

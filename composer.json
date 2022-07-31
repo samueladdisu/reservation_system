@@ -8,6 +8,9 @@
         "phpmailer/phpmailer": "^6.5",
         "pusher/pusher-php-server": "^7.0",
         "vlucas/phpdotenv": "^5.4",
-        "mailchimp/transactional": "^1.0"
+        "mailchimp/transactional": "^1.0",
+        "mailgun/mailgun-php": "^3.5",
+        "symfony/http-client": "^5.4",
+        "nyholm/psr7": "^1.5"
     }
 }

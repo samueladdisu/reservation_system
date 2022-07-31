@@ -132,11 +132,11 @@ function cancelLitsener($Money)
     $appKey = '9ab41241241c4e889f6b58120976c22e';
     $data = [
         'outTradeNo' => getName(10) . $_SESSION['Rtemp'],
-        'subject' => 'coffee',
+        'subject' => 'Booking',
         'totalAmount' => $ConvertedMoney,
         'shortCode' =>  '220162',
-        'notifyUrl' => 'https://www.versavvymedia.com/tomocaBot/eshiTele/',
-        'returnUrl' => 'https://t.me/TomTomChan',
+        'notifyUrl' => 'https://www.versavvymedia.com/reservation_system/telebirrCompleted/',
+        'returnUrl' => 'https://www.versavvymedia.com/reservation_system/',
         'receiveName' => 'KURIFTU',
         'appId' => 'c0704d7ddcf34a49b5e6408a836987fc',
         'timeoutExpress' => '30',
