@@ -281,7 +281,7 @@ function cutFromPromo($promo, $price)
 
 
       $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, cart, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo) 
-      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$cartString}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls')";
+      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{notnow}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);
