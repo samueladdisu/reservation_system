@@ -4,6 +4,10 @@ $RoomType = '';
 $Location = '';
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
+
+  if($Location == 'Tana'){
+    $Location = "Lake tana";
+  }
 }
 if (isset($_GET['roomType'])) {
   $RoomType = $_GET['roomType'];
@@ -109,7 +113,7 @@ if (isset($_GET['roomType'])) {
         <img src="./img/awash-cover.webp" alt="">
       <?php } else if ($Location == "entoto") { ?>
         <img src="./img/Glamping.webp" alt="">
-      <?php } else if ($Location == "Tana") { ?>
+      <?php } else if ($Location == "Lake tana") { ?>
         <img src="./img/Tana.webp" alt="">
       <?php } ?>
     </section>
@@ -170,9 +174,17 @@ if (isset($_GET['roomType'])) {
 
         <div class=" mt-3 single-room-detail">
           <div class="mycard mt-5 mt-lg-3" v-for="rows in roomName" :key="rows.room_id">
-            <!-- <div  v-if="rows.room_acc === 'Deluxe Lake Front King Size Bed'"> -->
 
-            <img :src="'./admin/room_img/' + rows.room_image" class="mycard-img-top" alt="...">
+            <?php
+            if ($Location == "Bishoftu") { ?>
+              <img :src="'./admin/room_img/' + rows.room_image" class="mycard-img-top">
+            <?php } else if ($Location == "awash") { ?>
+              <img :src="'./admin/room_img/awash/' + rows.room_image" class="mycard-img-top">
+            <?php } else if ($Location == "entoto") { ?>
+              <img :src="'./admin/room_img/entoto/' + rows.room_image" class="mycard-img-top">
+            <?php } else if ($Location == "Lake tana") { ?>
+              <img :src="'./admin/room_img/tana/' + rows.room_image" class="mycard-img-top">
+            <?php } ?>
             <div class="mycard-body">
               <h5 class="mycard-title">
                 {{ rows.room_acc }}

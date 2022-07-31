@@ -12,6 +12,8 @@ function CheckAndCutPromo($price, $promo)
 {
   global $connection;
 
+  date_default_timezone_set("Africa/Addis_Ababa");
+
   $promo_query = "SELECT * FROM promo WHERE promo_code = '$promo' AND promo_active = 'yes' LIMIT 1";
   $promo_result = mysqli_query($connection, $promo_query);
 
@@ -218,6 +220,24 @@ function calculateLoft($kid, $teen, $dbRack, $dMember, $promo)
       $price = $dbRack + 38;
     } else if ($teen == 0 && $kid == 1) {
       $price = $dbRack + 10;
+    }
+  }else if ($promo !== "" && $promo !== "member") {
+    if ($teen == 0 && $kid == 0) {
+      $price = $dbRack;
+    } else if ($teen == 1 && $kid == 0) {
+      $price = $dbRack + 38;
+    } else if ($teen == 0 && $kid == 1) {
+      $price = $dbRack + 10;
+    }
+
+    $DiscountPrice = CheckAndCutPromo($price, $promo);
+    if ($DiscountPrice == $price) {
+      return $price;
+    } else if ($DiscountPrice > $price) {
+      return $price;
+    } else {
+      $price = $DiscountPrice;
+      return $price;
     }
   }
 
@@ -562,6 +582,85 @@ function calculateEntoto($ad, $kid, $teen, $double, $single, $promo)
     }
   }
 
+
+  return $price;
+}
+
+function calculatePre($kid, $teen, $double, $dMember, $promo)
+{
+
+  $price = 0.00;
+
+  if ($promo == "member") {
+    if ($teen == 0 && $kid == 0) {
+      $price = $dMember;
+    } else if ($teen == 1 && $kid == 0) {
+      $price = $dMember + 38;
+    } else if ($teen == 0 && $kid == 1) {
+      $price = $dMember + 10;
+    }
+  } else if ($promo == "") {
+    if ($teen == 0 && $kid == 0) {
+      $price = $double;
+    } else if ($teen == 1 && $kid == 0) {
+      $price = $double + 38;
+    } else if ($teen == 0 && $kid == 1) {
+      $price = $double + 10;
+    }
+  } else if ($promo !== "" && $promo !== "member") {
+    if ($teen == 0 && $kid == 0) {
+      $price = $double;
+    } else if ($teen == 1 && $kid == 0) {
+      $price = $double + 38;
+    } else if ($teen == 0 && $kid == 1) {
+      $price = $double + 10;
+    }
+
+    $DiscountPrice = CheckAndCutPromo($price, $promo);
+    if ($DiscountPrice == $price) {
+      return $price;
+    } else if ($DiscountPrice > $price) {
+      return $price;
+    } else {
+      $price = $DiscountPrice;
+      return $price;
+    }
+  }
+
+  return $price;
+}
+
+function calculatePreEntoto($kid, $teen, $double, $promo)
+{
+  $price = 0.00;
+
+  if ($promo == "") {
+    if ($teen == 0 && $kid == 0) {
+      $price = $double;
+    } else if ($teen == 1 && $kid == 0) {
+      $price = $double + 38;
+    } else if ($teen == 0 && $kid == 1) {
+      $price = $double + 10;
+    }
+  } else if ($promo !== "" && $promo !== "member") {
+    if ($teen == 0 && $kid == 0) {
+      $price = $double;
+    } else if ($teen == 1 && $kid == 0) {
+      $price = $double + 38;
+    } else if ($teen == 0 && $kid == 1) {
+      $price = $double + 10;
+    }
+
+    $DiscountPrice = CheckAndCutPromo($price, $promo);
+    if ($DiscountPrice == $price) {
+      return $price;
+    } else if ($DiscountPrice > $price) {
+      return $price;
+    } else {
+      $price = $DiscountPrice;
+      return $price;
+    }
+  }
 
   return $price;
 }

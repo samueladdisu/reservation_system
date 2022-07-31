@@ -70,6 +70,7 @@ if ($received_data->action == 'fetchallLocation') {
     if ($roomAcc_temp == '' || $roomLocation == '') {
       $roomAcc_temp = $row["room_acc"];
       $roomLocation = $row["room_location"];
+      array_push($data, $row);
     } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
 
       array_push($data, $row);
@@ -80,9 +81,10 @@ if ($received_data->action == 'fetchallLocation') {
       $data = [];
       array_push($data, $row);
       // goto here;
+      
     }
   }
-  if (count($data) > 1) {
+  if (count($data) >= 1) {
     array_push($dataCount, $data);
   }
 
