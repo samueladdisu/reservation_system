@@ -42,12 +42,12 @@ $total = $temp_row['total'];
 $cart2 = $temp_row['cart'];
 $PayMethod = $temp_row['paymentMethod'];
 $cart = json_decode($cart2);
-$room_ids = json_decode($temp_res['room_id']);
-$guestInfos = json_decode($temp_res['guestInfo']);
-$room_nums = json_decode($temp_res['room_num']);
-$room_accs = json_decode($temp_res['room_acc']);
-$room_locs = json_decode($temp_res['room_location']);
-$CiCos = json_decode($temp_res['CinCoutInfo']);
+$room_ids = json_decode($temp_row['room_id']);
+$guestInfos = json_decode($temp_row['guestInfo']);
+$room_nums = json_decode($temp_row['room_num']);
+$room_accs = json_decode($temp_row['room_acc']);
+$room_locs = json_decode($temp_row['room_location']);
+$CiCos = json_decode($temp_row['CinCoutInfo']);
 
 
 file_put_contents("Lemlem.txt", gettype($cart2) . PHP_EOL . PHP_EOL, FILE_APPEND);
