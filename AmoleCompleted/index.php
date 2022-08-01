@@ -51,11 +51,8 @@ $CiCos = json_decode($temp_row['CinCoutInfo']);
 $board = json_decode($temp_row['temp_board']);
 
 
-file_put_contents("Lemlem.txt", gettype($cart2) . PHP_EOL . PHP_EOL, FILE_APPEND);
-// file_put_contents("Lemlem.txt", $cart2['adults'] . PHP_EOL . PHP_EOL, FILE_APPEND);
-// file_put_contents("Lemlem.txt", $cart['adults'] . PHP_EOL . PHP_EOL, FILE_APPEND);
-file_put_contents("Lemlem.txt", gettype($cart)  . PHP_EOL . PHP_EOL, FILE_APPEND);
-file_put_contents("Lemlem.txt", $PayerId . PHP_EOL . PHP_EOL, FILE_APPEND);
+
+
 
 
 function getName($n)
@@ -118,6 +115,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
             "res_board" => $board[$i]
 
         );
+   
         array_push($carts, $oneReservation);
 
         $i++;
@@ -128,7 +126,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
         $cartStingfy = json_encode($carts);
         $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
         $query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
-         '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '$guestNums', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
+         '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
 
         $result = mysqli_query($connection, $query);
         confirm($result);
