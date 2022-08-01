@@ -152,7 +152,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
         $booked_result = mysqli_query($connection, $booked_query);
         confirm($booked_result);
 
-        $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN '{$value['room_id']}'";
+        $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
         $result_status = mysqli_query($connection, $status_query);
         confirm($result_status);
     }
