@@ -344,7 +344,7 @@ if ($received_data->action == 'calculatePrice') {
   $sWeekdays = 0.00;
   $sMember = 0.00;
   $cart = $received_data->data;
-  $Bored = $received_data->dataBin;
+  // $Bored = $received_data->dataBin;
 
   foreach ($cart as $val) {
 
@@ -409,6 +409,7 @@ if ($received_data->action == 'calculatePrice') {
         }
       }
     } else if ($location == 'awash') {
+      $Bored = $val->reservationBoard;
       $query_type = "SELECT * FROM awash_price WHERE name = '$cartRoomType'";
       $result_type = mysqli_query($connection, $query_type);
       confirm($result_type);
