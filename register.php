@@ -182,6 +182,7 @@ function cutFromPromo($promo, $price)
   $roomLoca = array();
   $CinCoutInfo = array();
   $CICOAll  = array();
+  $boardeArr = array();
 
   function getName($n)
   {
@@ -208,6 +209,7 @@ function cutFromPromo($promo, $price)
     $roomLoca[] =  $val->room_location;
     $CinCoutInfo = [$val->checkin, $val->checkout];
     array_push($CICOAll, $CinCoutInfo);
+    array_push($boardeArr, $val->reservationBoard);
   }
   $id_sql = json_encode($id);
   $id_int = implode(',', $id);
@@ -278,10 +280,10 @@ function cutFromPromo($promo, $price)
       $roomAccs =  json_encode($roomAcc);
       $roomLocas = json_encode($roomLoca);
       $CICOAlls  = json_encode($CICOAll);
+      $boardeArrs = json_encode($boardeArr);
 
-
-      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo) 
-      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls')";
+      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board) 
+      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls', '$boardeArrs')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);

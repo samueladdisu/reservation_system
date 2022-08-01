@@ -48,6 +48,7 @@ $room_nums = json_decode($temp_row['room_num']);
 $room_accs = json_decode($temp_row['room_acc']);
 $room_locs = json_decode($temp_row['room_location']);
 $CiCos = json_decode($temp_row['CinCoutInfo']);
+$board = json_decode($temp_row['temp_board']);
 
 
 file_put_contents("Lemlem.txt", gettype($cart2) . PHP_EOL . PHP_EOL, FILE_APPEND);
@@ -113,7 +114,8 @@ if ($decision == "ACCEPT" && $reason == "100") {
             'room_acc' => $room_accs[$i],
             'room_location' => $room_locs[$i],
             'guestnums' => [$guestInfos[$i][0], $guestInfos[$i][1], $guestInfos[$i][2]],
-            "room_price" => $row
+            "room_price" => $row,
+            "res_board" => $board[$i]
 
         );
         array_push($carts, $oneReservation);
@@ -146,7 +148,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
         confirm($booked_result);
 
         $booked_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location, info_board) ";
-        $booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', 'full')";
+        $booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', '{$value['res_board']}')";
         $booked_result = mysqli_query($connection, $booked_query);
         confirm($booked_result);
 
