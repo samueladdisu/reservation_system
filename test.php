@@ -5,12 +5,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
 
   <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /> -->
+
+  
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <title>test</title>
 </head>
 
@@ -20,15 +26,6 @@
 
   <script type="text/javascript">
     let start, end
-    // let today = new Date().toISOString().slice(0, 10)
-    // const getTomorrow = () =>  new Date.setDate(new Date.getDate() + 1);
-    // let tomorrow = getTomorrow()
-
-    // const today = new Date().toISOString().slice(0, 10)
-    // const tomorrow = new Date(today)
-    // tomorrow.setDate(tomorrow.getDate() + 1)
-    // console.log(today)
-    // console.log(tomorrow)
 
     var today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -51,6 +48,17 @@
     $('#date').daterangepicker();
     $('#date').data('daterangepicker').setStartDate(today);
     $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+    $('#date').on('apply.daterangepicker', function(ev, picker) {
+      // console.log(picker.startDate.format('YYYY-MM-DD'));
+      // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+      start = picker.startDate.format('YYYY-MM-DD')
+      end = picker.endDate.format('YYYY-MM-DD')
+      console.log("start", start);
+      console.log("end", end);
+    });
+
   </script>
 </body>
 

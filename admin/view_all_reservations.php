@@ -88,7 +88,7 @@
 
                   <div class="card" style="width: 18rem;" v-for="row in guestInfo" :key="row.info_id">
                     <div class="card-body">
-                      <h5 class="card-title font-weight-bold"> {{ row.info_room_acc }} </h5>
+                      <h5 class="card-title font-weight-bold"> {{ row.info_room_acc }}  <span v-if="row.info_board"> - {{ row.info_board }} </span> </h5>
 
                     </div>
                     <ul class="list-group list-group-flush">
