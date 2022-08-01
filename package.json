@@ -17,3 +17,12 @@
   },
   "homepage": "https://github.com/samueladdisu/reservation_system#readme"
 }
+
+{"adults":2,
+"kids":0,"teens":1,
+"room_id":"75",
+"room_number":"105",
+"room_acc":"Deluxe Lake Front king size bed",
+"room_location":"Bishoftu",
+"room_price":"219.85"
+},
