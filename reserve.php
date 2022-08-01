@@ -1010,6 +1010,7 @@ if (isset($_GET['roomType'])) {
                       adults: this.res_guest[0],
                       teens: this.res_guest[1],
                       kids: this.res_guest[2],
+                      reservationBoard: ""
                     }
                     // console.log("row size:" + Object.keys(row).length);
 
