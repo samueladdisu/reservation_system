@@ -167,7 +167,7 @@ if (isset($_GET['roomType'])) {
 
           <div class="form-group col-lg-6">
             <label for="date" class="form-label" id="label">Select Date</label>
-            <input type="text" class="form-control" name="daterange" id="date" value="" />
+            <input type="text" class="form-control" name="daterange" id="date" value="" readonly/>
           </div>
           <div class="form-group col-lg-6">
             <button type="submit" class="btn btn-black" id="check">
