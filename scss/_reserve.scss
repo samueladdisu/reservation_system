@@ -137,7 +137,7 @@
   }
 }
 
-.header .nav-center .menu > div {
+.header .nav-center .menu>div {
   height: 2px;
   margin-bottom: 0.63rem;
   width: 2.31rem;
@@ -193,14 +193,30 @@
   }
 
   .myform {
-    display: grid;
-    place-content: center;
-    align-items: center;
-    gap: 1rem;
+
+    // display: grid;
+    // place-content: center;
+    // align-items: center;
+    // gap: 1rem;
+    #date {
+      margin: 1rem 0;
+      //  padding: 1rem 2rem;
+      background: transparent;
+      border: 1px solid #000;
+    }
+
 
     @include responsive($md) {
-      display: flex;
       padding: 1rem;
+    }
+
+    @include responsive($lg) {
+      display: flex;
+      align-items: center;
+
+      #check {
+        margin-top: 1.2rem;
+      }
     }
 
     .guest-option {
@@ -620,15 +636,15 @@
   }
 }
 
-@media screen and (min-width: 768px) {
-  .container .myform {
-    // display: flex;
-    gap: 1rem;
-    width: 100%;
-    align-items: center;
-    padding: 1.75rem 2.38rem;
-  }
-}
+// @media screen and (min-width: 768px) {
+//   .container .myform {
+//     // display: flex;
+//     gap: 1rem;
+//     width: 100%;
+//     align-items: center;
+//     padding: 1.75rem 2.38rem;
+//   }
+// }
 
 @media screen and (min-width: 1040px) {
   .form-wrapper {
@@ -918,12 +934,15 @@
 .btn-black {
   width: 100%;
 }
+
 .BAlert {
   width: 30%;
 }
+
 .aminties-list {
   padding: 1rem;
   margin-top: -1rem;
+
   @include responsive($lg) {
     margin-top: 0rem;
     padding: 2rem;
@@ -947,6 +966,7 @@
     color: $kuriftu-black;
     list-style-type: disc;
     font-size: 0.8rem;
+
     @include responsive($xl) {
       font-size: 1rem;
     }
@@ -996,15 +1016,14 @@
   font-family: "Myriad Pro Regular";
   color: $kuriftu-black;
   line-height: 1.63rem;
+
   @include responsive($xl) {
     line-height: 2.5rem;
   }
+
   margin-bottom: 1.88rem;
 }
 
-.cart-container {
-  display: none;
-}
 
 .bottom-cart {
   position: fixed;
@@ -1088,8 +1107,7 @@
     width: 20rem;
   }
 
-  .cart-wrapper {
-  }
+  .cart-wrapper {}
 
   .cart-container .cart-title {
     font-size: 1.5rem;
@@ -1498,6 +1516,10 @@
   font-weight: bold;
 }
 
+#label {
+  margin: 0 !important;
+}
+
 .my-form .form-select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -1601,19 +1623,23 @@ footer {
 
 .popup {
   margin: 10px auto;
+
   @include responsive($md) {
     margin: 250px auto;
   }
+
   @include responsive($lg) {
     margin: 200px auto;
     width: 80%;
     padding: 1rem;
   }
+
   @include responsive($xxl) {
     margin: 180px auto;
     width: 65%;
     padding: 2rem;
   }
+
   padding: 0.5rem;
   background: rgba(255, 255, 255, 1);
   border: 1px solid #d7d7d7;
@@ -1762,14 +1788,18 @@ footer {
   max-height: 30%;
   overflow: auto;
 }
+
 .complete-cont {
   margin-top: 2rem;
+
   @include responsive($lg) {
     margin-top: 4rem;
   }
+
   display: grid;
   place-content: center;
 }
+
 .check-box-wrapper {
   display: grid;
   place-content: center;
@@ -1778,6 +1808,7 @@ footer {
   border-color: #282828;
 
   border: 1px solid #b7b7b7;
+
   .check-icon {
     display: grid;
     place-items: center;
@@ -1785,6 +1816,7 @@ footer {
     img {
       width: 6rem;
     }
+
     p {
       margin-top: 1.5rem;
       margin-bottom: 2rem;
@@ -1794,17 +1826,21 @@ footer {
     }
   }
 }
+
 .width-imp {
   width: 18rem;
 }
+
 .form-center {
   display: grid;
   place-content: center;
 }
+
 .modal-header {
   font-size: 1.5rem !important;
   font-weight: 700;
   text-transform: uppercase !important;
+
   .close {
     background-color: #fff;
     border: 0px;
@@ -1813,9 +1849,11 @@ footer {
     font-weight: 700;
   }
 }
+
 .modal-body {
   margin-right: -2rem !important;
 }
+
 .text-dark {
   font-size: 1.3rem;
   margin-bottom: 1rem;
@@ -1849,4 +1887,11 @@ footer {
 
 .form-check-input {
   border-color: black !important;
+}
+
+.amole-confirm {
+  padding-top: 5rem;
+  width: 100vw;
+  display: grid;
+  place-items: center;
 }

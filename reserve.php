@@ -5,7 +5,7 @@ $Location = '';
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
 
-  if($Location == 'Tana'){
+  if ($Location == 'Tana') {
     $Location = "Lake tana";
   }
 }
@@ -25,9 +25,14 @@ if (isset($_GET['roomType'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
-  <link rel="stylesheet" href="css/t-datepicker.min.css">
-  <link rel="stylesheet" href="css/themes/t-datepicker-green.css">
+  <!-- <link rel="stylesheet" href="css/t-datepicker.min.css">
+  <link rel="stylesheet" href="css/themes/t-datepicker-green.css"> -->
   <link rel="stylesheet" href="./css/style.css">
+
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
 
   <title>Reservation</title>
 </head>
@@ -120,28 +125,28 @@ if (isset($_GET['roomType'])) {
     <div class="container-sm" v-if="haveData">
       <div class="form-wrapper">
 
-        <form class="myform" @submit.prevent="submitData">
-
-          <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Kuriftu</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p>are you still there.</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
-                  <button type="button" class="btn btn-red BAlert" data-dismiss="modal" @click="TimerExtend()">Yes</button>
-                </div>
+        <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Kuriftu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>are you still there.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
+                <button type="button" class="btn btn-red BAlert" data-dismiss="modal" @click="TimerExtend()">Yes</button>
               </div>
             </div>
           </div>
-          <div class="t-datepicker ">
+        </div>
+
+        <form class="myform row" @submit.prevent="submitData">
+          <!-- <div class="t-datepicker ">
             <div class="t-check-in">
               <div class="t-dates t-date-check-in">
                 <label class="t-date-info-title">Check In</label>
@@ -149,7 +154,6 @@ if (isset($_GET['roomType'])) {
               <input type="hidden" class="t-input-check-in" name="start">
               <div class="t-datepicker-day">
                 <table class="t-table-condensed">
-                  <!-- Date theme calendar -->
                 </table>
               </div>
             </div>
@@ -159,10 +163,17 @@ if (isset($_GET['roomType'])) {
               </div>
               <input type="hidden" class="t-input-check-out" name="end">
             </div>
+          </div> -->
+
+          <div class="form-group col-lg-6">
+            <label for="date" class="form-label" id="label">Select Date</label>
+            <input type="text" class="form-control" name="daterange" id="date" value="" />
           </div>
-          <button type="submit" class="btn btn-black">
-            Check Availability
-          </button>
+          <div class="form-group col-lg-6">
+            <button type="submit" class="btn btn-black" id="check">
+              Check Availability
+            </button>
+          </div>
         </form>
       </div>
 
@@ -534,32 +545,77 @@ if (isset($_GET['roomType'])) {
 
   </footer>
 
+
   <?php include_once './includes/footer.php' ?>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
   <script>
     var start, end
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    let tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    const td = String(tomorrow.getDate()).padStart(2, '0');
+    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const ty = tomorrow.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    tomorrow = tm + '/' + td + '/' + ty;
+    console.log(today)
+    console.log(tomorrow)
+
     $(document).ready(function() {
 
-      const tdate = $('.t-datepicker')
-      tdate.tDatePicker({
-        show: true,
-        iconDate: '<i class="fa fa-calendar"></i>'
+      $('#date').daterangepicker();
+      $('#date').data('daterangepicker').setStartDate(today);
+      $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+      $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // console.log(picker.startDate.format('YYYY-MM-DD'));
+        // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        start = picker.startDate.format('YYYY-MM-DD')
+        end = picker.endDate.format('YYYY-MM-DD')
+        console.log("start", start);
+        console.log("end", end);
       });
-      tdate.tDatePicker('show')
-
-
-      tdate.on('eventClickDay', function(e, dataDate) {
-
-        var getDateInput = tdate.tDatePicker('getDateInputs')
-
-        start = getDateInput[0];
-        end = getDateInput[1];
+    })
 
 
 
-      })
-    });
+    // $(document).ready(function() {
+
+    //   const tdate = $('.t-datepicker')
+    //   tdate.tDatePicker({
+    //     show: true,
+    //     iconDate: '<i class="fa fa-calendar"></i>'
+    //   });
+    //   tdate.tDatePicker('show')
+
+
+    //   tdate.on('eventClickDay', function(e, dataDate) {
+
+    //     var getDateInput = tdate.tDatePicker('getDateInputs')
+
+    //     start = getDateInput[0];
+    //     end = getDateInput[1];
+
+
+
+    //   })
+    // });
 
     const user = '<?php echo $user_name ?>'
     const app = Vue.createApp({
