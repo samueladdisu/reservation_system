@@ -128,11 +128,13 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
 
 
           <!-- <form action="payment_confirmation.php" method="post"> -->
-          <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" method="post" />
+          <form id="payment_confirmation" action="https://secureacceptance.cybersource.com/pay" method="post" />
           <?php
 
           $cart = $_SESSION['cart'];
           $total_price = $_SESSION['total'];
+          $access_key = $_ENV['ACCESS_KEY'];
+          $profile_id = $_ENV['PROFILE_ID'];
 
           $quantity = 1;
           $item_name = 1;
@@ -153,8 +155,8 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
           $customer_ip = $response["ip"];
 
           $arrayVariable = array(
-            "access_key"  => "bf0d90b4542b3b2b91ad73049ad08abc",
-            "profile_id"  => "0CD052F3-59A9-44AD-B4B3-54053477F7DA",
+            "access_key"  => $access_key,
+            "profile_id"  => $profile_id,
             "transaction_uuid"  =>  uniqid() . $_SESSION['Rtemp'],
             "signed_field_names"  => "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,device_fingerprint_id,customer_ip_address",
             "unsigned_field_names"  => "",

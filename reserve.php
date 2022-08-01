@@ -167,7 +167,7 @@ if (isset($_GET['roomType'])) {
 
           <div class="form-group col-lg-6">
             <label for="date" class="form-label" id="label">Select Date</label>
-            <input type="text" class="form-control" name="daterange" id="date" value="" readonly/>
+            <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
           </div>
           <div class="form-group col-lg-6">
             <button type="submit" class="btn btn-black" id="check">
@@ -568,11 +568,17 @@ if (isset($_GET['roomType'])) {
 
     today = mm + '/' + dd + '/' + yyyy;
     tomorrow = tm + '/' + td + '/' + ty;
-    console.log(today)
-    console.log(tomorrow)
+
+    start = yyyy + '-' + mm + '-' + dd;
+    end = ty + '-' + tm  + '-' + td;
+   
+    console.log("inital start", start);
+    console.log("inital end", end);
 
     $(document).ready(function() {
 
+      console.log("initial start", start);
+      console.log("initial end", end);
       $('#date').daterangepicker();
       $('#date').data('daterangepicker').setStartDate(today);
       $('#date').data('daterangepicker').setEndDate(tomorrow);
@@ -583,8 +589,8 @@ if (isset($_GET['roomType'])) {
 
         start = picker.startDate.format('YYYY-MM-DD')
         end = picker.endDate.format('YYYY-MM-DD')
-        console.log("start", start);
-        console.log("end", end);
+        console.log("updated start", start);
+        console.log("updated end", end);
       });
     })
 
@@ -963,6 +969,7 @@ if (isset($_GET['roomType'])) {
               this.res_adults = "0"
               this.res_teen = "0"
               this.res_kid = "0"
+              this.res_BB = ""
               $('#guest').modal('hide')
             }
 
@@ -1044,6 +1051,7 @@ if (isset($_GET['roomType'])) {
               this.res_adults = "0"
               this.res_teen = "0"
               this.res_kid = "0"
+              this.res_BB = ""
               $('#guest').modal('hide')
             }
           <?php } ?>
@@ -1299,7 +1307,7 @@ if (isset($_GET['roomType'])) {
         this.totalprice = JSON.parse(localStorage.total || '[]')
         this.checkLocalStorage()
 
-        Pusher.logToConsole = true;
+        // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
