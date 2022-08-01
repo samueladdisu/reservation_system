@@ -93,6 +93,8 @@ if ($decision == "ACCEPT" && $reason == "100") {
     $numofRooms = count($room_ids);
     $i = 0;
     $carts = array();
+    $oldCI = '';
+    $oldCO = '';
     while ($i < $numofRooms) {
 
         $queryRoom = "SELECT room_price from rooms WHERE room_id = '$room_ids[$i]'";
@@ -115,7 +117,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
             "res_board" => $board[$i]
 
         );
-   
+
         array_push($carts, $oneReservation);
 
         $i++;
@@ -124,12 +126,19 @@ if ($decision == "ACCEPT" && $reason == "100") {
     foreach ($carts  as $value) {
         $guestNums = json_encode($value['guestnums']);
         $cartStingfy = json_encode($carts);
-        $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
-        $query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
-         '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
+        $nowCI = strtotime($value['Checkin']);
+        $nowCO = strtotime($value['Checkout']);
+        if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
+            $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+            $query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
+             '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
 
-        $result = mysqli_query($connection, $query);
-        confirm($result);
+            $result = mysqli_query($connection, $query);
+            confirm($result);
+            $oldCI = strtotime($value['Checkin']);
+            $oldCO = strtotime($value['Checkout']);
+        }
+
 
         $last_record_query = "SELECT * FROM reservations WHERE res_confirmID = '$res_confirmID'";
         $last_record_result = mysqli_query($connection, $last_record_query);
