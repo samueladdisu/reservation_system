@@ -1,7 +1,7 @@
 <?php
 
 // include($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . basename(dirname(dirname(dirname(__FILE__)))) . "/admin_config.php");
-include("/admin_config.php");
+include("admin_config.php");
 
 $db_username = $_ENV['DB_USERNAME'];
 $db_pwd = $_ENV['DB_PASSWORD'];
