@@ -136,7 +136,7 @@ if ($decision == "ACCEPT" && $reason == "100") {
         confirm($last_record_result);
         $row = mysqli_fetch_assoc($last_record_result);
 
-        $res_Id = $row['res_id '];
+        $res_Id = $row['res_id'];
 
         $booked_query = "INSERT INTO booked_rooms(b_res_id, b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
         $booked_query .= "VALUES ('$res_Id', '{$value['room_id']}', '{$value['room_acc']}', '{$value['room_location']}',  '{$value['Checkin']}', '{$value['Checkout']}')";
