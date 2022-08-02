@@ -393,7 +393,21 @@ if ($received_data->action == 'calculatePrice') {
       foreach ($days as $day) {
         if ($cartRoomType == "Loft Family Room") {
           $price += calculateLoft($kid, $teen, $dbRack, $dbMember, $promo);
-        } else {
+        }else if($cartRoomType == 'Presidential Suite Family Room'){
+          switch ($day) {
+            case 'Friday':
+              $price += calculatePre($kid, $teen, $dbWeekend, $dbMember, $promo);
+              break;
+            case 'Saturday':
+              $price += calculatePre($kid, $teen,$dbRack, $dbMember, $promo);
+              break;
+            default:
+              // $price += doubleval($row_type['d_weekday_rate']);
+              $price += calculatePre($kid, $teen, $dbWeekdays, $dbMember, $promo);
+              break;
+          }
+        } 
+        else {
           switch ($day) {
             case 'Friday':
               $price += calculatePrice($ad, $kid, $teen, $sWeekend, $dbWeekend, $dbMember, $sMember, $promo);
@@ -417,6 +431,43 @@ if ($received_data->action == 'calculatePrice') {
       $row_type = mysqli_fetch_assoc($result_type);
 
       $price = calculatePriceAwash($ad, $kid, $teen, $Bored, $days, $row_type);
+    }else if ($location == 'entoto'){
+      $query = "SELECT * FROM entoto_price WHERE name = '$cartRoomType'";
+
+
+      $result_type = mysqli_query($connection, $query);
+      confirm($result_type);
+
+
+      while ($row_type = mysqli_fetch_assoc($result_type)) {
+        $double = $row_type['double_occ'];
+        $single = $row_type['single_occ'];
+      }
+
+      foreach ($days as $day) {
+        if($value->room_acc == "Presidential Family Room" ){
+          $price += calculatePreEntoto($kid, $teen, $double, $promo);
+        }else {
+
+          $price += calculateEntoto($ad, $kid, $teen, $double, $single, $promo);
+        }
+      }
+    }else if($location == 'Lake tana'){
+      $query = "SELECT * FROM tana_price WHERE name = '$cartRoomType'";
+
+        
+      $result_type = mysqli_query($connection, $query);
+      confirm($result_type);
+
+
+      while ($row_type = mysqli_fetch_assoc($result_type)) {
+        $double = $row_type['double_occ'];
+        $single = $row_type['single_occ'];
+      }
+
+      foreach ($days as $day) {
+        $price += calculateEntoto($ad, $kid, $teen, $double, $single, $promo);
+      }
     }
     array_push($arrayTemp, $price);
     $price = 0.00;
