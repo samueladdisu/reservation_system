@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://unpkg.com/vue@3.0.2"></script>
-  <title>Document</title>
+  <title>Telebirr</title>
 </head>
 
 <body>

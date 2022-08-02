@@ -133,7 +133,8 @@ function cancelLitsener($Money)
     $data = [
         'outTradeNo' => getName(10) . $_SESSION['Rtemp'],
         'subject' => 'Booking',
-        'totalAmount' => $ConvertedMoney,
+        // 'totalAmount' => $ConvertedMoney,
+        'totalAmount' => 1,
         'shortCode' =>  '220162',
         'notifyUrl' => 'https://www.versavvymedia.com/reservation_system/telebirrCompleted/',
         'returnUrl' => 'https://www.versavvymedia.com/reservation_system/',
