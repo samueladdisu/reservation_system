@@ -464,7 +464,48 @@ if (isset($_GET['roomType'])) {
         </div>
       </div>
     </div>
+    <div class="modal fade" id="loftModal">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Guests</h5>
+            <button type="button btn" class="close" data-dismiss="modal" aria-label="Close" @click.prevent="closeGuestModal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="" class="text-dark">Guest Number</label>
+              <div class="row">
+                <select name="adults" v-model="res_adults" class="custom-select col-3">
+                  <option value="" disabled selected>Guests</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
 
+                <select name="adults" @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
+                  <option value="" disabled>Teens(12-17)</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                </select>
+
+                <select name="adults" @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
+                  <option value="" disabled>Kid (6-11)</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" @click="nextBook" data-dismiss="modal" class="btn btn-black">Add Room</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div id="popup1" class="overlay">
     <div class="popup" v-for="items in cart" :key="items.id">
@@ -643,6 +684,8 @@ if (isset($_GET['roomType'])) {
           res_adults: '0',
           res_teen: '0',
           res_kid: '0',
+          loftKid: false,
+          loftTeen: false,
           res_guest: [],
           kid: false,
           teen: false,
@@ -741,83 +784,23 @@ if (isset($_GET['roomType'])) {
             // this.teens = 0;
             // this.kids = 0;
           } else {
-            alert("booked");
+            if (this.res_teen == 1) {
+            this.loftKid = true
+            this.res_kid = 0
+          } else {
+            this.loftKid = false
+          }
+
+          if (this.res_kid == 1) {
+            this.loftTeen = true
+            this.res_teen = 0
+          } else {
+            this.loftTeen = false
+          }
             this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
 
           }
 
-        },
-
-        checkAdult() {
-          if (this.res_teen || this.res_kid) {
-            if (this.res_teen) {
-              if (this.res_teen == 2) {
-
-                if (this.res_adults == 2) {
-
-                  alert("you cant");
-
-                } else if (this.res_adults == 1) {
-
-                  if (this.res_kid == 0) {
-                    alert("you can");
-                  } else {
-                    alert("you cant");
-                  }
-                }
-              }
-            }
-
-            if (res.res_kid) {
-              if (res.res_kid == 2) {
-
-                if (this.res_adults == 2 && this.res_teen == 0) {
-                  alret("you can");
-                } else {
-                  alert("you cant");
-                }
-
-              } else if (res.res_kid == 1) {
-                if (res.res_adults == 1 && (res.res_teen == 1 || res.res_teen == 1)) {
-                  alert("you can")
-                } else if (res.res_adults == 2 && res.res_teen == 1) {
-                  alert("you can");
-                } else {
-                  alert("you cant");
-                }
-
-              }
-            }
-
-          } else {
-            alert("you can");
-          }
-
-
-        },
-        checkTeen() {
-          if (this.res_teen == 2 && this.res_adults == 2) {
-
-            this.res_teen = 0
-
-            alert("2 adult and 2 teens can't stay in 1 room")
-
-          } else {
-            this.kid = false
-
-          }
-        },
-        checkKid() {
-          if (this.res_kid == 2 && this.res_adults == 2) {
-
-            // this.teen = true
-            alert(`2 adult, 2 kids and ${this.res_teen} teen can't stay in 1 room`)
-            this.res_kid = 0
-
-          } else {
-            this.teen = false
-
-          }
         },
         showDropdown() {
           this.dropdown = !this.dropdown
@@ -873,7 +856,12 @@ if (isset($_GET['roomType'])) {
             this.roww = row;
 
             console.log(row.room_id)
-            $('#guest').modal('show')
+            if (row.room_acc === "Loft Family Room" || row.room_acc === "Presidential Family Room" || row.room_acc === "Presidential Suite Family Room") {
+              $('#loftModal').modal('show')
+            } else {
+
+              $('#guest').modal('show')
+            }
             this.guestModal = true
 
           } else {
@@ -942,6 +930,7 @@ if (isset($_GET['roomType'])) {
                     }).then((res) => {
                       console.log(res.data);
                       this.PriceArray = res.data;
+
                     }).then((res) => {
                       this.PriceArray.forEach(val => {
                         total += val;
@@ -969,7 +958,7 @@ if (isset($_GET['roomType'])) {
               this.res_adults = "0"
               this.res_teen = "0"
               this.res_kid = "0"
-              this.res_BB = ""
+              // this.res_BB = ""
               $('#guest').modal('hide')
             }
 
@@ -1054,6 +1043,7 @@ if (isset($_GET['roomType'])) {
               this.res_kid = "0"
               this.res_BB = ""
               $('#guest').modal('hide')
+              $('#loftModal').modal('hide')
             }
           <?php } ?>
         },
@@ -1217,7 +1207,7 @@ if (isset($_GET['roomType'])) {
               if (this.min > 0) {
                 this.min--;
               } else if (this.min == 0) {
-                // this.clearOrder();
+                this.clearOrder();
               }
             } else if (this.sec == 5) {
               this.sec--;
@@ -1232,7 +1222,7 @@ if (isset($_GET['roomType'])) {
           clearInterval(this.timer);
 
           /* Reset the seconds of the timer */
-          this.sec = '10';
+          this.sec = '1800';
           this.min = '1';
           /* Set a new interval */
           this.timer = setInterval(this.startIdleTimer, 1000);

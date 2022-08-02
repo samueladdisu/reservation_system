@@ -429,8 +429,8 @@ if ($received_data->action == 'calculatePrice') {
       confirm($result_type);
 
       $row_type = mysqli_fetch_assoc($result_type);
-
       $price = calculatePriceAwash($ad, $kid, $teen, $Bored, $days, $row_type);
+
     }else if ($location == 'entoto'){
       $query = "SELECT * FROM entoto_price WHERE name = '$cartRoomType'";
 
@@ -445,7 +445,7 @@ if ($received_data->action == 'calculatePrice') {
       }
 
       foreach ($days as $day) {
-        if($value->room_acc == "Presidential Family Room" ){
+        if($cartRoomType == "Presidential Family Room" ){
           $price += calculatePreEntoto($kid, $teen, $double, $promo);
         }else {
 
