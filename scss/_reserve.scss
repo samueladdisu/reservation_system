@@ -1077,7 +1077,9 @@
   gap: 2rem;
   align-items: center;
 }
-
+.cart-container {
+  display: none;
+}
 @media screen and (min-width: 1440px) {
   .cart-container {
     display: block;
