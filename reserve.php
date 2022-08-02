@@ -570,8 +570,8 @@ if (isset($_GET['roomType'])) {
     tomorrow = tm + '/' + td + '/' + ty;
 
     start = yyyy + '-' + mm + '-' + dd;
-    end = ty + '-' + tm  + '-' + td;
-   
+    end = ty + '-' + tm + '-' + td;
+
     console.log("inital start", start);
     console.log("inital end", end);
 
@@ -892,7 +892,7 @@ if (isset($_GET['roomType'])) {
             if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
               alert("Adult can not be 0")
             } else if (this.res_BB == '') {
-              alert("Please select between the given options")
+              alert("Please select from the given options")
             } else {
               axios.post('book.php', {
                 action: 'hold',
