@@ -5,6 +5,12 @@ require  '../admin/includes/db.php';
 require  '../admin/includes/functions.php';
 require '../vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+use Mailgun\Mailgun;
+// First, instantiate the SDK with your API credentials
+$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 $cybsResponse = $_REQUEST;
 $Response = json_encode($cybsResponse);
 $jsonl = json_decode($Response, true);

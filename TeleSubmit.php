@@ -139,7 +139,7 @@ function cancelLitsener($Money)
         'notifyUrl' => 'https://www.versavvymedia.com/reservation_system/telebirrCompleted/',
         'returnUrl' => 'https://www.versavvymedia.com/reservation_system/',
         'receiveName' => 'KURIFTU',
-        'appId' => 'c0704d7ddcf34a49b5e6408a836987fc',
+        'appId' => $_ENV['TELE_APP_ID'],
         'timeoutExpress' => '30',
         'nonce' => getName(16),
         'timestamp' => getTime()
@@ -169,7 +169,7 @@ function cancelLitsener($Money)
         'ussd' => $ussd
     ];
 
-    $api = "http://196.188.120.3:11443/service-openup/toTradeWebPay";
+    $api = "https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/toTradeWebPay";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $api);

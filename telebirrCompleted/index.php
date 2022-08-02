@@ -1,4 +1,17 @@
-<?php include  'config.php'; ?>
+<?php 
+ob_start();
+session_start();
+require  '../admin/includes/db.php';
+require  '../admin/includes/functions.php';
+require '../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+use Mailgun\Mailgun;
+// First, instantiate the SDK with your API credentials
+$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
+?>
 <?php
 
 $content = file_get_contents('php://input');
