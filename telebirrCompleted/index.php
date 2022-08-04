@@ -1,4 +1,4 @@
-<?php 
+<?php
 ob_start();
 session_start();
 require  '../admin/includes/db.php';
@@ -16,36 +16,36 @@ $mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 
 $content = file_get_contents('php://input');
 
-$publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArCSJyX99BiuymBFhLLYp5iOdFgO8I2RK0yE/7W7hVcaS0jjc1aQxor7Q0uuS0ClacRTJUYmT3Hf6RvwwwaClAJ6TSNl5uXPek7RPTmBW59Onh+wc07twto7yUHuGS1IryhyLr0vs5TIf2/kxEsXY4EA3KB3OtmgmGdWvdubb4siXCUS7eD49DFCzmYmXPNeDxBNp5Rczmf+IBtLA3nlyT3EImgWF8CSdQj3UZTlEiOOpfYg5NWwepYrCzwLYxbRc0EoZO6jFr+oYfePlvmXPF8Y+ZEcDDINZxL+Raxsmr5qc2LVJpwyuzHTUZ//mHRRdAohhawdSgNbCVFHlQg53JQIDAQAB';
+$publicKey = $_ENV['TELE_PUBLIC_KEY'];
 
 function returnid(array $CHARS)
 {
-	$IDfromUID = "";
-	for ($x = 10; $x <= sizeof($CHARS); $x++) {
-		$IDfromUID .= $CHARS[$x];
-	}
-	return $IDfromUID;
+  $IDfromUID = "";
+  for ($x = 10; $x <= sizeof($CHARS); $x++) {
+    $IDfromUID .= $CHARS[$x];
+  }
+  return $IDfromUID;
 }
 
 function decryptRSA($source, $key)
 {
-	$pubPem = chunk_split($key, 64, "\n");
-	$pubPem = "-----BEGIN PUBLIC KEY-----\n" . $pubPem . "-----END PUBLIC KEY-----\n";
-	$public_key = openssl_pkey_get_public($pubPem);
-	if (!$public_key) {
-		die('invalid public key');
-	}
-	$decrypted = ''; //decode must be done before spliting for getting the binary String
-	$data = str_split(base64_decode($source), 256);
-	foreach ($data as $chunk) {
-		$partial = ''; //be sure to match padding
-		$decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
-		if ($decryptionOK === false) {
-			die('fail');
-		}
-		$decrypted .= $partial;
-	}
-	return $decrypted;
+  $pubPem = chunk_split($key, 64, "\n");
+  $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $pubPem . "-----END PUBLIC KEY-----\n";
+  $public_key = openssl_pkey_get_public($pubPem);
+  if (!$public_key) {
+    die('invalid public key');
+  }
+  $decrypted = ''; //decode must be done before spliting for getting the binary String
+  $data = str_split(base64_decode($source), 256);
+  foreach ($data as $chunk) {
+    $partial = ''; //be sure to match padding
+    $decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
+    if ($decryptionOK === false) {
+      die('fail');
+    }
+    $decrypted .= $partial;
+  }
+  return $decrypted;
 }
 
 
@@ -90,15 +90,15 @@ $board = json_decode($temp_row['temp_board']);
 
 function getName($n)
 {
-	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$randomString = '';
+  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $randomString = '';
 
-	for ($i = 0; $i < $n; $i++) {
-		$index = rand(0, strlen($characters) - 1);
-		$randomString .= $characters[$index];
-	}
+  for ($i = 0; $i < $n; $i++) {
+    $index = rand(0, strlen($characters) - 1);
+    $randomString .= $characters[$index];
+  }
 
-	return $randomString;
+  return $randomString;
 }
 
 
@@ -113,71 +113,71 @@ $oldCI = '';
 $oldCO = '';
 while ($i < $numofRooms) {
 
-	$queryRoom = "SELECT room_price from rooms WHERE room_id = '$room_ids[$i]'";
-	$last_record_result = mysqli_query($connection,  $queryRoom);
-	confirm($last_record_result);
-	$row = mysqli_fetch_assoc($last_record_result);
+  $queryRoom = "SELECT room_price from rooms WHERE room_id = '$room_ids[$i]'";
+  $last_record_result = mysqli_query($connection,  $queryRoom);
+  confirm($last_record_result);
+  $row = mysqli_fetch_assoc($last_record_result);
 
-	$oneReservation = array(
-		'Checkin' => $CiCos[$i][0],
-		'Checkout' => $CiCos[$i][1],
-		'room_id' => $room_ids[$i],
-		'adults' => $guestInfos[$i][0],
-		'teens' => $guestInfos[$i][1],
-		'kids' => $guestInfos[$i][2],
-		'room_number' => $room_nums[$i],
-		'room_acc' => $room_accs[$i],
-		'room_location' => $room_locs[$i],
-		'guestnums' => [$guestInfos[$i][0], $guestInfos[$i][1], $guestInfos[$i][2]],
-		"room_price" => $row,
-		"res_board" => $board[$i]
+  $oneReservation = array(
+    'Checkin' => $CiCos[$i][0],
+    'Checkout' => $CiCos[$i][1],
+    'room_id' => $room_ids[$i],
+    'adults' => $guestInfos[$i][0],
+    'teens' => $guestInfos[$i][1],
+    'kids' => $guestInfos[$i][2],
+    'room_number' => $room_nums[$i],
+    'room_acc' => $room_accs[$i],
+    'room_location' => $room_locs[$i],
+    'guestnums' => [$guestInfos[$i][0], $guestInfos[$i][1], $guestInfos[$i][2]],
+    "room_price" => $row,
+    "res_board" => $board[$i]
 
-	);
+  );
 
-	array_push($carts, $oneReservation);
+  array_push($carts, $oneReservation);
 
-	$i++;
+  $i++;
 }
 $cartStingfy = json_encode($carts);
 foreach ($carts  as $value) {
-	$guestNums = json_encode($value['guestnums']);
-	$cartStingfy = json_encode($carts);
-	$nowCI = strtotime($value['Checkin']);
-	$nowCO = strtotime($value['Checkout']);
-	if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
-		$query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
-		$query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
+  $guestNums = json_encode($value['guestnums']);
+  $cartStingfy = json_encode($carts);
+  $nowCI = strtotime($value['Checkin']);
+  $nowCO = strtotime($value['Checkout']);
+  if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
+    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+    $query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
              '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
 
-		$result = mysqli_query($connection, $query);
-		confirm($result);
-		$oldCI = strtotime($value['Checkin']);
-		$oldCO = strtotime($value['Checkout']);
-	}
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+    $oldCI = strtotime($value['Checkin']);
+    $oldCO = strtotime($value['Checkout']);
+  }
 
 
-	$last_record_query = "SELECT * FROM reservations WHERE res_confirmID = '$res_confirmID'";
-	$last_record_result = mysqli_query($connection, $last_record_query);
-	confirm($last_record_result);
-	$row = mysqli_fetch_assoc($last_record_result);
+  $last_record_query = "SELECT * FROM reservations WHERE res_confirmID = '$res_confirmID'";
+  $last_record_result = mysqli_query($connection, $last_record_query);
+  confirm($last_record_result);
+  $row = mysqli_fetch_assoc($last_record_result);
 
-	$res_Id = $row['res_id'];
+  $res_Id = $row['res_id'];
 
-	$booked_query = "INSERT INTO booked_rooms(b_res_id, b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
-	$booked_query .= "VALUES ('$res_Id', '{$value['room_id']}', '{$value['room_acc']}', '{$value['room_location']}',  '{$value['Checkin']}', '{$value['Checkout']}')";
+  $booked_query = "INSERT INTO booked_rooms(b_res_id, b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
+  $booked_query .= "VALUES ('$res_Id', '{$value['room_id']}', '{$value['room_acc']}', '{$value['room_location']}',  '{$value['Checkin']}', '{$value['Checkout']}')";
 
-	$booked_result = mysqli_query($connection, $booked_query);
+  $booked_result = mysqli_query($connection, $booked_query);
 
-	confirm($booked_result);
+  confirm($booked_result);
 
-	$booked_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location, info_board) ";
-	$booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', '{$value['res_board']}')";
-	$booked_result = mysqli_query($connection, $booked_query);
-	confirm($booked_result);
+  $booked_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location, info_board) ";
+  $booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', '{$value['res_board']}')";
+  $booked_result = mysqli_query($connection, $booked_query);
+  confirm($booked_result);
 
-	$status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
-	$result_status = mysqli_query($connection, $status_query);
-	confirm($result_status);
+  $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
+  $result_status = mysqli_query($connection, $status_query);
+  confirm($result_status);
 
   $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
     'from'    => 'no-reply@kurifturesorts.com',

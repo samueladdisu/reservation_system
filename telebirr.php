@@ -1,5 +1,4 @@
 <?php include  'config.php'; ?>
-<?php include 'security.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 
