@@ -200,7 +200,6 @@ function calculatePrice($ad, $kid, $teen, $single, $double, $dMember, $sMemeber,
   return $price;
 }
 
-
 function calculateLoft($kid, $teen, $dbRack, $dMember, $promo)
 {
   $price = 0.00;
@@ -221,7 +220,7 @@ function calculateLoft($kid, $teen, $dbRack, $dMember, $promo)
     } else if ($teen == 0 && $kid == 1) {
       $price = $dbRack + 10;
     }
-  }else if ($promo !== "" && $promo !== "member") {
+  } else if ($promo !== "" && $promo !== "member") {
     if ($teen == 0 && $kid == 0) {
       $price = $dbRack;
     } else if ($teen == 1 && $kid == 0) {

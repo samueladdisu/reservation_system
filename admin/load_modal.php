@@ -89,7 +89,7 @@ if ($received_data->action == 'filter') {
 
   $exists = mysqli_num_rows($result);
 
-  if ($exists) {
+  if ($exists > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
 
       $select_room_query = "SELECT * 
@@ -304,10 +304,10 @@ if ($received_data->action == 'addReservation') {
       "room_price"    => $value->room_price
     );
 
-    if($value->room_location === "awash"){
+    if ($value->room_location === "awash") {
 
       $guest_info_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_board, info_room_location) ";
-  
+
       $guest_info_query .= "VALUES ($last_id, $adults, $kids, $teens, $value->room_id, '$value->room_number', '$value->room_acc', '$value->board', '$value->room_location')";
     }
 
@@ -361,13 +361,13 @@ if ($received_data->action == 'addReservation') {
         foreach ($days as $day) {
           if ($value->room_acc == "Loft Family Room") {
             $price += calculateLoft($guests[$index][1], $guests[$index][2], $dbRack, $dbMember, $form_data->res_promo);
-          } else if($value->room_acc == "Presidential Suite Family Room"){
+          } else if ($value->room_acc == "Presidential Suite Family Room") {
             switch ($day) {
               case 'Friday':
                 $price += calculatePre($guests[$index][1], $guests[$index][2], $dbWeekend, $dbMember, $form_data->res_promo);
                 break;
               case 'Saturday':
-                $price += calculatePre($guests[$index][1], $guests[$index][2],$dbRack, $dbMember, $form_data->res_promo);
+                $price += calculatePre($guests[$index][1], $guests[$index][2], $dbRack, $dbMember, $form_data->res_promo);
                 break;
               default:
                 // $price += doubleval($row_type['d_weekday_rate']);
@@ -423,9 +423,9 @@ if ($received_data->action == 'addReservation') {
         }
 
         foreach ($days as $day) {
-          if($value->room_acc == "Presidential Family Room" ){
+          if ($value->room_acc == "Presidential Family Room") {
             $price += calculatePreEntoto($guests[$index][1], $guests[$index][2], $double, $form_data->res_promo);
-          }else {
+          } else {
 
             $price += calculateEntoto($guests[$index][0], $guests[$index][1], $guests[$index][2], $double, $single, $form_data->res_promo);
           }
@@ -435,7 +435,7 @@ if ($received_data->action == 'addReservation') {
       case 'Lake tana':
         $query = "SELECT * FROM tana_price WHERE name = '$value->room_acc'";
 
-        
+
         $result_type = mysqli_query($connection, $query);
         confirm($result_type);
 

@@ -5,14 +5,29 @@ $Location = '';
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
 
-  if ($Location == 'Tana') {
+  if ($Location == 'Tana' || $Location == 'tana') {
     $Location = "Lake tana";
   }
+} else {
+  $Location = '';
 }
 if (isset($_GET['roomType'])) {
   $RoomType = $_GET['roomType'];
+} else {
+  $RoomType = '';
 }
 
+if (isset($_GET['checkin'])) {
+  $checkin = $_GET['checkin'];
+} else {
+  $checkin = '';
+}
+
+if (isset($_GET['checkout'])) {
+  $checkout = $_GET['checkout'];
+} else {
+  $checkout = '';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +127,7 @@ if (isset($_GET['roomType'])) {
     </header>
     <section class="resort-wall">
       <?php
-      if ($Location == "Bishoftu") { ?>
+      if ($Location == "bishoftu") { ?>
         <img src="./img/2.webp" alt="">
       <?php } else if ($Location == "awash") { ?>
         <img src="./img/awash-cover.webp" alt="">
@@ -187,7 +202,7 @@ if (isset($_GET['roomType'])) {
           <div class="mycard mt-5 mt-lg-3" v-for="rows in roomName" :key="rows.room_id">
 
             <?php
-            if ($Location == "Bishoftu") { ?>
+            if ($Location == "bishoftu") { ?>
               <img :src="'./admin/room_img/' + rows.room_image" class="mycard-img-top">
             <?php } else if ($Location == "awash") { ?>
               <img :src="'./admin/room_img/awash/' + rows.room_image" class="mycard-img-top">
@@ -221,9 +236,9 @@ if (isset($_GET['roomType'])) {
               <p class="mycard-text">
                 {{ rows.room_desc.substring(0,147)+("...")}}
               </p>
-              <a href="#popup1" class="pop-btn button ">Room Detail
+              <!-- <a href="#popup1" class="pop-btn button ">Room Detail
                 <hr class="btn-line ">
-              </a>
+              </a> -->
               <hr class="divide-line" />
               <div class="flex-lg">
                 <ul class="aminties-list">
@@ -616,48 +631,81 @@ if (isset($_GET['roomType'])) {
     console.log("inital start", start);
     console.log("inital end", end);
 
-    $(document).ready(function() {
+    <?php
+    if ($checkin !== '' && $checkout !== '') {
+    ?>
 
-      console.log("initial start", start);
-      console.log("initial end", end);
-      $('#date').daterangepicker();
-      $('#date').data('daterangepicker').setStartDate(today);
-      $('#date').data('daterangepicker').setEndDate(tomorrow);
+      let checkin = '<?php echo $checkin ?>'
+      let checkout = '<?php echo $checkout ?>'
+      console.log("before");
+      console.log(checkin);
+      console.log(checkout);
 
-      $('#date').on('apply.daterangepicker', function(ev, picker) {
-        // console.log(picker.startDate.format('YYYY-MM-DD'));
-        // console.log(picker.endDate.format('YYYY-MM-DD'));
+      start = checkin
+      end = checkout
 
-        start = picker.startDate.format('YYYY-MM-DD')
-        end = picker.endDate.format('YYYY-MM-DD')
-        console.log("updated start", start);
-        console.log("updated end", end);
-      });
-    })
+      function formatDate(input) {
+        var datePart = input.match(/\d+/g),
+          year = datePart[0], // get only two digits
+          month = datePart[1],
+          day = datePart[2];
 
+        return month + '/' + day + '/' + year;
+      }
 
+      checkin = formatDate(checkin)
+      checkout = formatDate(checkout)
 
-    // $(document).ready(function() {
-
-    //   const tdate = $('.t-datepicker')
-    //   tdate.tDatePicker({
-    //     show: true,
-    //     iconDate: '<i class="fa fa-calendar"></i>'
-    //   });
-    //   tdate.tDatePicker('show')
-
-
-    //   tdate.on('eventClickDay', function(e, dataDate) {
-
-    //     var getDateInput = tdate.tDatePicker('getDateInputs')
-
-    //     start = getDateInput[0];
-    //     end = getDateInput[1];
+      console.log("after");
+      console.log(checkin);
+      console.log(checkout);
 
 
 
-    //   })
-    // });
+      $(document).ready(function() {
+
+        console.log("initial start", start);
+        console.log("initial end", end);
+        $('#date').daterangepicker();
+        $('#date').data('daterangepicker').setStartDate(checkin);
+        $('#date').data('daterangepicker').setEndDate(checkout);
+
+        $('#date').on('apply.daterangepicker', function(ev, picker) {
+          // console.log(picker.startDate.format('YYYY-MM-DD'));
+          // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+          start = picker.startDate.format('YYYY-MM-DD')
+          end = picker.endDate.format('YYYY-MM-DD')
+          console.log("updated start", start);
+          console.log("updated end", end);
+        });
+      })
+
+    <?php
+    } else {
+    ?>
+      $(document).ready(function() {
+
+        console.log("initial start", start);
+        console.log("initial end", end);
+        $('#date').daterangepicker();
+        $('#date').data('daterangepicker').setStartDate(today);
+        $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+        $('#date').on('apply.daterangepicker', function(ev, picker) {
+          // console.log(picker.startDate.format('YYYY-MM-DD'));
+          // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+          start = picker.startDate.format('YYYY-MM-DD')
+          end = picker.endDate.format('YYYY-MM-DD')
+          console.log("updated start", start);
+          console.log("updated end", end);
+        });
+      })
+    <?php
+    }
+    ?>
+
 
     const user = '<?php echo $user_name ?>'
     const app = Vue.createApp({
@@ -785,18 +833,18 @@ if (isset($_GET['roomType'])) {
             // this.kids = 0;
           } else {
             if (this.res_teen == 1) {
-            this.loftKid = true
-            this.res_kid = 0
-          } else {
-            this.loftKid = false
-          }
+              this.loftKid = true
+              this.res_kid = 0
+            } else {
+              this.loftKid = false
+            }
 
-          if (this.res_kid == 1) {
-            this.loftTeen = true
-            this.res_teen = 0
-          } else {
-            this.loftTeen = false
-          }
+            if (this.res_kid == 1) {
+              this.loftTeen = true
+              this.res_teen = 0
+            } else {
+              this.loftTeen = false
+            }
             this.res_guest = [this.res_adults, this.res_teen, this.res_kid];
 
           }
@@ -1135,22 +1183,26 @@ if (isset($_GET['roomType'])) {
           })
 
         },
-        fetchAllData() {
+        async fetchAllData() {
+
+
+
           <?php
-          if ($Location == '' && $RoomType == '') {
+          if ($Location == '' && $RoomType == '' && $checkin == '' && $checkout == '') {
           ?>
-            axios.post('book.php', {
+            await axios.post('book.php', {
               action: 'fetchall',
 
             }).then(res => {
               this.allData = res.data
+              console.log(res.data);
               this.takeOneEach(this.allData)
 
 
             })
-          <?php } else if ($Location !== '' && $RoomType == '') { ?>
+          <?php } else if ($Location !== '' && $RoomType == '' && $checkin == '' && $checkout == '') { ?>
 
-            axios.post('book.php', {
+            await axios.post('book.php', {
               action: 'fetchallLocation',
               location: '<?php echo $Location; ?>'
 
@@ -1161,18 +1213,35 @@ if (isset($_GET['roomType'])) {
             })
 
 
-          <?php } else if ($Location !== '' && $RoomType !== '') { ?>
+          <?php } else if ($Location !== '' && $RoomType !== '' && $checkin == '' && $checkout == '') { ?>
 
-            axios.post('book.php', {
+            await axios.post('book.php', {
               action: 'fetchallLocRom',
               location: '<?php echo $Location; ?>',
               roomType: '<?php echo $RoomType; ?>'
             }).then(res => {
               this.allData = res.data
+              console.log(res.data);
               this.takeOneEach(this.allData)
             })
 
-          <?php } ?>
+          <?php } else if ($Location !== '' && $checkin !== '' && $checkout !== '') {
+          ?>
+            await axios.post('book.php', {
+              action: 'filter',
+              location: '<?php echo $Location; ?>',
+              checkin: '<?php echo $checkin; ?>',
+              roomType: '',
+              checkout: '<?php echo $checkout; ?>'
+            }).then(res => {
+              this.allData = res.data
+              console.log(res.data);
+              this.takeOneEach(this.allData)
+            })
+
+
+          <?php  }
+          ?>
         },
 
         takeOneEach(dataToShorten) {

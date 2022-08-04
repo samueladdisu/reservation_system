@@ -13,6 +13,159 @@ $Not_booked = array();
 $booked = array();
 
 
+if ($received_data->action == 'filter') {
+  $location = $received_data->location;
+  $checkin = $received_data->checkin;
+  $checkout = $received_data->checkout;
+
+  $count = 0;
+  $roomAcc_temp = '';
+  $roomLocation = '';
+  $dataCount = [];
+
+  $query = "SELECT DISTINCT b_roomId
+    FROM booked_rooms 
+    WHERE b_checkout<= '$checkin' 
+    AND b_roomLocation = '$location'
+    UNION
+    SELECT DISTINCT b_roomId
+    FROM booked_rooms
+    WHERE b_checkin >= '$checkout'
+    AND b_roomLocation = '$location'";
+
+  $result = mysqli_query($connection, $query);
+  confirm($result);
+
+  $exists = mysqli_num_rows($result);
+
+
+  if ($exists > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+      $select_room_query = "SELECT * 
+      FROM rooms 
+      WHERE room_id = {$row['b_roomId']} ORDER BY room_acc";
+
+      $select_room_result = mysqli_query($connection, $select_room_query);
+      confirm($select_room_result);
+      while ($row2 = mysqli_fetch_assoc($select_room_result)) {
+
+        $filterd_data[] = $row2;
+      }
+    }
+
+    $select_not_booked_query = "SELECT * 
+    FROM rooms 
+    WHERE room_status = 'Not_booked'
+    AND room_location = '$location' ORDER BY room_acc";
+
+    $select_not_booked_result = mysqli_query($connection,  $select_not_booked_query);
+
+    confirm($select_not_booked_result);
+
+    while ($row3 = mysqli_fetch_assoc($select_not_booked_result)) {
+
+      $Not_booked_array[] = $row3;
+    }
+
+
+    // echo json_encode($Not_booked_array);
+    $merged_array = array_merge($filterd_data, $Not_booked_array);
+
+    $len = count($merged_array);
+    $temp = '';
+    foreach ($merged_array as $key => $value) {
+
+
+      if ($roomAcc_temp == '' || $roomLocation == '') {
+        $roomAcc_temp = $merged_array[$key]["room_acc"];
+        $roomLocation = $merged_array[$key]["room_location"];
+        array_push($data, $merged_array[$key]);
+      } else if ($roomAcc_temp == $merged_array[$key]["room_acc"] && $roomLocation == $merged_array[$key]["room_location"]) {
+
+        array_push($data, $merged_array[$key]);
+      } else if ($roomAcc_temp !== $merged_array[$key]["room_acc"] || $roomLocation !== $merged_array[$key]["room_location"]) {
+        $roomAcc_temp = $merged_array[$key]["room_acc"];
+        $roomLocation = $merged_array[$key]["room_location"];
+        array_push($dataCount, $data);
+        $data = [];
+        array_push($data, $merged_array[$key]);
+        // goto here;
+
+
+      }
+    }
+
+    //   foreach($merged_array as $key => $value){
+    //     if(count($dataCount) != 0){
+
+    //         for($i = 0; $i < count($dataCount); $i++ ){
+    //             if($merged_array[$key]['room_acc'] != $dataCount[0]["room_acc"] ){
+    //                 array_push($data, $merged_array[$key]);
+    //             }
+    //         }  
+    //     }else{
+    //         array_push($data, $merged_array[$key]);
+    //     }
+
+    //     for($i= $key + 1; $i < count($merged_array); $i++){
+    //         if($merged_array[$key]['room_acc'] == $merged_array[$i]["room_acc"]){
+
+    //             array_push($data, $merged_array[$i]);
+    //         }else{
+    //             array_push($dataCount, $data);
+    //             $data = [];
+    //         }
+    //     }
+
+    // }
+
+
+    if (count($data) >= 1) {
+      array_push($dataCount, $data);
+    }
+    echo json_encode($dataCount);
+  } else {
+    $ava_query = "SELECT * 
+    FROM rooms 
+    WHERE room_status = 'Not_booked'
+    AND room_location = '$location' ORDER BY room_acc";
+    $ava_result = mysqli_query($connection, $ava_query);
+
+    confirm($ava_result);
+
+    while ($row = mysqli_fetch_assoc($ava_result)) {
+      // $filterd_data[] = $row_ava;
+
+      if ($roomAcc_temp == '' || $roomLocation == '') {
+        $roomAcc_temp = $row["room_acc"];
+        $roomLocation = $row["room_location"];
+        array_push($data, $row);
+      } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
+
+        array_push($data, $row);
+      } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
+        $roomAcc_temp = $row["room_acc"];
+        $roomLocation = $row["room_location"];
+        array_push($dataCount, $data);
+        $data = [];
+        array_push($data, $row);
+        // goto here;
+
+      }
+    }
+
+    if (count($data) >= 1) {
+      array_push($dataCount, $data);
+    }
+
+    // echo json_encode("ava");
+    // echo json_encode($merged_array);
+    echo json_encode($dataCount);
+  }
+}
+
+
 if ($received_data->action == 'fetchall') {
   $count = 0;
   $roomAcc_temp = '';
@@ -81,9 +234,89 @@ if ($received_data->action == 'fetchallLocation') {
       $data = [];
       array_push($data, $row);
       // goto here;
-      
+
     }
   }
+  if (count($data) >= 1) {
+    array_push($dataCount, $data);
+  }
+
+
+  echo json_encode($dataCount);
+}
+
+if ($received_data->action == 'fetchallLocRom') {
+  $location = $received_data->location;
+  $roomType = $received_data->roomType;
+
+  $count = 0;
+  $roomAcc_temp = '';
+  $roomLocation = '';
+  $dataCount = [];
+
+  if ($location == "bishoftu") {
+
+    if ($roomType == "lakeview") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND  (room_acc = 'Deluxe Lake Front king size bed' OR room_acc = 'Deluxe Lake Front Twin Beds' OR room_acc = 'Top View King Size Bed' OR room_acc = 'Top View Twin Beds') ORDER BY room_acc";
+    } else if ($roomType == "gardenview") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND (room_acc = 'Garden View King Size Bed' OR room_acc = 'Garden View Twin Beds') ORDER BY room_acc";
+    } else if ($roomType == "village") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'Loft Family Room' ORDER BY room_acc";
+    } else if ($roomType == "Presidential") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND (room_acc = 'Presidential Suite Family Room' OR room_acc = 'Presidential Suite King Size Bed') ORDER BY room_acc";
+    }
+  } else if ($location == 'entoto') {
+
+    if ($roomType == "tent") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND (room_acc = 'Forest View Twin Bed' OR room_acc = 'Forest View King Size Bed') ORDER BY room_acc";
+    } else if ($roomType == "cabin") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'Presidential Family Room' ORDER BY room_acc";
+    }
+  } else if ($location == 'awash') {
+
+    if ($roomType == 'premium') {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'Premier Room'";
+    } else if ($roomType == 'junior') {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'Junior Suite' ORDER BY room_acc";
+    } else if ($roomType == 'executive') {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'Executive' ORDER BY room_acc";
+    } else if ($roomType == 'presidential') {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'presidential' ORDER BY room_acc";
+    }
+  } else if ($location == 'Lake tana') {
+    if ($roomType == 'lakeview') {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND (room_acc = 'Deluxe Lake Front king size bed' OR room_acc = 'Deluxe Lake Front Twin Beds' OR room_acc = '	Deluxe Lake View King Size') ORDER BY room_acc";
+    } else if ($roomType == "gardenview") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND (room_acc = 'Garden View Twin Beds' OR room_acc = 'Garden View King Size') ORDER BY room_acc";
+    } else if ($roomType == "presidential") {
+      $query = "SELECT * FROM rooms WHERE room_location = '$location' AND room_status = 'Not_booked' AND room_acc = 'Executive Suite Extra King Size' ORDER BY room_acc";
+    }
+  }
+
+  // echo json_encode($query);
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    if ($roomAcc_temp == '' || $roomLocation == '') {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+      array_push($data, $row);
+    } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
+
+      array_push($data, $row);
+    } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
+      $roomAcc_temp = $row["room_acc"];
+      $roomLocation = $row["room_location"];
+      array_push($dataCount, $data);
+      $data = [];
+      array_push($data, $row);
+      // goto here;
+
+    }
+  }
+
   if (count($data) >= 1) {
     array_push($dataCount, $data);
   }
@@ -393,21 +626,20 @@ if ($received_data->action == 'calculatePrice') {
       foreach ($days as $day) {
         if ($cartRoomType == "Loft Family Room") {
           $price += calculateLoft($kid, $teen, $dbRack, $dbMember, $promo);
-        }else if($cartRoomType == 'Presidential Suite Family Room'){
+        } else if ($cartRoomType == 'Presidential Suite Family Room') {
           switch ($day) {
             case 'Friday':
               $price += calculatePre($kid, $teen, $dbWeekend, $dbMember, $promo);
               break;
             case 'Saturday':
-              $price += calculatePre($kid, $teen,$dbRack, $dbMember, $promo);
+              $price += calculatePre($kid, $teen, $dbRack, $dbMember, $promo);
               break;
             default:
               // $price += doubleval($row_type['d_weekday_rate']);
               $price += calculatePre($kid, $teen, $dbWeekdays, $dbMember, $promo);
               break;
           }
-        } 
-        else {
+        } else {
           switch ($day) {
             case 'Friday':
               $price += calculatePrice($ad, $kid, $teen, $sWeekend, $dbWeekend, $dbMember, $sMember, $promo);
@@ -430,8 +662,7 @@ if ($received_data->action == 'calculatePrice') {
 
       $row_type = mysqli_fetch_assoc($result_type);
       $price = calculatePriceAwash($ad, $kid, $teen, $Bored, $days, $row_type);
-
-    }else if ($location == 'entoto'){
+    } else if ($location == 'entoto') {
       $query = "SELECT * FROM entoto_price WHERE name = '$cartRoomType'";
 
 
@@ -445,17 +676,17 @@ if ($received_data->action == 'calculatePrice') {
       }
 
       foreach ($days as $day) {
-        if($cartRoomType == "Presidential Family Room" ){
+        if ($cartRoomType == "Presidential Family Room") {
           $price += calculatePreEntoto($kid, $teen, $double, $promo);
-        }else {
+        } else {
 
           $price += calculateEntoto($ad, $kid, $teen, $double, $single, $promo);
         }
       }
-    }else if($location == 'Lake tana'){
+    } else if ($location == 'Lake tana') {
       $query = "SELECT * FROM tana_price WHERE name = '$cartRoomType'";
 
-        
+
       $result_type = mysqli_query($connection, $query);
       confirm($result_type);
 
