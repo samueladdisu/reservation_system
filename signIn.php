@@ -107,9 +107,9 @@
           Sign In
         </button>
         <p class="bottom-form">
-          Don't have an account? <a href="http://localhost/reservation_system/signUp.php">Sign up</a>
+          Don't have an account? <a href="https://reservations.kurifturesorts.com/signUp.php">Sign up</a>
           <br> <br>
-          Or <a href="http://localhost/reservation_system/forgot_password.php">Forgot password</a>
+          Or <a href="https://reservations.kurifturesorts.com/forgot_password.php">Forgot password</a>
 
         </p>
 

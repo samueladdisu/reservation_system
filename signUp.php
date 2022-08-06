@@ -324,7 +324,7 @@
           Sign Up
         </button>
         <p class="bottom-form">
-          Already have an account? <a href="http://localhost/reservation_system/signIn.php">Sign in</a>
+          Already have an account? <a href="https://reservations.kurifturesorts.com/signIn.php">Sign in</a>
         </p>
 
       </form>
