@@ -1,65 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php include  'config.php'; ?>
+<?php
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+//Load Composer's autoloader
+require 'vendor/autoload.php';
 
-  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /> -->
+//Create an instance; passing `true` enables exceptions
+$mail = new PHPMailer(true);
 
-  
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <title>test</title>
-</head>
+try {
+    //Server settings
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.sendgrid.net';                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'apikey';                     //SMTP username
+    $mail->Password   = $_ENV['SEND_GRID_API_KEY'];                               //SMTP password
+    // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-<body>
+    //Recipients
+    // $mail->setFrom('from@example.com', 'Mailer');
+    $mail->addAddress('samueladdisu7@gmail.com');     //Add a recipient          //Name is optional
+    // $mail->addReplyTo('info@example.com', 'Information');
+    // $mail->addCC('cc@example.com');
+    // $mail->addBCC('bcc@example.com');
+    //Optional name
 
-  <input type="text" name="daterange" id="date" value="" />
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'Here is the subject';
+    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-  <script type="text/javascript">
-    let start, end
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
 
-    var today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
 
-    let tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
+require_once('vendor/autoload.php');
 
-    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-    const td = String(tomorrow.getDate()).padStart(2, '0');
-    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const ty = tomorrow.getFullYear();
+$mailchimp = new MailchimpTransactional\ApiClient();
+$mailchimp->setApiKey('0jnBb2ZNxIOJmrWhV-jQwg');
 
-    today = mm + '/' + dd + '/' + yyyy;
-    tomorrow = tm + '/' + td + '/' + ty;
-    console.log(today)
-    console.log(tomorrow)
-
-    $('#date').daterangepicker();
-    $('#date').data('daterangepicker').setStartDate(today);
-    $('#date').data('daterangepicker').setEndDate(tomorrow);
-
-    $('#date').on('apply.daterangepicker', function(ev, picker) {
-      // console.log(picker.startDate.format('YYYY-MM-DD'));
-      // console.log(picker.endDate.format('YYYY-MM-DD'));
-
-      start = picker.startDate.format('YYYY-MM-DD')
-      end = picker.endDate.format('YYYY-MM-DD')
-      console.log("start", start);
-      console.log("end", end);
-    });
-
-  </script>
-</body>
-
-</html>
+$response = $mailchimp->users->ping();
+print_r($response);
