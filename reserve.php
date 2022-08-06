@@ -72,10 +72,10 @@ if (isset($_GET['checkout'])) {
                   <a class="link-text" href="./">Back to Resorts</a>
                 </li>
                 <li>
-                  <a class="link-text" href="">Sign Up</a>
+                  <a class="link-text" href="./signUp.php">Sign Up</a>
                 </li>
                 <li>
-                  <a class="link-text" href="">Login</a>
+                  <a class="link-text" href="./signIn.php">Login</a>
                 </li>
               </ul>
 
@@ -447,9 +447,9 @@ if (isset($_GET['checkout'])) {
                 <form>
                   <div class="row BBModal">
                     <div class="form-check col-3">
-                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="BedBreakfast" v-model="res_BB" required>
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        Bed and Breakfast
+                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="fullBoard" v-model="res_BB" required>
+                      <label class="form-check-label" for="flexRadioDefault3">
+                        full board
                       </label>
                     </div>
                     <div class="form-check col-3">
@@ -458,13 +458,15 @@ if (isset($_GET['checkout'])) {
                         Half board
                       </label>
                     </div>
-
                     <div class="form-check col-3">
-                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="fullBoard" v-model="res_BB" required>
-                      <label class="form-check-label" for="flexRadioDefault3">
-                        full board
+                      <input class="form-check-input costom" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="BedBreakfast" v-model="res_BB" required>
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Bed and Breakfast
                       </label>
                     </div>
+
+
+
                   </div>
                 </form>
               <?php
@@ -591,7 +593,7 @@ if (isset($_GET['checkout'])) {
   <footer>
     <div class="container">
       <img src="./img/black_logo.svg" alt="">
-      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa</p>
+      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa. Powered by <a href="https://versavvymedia.com/" target="_blank">Versavvy</a></p>
     </div>
 
   </footer>

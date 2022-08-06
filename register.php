@@ -371,7 +371,7 @@ function cutFromPromo($promo, $price)
           <label for="inputState" class="form-label payment">Payment Platform</label>
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
-            <option value="paypal">Pay Pal</option>
+            <!-- <option value="paypal">Pay Pal</option> -->
             <option value="amole">Amole</option>
             <option value="telebirr">Telebirr</option>
             <option value="arrival">Pay on Arrival</option>
@@ -539,7 +539,7 @@ function cutFromPromo($promo, $price)
   <footer>
     <div class="container">
       <img src="./img/black_logo.svg" alt="">
-      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa</p>
+      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa. Powered by <a href="https://versavvymedia.com/" target="_blank">Versavvy</a></p>
     </div>
 
   </footer>

@@ -12,24 +12,43 @@
 </head>
 
 <body>
-  <section class="signup-header">
-
+<header class="header reserve-header">
     <div class="container">
       <nav class="nav-center">
-        <div class="signup-menu">
-          <div class="line1"></div>
-          <div class="line2"></div>
-        </div>
+
         <div class="logo">
           <img src="./img/black_logo.svg" alt="">
         </div>
+        <div class="line">
+          <div class="container1">
+            <hr class="line1">
+            <ul class="justify-list">
 
-        <div class="book-now">
-          <a href="#" class="btn btn-outline-black ">Book Now</a>
+              <li>
+                <a class="link-text" href="./">Back to Resorts</a>
+              </li>
+              <li>
+                <a class="link-text" href="./signUp.php">Sign Up</a>
+              </li>
+              <li>
+                <a class="link-text" href="./signIn.php">Login</a>
+              </li>
+            </ul>
+
+
+            <hr class="line2">
+          </div>
         </div>
+
+
+
+
       </nav>
+
+
+
     </div>
-  </section>
+  </header>
 
 
 
@@ -105,7 +124,7 @@
 
     </div>
   </section>
-
+ 
   <?php include_once './includes/footer.php' ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>

@@ -19,7 +19,18 @@
       <div class="line">
         <div class="container1">
           <hr class="line1">
-          <a class="link-text" href="">Back to Home Page</a>
+          <ul class="justify-list">
+
+            <li>
+              <a class="link-text" href="">Back to Home Page</a>
+            </li>
+            <li>
+              <a class="link-text" href="./signUp.php">Sign Up</a>
+            </li>
+            <li>
+              <a class="link-text" href="./signIn.php">Login</a>
+            </li>
+          </ul>
           <hr class="line2">
         </div>
       </div>
@@ -120,7 +131,7 @@
           </div>
 
         </div>
-        <div class="single-destination">
+        <!-- <div class="single-destination">
           <img src="./img/photo_2018-11-27_20-09-49 1.jpg" alt="">
           <div class="desc">
             <div class="desc-wrapper">
@@ -138,7 +149,7 @@
 
           </div>
 
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -146,7 +157,7 @@
   <footer>
     <div class="container">
       <img src="./img/black_logo.svg" alt="">
-      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa</p>
+      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa. Powered by <a href="https://versavvymedia.com/" target="_blank">Versavvy</a></p>
     </div>
 
   </footer>

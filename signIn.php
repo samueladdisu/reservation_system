@@ -12,26 +12,77 @@
 </head>
 
 <body>
-  <section class="signup-header">
-
+  <header class="header reserve-header">
     <div class="container">
       <nav class="nav-center">
-        <div class="signup-menu">
-          <div class="line1"></div>
-          <div class="line2"></div>
-        </div>
+
         <div class="logo">
           <img src="./img/black_logo.svg" alt="">
         </div>
+        <div class="line">
+          <div class="container1">
+            <hr class="line1">
+            <ul class="justify-list">
 
-        <div class="book-now">
-          <a href="#" class="btn btn-outline-black ">Book Now</a>
+              <li>
+                <a class="link-text" href="./">Back to Resorts</a>
+              </li>
+              <li>
+                <a class="link-text" href="./signUp.php">Sign Up</a>
+              </li>
+              <li>
+                <a class="link-text" href="./signIn.php">Login</a>
+              </li>
+            </ul>
+
+
+            <hr class="line2">
+          </div>
         </div>
-      </nav>
-    </div>
-  </section>
 
-  <section class="main-body">
+
+        <?php
+
+        if (isset($_SESSION['m_username'])) {
+          $user_name =  $_SESSION['m_username'];
+        ?>
+          <div class="profile">
+            <div @click="showDropdown" class="profile-icon">
+              <h1 class="profile-name">
+                SA
+              </h1>
+
+            </div>
+
+            <div v-if="dropdown" class="drop-down">
+              <ul>
+                <li><a href="./profile.php"> <i class="fa-solid fa-user"></i> Profile</a></li>
+                <li> <a href="./logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log out</a></li>
+              </ul>
+            </div>
+          </div>
+
+        <?php
+        } else {
+          $user_name = null;
+        ?>
+
+
+
+        <?php
+        }
+
+        ?>
+
+
+      </nav>
+
+
+
+    </div>
+  </header>
+
+  <section class="main-body" style="height: 60vh">
     <h1 class="caps text-center">Sign In </h1>
     <div class="container" id="signin-wiget">
 
@@ -52,14 +103,14 @@
           </div>
         </div>
 
-        <button type="submit"  name="login" class="btn btn-secondary">
-          Sign In 
+        <button type="submit" name="login" class="btn btn-secondary">
+          Sign In
         </button>
         <p class="bottom-form">
           Don't have an account? <a href="http://localhost/reservation_system/signUp.php">Sign up</a>
-            <br> <br>
-            Or <a href="http://localhost/reservation_system/forgot_password.php">Forgot password</a>
-          
+          <br> <br>
+          Or <a href="http://localhost/reservation_system/forgot_password.php">Forgot password</a>
+
         </p>
 
 
@@ -76,7 +127,7 @@
               Success
             </h5>
             <p class="k-modalBody" ref="data">
-              <div v-html="succ"></div>
+            <div v-html="succ"></div>
             </p>
 
             <button @click="closeSuccess" style="background: #45b75c;" class="btn">
@@ -98,10 +149,10 @@
               Sorry!
             </h5>
             <p class="k-modalBody" ref="data">
-              <div v-html="msg"></div>
-              <div @click='verify' style="color: #6945a8; text-decoration: underline; cursor: pointer; margin-top: 0.5rem;" class="ver" v-if="ver">
-                {{ ver }}
-              </div>
+            <div v-html="msg"></div>
+            <div @click='verify' style="color: #6945a8; text-decoration: underline; cursor: pointer; margin-top: 0.5rem;" class="ver" v-if="ver">
+              {{ ver }}
+            </div>
             </p>
 
             <button @click="closeModal" class="btn btn-secondary">
@@ -114,7 +165,13 @@
     </div>
   </section>
 
+  <footer>
+    <div class="container">
+      <img src="./img/black_logo.svg" alt="">
+      <p>All Copyright &copy; 2022 Kuriftu Resort and Spa. Powered by <a href="https://versavvymedia.com/" target="_blank">Versavvy</a></p>
+    </div>
 
+  </footer>
 
   <?php include_once './includes/footer.php' ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -133,28 +190,28 @@
       },
       methods: {
         async submitForm() {
-          await axios.post('member.php',{
+          await axios.post('member.php', {
             action: 'submit',
             email: this.email,
             password: this.password
           }).then(res => {
             console.log(res.data);
-            if(res.data == "P"){
+            if (res.data == "P") {
               this.msg = "Incorrect Password. Please try again"
               this.modal = true
-            }else if(res.data == "E"){
+            } else if (res.data == "E") {
               this.msg = "Email Not Found. Please try again"
               this.modal = true
-            }else if(res.data == "V"){
+            } else if (res.data == "V") {
               this.msg = "You are not verified member."
               this.ver = "Click here to verify"
               this.modal = true
-            }else if(res.data == "In"){
+            } else if (res.data == "In") {
               window.location.href = "profile.php"
             }
           })
         },
-        async verify(){
+        async verify() {
           await axios.post('member.php', {
             action: 'verify',
             email: this.email,
@@ -163,7 +220,7 @@
             console.log(res.data);
             console.log("hellow");
 
-            if(res.data == "check_email"){
+            if (res.data == "check_email") {
               this.modal = false
               this.success = true
               this.succ = "Check your email for activation link"
