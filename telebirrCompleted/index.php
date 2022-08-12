@@ -189,6 +189,10 @@ foreach ($carts  as $value) {
 }
 
 
+$delete_temp_query = "DELETE FROM temp_res WHERE temp_ID = '$PayerId'";
+$delete_result = mysqli_query($connection, $delete_temp_query);
+
+
 
 
 ?>
