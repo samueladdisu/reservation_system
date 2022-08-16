@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/kuriftur/reservations.kurifturesorts.com
+    - export DEPLOYPATH=/home/versavvymediacom/public_html/reservation_system
     - /bin/cp -R * $DEPLOYPATH
