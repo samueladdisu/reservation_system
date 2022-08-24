@@ -16,7 +16,7 @@
             <div class="logo">
                 <img src="./img/black_logo.svg" alt="">
             </div>
-            <!-- <div class="line">
+            <div class="line">
                 <div class="container1">
                     <hr class="line1">
                     <ul class="justify-list">
@@ -33,11 +33,11 @@
                     </ul>
                     <hr class="line2">
                 </div>
-            </div> -->
+            </div>
         </nav>
     </header>
 
-    <!-- <section class="Destinations-list">
+    <section class="Destinations-list">
         <div class="container">
             <h2>Select a Resort</h2>
             <div class="wrapper">
@@ -134,10 +134,10 @@
             </div>
         </div>
 
-    </section> -->
+    </section>
 
 
-    <section class="Destinations-list">
+    <!-- <section class="Destinations-list">
         <div class="container" style="display: grid; place-items: center; height: 60vh">
             <h2>
                 Page Under Construction
@@ -145,14 +145,14 @@
 
         </div>
 
-    </section>
-    <!-- <footer>
+    </section> -->
+    <footer>
         <div class="container">
             <img src="./img/black_logo.svg" alt="">
             <p>All Copyright &copy; 2022 Kuriftu Resort and Spa. Powered by <a href="https://versavvymedia.com/" target="_blank">Versavvy</a></p>
         </div>
 
-    </footer> -->
+    </footer>
 </body>
 
 </html>

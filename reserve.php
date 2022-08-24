@@ -197,24 +197,6 @@ if (isset($_GET['checkout'])) {
                 </div>
 
                 <form class="myform row" @submit.prevent="submitData">
-                    <!-- <div class="t-datepicker ">
-            <div class="t-check-in">
-              <div class="t-dates t-date-check-in">
-                <label class="t-date-info-title">Check In</label>
-              </div>
-              <input type="hidden" class="t-input-check-in" name="start">
-              <div class="t-datepicker-day">
-                <table class="t-table-condensed">
-                </table>
-              </div>
-            </div>
-            <div class="t-check-out">
-              <div class="t-dates t-date-check-out">
-                <label class="t-date-info-title">Check Out</label>
-              </div>
-              <input type="hidden" class="t-input-check-out" name="end">
-            </div>
-          </div> -->
 
                     <div class="form-group col-lg-6">
                         <label for="date" class="form-label" id="label">Select Date</label>
@@ -1349,12 +1331,13 @@ if (isset($_GET['checkout'])) {
 
                     if (start && end) {
                         await axios.post('book.php', {
-                            action: 'getData',
-                            checkIn: start,
-                            checkOut: end,
-                            desti: this.desti
+                            action: 'filter',
+                            checkin: start,
+                            checkout: end,
+                            location: '<?php echo $Location; ?>',
                         }).then(res => {
                             this.allData = res.data
+                            console.log(this.allData);
                             this.takeOneEach(this.allData)
                         }).catch(err => {
                             console.log(err);
