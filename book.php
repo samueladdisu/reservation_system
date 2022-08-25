@@ -531,12 +531,27 @@ if ($received_data->action == 'insert') {
 
 if ($received_data->action == 'hold') {
 
+    date_default_timezone_set('Africa/Addis_Ababa');
   $id = intval($received_data->roomID);
 
   $query = "UPDATE rooms SET room_status = 'Hold' WHERE room_id = $id";
   $result = mysqli_query($connection, $query);
 
-  echo json_encode($result);
+  confirm($result);
+
+  $name = "Room_NO_". $id;
+
+  $after_15 = date("Y-m-d H:i:s", strtotime("now + 25 seconds"));
+
+  $timer_query = "CREATE EVENT IF NOT EXISTS $name 
+                  ON SCHEDULE AT  '$after_15' 
+                  DO 
+                    UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $id";
+  $timer_result = mysqli_query($connection, $timer_query);
+
+  confirm($timer_result);
+
+  echo json_encode(confirm($timer_result));
 }
 
 if ($received_data->action == 'clearHold') {

@@ -301,6 +301,8 @@ function cutFromPromo($promo, $price)
 
         $_SESSION['Rtemp'] = $temprec['temp_ID'];
 
+        
+
         switch ($params['res_paymentMethod']) {
           case 'amole':
             header("Location: ./amole.php");
@@ -310,6 +312,9 @@ function cutFromPromo($promo, $price)
             break;
           case 'telebirr':
             header("Location: ./telebirr.php");
+            break;
+          case 'chapa':
+            header("Location: ./chapa.php");
             break;
         }
       } else {
@@ -371,7 +376,7 @@ function cutFromPromo($promo, $price)
           <label for="inputState" class="form-label payment">Payment Platform</label>
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
-            <!-- <option value="paypal">Pay Pal</option> -->
+            <option value="chapa">Chapa</option>
             <option value="amole">Amole</option>
             <option value="telebirr">Telebirr</option>
             <option value="arrival">Pay on Arrival</option>

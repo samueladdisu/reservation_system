@@ -651,6 +651,14 @@ if (isset($_GET['checkout'])) {
         console.log("inital start", start);
         console.log("inital end", end);
 
+        // window.addEventListener('beforeunload', function(e) {
+        //     e.preventDefault();
+        //     // e.returnValue = '';
+        //     $('#guest').modal('show')
+
+        // });
+
+
         <?php
         if ($checkin !== '' && $checkout !== '') {
         ?>
@@ -815,7 +823,7 @@ if (isset($_GET['checkout'])) {
                                 RoomId: eachID.room_id,
                             })
                             .then((response) => {
-                                localStorage.clear();
+                                sessionStorage.clear();
                                 window.location.href = "reserve.php?location=<?php echo $Location; ?>";
                             });
 
@@ -839,8 +847,8 @@ if (isset($_GET['checkout'])) {
                     } else if (this.res_adults == "2") {
 
                         if ((this.res_teen == "2" && this.res_kid == "2") || (this.res_teen == "2" && this.res_kid == "0") || (this.res_teen == "1" && this.res_kid == "2")) {
-                            this.res_teens = 0;
-                            this.res_kids = 0;
+                            this.res_teen = 0;
+                            this.res_kid = 0;
                             alert("This combination of guest numbers is not possible.");
 
                         } else {
@@ -879,22 +887,22 @@ if (isset($_GET['checkout'])) {
                 },
                 fetchPromo() {
                     this.oneClick = true
-                    if (!localStorage.promo) {
+                    if (!sessionStorage.promo) {
 
                         axios.post('book.php', {
                             action: 'promoCode',
                             data: this.promoCode,
-                            TotalPrice: JSON.parse(localStorage.total)
+                            TotalPrice: JSON.parse(sessionStorage.total)
                         }).then(res => {
                             console.log(res.data)
                             // let discount = this.totalprice - ((res.data / 100) * this.totalprice)
                             this.totalprice = res.data.toFixed(2)
-                            localStorage.total = JSON.stringify(this.totalprice)
+                            sessionStorage.total = JSON.stringify(this.totalprice)
                         })
                         this.isPromoApplied = true
-                        localStorage.promo = this.isPromoApplied
+                        sessionStorage.promo = this.isPromoApplied
                     }
-                    this.isPromoApplied = JSON.parse(localStorage.promo || false)
+                    this.isPromoApplied = JSON.parse(sessionStorage.promo || false)
                 },
                 completeCart() {
 
@@ -967,9 +975,10 @@ if (isset($_GET['checkout'])) {
                                             total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
                                         })
                                         this.totalprice = total
-                                        localStorage.total = JSON.stringify(this.totalprice)
-                                        localStorage.cart = JSON.stringify(this.cart)
-                                        localStorage.BB = JSON.stringify(this.res_BB)
+                                        sessionStorage.total = JSON.stringify(this.totalprice)
+                                        sessionStorage.cart = JSON.stringify(this.cart)
+                                        sessionStorage.BB = JSON.stringify(this.res_BB)
+                                        localStorage.roomId = JSON.stringify(this.cart.room_id)
 
                                         row.cnt--
                                     }
@@ -1004,13 +1013,24 @@ if (isset($_GET['checkout'])) {
                                                 total += val;
                                             })
                                             this.totalprice = total.toFixed(2);
-                                            localStorage.total = JSON.stringify(this.totalprice)
-                                            localStorage.cart = JSON.stringify(this.cart)
-                                            localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                                            console.log(this.cart.room_id);
+                                            let roomIDs = [];
+                                            this.cart.forEach(val => {
+                                                roomIDs.push(val.room_id);
+                                            })
+                                            localStorage.roomId = JSON.stringify(roomIDs)
+
+                                            sessionStorage.total = JSON.stringify()
+                                            sessionStorage.cart = JSON.stringify(this.cart)
+                                            sessionStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+
+
                                             row.cnt--
 
                                             this.popOutSelected(row)
                                         })
+
+                                        console.log("out");
 
                                     }
                                 }
@@ -1038,7 +1058,7 @@ if (isset($_GET['checkout'])) {
                                 action: 'hold',
                                 roomID: this.roww.room_id,
                             }).then((res) => {
-
+                                console.log(res.data);
                                 if (user) {
 
                                     if (row.cnt > 0) {
@@ -1051,9 +1071,9 @@ if (isset($_GET['checkout'])) {
                                             total += (parseInt(val.room_price) - (0.15 * parseInt(val.room_price))) * this.nights
                                         })
                                         this.totalprice = total
-                                        localStorage.total = JSON.stringify(this.totalprice)
-                                        localStorage.cart = JSON.stringify(this.cart)
-                                        localStorage.BB = JSON.stringify(this.res_BB)
+                                        sessionStorage.total = JSON.stringify(this.totalprice)
+                                        sessionStorage.cart = JSON.stringify(this.cart)
+                                        sessionStorage.BB = JSON.stringify(this.res_BB)
 
                                         row.cnt--
                                     }
@@ -1087,9 +1107,14 @@ if (isset($_GET['checkout'])) {
                                                 total += val;
                                             })
                                             this.totalprice = total.toFixed(2);
-                                            localStorage.total = JSON.stringify(this.totalprice)
-                                            localStorage.cart = JSON.stringify(this.cart)
-                                            localStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
+                                            let roomIDs = [];
+                                            this.cart.forEach(val => {
+                                                roomIDs.push(val.room_id);
+                                            })
+                                            localStorage.roomId = JSON.stringify(roomIDs)
+                                            sessionStorage.total = JSON.stringify(this.totalprice)
+                                            sessionStorage.cart = JSON.stringify(this.cart)
+                                            sessionStorage.setItem("priceContainer", JSON.stringify(this.PriceArray));
                                             row.cnt--
 
                                             this.popOutSelected(row)
@@ -1123,7 +1148,7 @@ if (isset($_GET['checkout'])) {
 
                 deleteRoom(row) {
                     var tempBack = []
-                    var retrievedData = localStorage.getItem("priceContainer");
+                    var retrievedData = sessionStorage.getItem("priceContainer");
                     var PriceCon = JSON.parse(retrievedData);
                     let deleteTotal = 0;
 
@@ -1140,7 +1165,7 @@ if (isset($_GET['checkout'])) {
 
                             })
                             this.totalprice = deleteTotal
-                            localStorage.cart = JSON.stringify(this.cart)
+                            sessionStorage.cart = JSON.stringify(this.cart)
                             row.cnt++
                         } else {
                             let found = false;
@@ -1177,19 +1202,19 @@ if (isset($_GET['checkout'])) {
                             console.log(" Delete new Array", this.allData)
 
                             this.totalprice = deleteTotal.toFixed(2)
-                            localStorage.total = JSON.stringify(this.totalprice)
-                            localStorage.cart = JSON.stringify(this.cart)
-                            localStorage.setItem("priceContainer", JSON.stringify(PriceCon))
+                            sessionStorage.total = JSON.stringify(this.totalprice)
+                            sessionStorage.cart = JSON.stringify(this.cart)
+                            sessionStorage.setItem("priceContainer", JSON.stringify(PriceCon))
                             // row.cnt++
 
 
 
                         }
-                        var legth = JSON.parse(localStorage.cart)
+                        var legth = JSON.parse(sessionStorage.cart)
                         console.log(legth)
                         if (legth == 0) {
                             console.log("hey")
-                            localStorage.clear();
+                            sessionStorage.clear();
                             clearInterval(this.timer);
                             window.onload = '';
                             window.onmousemove = '';
@@ -1286,7 +1311,7 @@ if (isset($_GET['checkout'])) {
                 },
                 startIdleTimer() {
                     console.log("ideal")
-                    if (localStorage.cart !== 2) {
+                    if (sessionStorage.cart !== 2) {
 
 
 
@@ -1349,7 +1374,7 @@ if (isset($_GET['checkout'])) {
                 checkLocalStorage() {
 
 
-                    if (localStorage.cart) {
+                    if (sessionStorage.cart) {
                         window.onload = this.resetTimer;
                         window.onmousemove = this.resetTimer;
                         window.onmousedown = this.resetTimer;
@@ -1384,8 +1409,8 @@ if (isset($_GET['checkout'])) {
             },
             created() {
                 this.fetchAllData()
-                this.cart = JSON.parse(localStorage.cart || '[]')
-                this.totalprice = JSON.parse(localStorage.total || '[]')
+                this.cart = JSON.parse(sessionStorage.cart || '[]')
+                this.totalprice = JSON.parse(sessionStorage.total || '[]')
                 this.checkLocalStorage()
 
                 // Pusher.logToConsole = true;
@@ -1476,12 +1501,7 @@ if (isset($_GET['checkout'])) {
         })
 
 
-        // function Outerfunction(newData) {
-        //   this.app.set(app.allData, newData)
-        //   console.log("Updated Original Data: ", app.allData);
-        // }
     </script>
-
 
 
 </body>
