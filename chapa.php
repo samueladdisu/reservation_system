@@ -34,8 +34,8 @@
             'first_name' => $_SESSION['fName'],
             'last_name' => $_SESSION['lName'],
             'tx_ref' => 'kuirftu_booking_'. $tx_ref,
-            'callback_url' => 'https://www.test.kurifturesorts.com/chapaCompleted',
-            'return_url' => 'https://kurifturesorts.com'
+            'callback_url' => 'https://kurifturesorts.com',
+            'return_url' => 'https://www.test.kurifturesorts.com/chapaCompleted'
         ),
         CURLOPT_HTTPHEADER => array(
           'Authorization: Bearer '.$_ENV['CHAPA_SECK']

@@ -11,10 +11,10 @@ $dotenv->load();
 ?>
 <?php
 
-$content = file_get_contents('php://input');
+$content = $_REQUEST;
 
-$jsonnofityData = json_decode($content, true);
-file_put_contents("Lemlem.txt", $jsonnofityData . PHP_EOL . PHP_EOL, FILE_APPEND);
+// $jsonnofityData = json_decode($content, true);
+file_put_contents("Lemlem.txt", $content . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 
 
