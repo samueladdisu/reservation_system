@@ -1,26 +1,56 @@
+<?php include  'config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuriftu Resorts - Chapa</title>
 </head>
+
 <body>
-    
-<form method="POST" action="https://api.chapa.co/v1/hosted/pay" >
-    <input type="hidden" name="public_key" value="YOUR_PUBLIC_API_KEY" />
-    <input type="hidden" name="tx_ref" value="negade-tx-12345678sss9" />
-    <input type="hidden" name="amount" value="100" />
-    <input type="hidden" name="currency" value="ETB" />
-    <input type="hidden" name="email" value="israel@negade.et" />
-    <input type="hidden" name="first_name" value="Israel" />
-    <input type="hidden" name="last_name" value="Goytom" />
-    <input type="hidden" name="logo" value="https://yourcompany.com/logo.png" />
-    <input type="hidden" name="callback_url" value="https://example.com/callbackurl" />
-    <input type="hidden" name="return_url" value="https://example.com/returnurl" />
-    <input type="hidden" name="meta[title]" value="test" />
-    <button type="submit">Pay Now</button>
-</form>
+
+    <?php
+
+    $curl = curl_init();
+    $price = intval($_SESSION['total']);
+    $tx_ref = $_SESSION['Rtemp'];
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.chapa.co/v1/transaction/initialize',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => array(
+            'amount' =>  $price, 
+            'key' => $_ENV['CHAPA_PUB'], 
+            'currency' => 'ETB',
+            'email' => $_SESSION['email'],
+            'first_name' => $_SESSION['fName'],
+            'last_name' => $_SESSION['lName'],
+            'tx_ref' => 'kuirftu_booking_'. $tx_ref,
+            'callback_url' => 'https://www.kurifturesorts.com/',
+            'return_url' => 'https://www.test.kurifturesorts.com/chapaCompleted'
+        ),
+        CURLOPT_HTTPHEADER => array(
+          'Authorization: Bearer '.$_ENV['CHAPA_SECK']
+        ),
+      ));
+
+    $response = curl_exec($curl);
+    $response = json_decode($response);
+    $checkout_url = $response->data->checkout_url;
+    curl_close($curl);
+    var_dump($response);
+    // echo $checkout_url;
+    header("Location: $checkout_url");
+    ?>
+
 </body>
+
 </html>

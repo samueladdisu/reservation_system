@@ -220,6 +220,13 @@ function cutFromPromo($promo, $price)
       $params[$name] = escape($value);
       $_SESSION[$name] = escape($value);
     }
+
+    
+    $_SESSION['fName'] = $params['res_firstname'];
+    $_SESSION['lName'] = $params['res_lastname'];
+    $_SESSION['email'] = $params['res_email'];
+
+    
     if (isset($_POST['res_guestNo'])) {
       if ($_SESSION["promoApp"] == false) {
         $total_price = cutFromPromo($_POST['res_guestNo'], $total_price);
@@ -683,7 +690,7 @@ function cutFromPromo($promo, $price)
               })
               .then((response) => {
 
-                localStorage.clear();
+                sessionStorage.clear();
                 window.location.href = "reserve.php?location=<?php echo $slocation; ?>";
 
               });
