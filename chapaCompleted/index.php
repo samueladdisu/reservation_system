@@ -26,12 +26,13 @@ if (isset($_GET['ref'])) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $result = curl_exec($ch);
+    $result = json_decode($result);
     if (curl_errno($ch)) {
         echo 'Error:' . curl_error($ch);
     }
     curl_close($ch);
 
-    file_put_contents("chapa.txt", $result . PHP_EOL . PHP_EOL, FILE_APPEND);
+    file_put_contents("chapa.txt", $result->status . PHP_EOL . PHP_EOL, FILE_APPEND);
 }
 
 
