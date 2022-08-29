@@ -113,11 +113,11 @@
                           <select class="custom-select" v-model="roomType" id="">
                             <option disabled value="">Room Type</option>
 
-                            <option value="type.name" v-if="location !== 'Bishoftu'" v-for="type in types">
+                            <option :value="type.name" v-if="location !== 'Bishoftu'" v-for="type in types">
                               {{ type.name }}
                             </option>
 
-                            <option value="type.type_name" v-if="location === 'Bishoftu'" v-for="type in types">
+                            <option :value="type.type_name" v-if="location === 'Bishoftu'" v-for="type in types">
                               {{ type.type_name }}
                             </option>
 
@@ -300,7 +300,7 @@
                           </div>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" @click="booked" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                          <button type="button" @click="booked" data-dismiss="modal" :disabled="awash" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
                     </div>
@@ -574,6 +574,7 @@
       data() {
         return {
           res_BB: '',
+          awash: true,
           search_data: [],
           location: '',
           types: [],
@@ -764,13 +765,19 @@
           let loc = this.tempRow.room_location
           let guests 
           if (loc == "awash"){
-            guests = {
-            adults: this.res_adults,
-            teens: this.res_teen,
-            kids: this.res_kid,
-            ...this.tempRow,
-            board: this.res_BB
-          }
+
+            if (this.res_BB == '') {
+                alert('please select bored')
+            } else {
+                guests = {
+                adults: this.res_adults,
+                teens: this.res_teen,
+                kids: this.res_kid,
+                ...this.tempRow,
+                board: this.res_BB
+              }
+
+            }
           } else {
 
             guests = {
@@ -811,13 +818,13 @@
 
         },
         CheckGuest() {
-          console.log("adults", typeof(this.res_adults));
-          console.log("teen", typeof(this.res_teen));
-          console.log("kid", typeof(this.res_kid));
+          console.log("adults", this.res_adults);
+          console.log("teen", this.res_teen);
+          console.log("kid", this.res_kid);
           if (this.res_adults === "1") {
 
             if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "1") || (this.res_teen === "1" && this.res_kid === "2")) {
-              alert("This combination of guest numbers is not possible.");
+                alert("This combination of guest numbers is not possible.");
 
               this.res_teen = 0;
               this.res_kid = 0;
@@ -825,12 +832,18 @@
 
 
           } else if (this.res_adults === "2") {
-
-            if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "0") || (this.res_teen === "1" && this.res_kid === "2")) {
-              // alert("This combination of guest numbers is not possible.");
-              console.log("2 adult 2 teen");
+            console.log("2 adult");
+            if ((this.res_teen === "2" && this.res_kid === "2") || 
+                (this.res_teen === "2" && this.res_kid === "1") || 
+                (this.res_teen === "2" && this.res_kid === 0) || 
+                (this.res_teen === "2" && this.res_kid === "") || 
+                (this.res_teen === "1" && this.res_kid === "2")) {
+              alert("This combination of guest numbers is not possible.");
+              
               this.res_teen = 0;
               this.res_kid = 0;
+            }else {
+                // alert("possible")
             }
           } else if (this.res_adults === "0") {
             alert("adult cant be 0");
@@ -839,38 +852,6 @@
           }
 
 
-        },
-        checkAdult() {
-
-        },
-        checkTeen() {
-          if (this.res_teen == 2 && this.res_adults == 2) {
-            console.log("more than two");
-            this.res_teen = 0
-
-            alert("2 adult and 2 teens can't stay in 1 room")
-
-            console.log(this.res_kid);
-          } else if (this.res_teen == 2 && this.res_kid == 2) {
-            if (this.res_adults == 2) {
-              alert("2 adult and 2 teens 2 kids can't stay in 1 room")
-
-              this.res_teen = 0
-              this.res_kid = 0
-            }
-          }
-        },
-        checkKid() {
-          if (this.res_kid == 2 && this.res_adults == 2) {
-            console.log("more than two");
-            // this.teen = true
-            alert(`2 adult, 2 kids and ${this.res_teen} teen can't stay in 1 room`)
-            this.res_kid = 0
-            console.log(this.res_teen);
-          } else {
-            this.teen = false
-            console.log(this.res_teen);
-          }
         },
 
         async addReservation() {
@@ -938,7 +919,7 @@
       },
       created() {
         this.fetchAll()
-        Pusher.logToConsole = true;
+        // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
@@ -989,6 +970,17 @@
             this.fetchAll()
           }
         })
+      },
+      watch: {
+        res_BB(value) {
+            if( value != ''){
+                console.log(value);
+                this.awash = false
+            }
+        },
+        roomType(value) {
+          console.log("Room Type",value);
+        }
       }
     })
 

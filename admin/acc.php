@@ -364,7 +364,7 @@
                 </form>
 
               </div>
-              <div class="col-12 row">
+              <div class="col-12">
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Awash Room Types</h6>
@@ -401,30 +401,32 @@
                         $result = mysqli_query($connection, $query);
 
                         while ($row = mysqli_fetch_assoc($result)) {
-                          echo "<tr>";
-                          foreach ($row as $key => $value) {
-                            $row[$key] = $value;
 
-                            if ($key == 'room_img') {
                         ?>
-                              <td>
-                                <img width="100" src="./room_img/awash/<?php echo $row['room_img']; ?>" alt="">
-                              </td>
-                          <?php
-                            } else {
-                              echo "<td>$row[$key]</td>";
-                            }
-                          }
-                          ?>
+                          <tr>
 
-                          <?php
-                          if ($role != 'RA') {
-                          ?>
-                            <!-- <td><?php echo "<a href='acc.php?edit={$type_id}'><i style='color: turquoise;' class='far fa-edit'></i> </a>"; ?></td>
-                            <td><?php echo "<a href='acc.php?delete={$type_id}'><i style='color: red;' class='far fa-trash-alt'></i> </a>"; ?></td> -->
-                            </tr>
-                        <?php  }
-                        } ?>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['name']; ?></td>
+                            <td><?php echo $row['occupancy']; ?></td>
+                            <td>
+                              <img width="100" src="./room_img/awash/<?php echo $row['room_img']; ?>" alt="">
+                            </td>
+
+                            <td><?php echo $row['d_bb_wd']; ?></td>
+                            <td><?php echo $row['d_hb_wd']; ?></td>
+                            <td><?php echo $row['d_fb_wd']; ?></td>
+                            <td><?php echo $row['d_bb_we']; ?></td>
+                            <td><?php echo $row['d_hb_we']; ?></td>
+                            <td><?php echo $row['d_fb_we']; ?></td>
+                            <td><?php echo $row['s_bb_wd']; ?></td>
+                            <td><?php echo $row['s_hb_wd']; ?></td>
+                            <td><?php echo $row['s_fb_wd']; ?></td>
+                            <td><?php echo $row['s_bb_we']; ?></td>
+                            <td><?php echo $row['s_hb_we']; ?></td>
+                            <td><?php echo $row['s_fb_we']; ?></td>
+                          </tr>
+
+                        <?php } ?>
 
 
                       </table>
@@ -499,14 +501,14 @@
                 </form>
 
               </div>
-              <div class="col-12 row">
+              <div class="col-12">
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Entoto Room Types</h6>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="table display table-bordered" id="awashTable" width="100%" cellspacing="0">
+                      <table class="table display table-bordered" id="entotoTable" width="100%" cellspacing="0">
                         <thead>
                           <tr>
                             <th>Id</th>
@@ -524,22 +526,19 @@
                         $result = mysqli_query($connection, $query);
 
                         while ($row = mysqli_fetch_assoc($result)) {
-                          echo "<tr>";
-                          foreach ($row as $key => $value) {
-                            $row[$key] = $value;
 
-                            if ($key == 'room_img') {
                         ?>
-                              <td>
-                                <img width="100" src="./room_img/entoto/<?php echo $row['room_img']; ?>" alt="">
-                              </td>
-                          <?php
-                            } else {
-                              echo "<td>$row[$key]</td>";
-                            }
-                          }
-                          ?>
+                          <tr>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['name']; ?></td>
 
+                            <td><?php echo $row['occupancy']; ?></td>
+                            <td>
+                              <img width="100" src="./room_img/entoto/<?php echo $row['room_img']; ?>" alt="">
+                            </td>
+                            <td><?php echo $row['double_occ']; ?></td>
+                            <td><?php echo $row['single_occ']; ?></td>
+                          </tr>
                           <?php
                           if ($role != 'RA') {
                           ?>
@@ -548,6 +547,7 @@
                             </tr>
                         <?php  }
                         } ?>
+
 
 
                       </table>
@@ -620,14 +620,14 @@
                 </form>
 
               </div>
-              <div class="col-12 row">
+              <div class="col-12">
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Lake Tana Room Types</h6>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="table display table-bordered" id="awashTable" width="100%" cellspacing="0">
+                      <table class="table display table-bordered" id="tanaTable" width="100%" cellspacing="0">
                         <thead>
                           <tr>
                             <th>Id</th>
@@ -655,7 +655,7 @@
                                 <img width="100" src="./room_img/tana/<?php echo $row['room_img']; ?>" alt="">
                               </td>
                           <?php
-                            } else {
+                            } else if ($key != 'room_desc') {
                               echo "<td>$row[$key]</td>";
                             }
                           }
@@ -764,6 +764,8 @@
     $(document).ready(function() {
       $("#accTable").DataTable();
       $("#awashTable").DataTable();
+      $("#entotoTable").DataTable();
+      $("#tanaTable").DataTable();
 
     })
   </script>

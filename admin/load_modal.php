@@ -238,7 +238,6 @@ if ($received_data->action == 'addReservation') {
   $row = mysqli_fetch_assoc($last_record_result);
 
   if (empty($row)) {
-    echo json_encode("empty");
     $reset_query = "TRUNCATE TABLE reservations";
     $reset_result = mysqli_query($connection, $reset_query);
 
@@ -309,6 +308,10 @@ if ($received_data->action == 'addReservation') {
       $guest_info_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_board, info_room_location) ";
 
       $guest_info_query .= "VALUES ($last_id, $adults, $kids, $teens, $value->room_id, '$value->room_number', '$value->room_acc', '$value->board', '$value->room_location')";
+    } else {
+      $guest_info_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location) ";
+
+      $guest_info_query .= "VALUES ($last_id, $adults, $kids, $teens, $value->room_id, '$value->room_number', '$value->room_acc', '$value->room_location')";
     }
 
 
@@ -405,7 +408,15 @@ if ($received_data->action == 'addReservation') {
 
         $row = mysqli_fetch_assoc($result);
 
-        $price = calculatePriceAwash($guests[$index][0], $guests[$index][1], $guests[$index][2], $Bored, $days, $row);
+        echo json_encode("adults");
+        echo json_encode($guests[$index][0]);
+        echo json_encode("teens");
+        echo json_encode($guests[$index][1]);
+        echo json_encode("kid");
+        echo json_encode($guests[$index][2]);
+        $price += calculatePriceAwash($guests[$index][0], $guests[$index][1], $guests[$index][2], $Bored, $days, $row);
+
+        $index++;
         break;
 
         // Entoto pricing

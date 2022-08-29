@@ -674,6 +674,7 @@ if ($received_data->action === 'Newadd') {
     $reset_result = mysqli_query($connection, $reset_table);
 
     confirm($reset_result);
+    $id = 0;
   } else {
     foreach ($row as $value) {
       $id = $value;

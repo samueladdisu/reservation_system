@@ -1,221 +1,158 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="color-scheme:light dark;supported-color-schemes:light dark;">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1 user-scalable=yes">
-  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
-  <meta name="x-apple-disable-message-reformatting">
-  <meta name="color-scheme" content="light dark">
-  <meta name="supported-color-schemes" content="light dark">
-  <title></title>
-  <!--[if mso]> <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
-                          <![endif]-->
-  <!--[if mso]>
-                          <style>table,tr,td,p,span,a{mso-line-height-rule:exactly !important;line-height:120% !important;mso-table-lspace:0 !important;mso-table-rspace:0 !important;}.mso-padding{padding-top:20px !important;padding-bottom:20px !important;}
-                          </style>
-                          <![endif]-->
-  <style>
-    a[x-apple-data-detectors] {
-      color: inherit !important;
-      text-decoration: none !important;
-      font-size: inherit !important;
-      font-family: inherit !important;
-      font-weight: inherit !important;
-      line-height: inherit !important;
+<?php include  './includes/db.php'; ?>
+<?php include  './includes/functions.php'; ?>
+<?php
+
+$received_data = json_decode(file_get_contents("php://input"));
+date_default_timezone_set('Africa/Addis_Ababa');
+
+if ($received_data->action == 'filter') {
+
+  $room_quantity_array = array();
+  $filterd_data = array();
+  $location = $received_data->location;
+  $roomType = $received_data->roomType;
+  $checkin = $received_data->checkin;
+  $checkout = $received_data->checkout;
+  $roomQuantity = $received_data->roomQuantity;
+
+  if (($checkin && $checkout) && ($location && $roomType)) {
+
+    $query = "SELECT DISTINCT b_roomId 
+    FROM booked_rooms 
+    WHERE b_checkout<= '$checkin' 
+    AND b_roomLocation = '$location'
+    AND b_roomType = '$roomType'
+    UNION
+    SELECT DISTINCT b_roomId
+    FROM booked_rooms
+    WHERE b_checkin >= '$checkout'
+    AND b_roomLocation = '$location'
+    AND b_roomType = '$roomType'";
+  } else if (($checkin && $checkout) && !$location && !$roomType) {
+
+    $query = "SELECT DISTINCT b_roomId
+    FROM booked_rooms 
+    WHERE b_checkout<= '$checkin' 
+    UNION
+    SELECT DISTINCT b_roomId
+    FROM booked_rooms
+    WHERE b_checkin >= '$checkout'";
+  } else if (($checkin && $checkout) && !$location && $roomType) {
+    $query = "SELECT DISTINCT b_roomId 
+    FROM booked_rooms 
+    WHERE b_checkout<= '$checkin' 
+    AND b_roomType = '$roomType'
+    UNION
+    SELECT DISTINCT b_roomId
+    FROM booked_rooms
+    WHERE b_checkin >= '$checkout'
+    AND b_roomType = '$roomType'";
+  } else if (($checkin && $checkout) && $location && !$roomType) {
+    $query = "SELECT DISTINCT b_roomId
+    FROM booked_rooms 
+    WHERE b_checkout<= '$checkin' 
+    AND b_roomLocation = '$location'
+    UNION
+    SELECT DISTINCT b_roomId
+    FROM booked_rooms
+    WHERE b_checkin >= '$checkout'
+    AND b_roomLocation = '$location'";
+  }
+
+  $result = mysqli_query($connection, $query);
+  confirm($result);
+
+  $exists = mysqli_num_rows($result);
+
+  if ($exists) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+
+    // echo json_encode($row); 
+     
+      $query = "SELECT DISTINCT b_roomId 
+      FROM booked_rooms 
+      WHERE b_checkout>= '$checkin' 
+      AND b_roomId = {$row['b_roomId']}
+      UNION
+      SELECT DISTINCT b_roomId
+      FROM booked_rooms
+      WHERE b_checkin <= '$checkout'
+      AND b_roomId = {$row['b_roomId']}";
+
+      $result = mysqli_query($connection, $query);
+      while ($row = mysqli_fetch_assoc($result)) {
+
+          $filterd_data[] = $row;
+        }
+      
+        // $select_room_query = "SELECT * 
+        // FROM rooms 
+        // WHERE room_id = {$row['b_roomId']}";
+
+        // $select_room_result = mysqli_query($connection, $select_room_query);
+        // confirm($select_room_result);
+        // while ($row2 = mysqli_fetch_assoc($select_room_result)) {
+
+        //   $filterd_data[] = $row2;
+        // }
     }
 
-    u+#body a {
-      color: inherit !important;
-      text-decoration: none !important;
-      font-size: inherit !important;
-      font-family: inherit !important;
-      font-weight: inherit !important;
-      line-height: inherit !important;
+    echo json_encode($filterd_data);
+
+    // if ($location && $roomType) {
+    //   $select_not_booked_query = "SELECT * 
+    // FROM rooms
+    // WHERE room_status = 'Not_booked'
+    // AND room_location = '$location'
+    // AND room_acc = '$roomType'";
+    // } else if ($location && !$roomType) {
+    //   $select_not_booked_query = "SELECT * 
+    //   FROM rooms
+    //   WHERE room_status = 'Not_booked'
+    //   AND room_location = '$location'";
+    // } else if (!$location && $roomType) {
+    //   $select_not_booked_query = "SELECT * 
+    // FROM rooms
+    // WHERE room_status = 'Not_booked'
+    // AND room_acc = '$roomType'";
+    // }
+
+    // $select_not_booked_result = mysqli_query($connection, $select_not_booked_query);
+    // confirm($select_not_booked_result);
+
+    // while ($row3 = mysqli_fetch_assoc($select_not_booked_result)) {
+    //   $Not_booked_array[] = $row3;
+    // }
+
+    // $merged_array = array_merge($filterd_data, $Not_booked_array);
+    // $merged_array = array_slice($merged_array, 0, $roomQuantity);
+    // echo json_encode($merged_array);
+  } else {
+    if ($location && $roomType) {
+      $ava_query = "SELECT * 
+      FROM rooms 
+      WHERE room_status = 'Not_booked' 
+      AND room_location = '$location'
+      AND room_acc = '$roomType' LIMIT $roomQuantity";
+    } else if ($location && !$roomType) {
+      $ava_query = "SELECT * 
+      FROM rooms 
+      WHERE room_status = 'Not_booked' 
+      AND room_location = '$location' LIMIT $roomQuantity";
+    } else if (!$location && $roomType) {
+      $ava_query = "SELECT *
+      FROM rooms
+      WHERE room_status = 'Not_booked'
+      AND room_acc = '$roomType' LIMIT $roomQuantity";
     }
+    $ava_result = mysqli_query($connection, $ava_query);
+    confirm($ava_result);
+    while ($row_ava = mysqli_fetch_assoc($ava_result)) {
 
-    #MessageViewBody a {
-      color: inherit !important;
-      text-decoration: none !important;
-      font-size: inherit !important;
-      font-family: inherit !important;
-      font-weight: inherit !important;
-      line-height: inherit !important;
+      $filterd_data[] = $row_ava;
     }
-
-    :root {
-      color-scheme: light dark;
-      supported-color-schemes: light dark;
-    }
-
-    tr {
-      vertical-align: middle;
-    }
-
-    p,
-    a,
-    li {
-      color: #000000;
-      font-size: 16px;
-      mso-line-height-rule: exactly;
-      line-height: 24px;
-      font-family: Arial, sans-serif;
-    }
-
-    p:first-child {
-      margin-top: 0 !important;
-    }
-
-    p:last-child {
-      margin-bottom: 0 !important;
-    }
-
-    a {
-      text-decoration: underline;
-      font-weight: bold;
-      color: #0000ff
-    }
-
-    .alert p {
-      vertical-align: top;
-      color: #fff;
-      font-weight: 500;
-      text-align:
-        center;
-      border-radius: 3px 3px 0 0;
-      background-color: #FF9F00;
-      margin: 0;
-      padding: 20px;
-    }
-
-    @media only screen and (max-width:599px) {
-      .full-width-mobile {
-        width: 100% !important;
-        height: auto !important;
-      }
-
-      .mobile-padding {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-      }
-
-      .mobile-stack {
-        display: block !important;
-        width: 100% !important;
-      }
-    }
-
-    @media (prefers-color-scheme:dark) {
-
-      body,
-      div,
-      table,
-      td {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-      }
-
-      .content {
-        background-color: #222222 !important;
-      }
-
-      p,
-      li,
-      .white-text {
-        color: #B3BDC4 !important;
-      }
-
-      a {
-        color: #84cfe2 !important;
-      }
-
-      a span,
-      .alert-dark p {
-        color: #ffffff !important;
-      }
-    }
-  </style>
-</head>
-
-<body class="body" style="background-color:#f4f4f4;">
-  <div style="display:none;font-size:1px;color:#f4f4f4;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"></div> <span style="display:none!important;visibility:hidden;mso-hide:all;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"> &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</span>
-  <div role="article" aria-roledescription="email" aria-label="Your Email" lang="en" dir="ltr" style="font-size:16px;font-size:1rem;font-size:max(16px,1rem);background-color:#f4f4f4;">
-    <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;max-width:600px;width:100%;background-color:#f4f4f4;">
-      <tr style="vertical-align:middle;" valign="middle">
-        <td>
-          <!--[if mso]>
-                          <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse;"><tr><td align="center">
-                          <!--<![endif]-->
-        </td>
-      </tr>
-      <tr style="vertical-align:middle;" valign="middle">
-        <td align="center">
-          <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse;max-width:600px;width:100%;background-color:#fffffe;">
-            <tr style="vertical-align:middle;" valign="middle">
-              <td>
-                <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse;max-width:600px;width:100%;">
-                  <tr style="vertical-align:middle;" valign="middle">
-                    <td class="mso-padding alert alert-warning alert-dark" align="center" bgcolor="#FF9F00" valign="top">
-                      <p style="font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:Arial,sans-serif;vertical-align:top;color:#fff;font-weight:500;text-align:center;border-radius:3px 3px 0 0;background-color:#FF9F00;margin:0;padding:20px;margin-top:0!important;margin-bottom:0!important;">Password Reset Request.</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr style="vertical-align:middle;" valign="middle">
-              <td align="center" style="padding:30px;" class="content">
-                <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse;max-width:600px;width:100%;background-color:#fffffe;">
-                  <tr style="vertical-align:middle;" valign="middle">
-                    <td class="content">
-                      <p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:Arial,sans-serif;margin-bottom:0!important;">Follow the link to reset password This link is valid for 20 minutes</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr style="vertical-align:middle;" valign="middle">
-              <td align="center" class="content">
-                <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:100%">
-                  <tr style="vertical-align:middle;" valign="middle">
-                    <td align="left" style="padding:0 0 0 30px;" class="content">
-                    <a href="http://localhost/reservation_system/admin/new_password.php?eid={$email}&token={$encode_token}&exd={$expire_date}" style="font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:Arial,sans-serif;font-weight:bold;background:#348eda;text-decoration:none;padding:15px 25px;color:#fff;border-radius:4px;display:inline-block;mso-padding-alt:0;text-underline-color:#348eda;" class="dark-button">
-                        <!--[if mso]><i style="letter-spacing:25px;mso-font-width:-100%;mso-text-raise:30pt" hidden>&nbsp;</i>
-                          <![endif]--><span style="mso-text-raise:15pt;">Upgrade my&nbsp;account</span>
-                        <!--[if mso]><i style="letter-spacing:25px;mso-font-width:-100%" hidden>&nbsp;</i>
-                          <![endif]-->
-                      </a>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr style="vertical-align:middle;" valign="middle">
-              <td align="center" style="padding:30px;" class="content">
-                <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse;max-width:600px;width:100%;background-color:#fffffe;">
-                  <tr style="vertical-align:middle;" valign="middle">
-                    <td class="content">
-                      <p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:Arial,sans-serif;margin-top:0!important;margin-bottom:0!important;">Thanks for choosing Acme&nbsp;Inc.</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-          <table align="center" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse;max-width:600px;width:100%;">
-            <tr style="vertical-align:middle;" valign="middle">
-              <td align="center" style="padding:30px 0;">
-                <p style="mso-line-height-rule:exactly;line-height:24px;font-family:Arial,sans-serif;font-size:14px;color:#999;margin-top:0!important;margin-bottom:0!important;"><a href="http://twitter.com/mail_gun" style="mso-line-height-rule:exactly;line-height:24px;font-family:Arial,sans-serif;text-decoration:underline;font-weight:bold;font-size:14px;color:#999;">Unsubscribe</a> from these&nbsp;alerts.</p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <!--[if mso]>
-                          </td></tr></table>
-                          <!--<![endif]-->
-    </table>
-  </div>
-</body>
-
-</html>
+    // echo json_encode($filterd_data);
+  }
+}
