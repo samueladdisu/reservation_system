@@ -11,6 +11,7 @@ $filterd_data1 = array();
 $filterd_data2 = array();
 $Not_booked = array();
 $booked = array();
+$merged_array = array();
 
 
 if ($received_data->action == 'filter') {
@@ -23,15 +24,21 @@ if ($received_data->action == 'filter') {
   $roomLocation = '';
   $dataCount = [];
 
-  $query = "SELECT DISTINCT b_roomId
-    FROM booked_rooms 
-    WHERE b_checkout<= '$checkin' 
-    AND b_roomLocation = '$location'
-    UNION
-    SELECT DISTINCT b_roomId
-    FROM booked_rooms
-    WHERE b_checkin >= '$checkout'
-    AND b_roomLocation = '$location'";
+  $query = "SELECT * 
+  FROM rooms 
+  WHERE room_id 
+  NOT IN 
+    ( SELECT b_roomId
+      FROM booked_rooms 
+      WHERE '$checkin'
+      BETWEEN b_checkin AND b_checkout 
+      UNION
+      SELECT b_roomId
+      FROM booked_rooms
+      WHERE '$checkout'
+      BETWEEN b_checkin AND b_checkout
+      )
+  AND room_location = '$location' ORDER BY room_acc";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
@@ -40,40 +47,10 @@ if ($received_data->action == 'filter') {
 
 
   if ($exists > 0) {
+
     while ($row = mysqli_fetch_assoc($result)) {
-
-      $select_room_query = "SELECT * 
-      FROM rooms 
-      WHERE room_id = {$row['b_roomId']} ORDER BY room_acc";
-
-      $select_room_result = mysqli_query($connection, $select_room_query);
-      confirm($select_room_result);
-      while ($row2 = mysqli_fetch_assoc($select_room_result)) {
-
-        $filterd_data[] = $row2;
-      }
+      $merged_array[] = $row;
     }
-
-    $select_not_booked_query = "SELECT * 
-    FROM rooms 
-    WHERE room_status = 'Not_booked'
-    AND room_location = '$location' ORDER BY room_acc";
-
-    $select_not_booked_result = mysqli_query($connection,  $select_not_booked_query);
-
-    confirm($select_not_booked_result);
-
-    while ($row3 = mysqli_fetch_assoc($select_not_booked_result)) {
-
-      $Not_booked_array[] = $row3;
-    }
-
-
-    // echo json_encode($Not_booked_array);
-    $merged_array = array_merge($filterd_data, $Not_booked_array);
-
-    $len = count($merged_array);
-    $temp = '';
     foreach ($merged_array as $key => $value) {
 
 
@@ -96,73 +73,12 @@ if ($received_data->action == 'filter') {
       }
     }
 
-    //   foreach($merged_array as $key => $value){
-    //     if(count($dataCount) != 0){
-
-    //         for($i = 0; $i < count($dataCount); $i++ ){
-    //             if($merged_array[$key]['room_acc'] != $dataCount[0]["room_acc"] ){
-    //                 array_push($data, $merged_array[$key]);
-    //             }
-    //         }  
-    //     }else{
-    //         array_push($data, $merged_array[$key]);
-    //     }
-
-    //     for($i= $key + 1; $i < count($merged_array); $i++){
-    //         if($merged_array[$key]['room_acc'] == $merged_array[$i]["room_acc"]){
-
-    //             array_push($data, $merged_array[$i]);
-    //         }else{
-    //             array_push($dataCount, $data);
-    //             $data = [];
-    //         }
-    //     }
-
-    // }
-
 
     if (count($data) >= 1) {
       array_push($dataCount, $data);
     }
     echo json_encode($dataCount);
-  } else {
-    $ava_query = "SELECT * 
-    FROM rooms 
-    WHERE room_status = 'Not_booked'
-    AND room_location = '$location' ORDER BY room_acc";
-    $ava_result = mysqli_query($connection, $ava_query);
-
-    confirm($ava_result);
-
-    while ($row = mysqli_fetch_assoc($ava_result)) {
-      // $filterd_data[] = $row_ava;
-
-      if ($roomAcc_temp == '' || $roomLocation == '') {
-        $roomAcc_temp = $row["room_acc"];
-        $roomLocation = $row["room_location"];
-        array_push($data, $row);
-      } else if ($roomAcc_temp == $row["room_acc"] && $roomLocation == $row["room_location"]) {
-
-        array_push($data, $row);
-      } else if ($roomAcc_temp !== $row["room_acc"] || $roomLocation !== $row["room_location"]) {
-        $roomAcc_temp = $row["room_acc"];
-        $roomLocation = $row["room_location"];
-        array_push($dataCount, $data);
-        $data = [];
-        array_push($data, $row);
-        // goto here;
-
-      }
-    }
-
-    if (count($data) >= 1) {
-      array_push($dataCount, $data);
-    }
-
-    // echo json_encode("ava");
-    // echo json_encode($merged_array);
-    echo json_encode($dataCount);
-  }
+  } 
 }
 
 

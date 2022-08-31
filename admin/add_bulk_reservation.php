@@ -120,9 +120,9 @@ if (!isset($_SESSION['user_role'])) {
                         </div>
 
                         <div class="form-group col-6">
-                        <label> Payment Status * </label>
+                          <label> Payment Status * </label>
                           <select v-model="formData.group_paymentStatus" class="custom-select" required>
-                          <option disabled value="">-select-</option>
+                            <option disabled value="">-select-</option>
                             <option value="payed">Paid</option>
                             <option value="pending_payment">pending payment</option>
                           </select>
@@ -130,7 +130,7 @@ if (!isset($_SESSION['user_role'])) {
 
 
                         <div class="form-group col-6">
-                        <label> Number of Guests * </label>
+                          <label> Number of Guests * </label>
                           <input type="text" class="form-control" v-model="formData.group_GNum" @change='SetGuests' required>
                         </div>
 
@@ -141,16 +141,16 @@ if (!isset($_SESSION['user_role'])) {
                           </button>
                         </div>
                         <div class="form-group col-6">
-                        <label> Event Type * </label>
+                          <label> Event Type * </label>
                           <select v-model="formData.group_reason" class="custom-select" required>
-                          <option disabled value="">-select-</option>
+                            <option disabled value="">-select-</option>
                             <option value="con">Conference</option>
                             <option value="wed">Wedding</option>
                           </select>
                         </div>
 
                         <div class="form-group col-6">
-                        <label> Pricing * </label>
+                          <label> Pricing * </label>
                           <select v-model="formData.group_status" @change="customChecker" class="custom-select" required>
                             <option disabled value="">-select-</option>
                             <option value="def">Default Pricing</option>
@@ -159,17 +159,17 @@ if (!isset($_SESSION['user_role'])) {
                         </div>
 
                         <div class="form-group col-6" v-if="custom">
-                          <label for="">Weekends Price *</label> 
+                          <label for="">Weekends Price *</label>
                           <input type="text" class="form-control" v-model="formData.Weekends" required>
                         </div>
 
                         <div class="form-group col-6" v-if="custom">
-                        <label for="">Weekdays Price *</label> 
+                          <label for="">Weekdays Price *</label>
                           <input type="text" class="form-control" v-model="formData.Weekdays" required>
                         </div>
 
                         <div class="form-group col-6" v-if="custom">
-                        <label for="">Breakfast Price</label> 
+                          <label for="">Breakfast Price</label>
                           <input type="text" class="form-control" v-model="formData.custom_Breakfast">
                         </div>
 
@@ -184,22 +184,22 @@ if (!isset($_SESSION['user_role'])) {
                         </div>
 
                         <div class="form-group col-6" v-if="custom">
-                        <label>Dinner Price</label>
+                          <label>Dinner Price</label>
                           <input type="text" class="form-control" v-model="formData.custom_Dinner">
                         </div>
 
                         <div class="form-group col-6" v-if="custom">
-                        <label>BBQ Price</label>
+                          <label>BBQ Price</label>
                           <input type="text" class="form-control" v-model="formData.custom_BBQ">
                         </div>
 
                         <div class="form-group col-6" v-if="custom">
-                        <label>TeaBreak Price</label>
+                          <label>TeaBreak Price</label>
                           <input type="text" class="form-control" v-model="formData.custom_TeaBreak">
                         </div>
 
                         <div class="form-group col-6">
-                        <label>Lunch Guests</label>
+                          <label>Lunch Guests</label>
                           <input type="text" class="form-control" v-model="formData.group_Lunch">
                         </div>
 
@@ -209,7 +209,7 @@ if (!isset($_SESSION['user_role'])) {
                         </div>
 
                         <div class="form-group col-6">
-                        <label>BBQ Guests </label>
+                          <label>BBQ Guests </label>
                           <input type="text" class="form-control" v-model="formData.group_BBQ" value="formData.group_BBQ">
                         </div>
 
@@ -239,7 +239,7 @@ if (!isset($_SESSION['user_role'])) {
                       </div>
                     </div>
                     <div class="card-footer">
-                   
+
                     </div>
                   </div>
 
@@ -284,7 +284,7 @@ if (!isset($_SESSION['user_role'])) {
 
                               ?>
                                 <div class="form-group mt-2 col-2">
-                                  <select name="room_location" class="custom-select" v-model="location" id="">
+                                  <select name="room_location" @change="checkLocation" class="custom-select" v-model="location" id="">
                                     <option disabled value="">Resort Location</option>
                                     <?php
 
@@ -296,7 +296,10 @@ if (!isset($_SESSION['user_role'])) {
                                       $location_id = $row['location_id'];
                                       $location_name = $row['location_name'];
 
-                                      echo "<option value='$location_name'>{$location_name}</option>";
+                                      if ($location_name != 'Boston') {
+
+                                        echo "<option value='$location_name'>{$location_name}</option>";
+                                      }
                                     }
                                     ?>
                                   </select>
@@ -311,19 +314,13 @@ if (!isset($_SESSION['user_role'])) {
                               <div class="form-group mt-2 col-2">
                                 <select name="room_location" class="custom-select" v-model="roomType" id="">
                                   <option disabled value="">Room Type</option>
-                                  <?php
+                                  <option :value="type.name" v-if="location !== 'Bishoftu'" v-for="type in types">
+                                    {{ type.name }}
+                                  </option>
 
-                                  $query = "SELECT * FROM room_type";
-                                  $result = mysqli_query($connection, $query);
-                                  confirm($result);
-
-                                  while ($row = mysqli_fetch_assoc($result)) {
-                                    $type_name = $row['type_name'];
-                                    $type_location = $row['type_location'];
-
-                                    echo "<option value='$type_name'>{$type_name}</option>";
-                                  }
-                                  ?>
+                                  <option :value="type.type_name" v-if="location === 'Bishoftu'" v-for="type in types">
+                                    {{ type.type_name }}
+                                  </option>
                                 </select>
                               </div>
 
@@ -505,6 +502,7 @@ if (!isset($_SESSION['user_role'])) {
           custom: false,
           chekedList: false,
           defualt_value: '',
+          types: [],
           formData: {
             group_name: '',
             group_paymentStatus: '',
@@ -535,6 +533,18 @@ if (!isset($_SESSION['user_role'])) {
       },
 
       methods: {
+        async checkLocation() {
+          console.log("location", this.location);
+
+          await axios.post('load_modal.php', {
+            action: 'fetchTypes',
+            location: this.location
+          }).then(res => {
+            console.log("respose", res.data);
+            this.types = res.data
+          })
+
+        },
         SetGuests() {
 
 
@@ -621,9 +631,9 @@ if (!isset($_SESSION['user_role'])) {
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
 
-            if(this.formData.group_GNum >= this.bookedRooms.length ){
+            if (this.formData.group_GNum >= this.bookedRooms.length) {
 
-              if(capacity >= this.formData.group_GNum ){
+              if (capacity >= this.formData.group_GNum) {
 
                 await axios.post('group_res.php', {
                   action: 'Newadd',
@@ -637,15 +647,15 @@ if (!isset($_SESSION['user_role'])) {
                   // window.location.href = 'view_bulk_reservations.php'
                   console.log(res.data);
                 })
-              }else {
+              } else {
                 alert("Rooms capacity exceeded reduce guest number!")
               }
 
-            }else {
+            } else {
               alert("Rooms cannot exceed guest number!")
             }
 
-          }else {
+          } else {
             alert('Please Select Dates!')
           }
 

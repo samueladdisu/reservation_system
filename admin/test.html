@@ -10,14 +10,23 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
   <script>
-    // Base
-    // let apiKey = 'd9e53816d07345139c58d0ea733e3870';
-
-    axios.get('https://api.bigdatacloud.net/data/ip-geolocation?key=bdc_1f4147859340439ca926eeddc18401e1')
-        .then((res) => {
-          let ip = res.data.ip
-          console.log(ip);
-        })  
+  
+    async function filterRooms() {
+          await axios.post('test.php', {
+            "action": "filter",
+            "location": "Bishoftu",
+            "roomType": "",
+            "checkin": "2023-09-01",
+            "checkout": "2023-09-03",
+            "roomQuantity": "10"
+          }).then(res => {
+            console.log(res.data);
+          }).catch(err => console.log(err.message))
+        
+    }
+    
+    
+    filterRooms()
  
   </script>
 </body>
