@@ -34,8 +34,8 @@
             'first_name' => $_SESSION['fName'],
             'last_name' => $_SESSION['lName'],
             'tx_ref' =>  $tx_ref,
-            // 'callback_url' => 'https://www.test.kurifturesorts.com/chapaCompleted?ref='. $tx_ref
-            'callback_url' => 'http://localhost/reservation_system?ref='. $tx_ref
+            'callback_url' => 'https://www.test.kurifturesorts.com?ref='. $tx_ref
+            // 'callback_url' => 'http://localhost/reservation_system?ref='. $tx_ref
         ),
         CURLOPT_HTTPHEADER => array(
           'Authorization: Bearer '.$_ENV['CHAPA_SECK']
