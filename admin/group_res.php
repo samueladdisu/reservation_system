@@ -639,7 +639,21 @@ if ($received_data->action === 'Newadd') {
     $id = 0;
   } else {
     foreach ($row as $value) {
-      $id = $value;
+
+      $reset_auto_increment = "ALTER TABLE group_reservation AUTO_INCREMENT = $value";
+      $result = mysqli_query($connection, $reset_auto_increment);
+      confirm($result);
+
+      $last_record_query = "SELECT group_id FROM group_reservation ORDER BY group_id DESC LIMIT 1";
+
+      $last_record_result = mysqli_query($connection, $last_record_query);
+      confirm($last_record_result);
+
+      $row = mysqli_fetch_assoc($last_record_result);
+
+      foreach ($row as $val) {
+        $id = $val;
+      }
     }
   }
 
