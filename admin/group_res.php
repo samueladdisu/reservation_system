@@ -157,18 +157,6 @@ $allData = array();
 $data = array();
 $rooms = array();
 
-function getName($n)
-{
-  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $randomString = '';
-
-  for ($i = 0; $i < $n; $i++) {
-    $index = rand(0, strlen($characters) - 1);
-    $randomString .= $characters[$index];
-  }
-
-  return $randomString;
-}
 
 if ($received_data->action == "guestInfo"){
   $id = $received_data->id;

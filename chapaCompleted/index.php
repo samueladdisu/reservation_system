@@ -141,17 +141,11 @@ if (isset($_GET['ref'])) {
             $result_status = mysqli_query($connection, $status_query);
             confirm($result_status);
 
-            $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-                'from'    => 'no-reply@kurifturesorts.com',
-                'to'      => $email,
-                'subject' => 'Kuriftu Resort and Spa',
-                'html'    =>  "<h2>You have succesfully reserved a room</h2>
-                        <p> Here is your confirmation code $res_confirmID </p>"
-            ]);
+       
         }
 
 
-        $delete_temp_query = "DELETE FROM temp_res WHERE temp_ID = '$PayerId'";
+        $delete_temp_query = "DELETE FROM temp_res WHERE temp_ID = '$tx_ref'";
         $delete_result = mysqli_query($connection, $delete_temp_query);
     }
 }

@@ -334,7 +334,7 @@ if (!isset($_SESSION['user_role'])) {
 
                         <div class="form-group col-6">
                           <label for="">Select Room</label> <br>
-                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" required>
+                          <button type="button" :disabled="selectRoom" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" required>
                             Select Room
                           </button>
                         </div>
@@ -696,6 +696,7 @@ if (!isset($_SESSION['user_role'])) {
         return {
           spinner: false,
           success: false,
+          selectRoom: true,
           location: '',
           room_quantity: '',
           roomType: '',
@@ -733,13 +734,26 @@ if (!isset($_SESSION['user_role'])) {
       },
       watch: {
         'formData.group_reason'(val) {
+          if (this.location == 'Awash') {
+            this.custom = true
+            this.formData.group_status = "cus"
+          }
 
-          if (this.location != 'Bishoftu' && val == "wed")
-          console.log("watch", val);
-          console.log("watch", this.location);
+          if (this.location != 'Bishoftu' && val == "wed") {
 
-          this.custom = true
-          this.formData.group_status = "cus"
+            console.log("watch", val);
+            console.log("watch", this.location);
+
+            this.custom = true
+            this.formData.group_status = "cus"
+          }
+        },
+        'formData.group_GNum'(val) {
+          if(val != 0 || val != ''){
+            this.selectRoom = false
+          } else {
+            this.selectRoom = true
+          }
         }
       },
 
