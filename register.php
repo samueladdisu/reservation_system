@@ -96,7 +96,7 @@ function cutFromPromo($promo, $price)
             <ul class="justify-list">
 
               <li>
-                <a class="link-text" href="">Back to Resorts</a>
+                <a class="link-text" href="./">Back to Resorts</a>
               </li>
               <li>
                 <a class="link-text" href="">Sign Up</a>

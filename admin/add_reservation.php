@@ -146,6 +146,75 @@
                     </div>
                   </div>
 
+                  <!-- Success Modal -->
+                  <div id="success_tic" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <a class="close" href="#" data-dismiss="modal">&times;</a>
+                        <div class="page-body">
+                          <div class="text-center" v-if="spinner">
+                            <div class="spinner-border" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          </div>
+                          <div v-if="success">
+                            <div class="head">
+                              <h3 style="margin-top:5px;">Operation Successful!</h3>
+                              <!-- <h4>Lorem ipsum dolor sit amet</h4> -->
+                            </div>
+
+                            <h1 style="text-align:center;">
+                              <div class="checkmark-circle">
+                                <div class="background"></div>
+                                <div class="checkmark draw"></div>
+                              </div>
+                            </h1>
+                            <div style="text-align:center; margin-top: 2rem;">
+                              <a href="view_all_reservations.php">
+                                View reservation
+                              </a>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+
+
+                    </div>
+
+                  </div>
+                  <!-- End of Success Modal -->
+
+                  <!-- Spinner Modal  -->
+                  <div class="modal fade" id="spinnerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Please wait...</h5>
+                          <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button> -->
+                        </div>
+                        <div class="modal-body">
+                          <div class="text-center">
+                            <div class="spinner-border" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- End of Spinner Modal  -->
+
                   <!-- Modal -->
                   <div class="modal fade" id="guest">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -162,7 +231,6 @@
                             <div class="row">
                               <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
                                 <option value="" disabled>Adults*</option>
-                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
@@ -186,7 +254,7 @@
                           </div>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" @click="booked" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                          <button type="button" @click="booked" data-dismiss="modal" :disabled="guest" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
                     </div>
@@ -209,7 +277,6 @@
                             <div class="row">
                               <select name="adults" v-model="res_adults" class="custom-select col-3">
                                 <option value="" disabled>Guests</option>
-                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -255,7 +322,6 @@
                             <div class="row">
                               <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
                                 <option value="" disabled>Adults*</option>
-                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                               </select>
@@ -276,27 +342,27 @@
 
 
                             </div>
-                              <div class="row mt-3 d-flex justify-content-center BBModal">
-                                <div class="form-check col-3">
-                                  <input class="form-check-input costom" type="radio" id="flexRadioDefault1" value="BedBreakfast" v-model="res_BB" required>
-                                  <label class="form-check-label" for="flexRadioDefault1">
-                                    B&B
-                                  </label>
-                                </div>
-                                <div class="form-check col-3">
-                                  <input class="form-check-input costom" type="radio" id="flexRadioDefault2" value="Half Board" v-model="res_BB" required>
-                                  <label class="form-check-label" for="flexRadioDefault2">
-                                    HB
-                                  </label>
-                                </div>
-
-                                <div class="form-check col-3">
-                                  <input class="form-check-input costom" type="radio" id="flexRadioDefault3" value="fullBoard" v-model="res_BB" required>
-                                  <label class="form-check-label" for="flexRadioDefault3">
-                                    FB
-                                  </label>
-                                </div>
+                            <div class="row mt-3 d-flex justify-content-center BBModal">
+                              <div class="form-check col-3">
+                                <input class="form-check-input costom" type="radio" id="flexRadioDefault1" value="BedBreakfast" v-model="res_BB" required>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                  B&B
+                                </label>
                               </div>
+                              <div class="form-check col-3">
+                                <input class="form-check-input costom" type="radio" id="flexRadioDefault2" value="Half Board" v-model="res_BB" required>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                  HB
+                                </label>
+                              </div>
+
+                              <div class="form-check col-3">
+                                <input class="form-check-input costom" type="radio" id="flexRadioDefault3" value="fullBoard" v-model="res_BB" required>
+                                <label class="form-check-label" for="flexRadioDefault3">
+                                  FB
+                                </label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="modal-footer">
@@ -575,6 +641,9 @@
         return {
           res_BB: '',
           awash: true,
+          guest: true,
+          spinner: false,
+          success: false,
           search_data: [],
           location: '',
           types: [],
@@ -763,13 +832,13 @@
           })
 
           let loc = this.tempRow.room_location
-          let guests 
-          if (loc == "awash"){
+          let guests
+          if (loc == "awash") {
 
             if (this.res_BB == '') {
-                alert('please select bored')
+              alert('please select bored')
             } else {
-                guests = {
+              guests = {
                 adults: this.res_adults,
                 teens: this.res_teen,
                 kids: this.res_kid,
@@ -818,13 +887,13 @@
 
         },
         CheckGuest() {
-          console.log("adults", this.res_adults);
-          console.log("teen", this.res_teen);
-          console.log("kid", this.res_kid);
+          // console.log("adults", this.res_adults);
+          // console.log("teen", this.res_teen);
+          // console.log("kid", this.res_kid);
           if (this.res_adults === "1") {
 
             if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "1") || (this.res_teen === "1" && this.res_kid === "2")) {
-                alert("This combination of guest numbers is not possible.");
+              alert("This combination of guest numbers is not possible.");
 
               this.res_teen = 0;
               this.res_kid = 0;
@@ -832,50 +901,68 @@
 
 
           } else if (this.res_adults === "2") {
-            console.log("2 adult");
-            if ((this.res_teen === "2" && this.res_kid === "2") || 
-                (this.res_teen === "2" && this.res_kid === "1") || 
-                (this.res_teen === "2" && this.res_kid === 0) || 
-                (this.res_teen === "2" && this.res_kid === "") || 
-                (this.res_teen === "1" && this.res_kid === "2")) {
+            if ((this.res_teen === "2" && this.res_kid === "2") ||
+              (this.res_teen === "2" && this.res_kid === "1") ||
+              (this.res_teen === "2" && this.res_kid === 0) ||
+              (this.res_teen === "2" && this.res_kid === "") ||
+              (this.res_teen === "1" && this.res_kid === "2")) {
               alert("This combination of guest numbers is not possible.");
-              
+
               this.res_teen = 0;
               this.res_kid = 0;
-            }else {
-                // alert("possible")
+            } else {
+              // alert("possible")
             }
           } else if (this.res_adults === "0") {
             alert("adult cant be 0");
             this.res_teen = 0;
             this.res_kid = 0;
+            this.guest = true
           }
 
 
         },
 
         async addReservation() {
-          console.log("Selected room", this.cart);
-          console.log("check in", start);
-          console.log("check out", end);
-          console.log("Form Data", this.formData);
+          // console.log("Selected room", this.cart);
+          // console.log("check in", start);
+          // console.log("check out", end);
+          // console.log("Form Data", this.formData);
 
-          if (this.cart && start && end) {
 
-            await axios.post('load_modal.php', {
-              action: 'addReservation',
-              Form: this.formData,
-              checkin: start,
-              checkout: end,
-              rooms: this.cart,
-              // price: this.totalPrice
-            }).then(res => {
-              window.location.href = 'view_all_reservations.php'
-              console.log(res.data);
-              this.totalPrice = res.data
-            })
-          } else {
-            alert('Cart is empty please select room(s)')
+          if (start && end) {
+
+
+            if (this.cart == '') {
+              alert('Cart is empty please select room(s)')
+            } else {
+              $('#success_tic').modal('show')
+              this.spinner = true
+              await axios.post('load_modal.php', {
+                action: 'addReservation',
+                Form: this.formData,
+                checkin: start,
+                checkout: end,
+                rooms: this.cart,
+              }).then(res => {
+                // window.location.href = 'view_all_reservations.php'
+                console.log(res.data);
+                if (res.data == true) {
+                  this.spinner = false
+                  this.success = true
+                  this.formData = {}
+                  this.cart = {}
+                  start = ''
+                  end = ''
+                  console.log("Selected room", this.cart);
+                  console.log("check in", start);
+                  console.log("check out", end);
+                  console.log("Form Data", this.formData);
+                }
+
+
+              })
+            }
           }
 
 
@@ -973,13 +1060,20 @@
       },
       watch: {
         res_BB(value) {
-            if( value != ''){
-                console.log(value);
-                this.awash = false
-            }
+          if (value != '') {
+            console.log(value);
+            this.awash = false
+          }
+        },
+        res_adults(value) {
+          if (value != '' || value == 0) {
+            this.guest = false
+          } else {
+            this.guest = true
+          }
         },
         roomType(value) {
-          console.log("Room Type",value);
+          console.log("Room Type", value);
         }
       }
     })

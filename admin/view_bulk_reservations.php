@@ -43,10 +43,13 @@
                         <tr>
                           <th>Id</th>
                           <th>Group Name</th>
+                          <th>Guest Number</th>
                           <th>Rooms</th>
                           <th>Ava. Rooms</th>
                           <th>Check in</th>
                           <th>Check out</th>
+                          <th>Reason</th>
+                          <th>Remark</th>
                           <th>Location</th>
                           <th>Total Price</th>
                           <th></th>
@@ -75,7 +78,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLongTitle">
-                {{ tempRow.res_firstname }}
+                {{ tempRow.group_name }}
               </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -310,6 +313,7 @@
         return {
           posts: [''],
           tempRow: {},
+          tempRow: {},
           location: '',
           date: '',
           modal: "",
@@ -350,6 +354,9 @@
                 data: 'group_name'
               },
               {
+                data: 'group_guest'
+              },
+              {
                 data: 'group_roomQuantity'
               },
               {
@@ -360,6 +367,20 @@
               },
               {
                 data: 'group_checkout'
+              },
+              {
+                data: 'group_reason',
+                render: function(data, display){
+                  if(data == 'con'){
+                    return `Conference`
+                  }else if(data == 'wed'){
+                    return `Wedding`
+                  }
+
+                }
+              },
+              {
+                data: 'group_remark'
               },
               {
                 data: 'group_location'
@@ -377,6 +398,9 @@
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
                           <a class="dropdown-item" data-id="${data}" href="#" id="add">
                             Add
+                          </a>
+                          <a class="dropdown-item" data-id="${data}" id="view" href="#">
+                            View
                           </a>
                           <a class="dropdown-item" id="edit" href="edit_reservation.php?id=${data}" href="#">
                             Edit
@@ -431,9 +455,36 @@
             console.log("temp row", vm.tempDelete);
             $('#deleteModal').modal('show')
           })
+          $(document).on('click', '#view', function() {
+            // get room id from the table
+            let ids = $(this).data("id")
+            let temprow = {}
+
+            // filter alldata which is equal to the room id
+            vm.posts.forEach(item => {
+              if (item.group_id == ids) {
+                temprow = item
+              }
+            })
+
+            // assign to temp row
+            vm.tempRow = temprow
+            console.log("temp row", vm.tempRow);
+            vm.fetchGuestinfo()
+            $('#exampleModalLong').modal('show')
+          })
 
 
+        },
+        async fetchGuestinfo() {
+          await axios.post('group_res.php', {
+            action: 'guestInfo',
+            id: this.tempRow.group_id
+          }).then(res => {
+            console.log(res.data);
 
+            this.guestInfo = res.data
+          })
         },
         async getRooms(id) {
           console.log(id);

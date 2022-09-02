@@ -39,7 +39,165 @@ if (!isset($_SESSION['user_role'])) {
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css">
+  <style>
+    #success_tic .page-body {
+      max-width: 300px;
+      background-color: #FFFFFF;
+      margin: 10% auto;
+    }
 
+    #success_tic .page-body .head {
+      text-align: center;
+    }
+
+    #success_tic .close {
+      opacity: 1;
+      position: absolute;
+      right: 0px;
+      font-size: 30px;
+      padding: 3px 15px;
+      margin-bottom: 10px;
+    }
+
+    #success_tic .checkmark-circle {
+      width: 150px;
+      height: 150px;
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .checkmark-circle .background {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: #17a673;
+      position: absolute;
+    }
+
+    #success_tic .checkmark-circle .checkmark {
+      border-radius: 5px;
+    }
+
+    #success_tic .checkmark-circle .checkmark.draw:after {
+      -webkit-animation-delay: 300ms;
+      -moz-animation-delay: 300ms;
+      animation-delay: 300ms;
+      -webkit-animation-duration: 1s;
+      -moz-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-timing-function: ease;
+      -moz-animation-timing-function: ease;
+      animation-timing-function: ease;
+      -webkit-animation-name: checkmark;
+      -moz-animation-name: checkmark;
+      animation-name: checkmark;
+      -webkit-transform: scaleX(-1) rotate(135deg);
+      -moz-transform: scaleX(-1) rotate(135deg);
+      -ms-transform: scaleX(-1) rotate(135deg);
+      -o-transform: scaleX(-1) rotate(135deg);
+      transform: scaleX(-1) rotate(135deg);
+      -webkit-animation-fill-mode: forwards;
+      -moz-animation-fill-mode: forwards;
+      animation-fill-mode: forwards;
+    }
+
+    #success_tic .checkmark-circle .checkmark:after {
+      opacity: 1;
+      height: 75px;
+      width: 37.5px;
+      -webkit-transform-origin: left top;
+      -moz-transform-origin: left top;
+      -ms-transform-origin: left top;
+      -o-transform-origin: left top;
+      transform-origin: left top;
+      border-right: 15px solid #fff;
+      border-top: 15px solid #fff;
+      border-radius: 2.5px !important;
+      content: '';
+      left: 35px;
+      top: 80px;
+      position: absolute;
+    }
+
+    @-webkit-keyframes checkmark {
+      0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+      }
+
+      20% {
+        height: 0;
+        width: 37.5px;
+        opacity: 1;
+      }
+
+      40% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+      }
+
+      100% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+      }
+    }
+
+    @-moz-keyframes checkmark {
+      0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+      }
+
+      20% {
+        height: 0;
+        width: 37.5px;
+        opacity: 1;
+      }
+
+      40% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+      }
+
+      100% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes checkmark {
+      0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+      }
+
+      20% {
+        height: 0;
+        width: 37.5px;
+        opacity: 1;
+      }
+
+      40% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+      }
+
+      100% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 
 <body id="page-top">
@@ -76,7 +234,47 @@ if (!isset($_SESSION['user_role'])) {
 
             <div id="app">
 
+              <!-- Success Modal -->
+              <div id="success_tic" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-dialog-centered">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <a class="close" href="#" data-dismiss="modal">&times;</a>
+                    <div class="page-body">
+                      <div class="text-center" v-if="spinner">
+                        <div class="spinner-border" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                      <div v-if="success">
+                        <div class="head">
+                          <h3 style="margin-top:5px;">Operation Successful!</h3>
+                          <!-- <h4>Lorem ipsum dolor sit amet</h4> -->
+                        </div>
 
+                        <h1 style="text-align:center;">
+                          <div class="checkmark-circle">
+                            <div class="background"></div>
+                            <div class="checkmark draw"></div>
+                          </div>
+                        </h1>
+                        <div style="text-align:center; margin-top: 2rem;">
+                          <a href="view_bulk_reservations.php">
+                            View reservation
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+
+                </div>
+
+              </div>
+              <!-- End of Success Modal -->
               <form action="" method="POST" @submit.prevent="addbulk" id="reservation" class="col-12 row" enctype="multipart/form-data">
 
                 <h1 class="mb-4">Group Reservation</h1>
@@ -210,12 +408,12 @@ if (!isset($_SESSION['user_role'])) {
 
                         <div class="form-group col-6">
                           <label>BBQ Guests </label>
-                          <input type="text" class="form-control" v-model="formData.group_BBQ" value="formData.group_BBQ">
+                          <input type="text" class="form-control" v-model="formData.group_BBQ">
                         </div>
 
                         <div class="form-group col-6">
                           <label for="">Tea Break*</label>
-                          <select type="text" class="custom-select" v-model="formData.group_TeaBreak" required>
+                          <select type="text" class="custom-select" v-model="formData.group_TeaBreak">
                             <option disabled value="">-select-</option>
                             <option value="1">1 (Morning or Afternoon)</option>
                             <option value="2">2 (Both Morning and Afternoon)</option>
@@ -496,6 +694,8 @@ if (!isset($_SESSION['user_role'])) {
     const app = Vue.createApp({
       data() {
         return {
+          spinner: false,
+          success: false,
           location: '',
           room_quantity: '',
           roomType: '',
@@ -531,10 +731,21 @@ if (!isset($_SESSION['user_role'])) {
         }
 
       },
+      watch: {
+        'formData.group_reason'(val) {
+
+          if (this.location != 'Bishoftu' && val == "wed")
+          console.log("watch", val);
+          console.log("watch", this.location);
+
+          this.custom = true
+          this.formData.group_status = "cus"
+        }
+      },
 
       methods: {
         async checkLocation() {
-          console.log("location", this.location);
+          // console.log("location", this.location);
 
           await axios.post('load_modal.php', {
             action: 'fetchTypes',
@@ -634,7 +845,7 @@ if (!isset($_SESSION['user_role'])) {
             if (this.formData.group_GNum >= this.bookedRooms.length) {
 
               if (capacity >= this.formData.group_GNum) {
-
+                $('#success_tic').modal('show')
                 await axios.post('group_res.php', {
                   action: 'Newadd',
                   checkin: start,
@@ -646,6 +857,15 @@ if (!isset($_SESSION['user_role'])) {
                 }).then(res => {
                   // window.location.href = 'view_bulk_reservations.php'
                   console.log(res.data);
+
+                  if (res.data == true) {
+                    this.spinner = false
+                    this.success = true
+                    this.bookedRooms = []
+                    this.formData = {}
+                    this.room_quantity = ''
+                    this.location = ''
+                  }
                 })
               } else {
                 alert("Rooms capacity exceeded reduce guest number!")
@@ -701,7 +921,7 @@ if (!isset($_SESSION['user_role'])) {
       },
       created() {
         this.fetchAll()
-        Pusher.logToConsole = true;
+        // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'

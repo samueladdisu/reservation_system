@@ -211,7 +211,6 @@ if ($received_data->action == 'addReservation') {
 
     confirm($reset_result);
   } else {
-    echo json_encode("not empty");
     /**
      * if the table is not empty reset the auto increment so that 
      * It'll start from the last id
@@ -376,12 +375,12 @@ if ($received_data->action == 'addReservation') {
 
         $row = mysqli_fetch_assoc($result);
 
-        echo json_encode("adults");
-        echo json_encode($guests[$index][0]);
-        echo json_encode("teens");
-        echo json_encode($guests[$index][1]);
-        echo json_encode("kid");
-        echo json_encode($guests[$index][2]);
+        // echo json_encode("adults");
+        // echo json_encode($guests[$index][0]);
+        // echo json_encode("teens");
+        // echo json_encode($guests[$index][1]);
+        // echo json_encode("kid");
+        // echo json_encode($guests[$index][2]);
         $price += calculatePriceAwash($guests[$index][0], $guests[$index][1], $guests[$index][2], $Bored, $days, $row);
 
         $index++;
@@ -439,10 +438,8 @@ if ($received_data->action == 'addReservation') {
 
 
 
-  echo json_encode("Total Price");
-  echo json_encode($price);
-  echo json_encode("Discount");
-  echo json_encode($price);
+
+  // echo json_encode($price);
 
   $res_confirmID   = getName(8);
 
@@ -461,6 +458,8 @@ if ($received_data->action == 'addReservation') {
   $result = mysqli_query($connection, $query);
   confirm($result);
 
+  
+  echo json_encode($result);
   $data = true;
   $pusher->trigger('back_notifications', 'backend_reservation', $data);
 }

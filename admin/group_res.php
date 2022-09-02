@@ -170,6 +170,15 @@ function getName($n)
   return $randomString;
 }
 
+if ($received_data->action == "guestInfo"){
+  $id = $received_data->id;
+  $query = "SELECT * FROM group_reservation WHERE group_id = $id";
+  $result = mysqli_query($connection, $query);
+  confirm($result);
+
+  $row = mysqli_fetch_row($result);
+  echo json_encode($row);
+}
 if ($received_data->action == "getRooms") {
 
   $id = $received_data->id;
@@ -601,7 +610,7 @@ if ($received_data->action === 'Newadd') {
 
   $placement = [];
   $gustNum = $form->group_GNum;
-  $TeaB = $form->group_TeaBreak;
+  $TeaB = $form->group_TeaBreak ? $form->group_TeaBreak : 0;
   $BBQ = $form->group_BBQ;
   $Dineer = $form->group_Dinner;
   $LunchNum  = $form->group_Lunch;
@@ -869,18 +878,20 @@ if ($received_data->action === 'Newadd') {
     }
   }
 
-  echo json_encode($price);
+ 
 
   $res_agent = $_SESSION['username'];
   $group_rooms = json_encode($rooms);
   $quantity = count($rooms);
 
-  $query = "INSERT INTO group_reservation(group_name, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location) ";
+  $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location) ";
 
-  $query .= "VALUES ('{$form->group_name}', $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}')";
+  $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}')";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
+
+  echo json_encode($result);
 
   $data = true;
 
