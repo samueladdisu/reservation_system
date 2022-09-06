@@ -41,11 +41,10 @@ if (!isset($_SESSION['user_role'])) {
     -->
   <!-- Custom styles for this template-->
   <link rel="shortcut icon" href="../../img/kuriftufavicon.svg" type="image/x-icon">
-
-  <link rel="stylesheet" href="./css/t-datepicker.min.css">
-  <link rel="stylesheet" href="./css/themes/t-datepicker-green.css">
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <style>
 
     #success_tic .page-body {

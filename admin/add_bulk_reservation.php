@@ -34,10 +34,10 @@ if (!isset($_SESSION['user_role'])) {
   <link rel="stylesheet" href="https://cdn.datatables.net/s/dt/dt-1.10.10,se-1.1.0/datatables.min.css">
   <!-- Custom styles for this template-->
 
-  <link rel="stylesheet" href="./css/t-datepicker.min.css">
-  <link rel="stylesheet" href="./css/themes/t-datepicker-green.css">
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css">
   <style>
     #success_tic .page-body {
@@ -291,8 +291,8 @@ if (!isset($_SESSION['user_role'])) {
                     </div>
                     <div class="card-body d-flex justify-content-center">
                       <div class="col-6 row">
-                        <label> Select Dates * </label>
-                        <div class="t-datepicker col-12 form-group  my-2">
+                        <!-- <label> Select Dates * </label> -->
+                        <!-- <div class="t-datepicker col-12 form-group  my-2">
                           <div class="t-check-in">
                             <div class="t-dates t-date-check-in">
                               <label class="t-date-info-title">Check In</label>
@@ -300,7 +300,6 @@ if (!isset($_SESSION['user_role'])) {
                             <input type="hidden" class="t-input-check-in" name="start">
                             <div class="t-datepicker-day">
                               <table class="t-table-condensed">
-                                <!-- Date theme calendar -->
                               </table>
                             </div>
                           </div>
@@ -310,6 +309,11 @@ if (!isset($_SESSION['user_role'])) {
                             </div>
                             <input type="hidden" class="t-input-check-out" name="end">
                           </div>
+                        </div> -->
+
+                        <div class="form-group col-lg-12">
+                          <label for="date" class="label-date" id="label">Select Date</label>
+                          <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
                         </div>
 
                         <div class="form-group col-6">
@@ -658,7 +662,9 @@ if (!isset($_SESSION['user_role'])) {
   <!-- <script src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script> -->
 
   <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
-  <script src="./js/t-datepicker.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
   <!-- data table plugin  -->
@@ -666,29 +672,48 @@ if (!isset($_SESSION['user_role'])) {
 
 
   <script>
-    let start, end;
+
+    var start, end
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    let tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    const td = String(tomorrow.getDate()).padStart(2, '0');
+    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const ty = tomorrow.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    tomorrow = tm + '/' + td + '/' + ty;
+
+    start = yyyy + '-' + mm + '-' + dd;
+    end = ty + '-' + tm + '-' + td;
+
+    console.log("inital start", start);
+    console.log("inital end", end);
 
     $(document).ready(function() {
-      const tdate = $('.t-datepicker')
-      tdate.tDatePicker({
-        show: true,
-        iconDate: '<i class="fa fa-calendar"></i>'
+
+      console.log("initial start", start);
+      console.log("initial end", end);
+      $('#date').daterangepicker();
+      $('#date').data('daterangepicker').setStartDate(today);
+      $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+      $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // console.log(picker.startDate.format('YYYY-MM-DD'));
+        // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        start = picker.startDate.format('YYYY-MM-DD')
+        end = picker.endDate.format('YYYY-MM-DD')
+        console.log("updated start", start);
+        console.log("updated end", end);
       });
-      tdate.tDatePicker('show')
-
-
-      tdate.on('eventClickDay', function(e, dataDate) {
-
-        var getDateInput = tdate.tDatePicker('getDateInputs')
-
-        start = getDateInput[0];
-        end = getDateInput[1];
-
-        console.log("start", start);
-        console.log("end", end);
-      })
-    });
-
+    })
 
 
     const app = Vue.createApp({
@@ -749,7 +774,7 @@ if (!isset($_SESSION['user_role'])) {
           }
         },
         'formData.group_GNum'(val) {
-          if(val != 0 || val != ''){
+          if (val != 0 || val != '') {
             this.selectRoom = false
           } else {
             this.selectRoom = true

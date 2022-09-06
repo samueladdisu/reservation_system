@@ -34,8 +34,11 @@
             'first_name' => $_SESSION['fName'],
             'last_name' => $_SESSION['lName'],
             'tx_ref' =>  $tx_ref,
-            'callback_url' => 'https://www.test.kurifturesorts.com?ref='. $tx_ref
+            'callback_url' => 'https://www.test.kurifturesorts.com?ref='. $tx_ref,
             // 'callback_url' => 'http://localhost/reservation_system?ref='. $tx_ref
+            'subaccounts[id]' => '\"7c2e9876-f132-48b2-8d53-iu8ejjdh\"',
+            'subaccounts[split_type]' => '\"flat\"',
+            'subaccounts[split_ratio]' => '\"2\"'
         ),
         CURLOPT_HTTPHEADER => array(
           'Authorization: Bearer '.$_ENV['CHAPA_SECK']

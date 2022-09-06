@@ -51,24 +51,9 @@
                     </div>
                     <div class="card-body">
                       <div class="row py-1">
-                        <div class="t-datepicker mt-2 col-3">
-                          <div class="t-check-in">
-                            <div class="t-dates t-date-check-in">
-                              <label class="t-date-info-title">Check In</label>
-                            </div>
-                            <input type="hidden" class="t-input-check-in" name="start">
-                            <div class="t-datepicker-day">
-                              <table class="t-table-condensed">
-                                <!-- Date theme calendar -->
-                              </table>
-                            </div>
-                          </div>
-                          <div class="t-check-out">
-                            <div class="t-dates t-date-check-out">
-                              <label class="t-date-info-title">Check Out</label>
-                            </div>
-                            <input type="hidden" class="t-input-check-out" name="end">
-                          </div>
+
+                        <div class="form-group mt-2 col-3">
+                          <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
                         </div>
 
                         <!------------------------- t-date picker end  ------------------>
@@ -603,7 +588,8 @@
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-  <script src="./js/t-datepicker.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
   <!-- data table plugin  -->
@@ -611,29 +597,47 @@
 
 
   <script>
-    let start, end;
+    var start, end
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    let tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    const td = String(tomorrow.getDate()).padStart(2, '0');
+    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const ty = tomorrow.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    tomorrow = tm + '/' + td + '/' + ty;
+
+    start = yyyy + '-' + mm + '-' + dd;
+    end = ty + '-' + tm + '-' + td;
+
+    console.log("inital start", start);
+    console.log("inital end", end);
 
     $(document).ready(function() {
-      const tdate = $('.t-datepicker')
-      tdate.tDatePicker({
-        show: true,
-        iconDate: '<i class="fa fa-calendar"></i>'
+
+      console.log("initial start", start);
+      console.log("initial end", end);
+      $('#date').daterangepicker();
+      $('#date').data('daterangepicker').setStartDate(today);
+      $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+      $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // console.log(picker.startDate.format('YYYY-MM-DD'));
+        // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        start = picker.startDate.format('YYYY-MM-DD')
+        end = picker.endDate.format('YYYY-MM-DD')
+        console.log("updated start", start);
+        console.log("updated end", end);
       });
-      tdate.tDatePicker('show')
-
-
-      tdate.on('eventClickDay', function(e, dataDate) {
-
-        var getDateInput = tdate.tDatePicker('getDateInputs')
-
-        start = getDateInput[0];
-        end = getDateInput[1];
-
-        console.log("start", start);
-        console.log("end", end);
-      })
-    });
-
+    })
 
 
     const app = Vue.createApp({
