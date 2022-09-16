@@ -95,7 +95,7 @@
       'first_name' => $_SESSION['fName'],
       'last_name' => $_SESSION['lName'],
       'tx_ref' =>  $tx_ref,
-      'callback_url' => 'https://test.kurifturesorts.com',
+      'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted',
       'return_url' => 'https://test.kurifturesorts.com'
     ),
     CURLOPT_HTTPHEADER => array(

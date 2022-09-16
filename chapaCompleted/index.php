@@ -32,9 +32,9 @@ if (isset($_GET['ref'])) {
     }
     curl_close($ch);
 
-    // file_put_contents("chapa.txt", $result->status . PHP_EOL . PHP_EOL, FILE_APPEND);
+    file_put_contents("chapa.txt", $result . PHP_EOL . PHP_EOL, FILE_APPEND);
 
-    echo $result->status;
+    // echo $result->status;
 
     if ($result->status == 'success') {
         $queryFetch = "SELECT * FROM temp_res WHERE temp_ID = '$tx_ref'";
