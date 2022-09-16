@@ -172,6 +172,7 @@ function cutFromPromo($promo, $price)
   $checkOut = $_SESSION['checkOut'];
   $total_price = floatval($_SESSION['total']);
   $slocation = $_SESSION['Selectedlocation'];
+  
 
 
 
@@ -214,7 +215,7 @@ function cutFromPromo($promo, $price)
     $_SESSION['fName'] = $params['res_firstname'];
     $_SESSION['lName'] = $params['res_lastname'];
     $_SESSION['email'] = $params['res_email'];
-
+    $_SESSION['currency'] = $params['res_currency'];
     
     if (isset($_POST['res_guestNo'])) {
       if ($_SESSION["promoApp"] == false) {
@@ -303,9 +304,6 @@ function cutFromPromo($promo, $price)
           case 'amole':
             header("Location: ./amole.php");
             break;
-          case 'paypal':
-            header("Location: ./paypal.php");
-            break;
           case 'telebirr':
             header("Location: ./telebirr.php");
             break;
@@ -376,6 +374,15 @@ function cutFromPromo($promo, $price)
             <option value="amole">Amole</option>
             <option value="telebirr">Telebirr</option>
             <option value="arrival">Pay on Arrival</option>
+          </select>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+          <label for="currency" class="form-label payment">Currency</label>
+          <select required id="currency" name="res_currency" class="form-select">
+            <option disabled value="">Select Option</option>
+            <option value="ETB">ETB</option>
+            <option value="USD">USD</option>
           </select>
         </div>
 
@@ -712,7 +719,7 @@ function cutFromPromo($promo, $price)
           clearInterval(this.timer);
 
           /* Reset the seconds of the timer */
-          this.sec = '50';
+          this.sec = '1800';
           this.min = '0';
           /* Set a new interval */
           this.timer = setInterval(this.startIdleTimer, 1000);

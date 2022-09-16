@@ -30,6 +30,7 @@
           <!-- Content Row -->
           <div class="row">
             <div class="col-12 mb-2">
+
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Reservations</h6>
@@ -59,6 +60,90 @@
                 </div>
               </div>
 
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Pick a Date & Filter </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row py-1">
+
+                    <div class="form-group mt-2 col-3">
+                      <input type="date" v-model="filterDate" class="form-control"/>
+                    </div>
+
+                    <!------------------------- t-date picker end  ------------------>
+
+                    <?php
+
+                    if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+                    ?>
+                      <div class="form-group mt-2 col-2">
+                        <select name="room_location" class="custom-select" v-model="location" @change="checkLocation" id="">
+                          <option disabled value="">Resort Location</option>
+                          <?php
+
+                          $query = "SELECT * FROM locations";
+                          $result = mysqli_query($connection, $query);
+                          confirm($result);
+
+                          while ($row = mysqli_fetch_assoc($result)) {
+                            $location_id = $row['location_id'];
+                            $location_name = $row['location_name'];
+
+                            if ($location_name != 'Boston') {
+
+                              echo "<option value='$location_name'>{$location_name}</option>";
+                            }
+                          }
+                          ?>
+                        </select>
+                      </div>
+                    <?php } else { ?>
+                      <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+
+
+                    <?php  }
+
+
+                    ?>
+
+
+
+                    <div id="bulkContainer" class="col-3 mt-2">
+                      <button name="booked" @click.prevent="filterRes" class="btn btn-success">Filter</button>
+
+                      <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
+
+                    </div>
+
+
+
+
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table display table-bordered" width="100%" id="roomStatus" cellspacing="0">
+
+
+                      <thead>
+                        <tr>
+                          <th>Id</th>
+                          <th>Type</th>
+                          <th>Room no.</th>
+                          <th>Adults</th>
+                          <th>Kids</th>
+                          <th>teens</th>
+                          <th>Departure</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -88,7 +173,7 @@
 
                   <div class="card" style="width: 18rem;" v-for="row in guestInfo" :key="row.info_id">
                     <div class="card-body">
-                      <h5 class="card-title font-weight-bold"> {{ row.info_room_acc }}  <span v-if="row.info_board"> - {{ row.info_board }} </span> </h5>
+                      <h5 class="card-title font-weight-bold"> {{ row.info_room_acc }} <span v-if="row.info_board"> - {{ row.info_board }} </span> </h5>
 
                     </div>
                     <ul class="list-group list-group-flush">
@@ -243,12 +328,14 @@
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
   <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
-    // Enable pusher logging - don't include this in production
-
-
-
 
     const app = Vue.createApp({
       data() {
@@ -256,7 +343,8 @@
           posts: [''],
           tempRow: {},
           location: '',
-          date: '',
+          filterDate: "<?php echo date('Y-m-d');?>",
+          location: '',
           modal: "",
           tempcheckin: '',
           tempcheckout: '',
@@ -407,11 +495,63 @@
 
             this.guestInfo = res.data
           })
-        }
+        },
+        async fetchRoomStatus() {
+
+          
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'roomStatus',
+            // location: this.location,
+            // date: this.filterDate
+          }).then(res => {
+            console.log(res.data);
+            this.roomStatusTable(res.data)
+          })
+        },
+        roomStatusTable(row) {
+          $('#roomStatus').DataTable({
+            destroy: true,
+            dom: 'lBfrtip',
+            buttons: [
+              'excel',
+              'print',
+              'csv'
+            ],
+            order: [
+              [0, 'asc']
+            ],
+            data: row,
+            columns: [{
+                data: 'room_id'
+              },
+              {
+                data: 'room_acc'
+              },
+              {
+                data: 'room_number'
+              },
+              {
+                data: 'info_adults'
+              },
+              {
+                data: 'info_kids'
+              },
+              {
+                data: 'info_teens'
+              },
+              {
+                data: 'b_checkout'
+              },
+            ],
+          });
+
+        },
+        
       },
       created() {
         this.fetchData()
-        Pusher.logToConsole = true;
+        this.fetchRoomStatus()
+        // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'

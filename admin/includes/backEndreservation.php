@@ -164,7 +164,7 @@ if ($incoming->action == "delete") {
 
     $insert_group_query = "INSERT INTO group_rooms(g_res_id, g_room_id, g_room_acc, g_room_number, g_room_location) ";
 
-    $insert_group_query .= "VALUES ($g_res_id, $g_room_Id, '$g_room_acc', $g_room_num, '$g_room_loc')"; 
+    $insert_group_query .= "VALUES ($g_res_id, $g_room_Id, '$g_room_acc', $g_room_num, '$g_room_loc')";
 
     $insert_result = mysqli_query($connection, $insert_group_query);
     confirm($insert_result);
@@ -176,8 +176,25 @@ if ($incoming->action == "delete") {
     $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
     $guest_info_result = mysqli_query($connection, $guest_info_query);
     confirm($guest_info_result);
-
-
-
   }
+}
+
+if ($incoming->action == "roomStatus") {
+  $data = array();
+  $query = "SELECT DISTINCT t1.room_id, t1.room_acc, t1.room_number, t2.info_adults, t2.info_kids, t2.info_teens, t3.b_checkout
+            FROM rooms as t1
+            LEFT JOIN guest_info as t2
+            ON t1.room_id = t2.info_room_id
+            LEFT JOIN booked_rooms as t3
+            ON t1.room_id = t3.b_roomId AND t3.b_checkin = '2022-09-18'
+            WHERE t1.room_location = 'entoto'
+            ORDER BY t1.room_id";
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
 }
