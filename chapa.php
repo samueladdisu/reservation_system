@@ -96,7 +96,7 @@
       'last_name' => $_SESSION['lName'],
       'tx_ref' =>  $tx_ref,
       'callback_url' => 'https://test.kurifturesorts.com',
-      // 'callback_url' => 'http://localhost/reservation_system?ref='. $tx_ref
+      'return_url' => 'https://test.kurifturesorts.com'
     ),
     CURLOPT_HTTPHEADER => array(
       'Authorization: Bearer ' . $_ENV['CHAPA_SECK']
