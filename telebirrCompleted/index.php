@@ -88,18 +88,7 @@ $room_locs = json_decode($temp_row['room_location']);
 $CiCos = json_decode($temp_row['CinCoutInfo']);
 $board = json_decode($temp_row['temp_board']);
 
-function getName($n)
-{
-  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $randomString = '';
 
-  for ($i = 0; $i < $n; $i++) {
-    $index = rand(0, strlen($characters) - 1);
-    $randomString .= $characters[$index];
-  }
-
-  return $randomString;
-}
 
 
 $res_confirmID = getName(5);

@@ -62,7 +62,7 @@
 
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Pick a Date & Filter </h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Room Status </h6>
                 </div>
                 <div class="card-body">
                   <div class="row py-1">
@@ -79,7 +79,7 @@
 
                     ?>
                       <div class="form-group mt-2 col-2">
-                        <select name="room_location" class="custom-select" v-model="location" @change="checkLocation" id="">
+                        <select name="room_location" class="custom-select" v-model="filterLocation" @change="checkLocation" id="">
                           <option disabled value="">Resort Location</option>
                           <?php
 
@@ -111,9 +111,9 @@
 
 
                     <div id="bulkContainer" class="col-3 mt-2">
-                      <button name="booked" @click.prevent="filterRes" class="btn btn-success">Filter</button>
+                      <button name="booked" @click.prevent="fetchRoomStatus(filterLocation)" class="btn btn-success">Filter</button>
 
-                      <button name="booked" value="location" id="location" @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
+                      <button @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
 
                     </div>
 
@@ -131,10 +131,13 @@
                           <th>Id</th>
                           <th>Type</th>
                           <th>Room no.</th>
+                          <th>Guest Name</th>
                           <th>Adults</th>
                           <th>Kids</th>
                           <th>teens</th>
                           <th>Departure</th>
+                          <th>Status</th>
+                          <th>Location</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -481,7 +484,7 @@
           axios.post('./includes/backEndreservation.php', {
             action: 'fetchRes'
           }).then(res => {
-            console.log("comes from api", res.data);
+            // console.log("comes from api", res.data);
             this.posts = res.data
             this.table(res.data)
           })
@@ -496,13 +499,14 @@
             this.guestInfo = res.data
           })
         },
-        async fetchRoomStatus() {
+        async fetchRoomStatus(flocation="all") {
 
-          
+          console.log(flocation);
+          console.log(this.filterDate)
           await axios.post('./includes/backEndreservation.php', {
             action: 'roomStatus',
-            // location: this.location,
-            // date: this.filterDate
+            location: flocation,
+            date: this.filterDate
           }).then(res => {
             console.log(res.data);
             this.roomStatusTable(res.data)
@@ -531,6 +535,9 @@
                 data: 'room_number'
               },
               {
+                data: 'res_firstname'
+              },
+              {
                 data: 'info_adults'
               },
               {
@@ -542,6 +549,26 @@
               {
                 data: 'b_checkout'
               },
+              {
+                data: 'info_adults',
+                render: function(data, row, type){
+                  let today = new Date();
+                  const dd = String(today.getDate()).padStart(2, '0');
+                  const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                  const yyyy = today.getFullYear();
+                  start = yyyy + '-' + mm + '-' + dd;
+
+                  console.log(start)
+                  if(data !== null){
+                    return `Booked`
+                  } else {
+                    return 'Free'
+                  }
+                }
+              },
+              {
+                data: 'room_location'
+              }
             ],
           });
 

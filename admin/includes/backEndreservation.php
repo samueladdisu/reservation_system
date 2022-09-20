@@ -181,14 +181,31 @@ if ($incoming->action == "delete") {
 
 if ($incoming->action == "roomStatus") {
   $data = array();
-  $query = "SELECT DISTINCT t1.room_id, t1.room_acc, t1.room_number, t2.info_adults, t2.info_kids, t2.info_teens, t3.b_checkout
-            FROM rooms as t1
-            LEFT JOIN guest_info as t2
-            ON t1.room_id = t2.info_room_id
-            LEFT JOIN booked_rooms as t3
-            ON t1.room_id = t3.b_roomId AND t3.b_checkin = '2022-09-18'
-            WHERE t1.room_location = 'entoto'
-            ORDER BY t1.room_id";
+  $location = $incoming->location;
+  $date = $incoming->date;
+
+  if($location == "all"){
+    $query = "SELECT DISTINCT t1.room_id, t1.room_acc, t1.room_number, t4.res_firstname ,t2.info_adults, t2.info_kids, t2.info_teens, t3.b_checkout, t1.room_location
+    FROM rooms as t1
+    LEFT JOIN guest_info as t2
+    ON t1.room_id = t2.info_room_id
+    LEFT JOIN booked_rooms as t3
+    ON t1.room_id = t3.b_roomId AND t3.b_checkin = '$date'
+    LEFT JOIN reservations as t4
+    ON t2.info_res_id = t4.res_id
+    ORDER BY t1.room_id";
+  }else {
+    $query = "SELECT DISTINCT t1.room_id, t1.room_acc, t1.room_number, t4.res_firstname ,t2.info_adults, t2.info_kids, t2.info_teens, t3.b_checkout, t1.room_location
+    FROM rooms as t1
+    LEFT JOIN guest_info as t2
+    ON t1.room_id = t2.info_room_id
+    LEFT JOIN booked_rooms as t3
+    ON t1.room_id = t3.b_roomId AND t3.b_checkin = '$date'
+    LEFT JOIN reservations as t4
+    ON t2.info_res_id = t4.res_id
+    WHERE t1.room_location = '$location'
+    ORDER BY t1.room_id";
+  }
 
   $result = mysqli_query($connection, $query);
 

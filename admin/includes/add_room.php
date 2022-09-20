@@ -62,10 +62,10 @@ if (isset($_POST['awash_room'])) {
   confirm($acc_result);
 
   while ($row = mysqli_fetch_assoc($acc_result)) {
-    $occ = $row['occupancy'];
-    $price = $row['d_bb_we'];
-    $img = $row['room_img'];
-    $room_desc = $row['room_desc'];
+    $occ = escape($row['occupancy']);
+    $price = escape($row['double_occ']);
+     $img = escape($row['room_img']) ;
+     $room_desc = escape($row['room_desc']);
   }
 
 
@@ -79,22 +79,23 @@ if (isset($_POST['awash_room'])) {
 
 if (isset($_POST['entoto_room'])) {
   $room_acc         =  escape($_POST['e_room_acc']);
-  $room_number      =  escape($_POST['e_room_number']);
-
+  
+   $room_number      =  escape($_POST['e_room_number']);
+  
   $acc_query  = "SELECT * FROM entoto_price WHERE name = '$room_acc'";
   $acc_result = mysqli_query($connection, $acc_query);
 
   confirm($acc_result);
 
   while ($row = mysqli_fetch_assoc($acc_result)) {
-    $occ = $row['occupancy'];
-    $price = $row['double_occ'];
-    $img = $row['room_img'];
-    $room_desc = $row['room_desc'];
+     $occ = escape($row['occupancy']);
+    $price = escape($row['double_occ']);
+     $img = escape($row['room_img']) ;
+     $room_desc = escape($row['room_desc']);
   }
 
 
-  $query = "INSERT INTO `rooms` (`room_occupancy`, `room_acc`, `room_price`, `room_image`, `room_number`, `room_status`, `room_location`, `room_desc`) VALUES ('$occ', '$room_acc', '$price', '$img', '$room_number', 'Not_booked', 'entoto', '$room_desc');";
+  $query = "INSERT INTO rooms (room_occupancy, room_acc, room_price, room_image, room_number, room_status, room_location, room_desc) VALUES ('$occ', '$room_acc', '$price', '$img', '$room_number', 'Not_booked', 'entoto', '{$room_desc}');";
 
 
   $result = mysqli_query($connection, $query);
@@ -112,10 +113,10 @@ if (isset($_POST['tana_room'])) {
   confirm($acc_result);
 
   while ($row = mysqli_fetch_assoc($acc_result)) {
-    $occ = $row['occupancy'];
-    $price = $row['double_occ'];
-    $img = $row['room_img'];
-    $room_desc = $row['room_desc'];
+    $occ = escape($row['occupancy']);
+    $price = escape($row['double_occ']);
+     $img = escape($row['room_img']) ;
+     $room_desc = escape($row['room_desc']);
   }
 
 
@@ -207,11 +208,6 @@ if (isset($_POST['tana_room'])) {
         <input type="text" class="form-control" name="a_room_number" required>
       </div>
 
-      <div class="form-group">
-        <label for="post_content"> Room Description</label>
-        <textarea name="a_room_desc" id="" cols="30" rows="10" class="form-control" required></textarea>
-      </div>
-
 
       <div class="form-group">
         <input type="submit" class="btn btn-primary" name="awash_room" value="Add Room">
@@ -248,10 +244,6 @@ if (isset($_POST['tana_room'])) {
         <input type="text" class="form-control" name="e_room_number" required>
       </div>
 
-      <div class="form-group">
-        <label for="post_content"> Room Description</label>
-        <textarea name="e_room_desc" id="" cols="30" rows="10" class="form-control" required></textarea>
-      </div>
 
 
       <div class="form-group">
@@ -289,10 +281,6 @@ if (isset($_POST['tana_room'])) {
         <input type="text" class="form-control" name="t_room_number" required>
       </div>
 
-      <div class="form-group">
-        <label for="post_content"> Room Description</label>
-        <textarea name="t_room_desc" id="" cols="30" rows="10" class="form-control" required></textarea>
-      </div>
 
 
       <div class="form-group">

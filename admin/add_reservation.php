@@ -85,7 +85,7 @@
                             </select>
                           </div>
                         <?php } else { ?>
-                          <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+                          <input type="hidden" id="hiddenlocation" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
 
 
                         <?php  }
@@ -639,6 +639,7 @@
       });
     })
 
+   
 
     const app = Vue.createApp({
       data() {
@@ -686,8 +687,39 @@
         }
 
       },
+      watch: {
+        res_BB(value) {
+          if (value != '') {
+            console.log(value);
+            this.awash = false
+          }
+        },
+        res_adults(value) {
+          if (value != '' || value == 0) {
+            this.guest = false
+          } else {
+            this.guest = true
+          }
+        },
+        roomType(value) {
+          console.log("Room Type", value);
+        }
+      },
       methods: {
+        async checkLocationLoaded() {
+          if (document.getElementById("hiddenlocation").value){
+            let location = document.getElementById("hiddenlocation").value
 
+            console.log(location)
+            await axios.post('load_modal.php', {
+              action: 'fetchTypes',
+              location: location
+            }).then(res => {
+              console.log("respose", res.data);
+              this.types = res.data
+            })
+          }
+        },
         async checkLocation() {
           console.log("location", this.location);
 
@@ -972,10 +1004,15 @@
 
         },
         async filterRooms() {
+          let filterLocation = this.location
+          
+          if (filterLocation){
+            filterLocation = document.getElementById("hiddenlocation").value
+          }
           console.log(this.location);
           await axios.post('load_modal.php', {
             action: 'filter',
-            location: this.location,
+            location: filterLocation,
             roomType: this.roomType,
             checkin: start,
             checkout: end
@@ -1010,6 +1047,7 @@
       },
       created() {
         this.fetchAll()
+      
         // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
@@ -1062,23 +1100,8 @@
           }
         })
       },
-      watch: {
-        res_BB(value) {
-          if (value != '') {
-            console.log(value);
-            this.awash = false
-          }
-        },
-        res_adults(value) {
-          if (value != '' || value == 0) {
-            this.guest = false
-          } else {
-            this.guest = true
-          }
-        },
-        roomType(value) {
-          console.log("Room Type", value);
-        }
+      mounted() {
+        this.checkLocationLoaded()
       }
     })
 
