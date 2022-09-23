@@ -68,7 +68,7 @@
                   <div class="row py-1">
 
                     <div class="form-group mt-2 col-3">
-                      <input type="date" v-model="filterDate" class="form-control"/>
+                      <input type="date" v-model="filterDate" class="form-control" />
                     </div>
 
                     <!------------------------- t-date picker end  ------------------>
@@ -111,9 +111,28 @@
 
 
                     <div id="bulkContainer" class="col-3 mt-2">
-                      <button name="booked" @click.prevent="fetchRoomStatus(filterLocation)" class="btn btn-success">Filter</button>
 
-                      <button @click.prevent="clearFilter" class="btn btn-danger mx-2">Clear Filters</button>
+                      <?php
+
+                      if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+                      ?>
+
+                        <button name="booked" @click.prevent="fetchRoomStatus(filterLocation)" class="btn btn-success">Filter</button>
+
+                        <button @click.prevent="fetchRoomStatus('all')" class="btn btn-danger mx-2">Clear Filters</button>
+
+                      <?php } else { ?>
+                        <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+
+                        <button name="booked" @click.prevent="fetchRoomStatus('<?php echo $_SESSION['user_location']; ?>')" class="btn btn-success">Filter</button>
+
+                        <button @click.prevent="fetchRoomStatus('<?php echo $_SESSION['user_location']; ?>')" class="btn btn-danger mx-2">Clear Filters</button>
+                      <?php  } ?>
+
+                 
+
+                      
 
                     </div>
 
@@ -135,6 +154,7 @@
                           <th>Adults</th>
                           <th>Kids</th>
                           <th>teens</th>
+                          <th>Arrival</th>
                           <th>Departure</th>
                           <th>Status</th>
                           <th>Location</th>
@@ -339,14 +359,13 @@
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
-
     const app = Vue.createApp({
       data() {
         return {
           posts: [''],
           tempRow: {},
           location: '',
-          filterDate: "<?php echo date('Y-m-d');?>",
+          filterDate: "<?php echo date('Y-m-d'); ?>",
           location: '',
           modal: "",
           tempcheckin: '',
@@ -499,16 +518,34 @@
             this.guestInfo = res.data
           })
         },
-        async fetchRoomStatus(flocation="all") {
+        async fetchRoomStatus(flocation = "all") {
 
-          console.log(flocation);
-          console.log(this.filterDate)
+          // console.log(flocation);
+          // console.log(this.filterDate)
           await axios.post('./includes/backEndreservation.php', {
             action: 'roomStatus',
             location: flocation,
             date: this.filterDate
           }).then(res => {
-            console.log(res.data);
+            // console.log(res.data[0].b_checkin);
+
+            res.data.forEach(item => {
+              item.status = ""
+
+              if (item.b_checkin === null) {
+                item.status = "Free"
+              } else if (item.b_checkin === this.filterDate) {
+                item.status = "Arrival"
+              } else if (this.filterDate > item.b_checkin && this.filterDate < item.b_checkout) {
+                item.status = "Stay over"
+              } else if (item.b_checkout === this.filterDate) {
+                item.status = "Departure"
+              }
+
+
+            });
+
+            console.log(res.data)
             this.roomStatusTable(res.data)
           })
         },
@@ -547,24 +584,13 @@
                 data: 'info_teens'
               },
               {
+                data: 'b_checkin'
+              },
+              {
                 data: 'b_checkout'
               },
               {
-                data: 'info_adults',
-                render: function(data, row, type){
-                  let today = new Date();
-                  const dd = String(today.getDate()).padStart(2, '0');
-                  const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                  const yyyy = today.getFullYear();
-                  start = yyyy + '-' + mm + '-' + dd;
-
-                  console.log(start)
-                  if(data !== null){
-                    return `Booked`
-                  } else {
-                    return 'Free'
-                  }
-                }
+                data: 'status',
               },
               {
                 data: 'room_location'
@@ -573,11 +599,22 @@
           });
 
         },
-        
+
       },
       created() {
         this.fetchData()
+
+        <?php
+
+          if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+        ?>
         this.fetchRoomStatus()
+
+        <?php } else { ?>
+                        
+          this.fetchRoomStatus('<?php echo $_SESSION['user_location']; ?>')
+
+        <?php  } ?>
         // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'

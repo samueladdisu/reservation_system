@@ -11,80 +11,85 @@ if (isset($_POST['create_user'])) {
 
   $pattern_fn = "/^[a-zA-Z ]{3,12}$/";
 
-  // first name validation
-  if(!preg_match($pattern_fn, $user_firstname)){
-    $errFn = "Must be atleast 3 character long, letter and space allowed";
-  }
+  if($user_location != "Boston" && $user_role == "SA"){
+    echo "<script> alert('To be a superadmin, Location must be Boston.') </script>";
+  } else {
 
-  //last name validation
-
-  if(!preg_match($pattern_fn, $user_lastname)){
-    $errLn = "Must be atleast 3 character long, letter and space allowed";
-  }
-
-  //user name validation
-  //at least 3 character, letter, number and underscore allowed
-
-  $pattern_un = "/^[a-zA-Z0-9_]{3,16}$/";
-  if (!preg_match($pattern_un, $user_name)) {
-    $errUn = "Must be atleast 3 character long, letter, number and underscore allowed";
-  }
-
-  //email validation
-
-  
-
-  // $pattern_ue = "/^([a-z0-9\+_\-]+)(\.[a-z0-9]\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/";
-
-  if(!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
-    $errUe = "Invalid Email";
-  }
-
-
-  if($user_pwd == $user_Cpwd){
-    $pattern_up = "/^.*(?=.{4,56})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/";
-
-    if(!preg_match($pattern_up, $user_pwd)){
-      $errPass = "Must be atleast 4 character long, 1 upper case, 1 lower case letter and 1 number";
-
+    // first name validation
+    if(!preg_match($pattern_fn, $user_firstname)){
+      $errFn = "Must be atleast 3 character long, letter and space allowed";
     }
-  }
   
-
-  if(!isset($errFn) && !isset($errLn) && !isset($errUn) && !isset($errUe) && !isset($errPass)) {
-    $email_query = "SELECT * FROM users WHERE user_email = '$user_email'";
-    $email_result = mysqli_query($connection, $email_query);
-    confirm($email_result);
-
-    $email_count = mysqli_num_rows($email_result);
-
-    if(!empty($email_count)){
-      echo '<script> alert("Email already exist") </script>';
-    }
-
-    $userName_query = "SELECT * FROM users WHERE user_name = '$user_name'";
-    $userName_result= mysqli_query($connection, $userName_query);
-
-    confirm($userName_result);
-
-    $username_count = mysqli_num_rows($userName_result);
-
-    if(!empty($username_count)){
-      echo '<script> alert("User Name already exist") </script>';
-    }
-
+    //last name validation
   
-    if(empty($email_count) && empty($username_count)){
-
-      $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
+    if(!preg_match($pattern_fn, $user_lastname)){
+      $errLn = "Must be atleast 3 character long, letter and space allowed";
+    }
+  
+    //user name validation
+    //at least 3 character, letter, number and underscore allowed
+  
+    $pattern_un = "/^[a-zA-Z0-9_]{3,16}$/";
+    if (!preg_match($pattern_un, $user_name)) {
+      $errUn = "Must be atleast 3 character long, letter, number and underscore allowed";
+    }
+  
+    //email validation
+  
     
-      $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date) ";
-      $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role', now()) ";
+  
+    // $pattern_ue = "/^([a-z0-9\+_\-]+)(\.[a-z0-9]\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/";
+  
+    if(!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
+      $errUe = "Invalid Email";
+    }
+  
+  
+    if($user_pwd == $user_Cpwd){
+      $pattern_up = "/^.*(?=.{4,56})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/";
+  
+      if(!preg_match($pattern_up, $user_pwd)){
+        $errPass = "Must be atleast 4 character long, 1 upper case, 1 lower case letter and 1 number";
+  
+      }
+    }
     
-      $user_result = mysqli_query($connection, $query);
+  
+    if(!isset($errFn) && !isset($errLn) && !isset($errUn) && !isset($errUe) && !isset($errPass)) {
+      $email_query = "SELECT * FROM users WHERE user_email = '$user_email'";
+      $email_result = mysqli_query($connection, $email_query);
+      confirm($email_result);
+  
+      $email_count = mysqli_num_rows($email_result);
+  
+      if(!empty($email_count)){
+        echo '<script> alert("Email already exist") </script>';
+      }
+  
+      $userName_query = "SELECT * FROM users WHERE user_name = '$user_name'";
+      $userName_result= mysqli_query($connection, $userName_query);
+  
+      confirm($userName_result);
+  
+      $username_count = mysqli_num_rows($userName_result);
+  
+      if(!empty($username_count)){
+        echo '<script> alert("User Name already exist") </script>';
+      }
+  
     
-      confirm($user_result);
-      header("Location: ./users.php");
+      if(empty($email_count) && empty($username_count)){
+  
+        $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
+      
+        $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date) ";
+        $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role', now()) ";
+      
+        $user_result = mysqli_query($connection, $query);
+      
+        confirm($user_result);
+        header("Location: ./users.php");
+      }
     }
   }
 }

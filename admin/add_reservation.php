@@ -260,7 +260,7 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select name="adults" v-model="res_adults" class="custom-select col-3">
+                              <select name="adults" @change="checkLoft" v-model="res_adults" class="custom-select col-3">
                                 <option value="" disabled>Guests</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -268,13 +268,13 @@
                                 <option value="4">4</option>
                               </select>
 
-                              <select name="adults" @change="checkLoftTeen" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
+                              <select name="teen" @change="checkLoft" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
                                 <option value="" disabled>Teens(12-17)</option>
                                 <option value="0">0</option>
                                 <option value="1">1</option>
                               </select>
 
-                              <select name="adults" @change="checkLoftKid" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
+                              <select name="kid" @change="checkLoft" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
                                 <option value="" disabled>kid(6-11)</option>
                                 <option value="0">0</option>
                                 <option value="1">1</option>
@@ -285,7 +285,7 @@
                           </div>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" @click="booked" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                          <button type="button" @click="booked" data-dismiss="modal" :disabled="loftBtn" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
                     </div>
@@ -639,13 +639,14 @@
       });
     })
 
-   
+
 
     const app = Vue.createApp({
       data() {
         return {
           res_BB: '',
           awash: true,
+          loftBtn: true,
           guest: true,
           spinner: false,
           success: false,
@@ -707,7 +708,7 @@
       },
       methods: {
         async checkLocationLoaded() {
-          if (document.getElementById("hiddenlocation").value){
+          if (document.getElementById("hiddenlocation").value) {
             let location = document.getElementById("hiddenlocation").value
 
             console.log(location)
@@ -802,13 +803,14 @@
 
               // assign to temp row
               vm.tempRow = temprow
-              console.log("temp row", vm.tempRow.room_location);
-
+              console.log("temp row", vm.tempRow.room_acc);
+              console.log("acc", acc)
 
               if (vm.tempRow.room_location === "awash") {
                 $('#awashModal').modal('show')
               } else {
-                if (acc === "Loft Family Room" || acc === "Presidential Family Room" || acc === "Presidential Suite Family Room") {
+                if (vm.tempRow.room_acc === "Loft Family Room" || vm.tempRow.room_acc === "Presidential Family Room" || vm.tempRow.room_acc === "Presidential Suite Family Room") {
+                  console.log("loft")
                   $('#loftModal').modal('show')
                 } else {
                   $('#guest').modal('show')
@@ -823,6 +825,11 @@
             } else {
               alert("Please Select Check In and Check Out Date");
             }
+
+            vm.guest = true
+            
+
+            console.log(vm.res_adults)
           })
 
           $('#addReserveTable tbody').on('click', 'tr', function() {
@@ -905,16 +912,21 @@
           this.res_kid = ''
           this.res_BB = ''
         },
-        checkLoftTeen() {
-          if (this.res_teen == 1) {
+        checkLoft() {
+          if (this.res_adults === 0 || this.res_adults === "") {
+            this.loftBtn = true
+          } else {
+            this.loftBtn = false
+          }
+
+          if (this.res_teen === 1 || this.res_teen === '1') {
             this.loftKid = true
             this.res_kid = 0
           } else {
             this.loftKid = false
           }
-        },
-        checkLoftKid() {
-          if (this.res_kid == 1) {
+
+          if (this.res_kid === 1 || this.res_kid === '1') {
             this.loftTeen = true
             this.res_teen = 0
           } else {
@@ -922,10 +934,24 @@
           }
 
         },
+        // checkLoftTeen() {
+        //   if (this.res_teen == 1) {
+        //     this.loftKid = true
+        //     this.res_kid = 0
+        //   } else {
+        //     this.loftKid = false
+        //   }
+        // },
+        // checkLoftKid() {
+        //   if (this.res_kid == 1) {
+        //     this.loftTeen = true
+        //     this.res_teen = 0
+        //   } else {
+        //     this.loftTeen = false
+        //   }
+
+        // },
         CheckGuest() {
-          // console.log("adults", this.res_adults);
-          // console.log("teen", this.res_teen);
-          // console.log("kid", this.res_kid);
           if (this.res_adults === "1") {
 
             if ((this.res_teen === "2" && this.res_kid === "2") || (this.res_teen === "2" && this.res_kid === "1") || (this.res_teen === "1" && this.res_kid === "2")) {
@@ -949,7 +975,7 @@
             } else {
               // alert("possible")
             }
-          } else if (this.res_adults === "0") {
+          } else if (this.res_adults === "0" || this.res_adults === 0) {
             alert("adult cant be 0");
             this.res_teen = 0;
             this.res_kid = 0;
@@ -988,12 +1014,16 @@
                   this.success = true
                   this.formData = {}
                   this.cart = {}
-                  start = ''
-                  end = ''
                   console.log("Selected room", this.cart);
                   console.log("check in", start);
                   console.log("check out", end);
                   console.log("Form Data", this.formData);
+
+                  setTimeout(() => {
+                    window.location.href = "./view_all_reservations.php"
+                  }, 2000)
+                }else {
+
                 }
 
 
@@ -1004,11 +1034,22 @@
 
         },
         async filterRooms() {
-          let filterLocation = this.location
-          
-          if (filterLocation){
+          let filterLocation
+
+
+          <?php
+
+          if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+          ?>
+
+            filterLocation = this.location
+
+          <?php } else { ?>
             filterLocation = document.getElementById("hiddenlocation").value
-          }
+
+          <?php  } ?>
+
           console.log(this.location);
           await axios.post('load_modal.php', {
             action: 'filter',
@@ -1047,7 +1088,7 @@
       },
       created() {
         this.fetchAll()
-      
+
         // Pusher.logToConsole = true;
 
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
@@ -1101,7 +1142,18 @@
         })
       },
       mounted() {
-        this.checkLocationLoaded()
+        <?php
+
+        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+        ?>
+          console.log("Super Admin")
+        <?php } else { ?>
+
+
+          this.checkLocationLoaded()
+
+        <?php  } ?>
       }
     })
 

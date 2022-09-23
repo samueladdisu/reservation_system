@@ -185,26 +185,28 @@ if ($incoming->action == "roomStatus") {
   $date = $incoming->date;
 
   if($location == "all"){
-    $query = "SELECT DISTINCT t1.room_id, t1.room_acc, t1.room_number, t4.res_firstname ,t2.info_adults, t2.info_kids, t2.info_teens, t3.b_checkout, t1.room_location
-    FROM rooms as t1
-    LEFT JOIN guest_info as t2
-    ON t1.room_id = t2.info_room_id
-    LEFT JOIN booked_rooms as t3
-    ON t1.room_id = t3.b_roomId AND t3.b_checkin = '$date'
-    LEFT JOIN reservations as t4
-    ON t2.info_res_id = t4.res_id
-    ORDER BY t1.room_id";
+
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location
+    FROM rooms AS r
+    LEFT JOIN booked_rooms AS b
+    ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
+    LEFT JOIN reservations AS res
+    ON res.res_id = b.b_res_id
+    LEFT JOIN guest_info AS g
+    ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId";
+
   }else {
-    $query = "SELECT DISTINCT t1.room_id, t1.room_acc, t1.room_number, t4.res_firstname ,t2.info_adults, t2.info_kids, t2.info_teens, t3.b_checkout, t1.room_location
-    FROM rooms as t1
-    LEFT JOIN guest_info as t2
-    ON t1.room_id = t2.info_room_id
-    LEFT JOIN booked_rooms as t3
-    ON t1.room_id = t3.b_roomId AND t3.b_checkin = '$date'
-    LEFT JOIN reservations as t4
-    ON t2.info_res_id = t4.res_id
-    WHERE t1.room_location = '$location'
-    ORDER BY t1.room_id";
+
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location
+    FROM rooms AS r
+    LEFT JOIN booked_rooms AS b
+    ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
+    LEFT JOIN reservations AS res
+    ON res.res_id = b.b_res_id
+    LEFT JOIN guest_info AS g
+    ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId
+    WHERE r.room_location = '$location'";
+
   }
 
   $result = mysqli_query($connection, $query);
