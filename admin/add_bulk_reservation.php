@@ -35,7 +35,7 @@ if (!isset($_SESSION['user_role'])) {
   <!-- Custom styles for this template-->
 
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css">
@@ -507,7 +507,7 @@ if (!isset($_SESSION['user_role'])) {
                                   </select>
                                 </div>
                               <?php } else { ?>
-                                <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+                                <input type="hidden" id="hiddenlocation" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
                               <?php  }
 
 
@@ -664,7 +664,7 @@ if (!isset($_SESSION['user_role'])) {
   <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
   <!-- data table plugin  -->
@@ -672,7 +672,6 @@ if (!isset($_SESSION['user_role'])) {
 
 
   <script>
-
     var start, end
     var today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -783,6 +782,20 @@ if (!isset($_SESSION['user_role'])) {
       },
 
       methods: {
+        async checkLocationLoaded() {
+          if (document.getElementById("hiddenlocation").value) {
+            let location = document.getElementById("hiddenlocation").value
+
+            console.log(location)
+            await axios.post('load_modal.php', {
+              action: 'fetchTypes',
+              location: location
+            }).then(res => {
+              console.log("respose", res.data);
+              this.types = res.data
+            })
+          }
+        },
         async checkLocation() {
           // console.log("location", this.location);
 
@@ -930,13 +943,33 @@ if (!isset($_SESSION['user_role'])) {
           }).catch(err => console.log(err.message))
         },
         async filterRooms() {
-          console.log(this.location);
+          // console.log(this.location);
+          console.log("filter clicked");
+          console.log(start);
+          console.log(end);
+          console.log("location", this.location);
+
+          let filterLocation
+
+
+          <?php
+
+          if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+          ?>
+
+            filterLocation = this.location
+
+          <?php } else { ?>
+            filterLocation = document.getElementById("hiddenlocation").value
+
+          <?php  } ?>
 
           if (start && end) {
             if (this.room_quantity) {
               await axios.post('group_res.php', {
                 action: 'filter',
-                location: this.location,
+                location: filterLocation,
                 roomType: this.roomType,
                 roomQuantity: this.room_quantity,
                 checkin: start,
@@ -1011,29 +1044,23 @@ if (!isset($_SESSION['user_role'])) {
           }
         })
       },
+      mounted() {
+        <?php
+
+        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+        ?>
+          console.log("Super Admin")
+        <?php } else { ?>
+
+
+          this.checkLocationLoaded()
+
+        <?php  } ?>
+      }
     })
 
     app.mount('#app')
-
-
-    // window.addEventListener('load', () => {
-
-    //   const checkBoxes = document.querySelectorAll('.checkBoxes')
-    //   const selectAllBoxes = document.querySelector('#selectAllboxes')
-    //   selectAllBoxes.addEventListener('click', function() {
-    //     if (this.checked) {
-    //       console.log("all");
-    //       checkBoxes.forEach(check => {
-    //         check.checked = true
-    //       })
-
-    //     } else {
-    //       checkBoxes.forEach(check => {
-    //         check.checked = false
-    //       })
-    //     }
-    //   })
-    // })
   </script>
 
 

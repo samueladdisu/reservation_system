@@ -175,20 +175,34 @@ if (isset($_POST['create_user'])) {
           
         // }
 
-        if($user_role == 'RA'){
-          echo '<option value="PA">Property Admin</option>';
-          echo '<option value="SA">Super Admin</option>';
-        }else if($user_role == 'PA'){
-          echo '<option value="RA">Reservation Agent</option>';
-          echo '<option value="SA">Super Admin</option>';
-        }else if($user_role == 'SA'){
-          echo '<option value="RA">Reservation Agent</option>';
-          echo '<option value="PA">Property Admin</option>';
-        }else{
-          echo '<option value="RA">Reservation Agent</option>';
-          echo '<option value="PA">Property Admin</option>';
-          echo '<option value="SA">Super Admin</option>';
+        if ($_SESSION['user_role'] == 'SA' && $_SESSION['user_location'] == 'Boston') { 
+
+          if($user_role == 'RA'){
+            echo '<option value="PA">Property Admin</option>';
+            echo '<option value="SA">Super Admin</option>';
+          }else if($user_role == 'PA'){
+            echo '<option value="RA">Reservation Agent</option>';
+            echo '<option value="SA">Super Admin</option>';
+          }else if($user_role == 'SA'){
+            echo '<option value="RA">Reservation Agent</option>';
+            echo '<option value="PA">Property Admin</option>';
+          }else{
+            echo '<option value="RA">Reservation Agent</option>';
+            echo '<option value="PA">Property Admin</option>';
+            echo '<option value="SA">Super Admin</option>';
+          }
+
+        } else {
+          if($user_role == 'RA'){
+            echo '<option value="PA">Property Admin</option>';
+          }else if($user_role == 'PA'){
+            echo '<option value="RA">Reservation Agent</option>';
+          }else{
+            echo '<option value="RA">Reservation Agent</option>';
+            echo '<option value="PA">Property Admin</option>';
+          }
         }
+
       
       ?>
       

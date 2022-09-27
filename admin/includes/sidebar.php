@@ -40,9 +40,15 @@
              <div class="bg-white py-2 collapse-inner rounded">
                  <a class="collapse-item" href="./reservations.php">View All reservations</a>
                  <a class="collapse-item" href="./reservations.php?source=add_reservation">Add Reservation</a>
+                 <?php
+                    if ($_SESSION['user_role'] != 'RA') {
+                    ?>
+
                  <a class="collapse-item" href="./view_bulk_reservations.php">View Group Reservation</a>
                  <a class="collapse-item" href="./reservations.php?source=bulk">Add Group Reservation</a>
-                 
+                 <?php
+                    }
+                    ?>
              </div>
          </div>
      </li>
@@ -60,10 +66,11 @@
                     if ($_SESSION['user_role'] != 'RA') {
                     ?>
                      <a class="collapse-item" href="./rooms.php?source=add_room">Add Room</a>
+                     <a class="collapse-item" href="./acc.php">Room Type</a>
                  <?php
                     }
                     ?>
-                 <a class="collapse-item" href="./acc.php">Room Type</a>
+                 
 
                  <?php if ($_SESSION['user_role'] == 'SA') {
                     ?>

@@ -120,6 +120,26 @@ if (!isset($_SESSION['user_role'])) {
               </div>
             </div>
 
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="./includes/logout.php">Logout</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
           </div>
 
         </div>
@@ -186,13 +206,13 @@ if (!isset($_SESSION['user_role'])) {
                   {
                     data: 'room_image',
                     render: function(data, type, row) {
-                      if (row.room_location === 'entoto'){
+                      if (row.room_location === 'entoto') {
                         return '<img width="100" src="./room_img/entoto/' + data + '">'
-                      }else if (row.room_location === 'awash'){
+                      } else if (row.room_location === 'awash') {
                         return '<img width="100" src="./room_img/awash/' + data + '">'
-                      }else if (row.room_location === 'Lake tana'){
+                      } else if (row.room_location === 'Lake tana') {
                         return '<img width="100" src="./room_img/tana/' + data + '">'
-                      }else {
+                      } else {
                         return '<img width="100" src="./room_img/' + data + '">'
                       }
 
@@ -241,13 +261,13 @@ if (!isset($_SESSION['user_role'])) {
 
               let vm = this
 
-              $(document).on('click', '#deleteRow', function(){
+              $(document).on('click', '#deleteRow', function() {
                 let id = $(this).data("row")
                 console.log(id);
                 let temprow = {}
-                
+
                 vm.allData.forEach(item => {
-                  if(item.room_id == id){
+                  if (item.room_id == id) {
                     temprow = item
                   }
                 });
