@@ -11,7 +11,7 @@ $dotenv->load();
 ?>
 <?php
 
-file_put_contents("chapa.txt", "out side". PHP_EOL . PHP_EOL, FILE_APPEND);
+// file_put_contents("chapa.txt", "out side". PHP_EOL . PHP_EOL, FILE_APPEND);
 
 if (isset($_GET['ref'])) {
     $tx_ref = $_GET['ref'];
