@@ -187,7 +187,7 @@ function cutFromPromo($promo, $price)
 
  
 
-  $GID =  getName(5);
+  $GID =  getName(7);
 
   $res_confirmID = getName(8);
   foreach ($cart as  $val) {
@@ -288,15 +288,15 @@ function cutFromPromo($promo, $price)
 
       // get id of the regestered and send to payment provaider 
 
-      $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
-      $result = mysqli_query($connection, $querySelect);
-      confirm($result);
-      $resultNum = mysqli_num_rows($result);
-      if ($resultNum == 1) {
-        $temprec = mysqli_fetch_assoc($result);
+      // $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
+      // $result = mysqli_query($connection, $querySelect);
+      // confirm($result);
+      // $resultNum = mysqli_num_rows($result);
+      // if ($resultNum == 1) {
+      //   $temprec = mysqli_fetch_assoc($result);
 
 
-        $_SESSION['Rtemp'] = $temprec['temp_ID'];
+        $_SESSION['Rtemp'] = $GID;
 
         
 
@@ -311,8 +311,8 @@ function cutFromPromo($promo, $price)
             header("Location: ./chapa.php");
             break;
         }
-      } else {
-      }
+      // } else {
+      // }
     }
   }
 
