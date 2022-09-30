@@ -13,7 +13,7 @@ $dotenv->load();
 
 $received_data = json_decode(file_get_contents("php://input"));
 
-file_put_contents("chapa.txt", $received_data. PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("chapa.txt", $received_data->status. PHP_EOL . PHP_EOL, FILE_APPEND);
 
 // if (isset($_GET['ref'])) {
 //     $tx_ref = $_GET['ref'];
