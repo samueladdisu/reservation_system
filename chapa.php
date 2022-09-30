@@ -94,9 +94,10 @@
       'email' => $_SESSION['email'],
       'first_name' => $_SESSION['fName'],
       'last_name' => $_SESSION['lName'],
-      'tx_ref' =>  134565,
-      'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted?ref='. $tx_ref,
-      'return_url' => 'https://test.kurifturesorts.com/reservation_system/'
+      'tx_ref' =>  546,
+      // 'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted?ref='. $tx_ref,
+      'callback_url' => 'https://webhook.site/ed4df519-3b3c-4462-8662-5c3fcbcbd324',
+      'return_url' => 'https://test.kurifturesorts.com/'
     ),
     CURLOPT_HTTPHEADER => array(
       'Authorization: Bearer ' . $_ENV['CHAPA_SECK']
