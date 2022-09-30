@@ -94,7 +94,7 @@
       'email' => $_SESSION['email'],
       'first_name' => $_SESSION['fName'],
       'last_name' => $_SESSION['lName'],
-      'tx_ref' =>  9885,
+      'tx_ref' =>  986585,
       'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted/',
       'return_url' => 'https://test.kurifturesorts.com/'
     ),
