@@ -5,7 +5,7 @@ if ($_SESSION['user_role'] == 'RA') {
   header("Location: ./rooms.php");
 }
 ?>
-<?php 
+<?php
 $location = $_SESSION['user_location'];
 $role = $_SESSION['user_role'];
 
@@ -880,7 +880,7 @@ $role = $_SESSION['user_role'];
 
 
                               // Display categories from database
-                              
+
                               if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
                                 $query = "SELECT * FROM room_type ORDER BY type_id DESC";
                               } else {

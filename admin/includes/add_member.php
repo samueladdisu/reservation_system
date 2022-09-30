@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$gmail_pwd = $_ENV['GMAIL_PASSWORD'];
+// $gmail_pwd = $_ENV['GMAIL_PASSWORD'];
 
 if (isset($_POST['create_member'])) {
 
@@ -47,35 +47,35 @@ if (isset($_POST['create_member'])) {
       $result = mysqli_query($connection, $query);
       confirm($result);
 
-      $mail = new PHPMailer(true);
+      // $mail = new PHPMailer(true);
 
-      try {
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = "465";
-        $mail->SMTPSecure = "ssl";
+      // try {
+      //   $mail->isSMTP();
+      //   $mail->SMTPAuth = true;
+      //   $mail->Host = "smtp.gmail.com";
+      //   $mail->Port = "465";
+      //   $mail->SMTPSecure = "ssl";
 
-        $mail->Username = "samueladdisu9@gmail.com";
-        $mail->Password = "$gmail_pwd";
+      //   $mail->Username = "samueladdisu9@gmail.com";
+      //   $mail->Password = "$gmail_pwd";
 
-        $mail->setFrom("samueladdisu9@gmail.com");
-        $mail->addReplyTo("no-reply@samuel.com");
+      //   $mail->setFrom("samueladdisu9@gmail.com");
+      //   $mail->addReplyTo("no-reply@samuel.com");
 
-        // RECIPIENT 
-        $mail->addAddress($form['m_email']);
-        $mail->isHTML();
-        $mail->Subject = "Verify your email";
-        $mail->Body = "
-                <h2> Thank you for sign up</h2>
-                <h3> below your credentials make sure you changed your password </h3>
-                <p>User name:  {$form['m_username']}</p>
-                <p>Password:  {$form['m_pwd']}</p>
-        ";
-        $mail->send();
-      } catch (Exception $d) {
-        echo "Message could not be sent. Mailer Error: $mail->ErrorInfo";
-      }
+      //   // RECIPIENT 
+      //   $mail->addAddress($form['m_email']);
+      //   $mail->isHTML();
+      //   $mail->Subject = "Verify your email";
+      //   $mail->Body = "
+      //           <h2> Thank you for sign up</h2>
+      //           <h3> below your credentials make sure you changed your password </h3>
+      //           <p>User name:  {$form['m_username']}</p>
+      //           <p>Password:  {$form['m_pwd']}</p>
+      //   ";
+      //   $mail->send();
+      // } catch (Exception $d) {
+      //   echo "Message could not be sent. Mailer Error: $mail->ErrorInfo";
+      // }
 
       header("Location: members.php");
     } else {
