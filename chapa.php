@@ -89,7 +89,7 @@
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS => array(
       'amount' =>  $price,
-      'key' => $_ENV['CHAPA_PUB'],
+      // 'key' => $_ENV['CHAPA_PUB'],
       'currency' => $currency,
       'email' => $_SESSION['email'],
       'first_name' => $_SESSION['fName'],
