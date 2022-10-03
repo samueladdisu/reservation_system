@@ -8,9 +8,6 @@ require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
-?>
-<?php
-
 $received_data = json_decode(file_get_contents("php://input"));
 
 $tx_ref = $received_data->trx_ref;
@@ -148,18 +145,29 @@ if ($status == "success") {
             $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
             $result_status = mysqli_query($connection, $status_query);
             confirm($result_status);
-
-       
         }
 
 
         $delete_temp_query = "DELETE FROM temp_res WHERE userGID = '$tx_ref'";
         $delete_result = mysqli_query($connection, $delete_temp_query);
+
+        $email = new \SendGrid\Mail\Mail();
+        $email->setFrom("samueladdisu9@gmail.com", "Kuriftu Resort");
+        $email->setSubject("You have Successfully Reserved A room");
+        $email->addTo($email, $firstName . $lastName );
+        $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+        $email->addContent(
+            "text/html",
+            "<strong>and easy to do anywhere, even with PHP</strong>"
+        );
+        $sendgrid = new \SendGrid($_ENV['SENDGRID_API_KEY']);
+        try {
+            $response = $sendgrid->send($email);
+            print $response->statusCode() . "\n";
+            print_r($response->headers());
+            print $response->body() . "\n";
+        } catch (Exception $e) {
+            echo 'Caught exception: ' . $e->getMessage() . "\n";
+        }
     }
 }
-
-
-
-
-
-?>
