@@ -166,8 +166,11 @@ if ($status == "success") {
             print $response->statusCode() . "\n";
             print_r($response->headers());
             print $response->body() . "\n";
+
+            file_put_contents("chapa.txt", $response->statusCode() . $response->headers() .$response->body() . PHP_EOL . PHP_EOL, FILE_APPEND);
         } catch (Exception $e) {
-            echo 'Caught exception: ' . $e->getMessage() . "\n";
+            // echo 'Caught exception: ' . $e->getMessage() . "\n";
+            file_put_contents("chapa.txt", $e->getMessage()  . PHP_EOL . PHP_EOL, FILE_APPEND);
         }
     }
 }
