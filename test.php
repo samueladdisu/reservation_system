@@ -12,13 +12,13 @@ $back_result = mysqli_query($connection, $back_query);
 while($row = mysqli_fetch_assoc($back_result)) {
   foreach ($row as $key => $value) {
     # code...
-    echo $key . "=>". $value . "<br>";
+    // echo $key . "=>". $value . "<br>";
 
     $roomIDs[] = intval($value);
   }
 }
 
-var_dump($roomIDs);
+// var_dump($roomIDs);
 echo "<br>";
 
 foreach ($roomIDs as $val) {
