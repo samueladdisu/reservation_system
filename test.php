@@ -30,9 +30,9 @@ foreach ($roomIDs as $val) {
   if($num_row === 0){
     echo "Not_booked".$val . "<br>";
 
-    // $realse_room = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $val";
-    // $realse_result = mysqli_query($connection, $realse_room);
-    // confirm($realse_result);
+    $realse_room = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $val";
+    $realse_result = mysqli_query($connection, $realse_room);
+    confirm($realse_result);
   }else {
     echo "booked". $val . "<br>";;
   }
