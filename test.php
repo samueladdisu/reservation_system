@@ -1,6 +1,33 @@
 <?php 
 
-include  'config.php';
+require __DIR__ . '/vendor/autoload.php';
+
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+function confirm($result)
+{
+
+  global $connection;
+  if (!$result) {
+    die('QUERY FAILED ' . mysqli_error($connection));
+  }
+}
+
+$db_username = $_ENV['DB_USERNAME'];
+$db_pwd = $_ENV['DB_PASSWORD'];
+$db_name = $_ENV['DB_NAME'];
+
+$connection = mysqli_connect('localhost', $db_username, $db_pwd, $db_name);
+// $connection = mysqli_connect('localhost', 'root', '', 'lalibela');
+
+if (!$connection) {
+    echo "Error: Unable to connect to MySQL." . PHP_EOL;
+    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+    exit;
+}
+
 
 $roomIDs = array();
 $today = date('Y-m-d');
