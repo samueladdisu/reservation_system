@@ -96,7 +96,7 @@
       'last_name' => $_SESSION['lName'],
       'tx_ref' =>  $tx_ref,
       'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted/',
-      'return_url' => 'https://test.kurifturesorts.com/'
+      'return_url' => 'https://test.kurifturesorts.com/chapaCompleted/'
     ),
     CURLOPT_HTTPHEADER => array(
       'Authorization: Bearer ' . $_ENV['CHAPA_SECK']
