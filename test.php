@@ -18,8 +18,8 @@ $db_username = $_ENV['DB_USERNAME'];
 $db_pwd = $_ENV['DB_PASSWORD'];
 $db_name = $_ENV['DB_NAME'];
 
-$connection = mysqli_connect('localhost', $db_username, $db_pwd, $db_name);
-// $connection = mysqli_connect('localhost', 'root', '', 'lalibela');
+// $connection = mysqli_connect('localhost', $db_username, $db_pwd, $db_name);
+$connection = mysqli_connect('localhost', 'root', '', 'lalibela');
 
 if (!$connection) {
     echo "Error: Unable to connect to MySQL." . PHP_EOL;
@@ -55,7 +55,7 @@ foreach ($roomIDs as $val) {
 
 
   if($num_row === 0){
-    echo "Not_booked".$val . "<br>";
+    echo "Must be Not booked".$val . "<br>";
 
     $realse_room = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $val";
     $realse_result = mysqli_query($connection, $realse_room);
