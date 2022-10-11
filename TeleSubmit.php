@@ -161,7 +161,7 @@ function cancelLitsener($Money)
 
   $ConvertedMoney = converttoETB($Money);
 
-  $appKey = $_ENV['TELE_APP_KEY'];
+  // $appKey = $_ENV['TELE_APP_KEY'];
   $data = [
     'outTradeNo' => getName(10) . $_SESSION['Rtemp'],
     'subject' => 'Booking',
