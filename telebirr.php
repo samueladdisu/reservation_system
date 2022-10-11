@@ -67,14 +67,15 @@
             $item[$name] = $value;
             foreach ($item[$name] as $name1 => $val) {
 
-
-              $items[$name1] = $val;
+              // echo $items['room_location'];
+             $items[$name1] = $val;
             } ?>
 
             <h3 class="card-title"><?php echo $items['room_acc']; ?>
             </h3>
             <p class="card-text">
-              <?php echo $items['room_location']; ?>
+              <?php
+              echo $items['room_location']; ?>
             </p>
             <p class="text-muted">
               $<?php echo $items['room_price']; ?>

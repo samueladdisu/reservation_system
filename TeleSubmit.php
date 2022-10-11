@@ -115,6 +115,50 @@ if ($received->action == 'submit') {
 }
 function cancelLitsener($Money)
 {
+
+  $cart = $_SESSION['cart'];
+  // print_r($cart);
+
+  foreach ($cart as $name => $value) {
+
+    $item[$name] = $value;
+    foreach ($item[$name] as $name1 => $val) {
+
+
+       $items[$name1] = $val;
+
+       
+    }
+    
+  }
+
+  $loc =  $items['room_location'];
+
+  if($loc === 'Bishoftu'){
+    $appKey = $_ENV['BApp_Key'];
+    $appId  = $_ENV['BApp_ID'];
+    $publicKey = $_ENV['BPublic_Key'];
+    $short_code = $_ENV['BShort_Code'];
+    $receiveName = $_ENV['BName'];
+    $notify_url = "https://test.kurifturesorts.com/telebirrBishoftu/";
+  } else if($loc === 'entoto'){
+    $appKey = $_ENV['EApp_Key'];
+    $appId  = $_ENV['EApp_ID'];
+    $publicKey = $_ENV['EPublic_Key'];
+    $short_code = $_ENV['EShort_Code'];
+    $receiveName = $_ENV['EName'];
+    $notify_url = "https://test.kurifturesorts.com/telebirrEntoto/";
+
+  } else if ($loc === 'Lake tana') {
+    $appKey = $_ENV['TApp_Key'];
+    $appId  = $_ENV['TApp_ID'];
+    $publicKey = $_ENV['TPublic_Key'];
+    $short_code = $_ENV['TShort_Code'];
+    $receiveName = $_ENV['TName'];
+    $notify_url = "https://test.kurifturesorts.com/telebirrTana/";
+
+  }
+
   $ConvertedMoney = converttoETB($Money);
 
   $appKey = $_ENV['TELE_APP_KEY'];
@@ -123,17 +167,16 @@ function cancelLitsener($Money)
     'subject' => 'Booking',
     // 'totalAmount' => $ConvertedMoney,
     'totalAmount' => 1,
-    'shortCode' =>  $_ENV['SHORT_CODE'],
-    'notifyUrl' => 'https://reservations.kurifturesorts.com/telebirrCompleted/',
-    'returnUrl' => 'https://reservations.kurifturesorts.com/',
-    'receiveName' => 'KURIFTU',
-    'appId' => $_ENV['TELE_APP_ID'],
+    'shortCode' =>  $short_code,
+    'notifyUrl' => $notify_url,
+    'returnUrl' => 'https://test.kurifturesorts.com/',
+    'receiveName' => $receiveName,
+    'appId' => $appId,
     'timeoutExpress' => '30',
     'nonce' => getName(16),
     'timestamp' => getTime()
   ];
   $ussdjson = json_encode($data);
-  $publicKey = $_ENV['TELE_PUBLIC_KEY'];
   $ussd = encryptRSA($ussdjson, $publicKey);
 
   $data['appKey'] = $appKey;
@@ -150,7 +193,6 @@ function cancelLitsener($Money)
   $StringB = hash("sha256", $StringA);
   $sign = strtoupper($StringB);
 
-  $appId = $_ENV['TELE_APP_ID'];
   $requestMessage = [
     'appid' => $appId,
     'sign' => $sign,
@@ -189,3 +231,5 @@ function cancelLitsener($Money)
 
   return  $response;
 }
+
+cancelLitsener(1);
