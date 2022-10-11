@@ -16,7 +16,7 @@ $mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 
 $content = file_get_contents('php://input');
 
-$publicKey = $_ENV['TELE_PUBLIC_KEY'];
+$publicKey =  $_ENV['TPublic_Key'];
 
 function returnid(array $CHARS)
 {

@@ -147,7 +147,8 @@ function cancelLitsener($Money)
     $publicKey = $_ENV['EPublic_Key'];
     $short_code = $_ENV['EShort_Code'];
     $receiveName = $_ENV['EName'];
-    $notify_url = "https://test.kurifturesorts.com/telebirrEntoto/";
+    // $notify_url = "https://test.kurifturesorts.com/telebirrEntoto/";
+    $notify_url = "https://test.kurifturesorts.com/telebirrCompleted/";
 
   } else if ($loc === 'Lake tana') {
     $appKey = $_ENV['TApp_Key'];
