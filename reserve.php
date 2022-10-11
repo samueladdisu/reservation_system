@@ -413,7 +413,7 @@ if (isset($_GET['checkout'])) {
 
       </div>
     </div>
-    <div v-else>
+    <div class="container-sm" v-else>
 
       <div class="form-wrapper">
 
@@ -450,7 +450,7 @@ if (isset($_GET['checkout'])) {
           </div>
         </form>
       </div>
-      
+
       <div class="centerSAD">
         <div class="container-sm complete-cont  ">
           <div class="check-box-wrapper">
