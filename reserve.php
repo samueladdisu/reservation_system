@@ -173,9 +173,10 @@ if (isset($_GET['checkout'])) {
         <img src="./img/Tana.webp" alt="">
       <?php } ?>
     </section>
-    <div class="container-sm" v-if="haveData">
-      <div class="form-wrapper">
+    <div class="container-sm">
 
+      <div class="form-wrapper">
+  
         <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -195,9 +196,9 @@ if (isset($_GET['checkout'])) {
             </div>
           </div>
         </div>
-
+  
         <form class="myform row" @submit.prevent="submitData">
-
+  
           <div class="form-group col-lg-6">
             <label for="date" class="label-date" id="label">Select Date</label>
             <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
@@ -209,7 +210,20 @@ if (isset($_GET['checkout'])) {
           </div>
         </form>
       </div>
+    </div>
+    <div class="container-sm" >
 
+    <div class="centerSAD" v-if="!haveData">
+        <div class="container-sm complete-cont  ">
+          <div class="check-box-wrapper">
+            <div class="check-icon">
+              <img src="./img/sad2.svg" alt="">
+              <p> No room available</p>
+              <h2>Please select different dates and try again  </h2>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="lg-xl-wide">
 
@@ -411,55 +425,6 @@ if (isset($_GET['checkout'])) {
         </div>
 
 
-      </div>
-    </div>
-    <div class="container-sm" v-else>
-
-      <div class="form-wrapper">
-
-        <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Kuriftu</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p>are you still there.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @click="clearOrder">Cancel</button>
-                <button type="button" class="btn btn-red BAlert" data-dismiss="modal" @click="TimerExtend()">Yes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <form class="myform row" @submit.prevent="submitData">
-
-          <div class="form-group col-lg-6">
-            <label for="date" class="label-date" id="label">Select Date</label>
-            <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
-          </div>
-          <div class="form-group col-lg-6">
-            <button type="submit" class="btn btn-black" id="check">
-              Check Availability
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div class="centerSAD">
-        <div class="container-sm complete-cont  ">
-          <div class="check-box-wrapper">
-            <div class="check-icon">
-              <img src="./img/sad2.svg" alt="">
-              <p>No room available!</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="modal fade" id="guest">
@@ -1340,6 +1305,7 @@ if (isset($_GET['checkout'])) {
           if (dataToShorten.length == 0) {
             this.haveData = false
           } else {
+            this.haveData = true
             this.roomName = []
             dataToShorten.forEach(data1 => {
 
