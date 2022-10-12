@@ -30,7 +30,7 @@ if (!$connection) {
 
 
 $roomIDs = array();
-$today = date('Y-m-d');
+echo "Today ". $today = date('Y-m-d') . "<br>";
   
 $back_query = "SELECT b_roomId FROM booked_rooms WHERE b_checkout < '$today'";
 
