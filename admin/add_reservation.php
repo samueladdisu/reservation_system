@@ -598,7 +598,6 @@
 
                       <div class="form-group col-6">
                         <input type="text" placeholder="Special Request" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
-                        <!-- <textarea name="res_specialRequest" id="" cols="30" rows="10" placeholder="Special Request" class="form-control"></textarea> -->
                       </div>
 
                       <div class="form-group col-6">

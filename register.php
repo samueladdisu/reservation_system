@@ -456,7 +456,7 @@ function cutFromPromo($promo, $price)
               Rooms: <?php echo $_SESSION['rooms']; ?>
 
             </div>
-            <p class="text-muted" id="Timer" v-if="min > 10 && sec > 10 ">
+            <!-- <p class="text-muted" id="Timer" v-if="min > 10 && sec > 10 ">
               {{ min }}: {{sec}}min
             </p>
             <p class="text-muted" id="Timer" v-else-if="min > 10 && sec < 10 ">
@@ -467,7 +467,7 @@ function cutFromPromo($promo, $price)
             </p>
             <p class="text-muted" id="Timer" v-else-if="min < 10 && sec < 10 ">
               0{{ min }}: 0{{sec}}min
-            </p>
+            </p> -->
           </div>
 
         </div>

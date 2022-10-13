@@ -124,12 +124,30 @@ if ($received_data->action == 'fetchall') {
 if ($received_data->action == 'fetchallLocation') {
 
   $location = $received_data->location;
-
+  $checkin = $received_data->checkin;
+  $checkout = $received_data->checkout;
+  
   $count = 0;
   $roomAcc_temp = '';
   $roomLocation = '';
   $dataCount = [];
-  $query2 = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location' ORDER BY room_acc;";
+  // $query2 = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location' ORDER BY room_acc;";
+
+  $query2 = "SELECT * 
+  FROM rooms 
+  WHERE room_id 
+  NOT IN 
+    ( SELECT b_roomId
+      FROM booked_rooms 
+      WHERE '$checkin'
+      BETWEEN b_checkin AND b_checkout 
+      UNION
+      SELECT b_roomId
+      FROM booked_rooms
+      WHERE '$checkout'
+      BETWEEN b_checkin AND b_checkout
+      )
+  AND room_location = '$location' ORDER BY room_acc";
 
   $result2 = mysqli_query($connection, $query2);
   confirm($result2);

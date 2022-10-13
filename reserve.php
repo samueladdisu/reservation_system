@@ -523,7 +523,8 @@ if (isset($_GET['checkout'])) {
             <div class="form-group">
               <label for="" class="text-dark">Guest Number</label>
               <div class="row">
-                <select name="adults" v-model="res_adults" class="custom-select col-3">
+                <select name="adults" 
+                @change="CheckGuest" v-model="res_adults" class="custom-select col-3">
                   <option value="" disabled selected>Guests</option>
                   <option value="0">0</option>
                   <option value="1">1</option>
@@ -737,13 +738,18 @@ if (isset($_GET['checkout'])) {
 
           start = picker.startDate.format('YYYY-MM-DD')
           end = picker.endDate.format('YYYY-MM-DD')
-          console.log("updated start", start);
-          console.log("updated end", end);
+          // console.log("updated start", start);
+          // console.log("updated end", end);
+
+          vm.submitData()
+
+
         });
       })
     <?php
     }
     ?>
+
 
 
     const user = '<?php echo $user_name ?>'
@@ -962,7 +968,9 @@ if (isset($_GET['checkout'])) {
           let rooms = 0;
           var total = 0.00;
           row = this.roww
-          console.log(this.res_BB)
+          // console.log(this.res_BB)
+
+          
           <?php if ($Location == "awash") { ?>
             if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
               alert("Adult can not be 0")
@@ -1010,7 +1018,6 @@ if (isset($_GET['checkout'])) {
                     let PutTogeter = Object.assign(row, guests)
                     this.cart.push(PutTogeter);
                     let temparray = [];
-
                     axios.post('book.php', {
                       action: 'calculatePrice',
                       data: this.cart,
@@ -1105,6 +1112,7 @@ if (isset($_GET['checkout'])) {
                     let PutTogeter = Object.assign(row, guests)
                     this.cart.push(PutTogeter);
                     let temparray = [];
+                    console.log("cart", this.cart)
 
                     axios.post('book.php', {
                       action: 'calculatePrice',
@@ -1150,6 +1158,8 @@ if (isset($_GET['checkout'])) {
               $('#loftModal').modal('hide')
             }
           <?php } ?>
+
+          
         },
 
         booked() {
@@ -1248,6 +1258,8 @@ if (isset($_GET['checkout'])) {
           ?>
             await axios.post('book.php', {
               action: 'fetchall',
+              checkin: start,
+              checkout: end,
 
             }).then(res => {
               this.allData = res.data
@@ -1260,8 +1272,9 @@ if (isset($_GET['checkout'])) {
 
             await axios.post('book.php', {
               action: 'fetchallLocation',
-              location: '<?php echo $Location; ?>'
-
+              location: '<?php echo $Location; ?>',
+              checkin: start,
+              checkout: end,
             }).then(res => {
               this.allData = res.data
               this.takeOneEach(this.allData)
@@ -1274,7 +1287,9 @@ if (isset($_GET['checkout'])) {
             await axios.post('book.php', {
               action: 'fetchallLocRom',
               location: '<?php echo $Location; ?>',
-              roomType: '<?php echo $RoomType; ?>'
+              roomType: '<?php echo $RoomType; ?>',
+              checkin: start,
+              checkout: end,
             }).then(res => {
               this.allData = res.data
               console.log(res.data);
@@ -1478,7 +1493,7 @@ if (isset($_GET['checkout'])) {
 
       }
     })
-    app.mount('#app')
+    const vm = app.mount('#app')
     $(".button").on("click", function() {
       var $button = $(this);
       var oldValue = $button.parent().find("input").val();
