@@ -8,7 +8,7 @@ require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
-use Mailgun\Mailgun;
+// use Mailgun\Mailgun;
 // First, instantiate the SDK with your API credentials
 // $mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 ?>
@@ -60,7 +60,7 @@ $Amount = $jsonnofityData['totalAmount'];
 $PayerId = returnid($tansactionchars);
 file_put_contents("Lemlem1.txt", $userId . PHP_EOL . PHP_EOL, FILE_APPEND);
 
-$queryFetch = "SELECT * FROM temp_res WHERE temp_ID = '$PayerId'";
+$queryFetch = "SELECT * FROM temp_res WHERE userGID = '$PayerId'";
 $temp_res = mysqli_query($connection, $queryFetch);
 
 confirm($temp_res);
