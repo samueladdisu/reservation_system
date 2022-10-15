@@ -38,7 +38,7 @@ if ($received_data->action == 'filter') {
       WHERE '$checkout'
       BETWEEN b_checkin AND b_checkout
       )
-  AND room_location = '$location' ORDER BY room_acc";
+  AND room_location = '$location' AND room_status <> 'Hold' ORDER BY room_acc";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
