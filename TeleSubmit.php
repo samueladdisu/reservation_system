@@ -140,15 +140,15 @@ function cancelLitsener($Money)
     $publicKey = $_ENV['BPublic_Key'];
     $short_code = $_ENV['BShort_Code'];
     $receiveName = $_ENV['BName'];
-    $notify_url = "https://test.kurifturesorts.com/telebirrBishoftu/";
+    $notify_url = "https://reservations.kurifturesorts.com/telebirrBishoftu/";
   } else if($loc === 'entoto'){
     $appKey = $_ENV['EApp_Key'];
     $appId  = $_ENV['EApp_ID'];
     $publicKey = $_ENV['EPublic_Key'];
     $short_code = $_ENV['EShort_Code'];
     $receiveName = $_ENV['EName'];
-    // $notify_url = "https://test.kurifturesorts.com/telebirrEntoto/";
-    $notify_url = "https://test.kurifturesorts.com/telebirrCompleted/";
+    $notify_url = "https://reservations.kurifturesorts.com/telebirrEntoto/";
+    // $notify_url = "https://reservations.kurifturesorts.com/telebirrCompleted/";
 
   } else if ($loc === 'Lake tana') {
     $appKey = $_ENV['TApp_Key'];
@@ -156,7 +156,7 @@ function cancelLitsener($Money)
     $publicKey = $_ENV['TPublic_Key'];
     $short_code = $_ENV['TShort_Code'];
     $receiveName = $_ENV['TName'];
-    $notify_url = "https://test.kurifturesorts.com/telebirrTana/";
+    $notify_url = "https://reservations.kurifturesorts.com/telebirrTana/";
 
   }
 
@@ -170,7 +170,7 @@ function cancelLitsener($Money)
     'totalAmount' => 1,
     'shortCode' =>  $short_code,
     'notifyUrl' => $notify_url,
-    'returnUrl' => 'https://test.kurifturesorts.com/',
+    'returnUrl' => 'https://reservations.kurifturesorts.com/',
     'receiveName' => $receiveName,
     'appId' => $appId,
     'timeoutExpress' => '30',
