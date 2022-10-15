@@ -225,7 +225,7 @@ if (isset($_GET['checkout'])) {
         </div>
       </div>
 
-      <div class="lg-xl-wide">
+      <div class="lg-xl-wide" v-if="haveData">
 
 
         <!-- available rooms -->
@@ -1388,11 +1388,19 @@ if (isset($_GET['checkout'])) {
               checkout: end,
               location: '<?php echo $Location; ?>',
             }).then(res => {
+              console.log(res.data)
               this.allData = res.data
               console.log(this.allData);
-              this.takeOneEach(this.allData)
+
+              if (this.allData == "empty"){
+                console.log("empty")
+                this.haveData = false
+              }else {
+                this.haveData = true
+                this.takeOneEach(this.allData)
+              }
             }).catch(err => {
-              console.log(err);
+              console.log("error",err);
             })
           } else {
             alert('Please fill all fields')

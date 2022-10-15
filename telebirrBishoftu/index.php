@@ -10,7 +10,7 @@ $dotenv->load();
 
 use Mailgun\Mailgun;
 // First, instantiate the SDK with your API credentials
-$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
+// $mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 ?>
 <?php
 

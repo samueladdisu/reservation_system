@@ -129,8 +129,6 @@ if (isset($_GET['ref'])) {
             $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
             $result_status = mysqli_query($connection, $status_query);
             confirm($result_status);
-
-       
         }
 
 
@@ -154,7 +152,7 @@ if (isset($_GET['ref'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script>
-      sessionStorage.clear()
+        sessionStorage.clear()
     </script>
     <title>Kuriftu - Reservation</title>
 </head>
@@ -207,7 +205,9 @@ if (isset($_GET['ref'])) {
                                     <br>Per Night <br>Including Taxes & Fees
                                 </p>
                                 </p>
-                                <a href="./reserve.php?location=awash"> <button class="btn btn-black btn-detail">View Rooms </button></a>
+                                <!-- <a href="./reserve.php?location=awash"> <button class="btn btn-black btn-detail">View Rooms </button></a> -->
+
+                                <a href="#"> <button class="btn btn-outline-black btn-detail" disabled>Unavaliable Now </button></a>
                             </div>
                         </div>
 
@@ -229,7 +229,9 @@ if (isset($_GET['ref'])) {
                                     <br>Per Night<br>Including Taxes & Fees
                                 </p>
                                 </p>
-                                <a href="./reserve.php?location=bishoftu"> <button class="btn btn-black btn-detail">View Rooms </button></a>
+                                <!-- <a href="./reserve.php?location=bishoftu"> <button class="btn btn-black btn-detail">View Rooms </button></a> -->
+
+                                <a href="#"> <button class="btn btn-outline-black btn-detail" disabled>Unavaliable Now </button></a>
                             </div>
                         </div>
 
@@ -251,7 +253,7 @@ if (isset($_GET['ref'])) {
                                     <br>Per Night<br>Including Taxes & Fees
                                 </p>
                                 </p>
-                                <a href="./reserve.php?location=entoto"> <button class="btn btn-black btn-detail">View Rooms </button></a>
+                                <a href="./reserve.php?location=entoto"> <button class="btn btn-black btn-detail" >View Rooms </button></a>
                             </div>
                         </div>
 
@@ -274,7 +276,9 @@ if (isset($_GET['ref'])) {
                                     <br>Per Night<br>Including Taxes & Fees
                                 </p>
                                 </p>
-                                <a href="./reserve.php?location=Tana"> <button class="btn btn-black btn-detail">View Rooms </button></a>
+                                <!-- <a href="./reserve.php?location=Tana"> <button class="btn btn-black btn-detail">View Rooms </button></a> -->
+
+                                <a href="#"> <button class="btn btn-outline-black btn-detail" disabled>Unavaliable Now </button></a>
                             </div>
                         </div>
 

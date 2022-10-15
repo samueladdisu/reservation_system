@@ -78,7 +78,9 @@ if ($received_data->action == 'filter') {
       array_push($dataCount, $data);
     }
     echo json_encode($dataCount);
-  } 
+  } else {
+    echo json_encode("empty");
+  }
 }
 
 
@@ -126,7 +128,7 @@ if ($received_data->action == 'fetchallLocation') {
   $location = $received_data->location;
   $checkin = $received_data->checkin;
   $checkout = $received_data->checkout;
-  
+
   $count = 0;
   $roomAcc_temp = '';
   $roomLocation = '';

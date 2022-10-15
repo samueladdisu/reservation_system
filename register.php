@@ -371,7 +371,7 @@ function cutFromPromo($promo, $price)
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
             <option value="chapa">Chapa</option>
-            <option value="amole">Amole</option>
+            <!-- <option value="amole">Amole</option> -->
             <option value="telebirr">Telebirr</option>
             <option value="arrival">Pay on Arrival</option>
           </select>
