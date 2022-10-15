@@ -88,8 +88,7 @@
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS => array(
-      'amount' =>  1,
-      // 'amount' =>  $price,
+      'amount' =>  $price,
       // 'key' => $_ENV['CHAPA_PUB'],
       'currency' => $currency,
       'email' => $_SESSION['email'],

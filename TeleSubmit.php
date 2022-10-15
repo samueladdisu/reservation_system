@@ -166,8 +166,8 @@ function cancelLitsener($Money)
   $data = [
     'outTradeNo' => getName(10) . $_SESSION['Rtemp'],
     'subject' => 'Booking',
-    // 'totalAmount' => $ConvertedMoney,
-    'totalAmount' => 1,
+    'totalAmount' => $ConvertedMoney,
+    // 'totalAmount' => 1,
     'shortCode' =>  $short_code,
     'notifyUrl' => $notify_url,
     'returnUrl' => 'https://reservations.kurifturesorts.com/',
