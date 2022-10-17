@@ -38,9 +38,13 @@
 <?php
 $RoomType = '';
 $Location = '';
+
+
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
-
+  if ($Location !== "entoto") {
+    header("Location: ./");
+  }
   if ($Location == 'Tana' || $Location == 'tana') {
     $Location = "Lake tana";
   }
