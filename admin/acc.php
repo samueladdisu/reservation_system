@@ -575,6 +575,8 @@ $role = $_SESSION['user_role'];
                               <th>Image</th>
                               <th>Single</th>
                               <th>Double</th>
+                              <th></th>
+                              <th></th>
                             </tr>
                           </thead>
                           <?php
@@ -594,16 +596,16 @@ $role = $_SESSION['user_role'];
                               <td>
                                 <img width="100" src="./room_img/entoto/<?php echo $row['room_img']; ?>" alt="">
                               </td>
-                              <td><?php echo $row['double_occ']; ?></td>
                               <td><?php echo $row['single_occ']; ?></td>
+                              <td><?php echo $row['double_occ']; ?></td>
+                              <?php
+                              if ($role != 'RA') {
+                              ?>
+                                <td><?php echo "<a href='acc.php?edit={$type_id}'><i style='color: turquoise;' class='far fa-edit'></i> </a>"; ?></td>
+                                <td><?php echo "<a href='acc.php?delete={$type_id}'><i style='color: red;' class='far fa-trash-alt'></i> </a>"; ?></td>
+                              <?php } ?>
                             </tr>
-                            <?php
-                            if ($role != 'RA') {
-                            ?>
-                              <!-- <td><?php echo "<a href='acc.php?edit={$type_id}'><i style='color: turquoise;' class='far fa-edit'></i> </a>"; ?></td>
-                                <td><?php echo "<a href='acc.php?delete={$type_id}'><i style='color: red;' class='far fa-trash-alt'></i> </a>"; ?></td> -->
-                              </tr>
-                          <?php  }
+                          <?php
                           } ?>
 
 

@@ -46,8 +46,8 @@ if ($received_data->action == 'filter') {
         BETWEEN b_checkin AND b_checkout
         )
     AND room_acc = '$roomType'
-    AND room_location = '$location'";
-
+    AND room_location = '$location'
+    AND room_status <> 'Hold'";
   } else if (($checkin && $checkout) && !$location && !$roomType) {
     $query = "SELECT * 
     FROM rooms 
@@ -62,8 +62,8 @@ if ($received_data->action == 'filter') {
         FROM booked_rooms
         WHERE '$checkout'
         BETWEEN b_checkin AND b_checkout
-        )";
-
+        )
+    AND room_status <> 'Hold'";
   } else if (($checkin && $checkout) && !$location && $roomType) {
     $query = "SELECT * 
     FROM rooms 
@@ -79,8 +79,8 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout'
         BETWEEN b_checkin AND b_checkout
         )
-    AND room_acc = '$roomType'";
-
+    AND room_acc = '$roomType'
+    AND room_status <> 'Hold'";
   } else if (($checkin && $checkout) && $location && !$roomType) {
     $query = "SELECT * 
     FROM rooms 
@@ -96,7 +96,8 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout'
         BETWEEN b_checkin AND b_checkout
         )
-    AND room_location = '$location'";
+    AND room_location = '$location'
+    AND room_status <> 'Hold'";
   }
 
   $result = mysqli_query($connection, $query);
@@ -115,12 +116,45 @@ if ($received_data->action == 'filter') {
 }
 
 if ($received_data->action == 'fetchAll') {
+  $checkin = $received_data->checkin;
+  $checkout = $received_data->checkout;
 
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
-    $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked'";
+    // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked'";
+    $query = "SELECT * 
+  FROM rooms 
+  WHERE room_id 
+  NOT IN 
+    ( SELECT b_roomId
+      FROM booked_rooms 
+      WHERE '$checkin'
+      BETWEEN b_checkin AND b_checkout 
+      UNION
+      SELECT b_roomId
+      FROM booked_rooms
+      WHERE '$checkout'
+      BETWEEN b_checkin AND b_checkout
+      ) 
+  AND room_status <> 'Hold' ORDER BY room_acc";
   } else {
 
-    $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
+    // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
+
+    $query = "SELECT * 
+  FROM rooms 
+  WHERE room_id 
+  NOT IN 
+    ( SELECT b_roomId
+      FROM booked_rooms 
+      WHERE '$checkin'
+      BETWEEN b_checkin AND b_checkout 
+      UNION
+      SELECT b_roomId
+      FROM booked_rooms
+      WHERE '$checkout'
+      BETWEEN b_checkin AND b_checkout
+      )
+  AND room_location = '$location' AND room_status <> 'Hold' ORDER BY room_acc";
   }
 
   $result = mysqli_query($connection, $query);
@@ -445,7 +479,7 @@ if ($received_data->action == 'addReservation') {
   $result = mysqli_query($connection, $query);
   confirm($result);
 
-  
+
   echo json_encode($result);
   $data = true;
   $pusher->trigger('back_notifications', 'backend_reservation', $data);

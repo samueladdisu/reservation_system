@@ -420,11 +420,11 @@
 
                           <thead>
                             <tr>
-                              <th>Id</th>
+                              <th>Room No</th>
                               <th>Occupancy</th>
                               <th>Accomodation</th>
                               <th>Price</th>
-                              <th>Room Number</th>
+
                               <th>Room Status</th>
                               <th>Hotel Location</th>
                               <th>Select Room</th>
@@ -447,8 +447,6 @@
                         <div class="form-group mt-2 col-3">
                           <input type="date" v-model="filterDate" class="form-control" />
                         </div>
-
-                        <!------------------------- t-date picker end  ------------------>
 
                         <?php
 
@@ -524,9 +522,8 @@
 
                           <thead>
                             <tr>
-                              <th>Id</th>
+                              <th>Room No</th>
                               <th>Type</th>
-                              <th>Room no.</th>
                               <th>Guest Name</th>
                               <th>Adults</th>
                               <th>Kids</th>
@@ -535,7 +532,6 @@
                               <th>Departure</th>
                               <th>Status</th>
                               <th>Location</th>
-                              <th>Select Room</th> 
                             </tr>
                           </thead>
                           <tbody>
@@ -745,6 +741,7 @@
         end = picker.endDate.format('YYYY-MM-DD')
         console.log("updated start", start);
         console.log("updated end", end);
+        vm.fetchAll()
       });
     })
 
@@ -852,16 +849,16 @@
             location: flocation,
             date: this.filterDate
           }).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
 
             res.data.forEach(item => {
               item.status = ""
 
-              if ("2022-10-09" === item.b_checkin) {
-                
-                console.log("Start", start);
-                console.log("bckin", item.b_checkin);
-              }
+              // if ("2022-10-09" === item.b_checkin) {
+
+              //   console.log("Start", start);
+              //   console.log("bckin", item.b_checkin);
+              // }
 
               if (item.b_checkin === null) {
                 item.status = "Free"
@@ -894,14 +891,12 @@
             ],
             data: row,
             columns: [{
-                data: 'room_id'
+                data: 'room_number'
               },
               {
                 data: 'room_acc'
               },
-              {
-                data: 'room_number'
-              },
+
               {
                 data: 'res_firstname'
               },
@@ -925,16 +920,56 @@
               },
               {
                 data: 'room_location'
-              },
-              {
-                data: 'room_id',
-                render: function(data, type, row) {
-                  return `<input type="button" class="btn btn-primary" value="Select" data-id="${data}" data-row="${row}" id="selectRow">`
-                }
               }
             ],
-          });
 
+          });
+          // let vm = this
+          // $(document).on('click', '#selectRow', function() {
+
+
+          //   if (start && end) {
+          //     let acc = $('#selectAcc').data("acc")
+          //     // get room id from the table
+          //     let ids = $(this).data("id")
+          //     let temprow = {}
+          //     // filter alldata which is equal to the room id
+          //     vm.allData.forEach(item => {
+          //       if (item.room_id == ids) {
+          //         temprow = item
+          //       }
+          //     })
+
+          //     // assign to temp row
+          //     vm.tempRow = temprow
+          //     console.log("temp row", vm.tempRow.room_acc);
+          //     console.log("acc", acc)
+
+          //     if (vm.tempRow.room_location === "awash") {
+          //       $('#awashModal').modal('show')
+          //     } else {
+          //       if (vm.tempRow.room_acc === "Loft Family Room" || vm.tempRow.room_acc === "Presidential Family Room" || vm.tempRow.room_acc === "Presidential Suite Family Room") {
+          //         console.log("loft")
+          //         $('#loftModal').modal('show')
+          //       } else {
+          //         $('#guest').modal('show')
+          //       }
+
+          //     }
+
+
+
+
+
+          //   } else {
+          //     alert("Please Select Check In and Check Out Date");
+          //   }
+
+          //   vm.guest = true
+
+
+          //   console.log(vm.res_adults)
+          // })
         },
         table(row) {
           var selected = [];
@@ -955,7 +990,7 @@
               }
             },
             columns: [{
-                data: 'room_id',
+                data: 'room_number'
               },
               {
                 data: 'room_occupancy'
@@ -969,9 +1004,7 @@
               {
                 data: 'room_price'
               },
-              {
-                data: 'room_number'
-              },
+
               {
                 data: 'room_status'
               },
@@ -1058,11 +1091,13 @@
         async fetchAll() {
 
           await axios.post('load_modal.php', {
-            action: 'fetchAll'
+            action: 'fetchAll',
+            checkin: start,
+            checkout: end
           }).then(res => {
             this.allData = res.data
             this.table(res.data)
-            // console.log(this.allData);
+            console.log(res.data);
           }).catch(err => console.log(err.message))
         },
         deleteCart(item) {
@@ -1073,9 +1108,6 @@
         },
         booked() {
 
-          this.cart.forEach(item => {
-            console.log(item.room_id);
-          })
 
           let loc = this.tempRow.room_location
           let guests
@@ -1103,8 +1135,23 @@
             }
           }
 
+          // console.log(this.tempRow.room_id)
+          console.log(this.isEmpty(this.cart))
+          if(this.isEmpty(this.cart)){
+            this.cart.push(guests);
+            console.log("emp push")
+          }else {
+            let exits = this.cart.filter(row => {
+              return this.tempRow.room_id === row.room_id
+            })
 
-          this.cart.push(guests);
+            if(this.isEmpty(exits)){
+              this.cart.push(guests);
+            }else {
+              console.log(exits)
+              alert("Room Already Selected")
+            }
+          }
 
 
           console.log("singleRoom", guests);
@@ -1114,6 +1161,9 @@
           this.res_teen = ''
           this.res_kid = ''
           this.res_BB = ''
+        },
+        isEmpty(obj) {
+          return Object.keys(obj).length === 0;
         },
         checkLoft() {
           if (this.res_adults === 0 || this.res_adults === "") {
@@ -1354,7 +1404,7 @@
       }
     })
 
-    app.mount('#app')
+    const vm = app.mount('#app')
   </script>
 
 

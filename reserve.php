@@ -1267,7 +1267,7 @@ if (isset($_GET['checkout'])) {
 
             }).then(res => {
               this.allData = res.data
-              console.log(res.data);
+              console.log("all empty", res.data);
               this.takeOneEach(this.allData)
 
 
@@ -1275,28 +1275,30 @@ if (isset($_GET['checkout'])) {
           <?php } else if ($Location !== '' && $RoomType == '' && $checkin == '' && $checkout == '') { ?>
 
             await axios.post('book.php', {
-              action: 'fetchallLocation',
+              action: 'filter',
               location: '<?php echo $Location; ?>',
               checkin: start,
               checkout: end,
             }).then(res => {
               this.allData = res.data
               this.takeOneEach(this.allData)
-              console.log(res.data);
+              console.log("location only",res.data);
+              console.log(start)
+              console.log(end)
             })
 
 
           <?php } else if ($Location !== '' && $RoomType !== '' && $checkin == '' && $checkout == '') { ?>
 
             await axios.post('book.php', {
-              action: 'fetchallLocRom',
+              action: 'filter',
               location: '<?php echo $Location; ?>',
               roomType: '<?php echo $RoomType; ?>',
               checkin: start,
               checkout: end,
             }).then(res => {
               this.allData = res.data
-              console.log(res.data);
+              console.log("location and roomtype",res.data);
               this.takeOneEach(this.allData)
             })
 
@@ -1311,7 +1313,7 @@ if (isset($_GET['checkout'])) {
             }).then(res => {
               this.allData = res.data
               console.log(res.data);
-              this.takeOneEach(this.allData)
+              this.takeOneEach("location checkin checkout",this.allData)
             })
 
 
