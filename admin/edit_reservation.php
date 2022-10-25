@@ -676,7 +676,9 @@
         async fetchAll() {
 
           await axios.post('load_modal.php', {
-            action: 'fetchAll'
+            action: 'fetchAll',
+            checkin: start,
+            checkout: end
           }).then(res => {
             this.allData = res.data
             this.table(res.data)
