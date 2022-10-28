@@ -172,7 +172,7 @@ function cutFromPromo($promo, $price)
   $checkOut = $_SESSION['checkOut'];
   $total_price = floatval($_SESSION['total']);
   $slocation = $_SESSION['Selectedlocation'];
-  
+
 
 
 
@@ -185,7 +185,7 @@ function cutFromPromo($promo, $price)
   $CICOAll  = array();
   $boardeArr = array();
 
- 
+
 
   $GID =  getName(7);
 
@@ -211,12 +211,12 @@ function cutFromPromo($promo, $price)
       $_SESSION[$name] = escape($value);
     }
 
-    
+
     $_SESSION['fName'] = $params['res_firstname'];
     $_SESSION['lName'] = $params['res_lastname'];
     $_SESSION['email'] = $params['res_email'];
     $_SESSION['currency'] = $params['res_currency'];
-    
+
     if (isset($_POST['res_guestNo'])) {
       if ($_SESSION["promoApp"] == false) {
         $total_price = cutFromPromo($_POST['res_guestNo'], $total_price);
@@ -235,39 +235,47 @@ function cutFromPromo($promo, $price)
         echo "<script> alert('You can\'t reserve less than 5 days in advance');</script>";
       } else {
 
-        foreach ($id  as $value) {
+        foreach ($carts  as $value) {
+          $guestNums = json_encode($value['guestnums']);
+          $cartStingfy = json_encode($carts);
+          $nowCI = strtotime($value['Checkin']);
+          $nowCO = strtotime($value['Checkout']);
+          if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
+              $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+              $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$value['Checkin']}', '{$value['Checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql',
+              '{$total_price}', '{$value['room_location']}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
 
-          //  Select room details from room id 
-
-          $room_query = "SELECT room_acc, room_location FROM rooms WHERE room_id = $value";
-
-          $room_result = mysqli_query($connection, $room_query);
-          confirm($room_result);
-          $room_row = mysqli_fetch_assoc($room_result);
+              $result = mysqli_query($connection, $query);
+              confirm($result);
+              $oldCI = strtotime($value['Checkin']);
+              $oldCO = strtotime($value['Checkout']);
+          }
 
 
-          // Insert into booked table
+          $last_record_query = "SELECT * FROM reservations WHERE res_confirmID = '$res_confirmID'";
+          $last_record_result = mysqli_query($connection, $last_record_query);
+          confirm($last_record_result);
+          $row = mysqli_fetch_assoc($last_record_result);
 
-          $booked_query = "INSERT INTO booked_rooms(b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) VALUES ($value, '{$room_row['room_acc']}', '{$room_row['room_location']}',  '{$checkIn}', '{$checkOut}')";
+          $res_Id = $row['res_id'];
+
+          $booked_query = "INSERT INTO booked_rooms(b_res_id, b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
+          $booked_query .= "VALUES ('$res_Id', '{$value['room_id']}', '{$value['room_acc']}', '{$value['room_location']}',  '{$value['Checkin']}', '{$value['Checkout']}')";
 
           $booked_result = mysqli_query($connection, $booked_query);
 
           confirm($booked_result);
-        }
-        $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, 	res_agent) ";
-        $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '$checkIn', '$checkOut', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql', '{$total_price}', '{$location}', '{$res_confirmID}', '{$params['res_specialRequest']}', 'website')";
 
-        $result = mysqli_query($connection, $query);
-        confirm($result);
+          $booked_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location, info_board) ";
+          $booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', '{$value['res_board']}')";
+          $booked_result = mysqli_query($connection, $booked_query);
+          confirm($booked_result);
 
+          $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
+          $result_status = mysqli_query($connection, $status_query);
+          confirm($result_status);
+      }
 
-        $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` IN ($id_int)";
-        $result_status = mysqli_query($connection, $status_query);
-        confirm($result_status);
-        $data = true;
-
-        $pusher->trigger('front_notifications', 'front_reservation', $data);
-        header("Location: ./session_destory.php");
       }
     } else {
 
@@ -296,21 +304,21 @@ function cutFromPromo($promo, $price)
       //   $temprec = mysqli_fetch_assoc($result);
 
 
-        $_SESSION['Rtemp'] = $GID;
+      $_SESSION['Rtemp'] = $GID;
 
-        
 
-        switch ($params['res_paymentMethod']) {
-          case 'amole':
-            header("Location: ./amole.php");
-            break;
-          case 'telebirr':
-            header("Location: ./telebirr.php");
-            break;
-          case 'chapa':
-            header("Location: ./chapa.php");
-            break;
-        }
+
+      switch ($params['res_paymentMethod']) {
+        case 'amole':
+          header("Location: ./amole.php");
+          break;
+        case 'telebirr':
+          header("Location: ./telebirr.php");
+          break;
+        case 'chapa':
+          header("Location: ./chapa.php");
+          break;
+      }
       // } else {
       // }
     }
@@ -373,7 +381,7 @@ function cutFromPromo($promo, $price)
             <option value="chapa">Credit / Debit Card</option>
             <!-- <option value="amole">Amole</option> -->
             <option value="telebirr">Telebirr</option>
-            <option value="arrival">Pay on Arrival</option>
+            <!-- <option value="arrival">Pay on Arrival</option> -->
           </select>
         </div>
         <div class="col-md-6"></div>
