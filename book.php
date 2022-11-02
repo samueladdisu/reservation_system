@@ -28,16 +28,14 @@ if ($received_data->action == 'filter') {
   FROM rooms 
   WHERE room_id 
   NOT IN 
-    ( SELECT b_roomId
-      FROM booked_rooms 
-      WHERE '$checkin'
-      BETWEEN b_checkin AND b_checkout 
-      UNION
-      SELECT b_roomId
-      FROM booked_rooms
-      WHERE '$checkout'
-      BETWEEN b_checkin AND b_checkout
-      )
+      ( SELECT b_roomId
+        FROM booked_rooms 
+        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
+        UNION
+        SELECT b_roomId
+        FROM booked_rooms
+        WHERE '$checkout' > b_checkin AND '$checkout' < b_checkout
+        )
   AND room_location = '$location' AND room_status <> 'Hold' ORDER BY room_acc";
 
   $result = mysqli_query($connection, $query);
