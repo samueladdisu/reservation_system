@@ -37,11 +37,11 @@ if ($received_data->action == 'filter') {
     NOT IN 
       ( SELECT b_roomId
         FROM booked_rooms 
-        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
+        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
         UNION
         SELECT b_roomId
         FROM booked_rooms
-        WHERE '$checkout' > b_checkin AND '$checkout' < b_checkout
+        WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
     AND room_acc = '$roomType'
     AND room_location = '$location'
@@ -53,11 +53,11 @@ if ($received_data->action == 'filter') {
     NOT IN 
       ( SELECT b_roomId
         FROM booked_rooms 
-        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
+        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
         UNION
         SELECT b_roomId
         FROM booked_rooms
-        WHERE '$checkout' > b_checkin AND '$checkout' < b_checkout
+        WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
     AND room_status <> 'Hold'";
   } else if (($checkin && $checkout) && !$location && $roomType) {
@@ -67,11 +67,11 @@ if ($received_data->action == 'filter') {
     NOT IN 
       ( SELECT b_roomId
         FROM booked_rooms 
-        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
+        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
         UNION
         SELECT b_roomId
         FROM booked_rooms
-        WHERE '$checkout' > b_checkin AND '$checkout' < b_checkout
+        WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
     AND room_acc = '$roomType'
     AND room_status <> 'Hold'";
@@ -82,11 +82,11 @@ if ($received_data->action == 'filter') {
     NOT IN 
       ( SELECT b_roomId
         FROM booked_rooms 
-        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
+        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
         UNION
         SELECT b_roomId
         FROM booked_rooms
-        WHERE '$checkout' > b_checkin AND '$checkout' < b_checkout
+        WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
     AND room_location = '$location'
     AND room_status <> 'Hold'";
