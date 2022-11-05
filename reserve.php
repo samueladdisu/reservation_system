@@ -1,38 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Kuriftu - Reservation</title>
-</head>
-
-<body>
-    <header class="reserve-header">
-        <nav class="nav-center">
-
-            <div class="logo">
-                <img src="./img/black_logo.svg" alt="">
-            </div>
-        </nav>
-    </header>
-
-
-
-    <section class="Destinations-list">
-        <div class="container" style="display: grid; place-items: center; height: 60vh">
-            <h2>
-                Page Under Construction
-            </h2>
-
-        </div>
-
-    </section>
-</body>
-
-</html> -->
 
 <?php include  'config.php'; ?>
 <?php
@@ -42,7 +7,7 @@ $Location = '';
 
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
-  if ($Location !== "entoto") {
+  if ($Location !== "entoto" && $Location !== "awash") {
     header("Location: ./");
   }
   if ($Location == 'Tana' || $Location == 'tana') {

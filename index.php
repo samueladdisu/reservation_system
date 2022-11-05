@@ -205,9 +205,9 @@ if (isset($_GET['ref'])) {
                                     <br>Per Night <br>Including Taxes & Fees
                                 </p>
                                 </p>
-                                <!-- <a href="./reserve.php?location=awash"> <button class="btn btn-black btn-detail">View Rooms </button></a> -->
+                                <a href="./reserve.php?location=awash"> <button class="btn btn-black btn-detail">View Rooms </button></a>
 
-                                <a href="#"> <button class="btn btn-outline-black btn-detail" disabled>Unavaliable Now </button></a>
+                                <!-- <a href="#"> <button class="btn btn-outline-black btn-detail" disabled>Unavaliable Now </button></a> -->
                             </div>
                         </div>
 
