@@ -247,7 +247,6 @@
                     <li class="list-group-item"> <strong> Special Request: </strong>{{ tempRow.res_specialRequest }}</li>
                     <li class="list-group-item"> <strong>Payment Status:</strong> {{ tempRow.res_paymentStatus }}</li>
                     <li class="list-group-item"> <strong>Check out:</strong> {{ tempRow.res_checkout }}</li>
-                    <li class="list-group-item"> <strong>Agent:</strong> {{ tempRow.res_agent }}</li>
                     <li class="list-group-item"> <strong>Booked At:</strong> {{ tempRow.created_at }}</li>
                   </ul>
                 </div>
