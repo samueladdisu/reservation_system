@@ -248,6 +248,7 @@
                     <li class="list-group-item"> <strong>Payment Status:</strong> {{ tempRow.res_paymentStatus }}</li>
                     <li class="list-group-item"> <strong>Check out:</strong> {{ tempRow.res_checkout }}</li>
                     <li class="list-group-item"> <strong>Agent:</strong> {{ tempRow.res_agent }}</li>
+                    <li class="list-group-item"> <strong>Booked At:</strong> {{ tempRow.created_at }}</li>
                   </ul>
                 </div>
                 <div class="card" style="width: 18rem;">
@@ -257,9 +258,10 @@
                     <li class="list-group-item"> <strong> City: </strong>{{ tempRow.res_city }}</li>
                     <li class="list-group-item"> <strong>Zip Code:</strong> {{ tempRow.res_zipcode }}</li>
                     <li class="list-group-item"> <strong>Payment Method:</strong> {{ tempRow.res_paymentMethod }}</li>
+                    <li class="list-group-item"> <strong>Payment Confirmed At:</strong> {{ tempRow.payment_confirmed_at }}</li>
                   </ul>
                 </div>
-
+                
 
 
               </div>
