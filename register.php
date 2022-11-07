@@ -241,14 +241,14 @@ function cutFromPromo($promo, $price)
           $nowCI = strtotime($value['Checkin']);
           $nowCO = strtotime($value['Checkout']);
           if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
-              $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
-              $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$value['Checkin']}', '{$value['Checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql',
+            $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+            $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$value['Checkin']}', '{$value['Checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql',
               '{$total_price}', '{$value['room_location']}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
 
-              $result = mysqli_query($connection, $query);
-              confirm($result);
-              $oldCI = strtotime($value['Checkin']);
-              $oldCO = strtotime($value['Checkout']);
+            $result = mysqli_query($connection, $query);
+            confirm($result);
+            $oldCI = strtotime($value['Checkin']);
+            $oldCO = strtotime($value['Checkout']);
           }
 
 
@@ -274,11 +274,10 @@ function cutFromPromo($promo, $price)
           $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
           $result_status = mysqli_query($connection, $status_query);
           confirm($result_status);
-      }
-
+        }
       }
     } else {
-
+      date_default_timezone_set('Africa/Addis_Ababa');
       $roomID = json_encode($id);
       $guestInfoAlls = json_encode($guestInfoAll);
       $roomNums = json_encode($roomNum);
@@ -287,8 +286,10 @@ function cutFromPromo($promo, $price)
       $CICOAlls  = json_encode($CICOAll);
       $boardeArrs = json_encode($boardeArr);
 
-      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board) 
-      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls', '$boardeArrs')";
+      $created_at = date('Y-m-d h:i:s');
+
+      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board, created_at) 
+      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls', '$boardeArrs', '$created_at')";
 
       $result = mysqli_query($connection, $queryDB);
       confirm($result);

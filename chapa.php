@@ -95,6 +95,8 @@
       'first_name' => $_SESSION['fName'],
       'last_name' => $_SESSION['lName'],
       'tx_ref' =>  $tx_ref,
+      // 'callback_url' => 'http://localhost/reservation_system/chapaCompleted/',
+      // 'return_url' => 'http://localhost/reservation_system/',
       'callback_url' => 'https://reservations.kurifturesorts.com/chapaCompleted/',
       'return_url' => 'https://reservations.kurifturesorts.com/'
     ),
