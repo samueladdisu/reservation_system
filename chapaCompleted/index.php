@@ -8,6 +8,9 @@ require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
+date_default_timezone_set('Africa/Addis_Ababa');
+
+
 $received_data = json_decode(file_get_contents("php://input"));
 
 $tx_ref = $received_data->trx_ref;
