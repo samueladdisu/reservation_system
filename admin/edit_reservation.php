@@ -484,46 +484,27 @@
     let cart = JSON.parse(editTemp[0].res_cart)
 
 
-    console.log("cart ", cart);
+    // console.log("cart ", cart);
 
-    console.log(res_id);
+    // console.log(res_id);
 
     console.log("res checkin", editTemp[0].res_checkin)
+    console.log("res checkin", editTemp[0].res_checkout)
 
-    var start, end
-    var today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
+    // convert dates to mm/dd/yyy format
 
-    let tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
+    const [year, month, day] = editTemp[0].res_checkin.split('-');
+    const [year2, month2, day2] = editTemp[0].res_checkout.split('-');
+    let start = [month, day, year].join('/')
+    let end = [month2, day2, year2].join('/')
 
-    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-    const td = String(tomorrow.getDate()).padStart(2, '0');
-    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const ty = tomorrow.getFullYear();
-
-    today = mm + '/' + dd + '/' + yyyy;
-    tomorrow = tm + '/' + td + '/' + ty;
-
-    start = yyyy + '-' + mm + '-' + dd;
-    end = ty + '-' + tm + '-' + td;
-
-    console.log("inital start", start);
-    console.log("inital end", end);
 
     $(document).ready(function() {
-
-      console.log("initial start", start);
-      console.log("initial end", end);
       $('#date').daterangepicker();
-      $('#date').data('daterangepicker').setStartDate(today);
-      $('#date').data('daterangepicker').setEndDate(tomorrow);
+      $('#date').data('daterangepicker').setStartDate(start);
+      $('#date').data('daterangepicker').setEndDate(end);
 
       $('#date').on('apply.daterangepicker', function(ev, picker) {
-        // console.log(picker.startDate.format('YYYY-MM-DD'));
-        // console.log(picker.endDate.format('YYYY-MM-DD'));
 
         start = picker.startDate.format('YYYY-MM-DD')
         end = picker.endDate.format('YYYY-MM-DD')
@@ -533,7 +514,7 @@
     })
 
 
-
+    
 
 
 
@@ -674,7 +655,8 @@
 
         },
         async fetchAll() {
-
+          console.log("inside vue",start)
+          console.log("inside vue",end)
           await axios.post('load_modal.php', {
             action: 'fetchAll',
             checkin: start,
@@ -852,7 +834,7 @@
       }
     })
 
-    app.mount('#app')
+    var vm2 = app.mount('#app')
   </script>
 
 

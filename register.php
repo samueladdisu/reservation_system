@@ -215,7 +215,9 @@ function cutFromPromo($promo, $price)
     $_SESSION['fName'] = $params['res_firstname'];
     $_SESSION['lName'] = $params['res_lastname'];
     $_SESSION['email'] = $params['res_email'];
-    $_SESSION['currency'] = $params['res_currency'];
+
+   
+    
 
     if (isset($_POST['res_guestNo'])) {
       if ($_SESSION["promoApp"] == false) {
@@ -310,14 +312,16 @@ function cutFromPromo($promo, $price)
 
 
       switch ($params['res_paymentMethod']) {
-        case 'amole':
-          header("Location: ./amole.php");
-          break;
         case 'telebirr':
           header("Location: ./telebirr.php");
           break;
-        case 'chapa':
+        case 'chapa_usd':
           header("Location: ./chapa.php");
+          $_SESSION['currency'] = "USD";
+          break;
+        case 'chapa_etb':
+          header("Location: ./chapa.php");
+          $_SESSION['currency'] = "ETB";
           break;
       }
       // } else {
@@ -379,19 +383,10 @@ function cutFromPromo($promo, $price)
           <label for="inputState" class="form-label payment">Payment Platform</label>
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
-            <option value="chapa">Credit / Debit Card</option>
+            <option value="chapa_usd">Credit / Debit Card</option>
             <!-- <option value="amole">Amole</option> -->
             <option value="telebirr">Telebirr</option>
-            <!-- <option value="arrival">Pay on Arrival</option> -->
-          </select>
-        </div>
-        <div class="col-md-6"></div>
-        <div class="col-md-6">
-          <label for="currency" class="form-label payment">Currency</label>
-          <select required id="currency" name="res_currency" class="form-select">
-            <option disabled value="">Select Option</option>
-            <option value="ETB">ETB</option>
-            <option value="USD">USD</option>
+            <option value="chapa_etb">Bank of Abysiniya</option>
           </select>
         </div>
 
