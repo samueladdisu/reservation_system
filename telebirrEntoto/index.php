@@ -14,6 +14,8 @@ $dotenv->load();
 ?>
 <?php
 
+
+header('Content-Type: application/json; charset=utf-8');
 $content = file_get_contents('php://input');
 
 $publicKey = $_ENV['EPublic_Key'];
@@ -51,6 +53,11 @@ date_default_timezone_set('Africa/Addis_Ababa');
 
 
 $nofityData = decryptRSA($content, $publicKey);
+$response = [
+  "code" => 0,
+  "msg" => "success"
+];
+echo json_encode($response);
 $jsonnofityData = json_decode($nofityData, true);
 file_put_contents("Lemlem.txt", $jsonnofityData['outTradeNo'] . PHP_EOL . PHP_EOL, FILE_APPEND);
 
@@ -184,12 +191,7 @@ foreach ($carts  as $value) {
 $delete_temp_query = "DELETE FROM temp_res WHERE temp_ID = '$PayerId'";
 $delete_result = mysqli_query($connection, $delete_temp_query);
 
-$response = [
-  "code" => 0,
-  "msg" => "success"
-];
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode($response);
+
 
 
 ?>
