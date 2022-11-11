@@ -184,7 +184,12 @@ foreach ($carts  as $value) {
 $delete_temp_query = "DELETE FROM temp_res WHERE temp_ID = '$PayerId'";
 $delete_result = mysqli_query($connection, $delete_temp_query);
 
-
+$response = [
+  "code" => 0,
+  "msg" => "success"
+];
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode($response);
 
 
 ?>
