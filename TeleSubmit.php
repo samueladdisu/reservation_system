@@ -98,6 +98,10 @@ function converttoETB($price)
     $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
     $rate_result = mysqli_query($connection, $rate_query);
     confirm($rate_result);
+
+    $insert_to_exrate = "INSERT INTO exchage_rates(date, rate) VALUES('$todaydate', $rate_value)";
+    $insert_result = mysqli_query($connection, $insert_to_exrate);
+    confirm($insert_result);
     return $price * $rate_value;
   }
 }
@@ -125,23 +129,20 @@ function cancelLitsener($Money)
     foreach ($item[$name] as $name1 => $val) {
 
 
-       $items[$name1] = $val;
-
-       
+      $items[$name1] = $val;
     }
-    
   }
 
   $loc =  $items['room_location'];
 
-  if($loc === 'Bishoftu'){
+  if ($loc === 'Bishoftu') {
     $appKey = $_ENV['BApp_Key'];
     $appId  = $_ENV['BApp_ID'];
     $publicKey = $_ENV['BPublic_Key'];
     $short_code = $_ENV['BShort_Code'];
     $receiveName = $_ENV['BName'];
     $notify_url = "https://reservations.kurifturesorts.com/telebirrBishoftu/";
-  } else if($loc === 'entoto'){
+  } else if ($loc === 'entoto') {
     $appKey = $_ENV['EApp_Key'];
     $appId  = $_ENV['EApp_ID'];
     $publicKey = $_ENV['EPublic_Key'];
@@ -157,7 +158,6 @@ function cancelLitsener($Money)
     $short_code = $_ENV['TShort_Code'];
     $receiveName = $_ENV['TName'];
     $notify_url = "https://reservations.kurifturesorts.com/telebirrTana/";
-
   }
 
   $ConvertedMoney = converttoETB($Money);

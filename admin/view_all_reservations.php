@@ -31,9 +31,62 @@
           <div class="row">
             <div class="col-12 mb-2">
 
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Exchange Rates</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="table-responsive">
+                        <table class="table display table-bordered" width="100%" id="exRates" cellspacing="0">
+
+
+                          <thead>
+                            <tr>
+                              <th>Id</th>
+                              <th>Date</th>
+                              <th>Rate</th>
+                            </tr>
+                          </thead>
+                          <?php
+
+                          $ex_query = "SELECT * FROM exchage_rates ORDER BY id DESC";
+                          $ex_result = mysqli_query($connection, $ex_query);
+
+                          confirm($ex_result);
+
+                          while ($row = mysqli_fetch_assoc($ex_result)) {
+                          ?>
+                            <tr>
+                              <td><?php echo $row['id'] ?></td>
+                              <td><?php echo $row['date'] ?></td>
+                              <td><?php echo $row['rate'] ?></td>
+                            </tr>
+                          <?php
+                          }
+
+                          ?>
+
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
+                <div class="card-header d-flex justify-content-between py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Reservations</h6>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Exchange Rates
+                  </button>
+
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -130,9 +183,9 @@
                         <button @click.prevent="fetchRoomStatus('<?php echo $_SESSION['user_location']; ?>')" class="btn btn-danger mx-2">Clear Filters</button>
                       <?php  } ?>
 
-                 
 
-                      
+
+
 
                     </div>
 
@@ -260,7 +313,7 @@
                     <li class="list-group-item"> <strong>Payment Confirmed At:</strong> {{ tempRow.payment_confirmed_at }}</li>
                   </ul>
                 </div>
-                
+
 
 
               </div>
@@ -344,7 +397,7 @@
 
 
   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
- <script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
   <!-- Core plugin JavaScript-->
 
 
@@ -361,6 +414,14 @@
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
+    $(document).ready(function() {
+
+      $('#exRates').DataTable({
+        order: [
+          [0, 'des']
+        ],
+      });
+    })
     const app = Vue.createApp({
       data() {
         return {
@@ -605,15 +666,14 @@
       },
       created() {
         this.fetchData()
-
         <?php
 
-          if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
         ?>
-        this.fetchRoomStatus()
+          this.fetchRoomStatus()
 
         <?php } else { ?>
-                        
+
           this.fetchRoomStatus('<?php echo $_SESSION['user_location']; ?>')
 
         <?php  } ?>

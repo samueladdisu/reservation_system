@@ -104,10 +104,12 @@
            </div>
        </div>
    </div>
+
+  
    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
    <script>
        $(function() {
-
+        
            var dateFormat = "mm/dd/yy";
            var minDatefrom;
 
@@ -130,6 +132,7 @@
            }
 
        });
+     
    </script>
 
    </body>
