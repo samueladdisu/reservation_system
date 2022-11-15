@@ -74,6 +74,7 @@
               ?>
 
 
+
               <form action="" @submit.prevent="addReservation" method="POST" id="reservation" class="col-12 row" enctype="multipart/form-data">
 
                 <h1 class="mb-4">Edit Reservation</h1>
@@ -514,7 +515,7 @@
     })
 
 
-    
+
 
 
 
@@ -655,8 +656,8 @@
 
         },
         async fetchAll() {
-          console.log("inside vue",start)
-          console.log("inside vue",end)
+          console.log("inside vue", start)
+          console.log("inside vue", end)
           await axios.post('load_modal.php', {
             action: 'fetchAll',
             checkin: start,
@@ -765,12 +766,19 @@
           let arrival, departure
 
           if (start && end) {
-            arrival = start
-            departure = end
+
+            const [ month, day , year] = start.split('/');
+            const [month2, day2, year2] = end.split('/');
+            arrival = [ year, month, day].join('-')
+            departure = [year2, month2, day2].join('-')
+
           } else {
             arrival = this.editCheckin
             departure = this.editCheckout
           }
+
+          console.log("start", start)
+          console.log("end", end)
 
           console.log("check in", arrival);
           console.log("check out", departure);
