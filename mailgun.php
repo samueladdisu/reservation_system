@@ -5,7 +5,11 @@ require 'vendor/autoload.php';
 
 use Mailgun\Mailgun;
 // First, instantiate the SDK with your API credentials
-$mg = Mailgun::create('b7a48d55770182bb0d7500b03764acd2-31eedc68-53c4eb17');
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 
 $mg->messages()->send('reservations.kurifturesorts.com', [
     'from'    => 'no-reply@kurifturesorts.com',
