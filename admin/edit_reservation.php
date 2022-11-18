@@ -766,11 +766,17 @@
           let arrival, departure
 
           if (start && end) {
+            // console.log("start", start)
+            // console.log("end", end)
 
-            const [ month, day , year] = start.split('/');
-            const [month2, day2, year2] = end.split('/');
-            arrival = [ year, month, day].join('-')
-            departure = [year2, month2, day2].join('-')
+            // const [ month, day , year] = start.split('/');
+            // const [month2, day2, year2] = end.split('/');
+            // console.log([ month, day , year])
+            // console.log([month2, day2, year2])
+            // arrival = [ year, month, day].join('-')
+            // departure = [year2, month2, day2].join('-')
+            arrival = start 
+            departure = end
 
           } else {
             arrival = this.editCheckin
@@ -792,7 +798,7 @@
             rooms: this.cart,
             // price: this.totalPrice
           }).then(res => {
-            window.location.href = 'view_all_reservations.php'
+            // window.location.href = 'view_all_reservations.php'
             console.log(res.data);
             this.totalPrice = res.data
           })
