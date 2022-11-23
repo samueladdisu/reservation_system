@@ -253,7 +253,7 @@ if (isset($_GET['ref'])) {
                                     <br>Per Night<br>Including Taxes & Fees
                                 </p>
                                 </p>
-                                <a href="./reserve.php?location=entoto"> <button class="btn btn-black btn-detail" >View Rooms </button></a>
+                                <a href="./reserve.php?location=entoto"> <button class="btn btn-black btn-detail">View Rooms </button></a>
                             </div>
                         </div>
 
@@ -309,8 +309,8 @@ if (isset($_GET['ref'])) {
     </footer>
 
     <script>
-	esk('track', 'Conversion');
-</script>
+        esk('track', 'Conversion');
+    </script>
 
 </body>
 

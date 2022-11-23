@@ -11,44 +11,23 @@
 </head>
 
 <body>
-  <section class="signup-header">
+  <header class="reserve-header">
+    <nav class="nav-center">
 
-    <div class="container">
-      <nav class="nav-center">
-        <div class="signup-menu">
-          <div class="line1"></div>
-          <div class="line2"></div>
-        </div>
-        <div class="logo">
-          <img src="./img/black_logo.svg" alt="">
-        </div>
-
-        <div class="book-now">
-          <a href="#" class="btn btn-outline-black ">Book Now</a>
-        </div>
-      </nav>
-    </div>
-  </section>
+      <div class="logo">
+        <img src="./img/black_logo.svg" alt="">
+      </div>
+     
+    </nav>
+  </header>
 
   <section class="main-body">
     <h1 class="caps text-center">Thank you for choosing us! </h1>
     <div class="container" id="form-wiget">
-  
-    <?php 
-    
-      // if(isset($_GET['tx'])){
-      //   $amount = $_GET['amt'];
-      //   $currency = $_GET['cc'];
-      //   $transaction = $_GET['tx'];
-      //   $status = $_GET['st'];
-      // }else {
-      //   header("Location: ./reserve.php");
-      // }
-    
-    
-    ?>
+
       
 
+    <a href="./reserve.php?location=awash"> <button class="btn btn-black btn-detail">Back to Home </button></a>
 
     </div>
   </section>
