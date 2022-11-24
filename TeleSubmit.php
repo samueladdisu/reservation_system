@@ -200,7 +200,7 @@ function cancelLitsener($Money)
     'ussd' => $ussd
   ];
 
-  $api = "https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/toTradeWebPay";
+  $api = "http://196.188.120.3:11443/ammapi/service-openup/toTradeWebPay";
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $api);
