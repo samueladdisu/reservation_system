@@ -200,7 +200,7 @@ function cancelLitsener($Money)
     'ussd' => $ussd
   ];
 
-  $api = "http://196.188.120.3:11443/ammapi/service-openup/toTradeWebPay";
+  $api = "http://196.188.120.3:11443/service-openup/toTradeWebPay";
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $api);
