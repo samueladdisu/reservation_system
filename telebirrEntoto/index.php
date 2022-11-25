@@ -1,7 +1,7 @@
 <?php
 
 file_put_contents("Lemlem1.txt", "hello world". PHP_EOL . PHP_EOL, FILE_APPEND);
-ob_start();
+// ob_start();
 session_start();
 require  '../admin/includes/db.php';
 require  '../admin/includes/functions.php';
@@ -59,7 +59,7 @@ $response = [
   "code" => 0,
   "msg" => "success"
 ];
-echo json_encode($response);
+// echo json_encode($response);
 $jsonnofityData = json_decode($nofityData, true);
 file_put_contents("Lemlem.txt", $jsonnofityData['outTradeNo'] . PHP_EOL . PHP_EOL, FILE_APPEND);
 
@@ -180,13 +180,13 @@ foreach ($carts  as $value) {
   $result_status = mysqli_query($connection, $status_query);
   confirm($result_status);
 
-  $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-    'from'    => 'no-reply@kurifturesorts.com',
-    'to'      => $email,
-    'subject' => 'Kuriftu Resort and Spa',
-    'html'    =>  "<h2>You have succesfully reserved a room</h2>
-    <p> Here is your confirmation code $res_confirmID </p>"
-  ]);
+//   $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
+//     'from'    => 'no-reply@kurifturesorts.com',
+//     'to'      => $email,
+//     'subject' => 'Kuriftu Resort and Spa',
+//     'html'    =>  "<h2>You have succesfully reserved a room</h2>
+//     <p> Here is your confirmation code $res_confirmID </p>"
+//   ]);
 }
 
 
