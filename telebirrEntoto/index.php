@@ -1,5 +1,5 @@
 <?php
-ob_start();
+// ob_start();
 session_start();
 require  '../admin/includes/db.php';
 require  '../admin/includes/functions.php';
@@ -178,13 +178,13 @@ foreach ($carts  as $value) {
   $result_status = mysqli_query($connection, $status_query);
   confirm($result_status);
 
-  $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-    'from'    => 'no-reply@kurifturesorts.com',
-    'to'      => $email,
-    'subject' => 'Kuriftu Resort and Spa',
-    'html'    =>  "<h2>You have succesfully reserved a room</h2>
-    <p> Here is your confirmation code $res_confirmID </p>"
-  ]);
+  // $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
+  //   'from'    => 'no-reply@kurifturesorts.com',
+  //   'to'      => $email,
+  //   'subject' => 'Kuriftu Resort and Spa',
+  //   'html'    =>  "<h2>You have succesfully reserved a room</h2>
+  //   <p> Here is your confirmation code $res_confirmID </p>"
+  // ]);
 }
 
 
