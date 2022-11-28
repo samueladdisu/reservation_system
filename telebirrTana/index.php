@@ -1,5 +1,5 @@
 <?php
-ob_start();
+// ob_start();
 session_start();
 require  '../admin/includes/db.php';
 require  '../admin/includes/functions.php';
@@ -8,7 +8,7 @@ require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
-use Mailgun\Mailgun;
+// use Mailgun\Mailgun;
 // First, instantiate the SDK with your API credentials
 // $mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
 ?>
@@ -172,13 +172,13 @@ foreach ($carts  as $value) {
   $result_status = mysqli_query($connection, $status_query);
   confirm($result_status);
 
-  $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-    'from'    => 'no-reply@kurifturesorts.com',
-    'to'      => $email,
-    'subject' => 'Kuriftu Resort and Spa',
-    'html'    =>  "<h2>You have succesfully reserved a room</h2>
-    <p> Here is your confirmation code $res_confirmID </p>"
-  ]);
+  // $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
+  //   'from'    => 'no-reply@kurifturesorts.com',
+  //   'to'      => $email,
+  //   'subject' => 'Kuriftu Resort and Spa',
+  //   'html'    =>  "<h2>You have succesfully reserved a room</h2>
+  //   <p> Here is your confirmation code $res_confirmID </p>"
+  // ]);
 }
 
 

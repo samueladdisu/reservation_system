@@ -1295,8 +1295,14 @@
             checkout: end
           }).then(res => {
             console.log(res.data);
-            this.allData = res.data
-            this.table(res.data)
+            if(res.data !== "empty"){
+              this.allData = res.data
+              this.table(res.data)
+            }else {
+              this.allData = {}
+              this.table({})
+              alert("No Room Avaliable Please Try different Dates")
+            }
           }).catch(err => console.log(err.message))
 
           console.log("filtered data", this.allData);

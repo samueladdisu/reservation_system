@@ -1,5 +1,5 @@
 <?php
-ob_start();
+// ob_start();
 session_start();
 require  '../admin/includes/db.php';
 require  '../admin/includes/functions.php';
@@ -155,26 +155,6 @@ if ($status == "success") {
         $delete_temp_query = "DELETE FROM temp_res WHERE userGID = '$tx_ref'";
         $delete_result = mysqli_query($connection, $delete_temp_query);
 
-        $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("samueladdisu9@gmail.com", "Kuriftu Resort");
-        $email->setSubject("You have Successfully Reserved A room");
-        $email->addTo($email, $firstName . $lastName );
-        $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
-        $email->addContent(
-            "text/html",
-            "<strong>and easy to do anywhere, even with PHP</strong>"
-        );
-        $sendgrid = new \SendGrid($_ENV['SENDGRID_API_KEY']);
-        try {
-            $response = $sendgrid->send($email);
-            print $response->statusCode() . "\n";
-            print_r($response->headers());
-            print $response->body() . "\n";
-
-            file_put_contents("chapa.txt", $response->statusCode() . $response->headers() .$response->body() . PHP_EOL . PHP_EOL, FILE_APPEND);
-        } catch (Exception $e) {
-            // echo 'Caught exception: ' . $e->getMessage() . "\n";
-            file_put_contents("chapa.txt", $e->getMessage()  . PHP_EOL . PHP_EOL, FILE_APPEND);
-        }
+        
     }
 }
