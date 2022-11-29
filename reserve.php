@@ -1,4 +1,3 @@
-
 <?php include  'config.php'; ?>
 <?php
 $RoomType = '';
@@ -52,7 +51,26 @@ if (isset($_GET['checkout'])) {
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-
+  <!-- Eskimi DSP Pixel Code -->
+  <script>
+    ! function(f, e, t, u, n, s, p) {
+      if (f.esk) return;
+      n = f.esk = function() {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f.___esk) f.___esk = n;
+      n.push = n;
+      n.loaded = !0;
+      n.queue = [];
+      s = e.createElement(t);
+      s.async = !0;
+      s.src = u;
+      p = e.getElementsByTagName(t)[0];
+      p.parentNode.insertBefore(s, p)
+    }(window, document, 'script', 'https://dsp-media.eskimi.com/assets/js/e/gtr.min.js?_=0.0.0.3');
+    esk('init', '24382');
+  </script>
+  <!-- End Eskimi DSP Pixel Code -->
 
   <title>Reservation</title>
 </head>
@@ -145,7 +163,7 @@ if (isset($_GET['checkout'])) {
     <div class="container-sm">
 
       <div class="form-wrapper">
-  
+
         <div class="modal" tabindex="-1" role="dialog" id="TimesUP">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -165,9 +183,9 @@ if (isset($_GET['checkout'])) {
             </div>
           </div>
         </div>
-  
+
         <form class="myform row" @submit.prevent="submitData">
-  
+
           <div class="form-group col-lg-6">
             <label for="date" class="label-date" id="label">Select Date</label>
             <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
@@ -180,15 +198,15 @@ if (isset($_GET['checkout'])) {
         </form>
       </div>
     </div>
-    <div class="container-sm" >
+    <div class="container-sm">
 
-    <div class="centerSAD" v-if="!haveData">
+      <div class="centerSAD" v-if="!haveData">
         <div class="container-sm complete-cont  ">
           <div class="check-box-wrapper">
             <div class="check-icon">
               <img src="./img/sad2.svg" alt="">
               <p> No room available</p>
-              <h2>Please select different dates and try again  </h2>
+              <h2>Please select different dates and try again </h2>
             </div>
           </div>
         </div>
@@ -492,8 +510,7 @@ if (isset($_GET['checkout'])) {
             <div class="form-group">
               <label for="" class="text-dark">Guest Number</label>
               <div class="row">
-                <select name="adults" 
-                @change="CheckGuest" v-model="res_adults" class="custom-select col-3">
+                <select name="adults" @change="CheckGuest" v-model="res_adults" class="custom-select col-3">
                   <option value="" disabled selected>Guests</option>
                   <option value="0">0</option>
                   <option value="1">1</option>
@@ -599,17 +616,6 @@ if (isset($_GET['checkout'])) {
 
 
   <?php include_once './includes/footer.php' ?>
-
-<!-- Eskimi DSP Pixel Code -->
-<script>
-	!function(f,e,t,u,n,s,p) {if(f.esk)return;n=f.esk=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f.___esk)f.___esk=n;n.push=n;n.loaded=!0;n.queue=[];s=e.createElement(t);s.async=!0;s.src=u;p=e.getElementsByTagName(t)[0];p.parentNode.insertBefore(s,p)}(window,document,'script', 'https://dsp-media.eskimi.com/assets/js/e/gtr.min.js?_=0.0.0.3');
-	esk('init', '24382');
-</script>
-<!-- End Eskimi DSP Pixel Code -->
-
-
-
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
@@ -945,7 +951,7 @@ if (isset($_GET['checkout'])) {
           row = this.roww
           // console.log(this.res_BB)
 
-          
+
           <?php if ($Location == "awash") { ?>
             if (this.res_adults === 'undefined' || this.res_adults == null || this.res_adults == "0") {
               alert("Adult can not be 0")
@@ -1134,7 +1140,7 @@ if (isset($_GET['checkout'])) {
             }
           <?php } ?>
 
-          
+
         },
 
         booked() {
@@ -1253,7 +1259,7 @@ if (isset($_GET['checkout'])) {
             }).then(res => {
               this.allData = res.data
               this.takeOneEach(this.allData)
-              console.log("location only",res.data);
+              console.log("location only", res.data);
               console.log(start)
               console.log(end)
             })
@@ -1269,7 +1275,7 @@ if (isset($_GET['checkout'])) {
               checkout: end,
             }).then(res => {
               this.allData = res.data
-              console.log("location and roomtype",res.data);
+              console.log("location and roomtype", res.data);
               this.takeOneEach(this.allData)
             })
 
@@ -1284,7 +1290,7 @@ if (isset($_GET['checkout'])) {
             }).then(res => {
               this.allData = res.data
               console.log(res.data);
-              this.takeOneEach("location checkin checkout",this.allData)
+              this.takeOneEach("location checkin checkout", this.allData)
             })
 
 
@@ -1369,15 +1375,15 @@ if (isset($_GET['checkout'])) {
               this.allData = res.data
               console.log(this.allData);
 
-              if (this.allData == "empty"){
+              if (this.allData == "empty") {
                 console.log("empty")
                 this.haveData = false
-              }else {
+              } else {
                 this.haveData = true
                 this.takeOneEach(this.allData)
               }
             }).catch(err => {
-              console.log("error",err);
+              console.log("error", err);
             })
           } else {
             alert('Please fill all fields')

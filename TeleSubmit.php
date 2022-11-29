@@ -170,7 +170,7 @@ function cancelLitsener($Money)
     // 'totalAmount' => 1,
     'shortCode' =>  $short_code,
     'notifyUrl' => $notify_url,
-    'returnUrl' => 'https://reservations.kurifturesorts.com/',
+    'returnUrl' => 'https://reservations.kurifturesorts.com/Thankyou/',
     'receiveName' => $receiveName,
     'appId' => $appId,
     'timeoutExpress' => '30',

@@ -85,6 +85,19 @@ $lime-green: #71deb5;
 $blue: #3d5a80;
 $trans: all 0.5s ease-in-out;
 
+.btn-wrapper {
+  display: grid;
+  place-items: center;
+  margin-top: 2rem;
+}
+
+.thanks_footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
 // Gird system
 .container {
   width: 100% - 10%;
@@ -188,6 +201,16 @@ $trans: all 0.5s ease-in-out;
   background: $kuriftu-brown;
   color: $kuriftu-white;
   border-color: $kuriftu-brown;
+}
+.btn-back {
+  background: $kuriftu-black;
+  color: $kuriftu-white;
+  border-color: $kuriftu-black;
+}
+.btn-back2 {
+  background: $kuriftu-black;
+  color: $kuriftu-white;
+  border-color: $kuriftu-black;
 }
 .btn-rounded {
   // border-radius: 48px;
