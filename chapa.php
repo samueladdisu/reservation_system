@@ -98,7 +98,7 @@
       // 'callback_url' => 'http://localhost/reservation_system/chapaCompleted/',
       // 'return_url' => 'http://localhost/reservation_system/',
       'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted/',
-      'return_url' => 'https://test.kurifturesorts.com/'
+      'return_url' => 'https://test.kurifturesorts.com/Thankyou/'
     ),
     CURLOPT_HTTPHEADER => array(
       'Authorization: Bearer ' . $_ENV['CHAPA_SECK']
