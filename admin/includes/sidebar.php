@@ -44,8 +44,8 @@
                     if ($_SESSION['user_role'] != 'RA') {
                     ?>
 
-                 <a class="collapse-item" href="./view_bulk_reservations.php">View Group Reservation</a>
-                 <a class="collapse-item" href="./reservations.php?source=bulk">Add Group Reservation</a>
+                 <!-- <a class="collapse-item" href="./view_bulk_reservations.php">View Group Reservation</a>
+                 <a class="collapse-item" href="./reservations.php?source=bulk">Add Group Reservation</a> -->
                  <?php
                     }
                     ?>
