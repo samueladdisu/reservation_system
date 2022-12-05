@@ -798,7 +798,7 @@
             rooms: this.cart,
             // price: this.totalPrice
           }).then(res => {
-            window.location.href = 'view_all_reservations.php'
+            // window.location.href = 'view_all_reservations.php'
             console.log(res.data);
             this.totalPrice = res.data
           })

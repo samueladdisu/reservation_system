@@ -3,7 +3,16 @@
 $RoomType = '';
 $Location = '';
 
+if (isset($_GET['ref'])) {
+  date_default_timezone_set("Africa/Addis_Ababa");
+  $ref = $_GET['ref'];
 
+  $clicked_at = date('Y-m-d H:i:s');
+
+  $query = "INSERT INTO visitors(source, clicked_at) VALUES('$ref', '$clicked_at')";
+  $result = mysqli_query($connection, $query);
+  confirm($result);
+}
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
   if ($Location !== "entoto") {

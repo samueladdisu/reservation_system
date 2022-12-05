@@ -40,15 +40,8 @@
              <div class="bg-white py-2 collapse-inner rounded">
                  <a class="collapse-item" href="./reservations.php">View All reservations</a>
                  <a class="collapse-item" href="./reservations.php?source=add_reservation">Add Reservation</a>
-                 <?php
-                    if ($_SESSION['user_role'] != 'RA') {
-                    ?>
-
-                 <!-- <a class="collapse-item" href="./view_bulk_reservations.php">View Group Reservation</a>
-                 <a class="collapse-item" href="./reservations.php?source=bulk">Add Group Reservation</a> -->
-                 <?php
-                    }
-                    ?>
+                 <a class="collapse-item" href="./view_bulk_reservations.php">View Group Reservation</a>
+                 <a class="collapse-item" href="./reservations.php?source=bulk">Add Group Reservation</a>
              </div>
          </div>
      </li>

@@ -26,19 +26,15 @@ if (!isset($_SESSION['user_role'])) {
   <title>Add Group Reservation - Dashboard</title>
 
   <!-- Custom fonts for this template-->
-  <!-- <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> -->
-
-  <!-- <link rel="stylesheet" href="https://cdn.datatables.net/s/dt/dt-1.10.10,se-1.1.0/datatables.min.css"> -->
   <!-- Custom styles for this template-->
 
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-<!-- 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css"> -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
   <style>
     #success_tic .page-body {
       max-width: 300px;
@@ -289,27 +285,8 @@ if (!isset($_SESSION['user_role'])) {
                     <div class="card-header py-3">
                       <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
                     </div>
-                    <div class="card-body d-flex justify-content-center">
+                    <div class="card-body d-flex">
                       <div class="col-6 row">
-                        <!-- <label> Select Dates * </label> -->
-                        <!-- <div class="t-datepicker col-12 form-group  my-2">
-                          <div class="t-check-in">
-                            <div class="t-dates t-date-check-in">
-                              <label class="t-date-info-title">Check In</label>
-                            </div>
-                            <input type="hidden" class="t-input-check-in" name="start">
-                            <div class="t-datepicker-day">
-                              <table class="t-table-condensed">
-                              </table>
-                            </div>
-                          </div>
-                          <div class="t-check-out">
-                            <div class="t-dates t-date-check-out">
-                              <label class="t-date-info-title">Check Out</label>
-                            </div>
-                            <input type="hidden" class="t-input-check-out" name="end">
-                          </div>
-                        </div> -->
 
                         <div class="form-group col-lg-12">
                           <label for="date" class="label-date" id="label">Select Date</label>
@@ -438,6 +415,24 @@ if (!isset($_SESSION['user_role'])) {
                                                     <h6 class="m-0 font-weight-bold text-primary">Fill in Gue</h6>
                                                 </div> -->
 
+                      </div>
+
+                      <div class="col-6">
+                        <h6 class="mb-2 font-weight-bold">Selected Rooms</h6>
+
+                        <table class="table display table-bordered table-hover" id="selectedRooms" width="100%" cellspacing="0">
+
+                          <thead>
+                            <tr>
+                              <th>Room No</th>
+                              <th>Room Type</th>
+                              <th>Room Location</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                     <div class="card-footer">
@@ -650,27 +645,18 @@ if (!isset($_SESSION['user_role'])) {
   <script src="https://unpkg.com/vue@3.0.2"></script>
 
 
-  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
   <script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script> -->
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-  <!-- <script src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script> -->
-
-  <!-- <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script> -->
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
   <!-- data table plugin  -->
-
-
 
   <script>
     var start, end
@@ -715,7 +701,6 @@ if (!isset($_SESSION['user_role'])) {
       });
     })
 
-
     const app = Vue.createApp({
       data() {
         return {
@@ -757,32 +742,44 @@ if (!isset($_SESSION['user_role'])) {
         }
 
       },
-      watch: {
-        'formData.group_reason'(val) {
-          if (this.location == 'Awash') {
-            this.custom = true
-            this.formData.group_status = "cus"
-          }
-
-          if (this.location != 'Bishoftu' && val == "wed") {
-
-            console.log("watch", val);
-            console.log("watch", this.location);
-
-            this.custom = true
-            this.formData.group_status = "cus"
-          }
-        },
-        'formData.group_GNum'(val) {
-          if (val != 0 || val != '') {
-            this.selectRoom = false
-          } else {
-            this.selectRoom = true
-          }
-        }
-      },
-
       methods: {
+        selectedRoomsTable(row) {
+          const dataTable = $('#selectedRooms').DataTable({
+            destroy: true,
+            order: [
+              [0, 'asc']
+            ],
+            data: row,
+            columns: [{
+                data: 'room_number'
+              },
+              {
+                data: 'room_acc'
+              },
+              {
+                data: 'room_location'
+              },
+              {
+                data: 'room_id',
+                render: function(data, type, row) {
+                  return `<a data-row="${data}"  id="deleteRow"><i style='color: red;' class='far fa-trash-alt'></i></a>`
+                }
+              }
+            ],
+
+          });
+
+          let vm = this
+          $(document).on('click', '#deleteRow', function() {
+            let id = $(this).data('row')
+            console.log("from table", id)
+            vm.bookedRooms = vm.bookedRooms.filter(item => item.room_id != id)
+            dataTable.clear();
+            dataTable.rows.add(vm.bookedRooms);
+            dataTable.draw();
+          })
+
+        },
         async checkLocationLoaded() {
           if (document.getElementById("hiddenlocation").value) {
             let location = document.getElementById("hiddenlocation").value
@@ -820,6 +817,8 @@ if (!isset($_SESSION['user_role'])) {
         },
         closePopOut() {
           console.log("Selected Rooms", this.bookedRooms);
+
+          this.selectedRoomsTable(this.bookedRooms)
           $("#exampleModalCenter").modal("hide");
 
 
@@ -908,7 +907,7 @@ if (!isset($_SESSION['user_role'])) {
                   RoomNum: this.room_quantity,
                   location: this.location
                 }).then(res => {
-                  // window.location.href = 'view_bulk_reservations.php'
+                  window.location.href = 'view_bulk_reservations.php'
                   console.log(res.data);
 
                   if (res.data == true) {
@@ -934,9 +933,12 @@ if (!isset($_SESSION['user_role'])) {
 
         },
         async fetchAll() {
-
+          console.log("fetch", start)
+          console.log("fetch", end)
           await axios.post('load_modal.php', {
-            action: 'fetchAll'
+            action: 'fetchAll',
+            checkin: start,
+            checkout: end
           }).then(res => {
             this.allData = res.data
             // this.table(res.data)
@@ -991,6 +993,30 @@ if (!isset($_SESSION['user_role'])) {
           this.roomType = ''
           this.location = ''
         },
+      },
+      watch: {
+        'formData.group_reason'(val) {
+          if (this.location == 'Awash') {
+            this.custom = true
+            this.formData.group_status = "cus"
+          }
+
+          if (this.location != 'Bishoftu' && val == "wed") {
+
+            console.log("watch", val);
+            console.log("watch", this.location);
+
+            this.custom = true
+            this.formData.group_status = "cus"
+          }
+        },
+        'formData.group_GNum'(val) {
+          if (val != 0 || val != '') {
+            this.selectRoom = false
+          } else {
+            this.selectRoom = true
+          }
+        }
       },
       created() {
         this.fetchAll()
@@ -1060,22 +1086,8 @@ if (!isset($_SESSION['user_role'])) {
         <?php  } ?>
       }
     })
-
     app.mount('#app')
   </script>
-
-
-
-
-
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
-
-
-
-
-
-  <!-- <script src="./js/room.js"></script> -->
 
 </body>
 
