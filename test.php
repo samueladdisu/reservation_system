@@ -38,7 +38,7 @@ confirm($free_hold_result);
 
 
 $roomIDs = array();
-echo "Today ". $today = date('Y-m-d') . "<br>";
+// echo "Today ". $today = date('Y-m-d') . "<br>";
   
 $back_query = "SELECT b_roomId FROM booked_rooms WHERE b_checkout < '$today'";
 
@@ -54,7 +54,7 @@ while($row = mysqli_fetch_assoc($back_result)) {
 }
 
 // var_dump($roomIDs);
-echo "<br>";
+// echo "<br>";
 
 foreach ($roomIDs as $val) {
   $front_query = "SELECT * FROM booked_rooms WHERE b_checkout > '$today' AND b_roomID = $val";
@@ -63,13 +63,13 @@ foreach ($roomIDs as $val) {
 
 
   if($num_row === 0){
-    echo "Must be Not booked".$val . "<br>";
+    // echo "Must be Not booked".$val . "<br>";
 
     $realse_room = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $val";
     $realse_result = mysqli_query($connection, $realse_room);
     confirm($realse_result);
   }else {
-    echo "booked". $val . "<br>";;
+    // echo "booked". $val . "<br>";;
   }
 }
 
