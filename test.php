@@ -38,7 +38,7 @@ confirm($free_hold_result);
 
 
 $roomIDs = array();
-// echo "Today ". $today = date('Y-m-d') . "<br>";
+$today = date('Y-m-d');
   
 $back_query = "SELECT b_roomId FROM booked_rooms WHERE b_checkout < '$today'";
 
