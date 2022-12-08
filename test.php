@@ -28,6 +28,12 @@ if (!$connection) {
     exit;
 }
 
+$free_hold = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_status = 'Hold'";
+
+$free_hold_result = mysqli_query($connection, $free_hold);
+
+confirm($free_hold_result);
+
 
 $roomIDs = array();
 echo "Today ". $today = date('Y-m-d') . "<br>";

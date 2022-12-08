@@ -40,7 +40,7 @@
 
               if (isset($_GET['id'])) {
 
-                $id = $_GET['id'];
+                $id = escape($_GET['id']);
                 $edit_res = array();
                 $room_ids = array();
                 $cart     = array();
