@@ -369,7 +369,7 @@ if ($received_data->action == 'filter') {
         BETWEEN b_checkin AND b_checkout
         )
     AND room_acc = '$roomType'
-    AND room_location = '$location' LIMIT $roomQuantity";
+    AND room_location = '$location'";
 
   } else if (($checkin && $checkout) && !$location && !$roomType) {
     $query = "SELECT * 
@@ -386,7 +386,7 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout'
         BETWEEN b_checkin AND b_checkout
         )
-    LIMIT $roomQuantity";
+   ";
 
   } else if (($checkin && $checkout) && !$location && $roomType) {
     $query = "SELECT * 
@@ -403,7 +403,7 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout'
         BETWEEN b_checkin AND b_checkout
         )
-    AND room_acc = '$roomType' LIMIT $roomQuantity";
+    AND room_acc = '$roomType'";
 
   } else if (($checkin && $checkout) && $location && !$roomType) {
     $query = "SELECT * 
@@ -420,7 +420,7 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout'
         BETWEEN b_checkin AND b_checkout
         )
-    AND room_location = '$location' LIMIT $roomQuantity";
+    AND room_location = '$location'";
   }
 
   $result = mysqli_query($connection, $query);

@@ -737,7 +737,7 @@ if (!isset($_SESSION['user_role'])) {
           },
           bookedRooms: [],
           selectAllRoom: false,
-          allData: '',
+          allData: [],
 
         }
 
@@ -845,12 +845,19 @@ if (!isset($_SESSION['user_role'])) {
 
 
           if (this.selectAllRoom) {
-            this.bookedRooms = this.allData
+
+            for (let i = 0; i < this.bookedRooms.length; i++) {
+
+              this.allData = this.allData.filter(item => this.bookedRooms[i].room_id !== item.room_id)
+
+            }
+
+            this.bookedRooms = [...this.bookedRooms, ...this.allData]
             checkBoxes.forEach(check => {
               check.checked = true
             })
           } else {
-            this.bookedRooms = []
+            // this.bookedRooms = []
             checkBoxes.forEach(check => {
               check.checked = false
             })
@@ -864,21 +871,14 @@ if (!isset($_SESSION['user_role'])) {
 
           if (event.target.checked) {
             console.log(row);
+
             this.bookedRooms.push(row)
           } else {
-            // let rowIndex = this.bookedRooms.indexOf(row)
-
-            // console.log(rowIndex);
-            // this.bookedRooms.splice(rowIndex, 1)
-            // console.log(this.bookedRooms);
 
             this.bookedRooms = this.bookedRooms.filter(item => {
               return item.room_id !== row.room_id
             })
 
-            this.bookedRooms.forEach(item => {
-              console.log(item.room_id);
-            })
             console.log("new line");
           }
 
@@ -888,6 +888,9 @@ if (!isset($_SESSION['user_role'])) {
           //     this.chekedList = true;
           // }
           // this.fetchAll()
+        },
+        isEmpty(obj) {
+          return Object.keys(obj).length === 0;
         },
         async addbulk() {
 
@@ -947,10 +950,10 @@ if (!isset($_SESSION['user_role'])) {
         },
         async filterRooms() {
           // console.log(this.location);
-          console.log("filter clicked");
-          console.log(start);
-          console.log(end);
-          console.log("location", this.location);
+          // console.log("filter clicked");
+          // console.log(start);
+          // console.log(end);
+          // console.log("location", this.location);
 
           let filterLocation
 
@@ -980,7 +983,41 @@ if (!isset($_SESSION['user_role'])) {
               }).then(res => {
                 console.log(res.data);
                 this.allData = res.data
-                // this.table(res.data)
+                // console.log("res.data type", res.data);
+                // console.log("alldata type", typeof(this.allData));
+                for (let i = 0; i < this.bookedRooms.length; i++) {
+
+                  this.allData = this.allData.filter(item => this.bookedRooms[i].room_id !== item.room_id)
+
+                  // res.data.forEach(item => {
+                  //   if (this.bookedRooms[i].room_id !== item.room_id) {
+                  //     this.allData[item] = item
+                  //   }
+                  // })
+
+                }
+                let limit = parseInt(this.room_quantity)
+                
+
+                let sliced = [];
+                let size = Object.keys(this.allData).length;
+                console.log("Size",size)
+
+                if(size > limit ){
+
+                  for (let i = 0; i < limit; i++)
+                    sliced[i] = this.allData[i];
+                  console.log("sliced", sliced);
+  
+                  this.allData = sliced
+                }
+                // console.log("after fileter", this.allData);
+                // let limit = parseInt(this.room_quantity) - 1
+               
+                // console.log("limit", limit);
+                // this.allData = res.data.slice(limit)
+
+                console.log("after slice", this.allData);
               }).catch(err => console.log(err.message))
             }
           }

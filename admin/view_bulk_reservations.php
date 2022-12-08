@@ -371,10 +371,10 @@
               },
               {
                 data: 'group_reason',
-                render: function(data, display){
-                  if(data == 'con'){
+                render: function(data, display) {
+                  if (data == 'con') {
                     return `Conference`
-                  }else if(data == 'wed'){
+                  } else if (data == 'wed') {
                     return `Wedding`
                   }
 
@@ -403,7 +403,7 @@
                           <a class="dropdown-item" data-id="${data}" id="view" href="#">
                             View
                           </a>
-                          
+                         
                           <div class="dropdown-divider"></div>
                           <a data-id="${data}" id="delete" href="#" class="dropdown-item text-danger">
                             Delete
@@ -415,10 +415,10 @@
               }
             ],
           });
-
           // <a class="dropdown-item" id="edit" href="edit_bulk_reservation.php?id=${data}" href="#">
-                          //   Edit
-                          // </a>
+          //                   Edit
+          //                 </a>
+
           let vm = this
           $(document).on('click', '#add', function() {
             // get room id from the table
