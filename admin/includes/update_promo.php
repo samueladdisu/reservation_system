@@ -37,7 +37,7 @@
 
  
   <div class="form-group">
-    <input type="submit" class="btn btn-primary" name="update_category" value="Update Accomodation">
+    <input type="submit" class="btn btn-primary" name="update_category" value="Update Promo">
   </div>
 </form>
 <?php
@@ -49,7 +49,7 @@ if (isset($_POST['update_category'])) {
   $promo_time = escape($_POST['promo_time']);
   $promo_usage = escape($_POST['promo_usage']);
 
-  $query = "UPDATE `promo` SET `promo_code` = '$promo_code', `promo_amount` = '$promo_amount', `promo_time` = '$promo_time'  WHERE `promo`.`promo_id` = $type_id;";
+  $query = "UPDATE `promo` SET `promo_code` = '$promo_code', `promo_amount` = '$promo_amount', `promo_time` = '$promo_time', `promo_usage` = '$promo_usage'  WHERE `promo`.`promo_id` = $type_id;";
   $update = mysqli_query($connection, $query);
 
   if (!$update) {

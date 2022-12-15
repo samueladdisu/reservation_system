@@ -216,118 +216,125 @@ function cutFromPromo($promo, $price)
     $_SESSION['lName'] = $params['res_lastname'];
     $_SESSION['email'] = $params['res_email'];
 
-   
-    
+
+
 
     if (isset($_POST['res_guestNo'])) {
       if ($_SESSION["promoApp"] == false) {
-        $total_price = cutFromPromo($_POST['res_guestNo'], $total_price);
-        $_SESSION['total'] = "$total_price";
-        $_SESSION["promoApp"] = true;
-      }
-    }
+        $total_price_promo = cutFromPromo($_POST['res_guestNo'], $total_price);
+        if ($total_price_promo == $total_price) {
+          echo "<script> alert('Sorry! Promo code is expired or wrong');</script>";
+        } else {
 
-    if ($params['res_paymentMethod'] == 'arrival') {
-      $firstDate = new DateTime($checkIn);
-      $today = new DateTime();
-      $diff = $firstDate->diff($today);
-      $days = $diff->days;
+          $_SESSION['total'] = "$total_price_promo";
+          $_SESSION["promoApp"] = true;
 
-      if ($days < 5) {
-        echo "<script> alert('You can\'t reserve less than 5 days in advance');</script>";
-      } else {
+          date_default_timezone_set('Africa/Addis_Ababa');
+          $roomID = json_encode($id);
+          $guestInfoAlls = json_encode($guestInfoAll);
+          $roomNums = json_encode($roomNum);
+          $roomAccs =  json_encode($roomAcc);
+          $roomLocas = json_encode($roomLoca);
+          $CICOAlls  = json_encode($CICOAll);
+          $boardeArrs = json_encode($boardeArr);
 
-        foreach ($carts  as $value) {
-          $guestNums = json_encode($value['guestnums']);
-          $cartStingfy = json_encode($carts);
-          $nowCI = strtotime($value['Checkin']);
-          $nowCO = strtotime($value['Checkout']);
-          if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
-            $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
-            $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$value['Checkin']}', '{$value['Checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql',
-              '{$total_price}', '{$value['room_location']}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
+          $created_at = date('Y-m-d h:i:s');
 
-            $result = mysqli_query($connection, $query);
-            confirm($result);
-            $oldCI = strtotime($value['Checkin']);
-            $oldCO = strtotime($value['Checkout']);
+          $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board, created_at) 
+          VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls', '$boardeArrs', '$created_at')";
+
+          $result = mysqli_query($connection, $queryDB);
+          confirm($result);
+
+
+          // get id of the regestered and send to payment provaider 
+
+          // $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
+          // $result = mysqli_query($connection, $querySelect);
+          // confirm($result);
+          // $resultNum = mysqli_num_rows($result);
+          // if ($resultNum == 1) {
+          //   $temprec = mysqli_fetch_assoc($result);
+
+
+          $_SESSION['Rtemp'] = $GID;
+
+
+
+          switch ($params['res_paymentMethod']) {
+            case 'telebirr':
+              header("Location: ./telebirr.php");
+              break;
+            case 'chapa_usd':
+              header("Location: ./chapa.php");
+              $_SESSION['currency'] = "USD";
+              break;
+            case 'chapa_etb':
+              header("Location: ./chapa.php");
+              $_SESSION['currency'] = "ETB";
+              break;
           }
-
-
-          $last_record_query = "SELECT * FROM reservations WHERE res_confirmID = '$res_confirmID'";
-          $last_record_result = mysqli_query($connection, $last_record_query);
-          confirm($last_record_result);
-          $row = mysqli_fetch_assoc($last_record_result);
-
-          $res_Id = $row['res_id'];
-
-          $booked_query = "INSERT INTO booked_rooms(b_res_id, b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
-          $booked_query .= "VALUES ('$res_Id', '{$value['room_id']}', '{$value['room_acc']}', '{$value['room_location']}',  '{$value['Checkin']}', '{$value['Checkout']}')";
-
-          $booked_result = mysqli_query($connection, $booked_query);
-
-          confirm($booked_result);
-
-          $booked_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location, info_board) ";
-          $booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', '{$value['res_board']}')";
-          $booked_result = mysqli_query($connection, $booked_query);
-          confirm($booked_result);
-
-          $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
-          $result_status = mysqli_query($connection, $status_query);
-          confirm($result_status);
+          // } else {
+          // }
         }
       }
-    } else {
-      date_default_timezone_set('Africa/Addis_Ababa');
-      $roomID = json_encode($id);
-      $guestInfoAlls = json_encode($guestInfoAll);
-      $roomNums = json_encode($roomNum);
-      $roomAccs =  json_encode($roomAcc);
-      $roomLocas = json_encode($roomLoca);
-      $CICOAlls  = json_encode($CICOAll);
-      $boardeArrs = json_encode($boardeArr);
-
-      $created_at = date('Y-m-d h:i:s');
-
-      $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board, created_at) 
-      VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls', '$boardeArrs', '$created_at')";
-
-      $result = mysqli_query($connection, $queryDB);
-      confirm($result);
-
-
-      // get id of the regestered and send to payment provaider 
-
-      // $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
-      // $result = mysqli_query($connection, $querySelect);
-      // confirm($result);
-      // $resultNum = mysqli_num_rows($result);
-      // if ($resultNum == 1) {
-      //   $temprec = mysqli_fetch_assoc($result);
-
-
-      $_SESSION['Rtemp'] = $GID;
-
-
-
-      switch ($params['res_paymentMethod']) {
-        case 'telebirr':
-          header("Location: ./telebirr.php");
-          break;
-        case 'chapa_usd':
-          header("Location: ./chapa.php");
-          $_SESSION['currency'] = "USD";
-          break;
-        case 'chapa_etb':
-          header("Location: ./chapa.php");
-          $_SESSION['currency'] = "ETB";
-          break;
-      }
-      // } else {
-      // }
     }
   }
+
+  //   if ($params['res_paymentMethod'] == 'arrival') {
+  //     $firstDate = new DateTime($checkIn);
+  //     $today = new DateTime();
+  //     $diff = $firstDate->diff($today);
+  //     $days = $diff->days;
+
+  //     if ($days < 5) {
+  //       echo "<script> alert('You can\'t reserve less than 5 days in advance');</script>";
+  //     } else {
+
+  //       foreach ($carts  as $value) {
+  //         $guestNums = json_encode($value['guestnums']);
+  //         $cartStingfy = json_encode($carts);
+  //         $nowCI = strtotime($value['Checkin']);
+  //         $nowCO = strtotime($value['Checkout']);
+  //         if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
+  //           $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+  //           $query .= "VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$value['Checkin']}', '{$value['Checkout']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '$id_sql',
+  //             '{$total_price}', '{$value['room_location']}', '{$res_confirmID}', '{$params['res_specialRequest']}', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
+
+  //           $result = mysqli_query($connection, $query);
+  //           confirm($result);
+  //           $oldCI = strtotime($value['Checkin']);
+  //           $oldCO = strtotime($value['Checkout']);
+  //         }
+
+
+  //         $last_record_query = "SELECT * FROM reservations WHERE res_confirmID = '$res_confirmID'";
+  //         $last_record_result = mysqli_query($connection, $last_record_query);
+  //         confirm($last_record_result);
+  //         $row = mysqli_fetch_assoc($last_record_result);
+
+  //         $res_Id = $row['res_id'];
+
+  //         $booked_query = "INSERT INTO booked_rooms(b_res_id, b_roomId, b_roomType, b_roomLocation, b_checkin, b_checkout) ";
+  //         $booked_query .= "VALUES ('$res_Id', '{$value['room_id']}', '{$value['room_acc']}', '{$value['room_location']}',  '{$value['Checkin']}', '{$value['Checkout']}')";
+
+  //         $booked_result = mysqli_query($connection, $booked_query);
+
+  //         confirm($booked_result);
+
+  //         $booked_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_room_location, info_board) ";
+  //         $booked_query .= "VALUES ('$res_Id', '{$value['adults']}', '{$value['kids']}',  '{$value['teens']}', '{$value['room_id']}', '{$value['room_number']}', '{$value['room_acc']}', '{$value['room_location']}', '{$value['res_board']}')";
+  //         $booked_result = mysqli_query($connection, $booked_query);
+  //         confirm($booked_result);
+
+  //         $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
+  //         $result_status = mysqli_query($connection, $status_query);
+  //         confirm($result_status);
+  //       }
+  //     }
+  //   } else {
+
+  // }
 
   ?>
   <div class="container" id="regApp">

@@ -421,11 +421,11 @@
                           <thead>
                             <tr>
                               <th>Room No</th>
-                              <th>Occupancy</th>
+                              <!-- <th>Occupancy</th> -->
                               <th>Accomodation</th>
                               <th>Price</th>
 
-                              <th>Room Status</th>
+                              <!-- <th>Room Status</th> -->
                               <th>Hotel Location</th>
                               <th>Select Room</th>
                             </tr>
@@ -992,9 +992,9 @@
             columns: [{
                 data: 'room_number'
               },
-              {
-                data: 'room_occupancy'
-              },
+              // {
+              //   data: 'room_occupancy'
+              // },
               {
                 data: 'room_acc',
                 render: function(data) {
@@ -1005,9 +1005,9 @@
                 data: 'room_price'
               },
 
-              {
-                data: 'room_status'
-              },
+              // {
+              //   data: 'room_status'
+              // },
               {
                 data: 'room_location'
               },

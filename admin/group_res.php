@@ -599,6 +599,7 @@ if ($received_data->action === 'Newadd') {
   $reason = $received_data->form->group_reason;
   $location =  $received_data->location;
 
+  $created_at = date('Y-m-d H:i:s');
 
   $placement = [];
   $gustNum = $form->group_GNum;

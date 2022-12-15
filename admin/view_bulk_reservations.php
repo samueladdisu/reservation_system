@@ -403,7 +403,9 @@
                           <a class="dropdown-item" data-id="${data}" id="view" href="#">
                             View
                           </a>
-                         
+                          <a class="dropdown-item" id="edit" href="edit_bulk_reservation.php?id=${data}" href="#">
+                            Edit
+                          </a>
                           <div class="dropdown-divider"></div>
                           <a data-id="${data}" id="delete" href="#" class="dropdown-item text-danger">
                             Delete
@@ -415,9 +417,7 @@
               }
             ],
           });
-          // <a class="dropdown-item" id="edit" href="edit_bulk_reservation.php?id=${data}" href="#">
-          //                   Edit
-          //                 </a>
+          
 
           let vm = this
           $(document).on('click', '#add', function() {
