@@ -229,7 +229,15 @@ function cutFromPromo($promo, $price)
           $_SESSION['total'] = "$total_price_promo";
           $_SESSION["promoApp"] = true;
 
-          date_default_timezone_set('Africa/Addis_Ababa');
+          
+          // } else {
+          // }
+        }
+      }
+    }
+
+
+    date_default_timezone_set('Africa/Addis_Ababa');
           $roomID = json_encode($id);
           $guestInfoAlls = json_encode($guestInfoAll);
           $roomNums = json_encode($roomNum);
@@ -274,11 +282,6 @@ function cutFromPromo($promo, $price)
               $_SESSION['currency'] = "ETB";
               break;
           }
-          // } else {
-          // }
-        }
-      }
-    }
   }
 
   //   if ($params['res_paymentMethod'] == 'arrival') {
