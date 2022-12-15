@@ -30,7 +30,7 @@ if ($received_data->action == 'filter') {
   NOT IN 
       ( SELECT b_roomId
         FROM booked_rooms 
-        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
+        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
         UNION
         SELECT b_roomId
         FROM booked_rooms

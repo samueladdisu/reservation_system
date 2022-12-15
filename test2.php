@@ -1,17 +1,3 @@
-<?php 
-
-
-require 'vendor/autoload.php';
-
-use Mailgun\Mailgun;
-// First, instantiate the SDK with your API credentials
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
-
-$Message2 = <<< EOD
 <!DOCTYPE html>
 <html
     style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -436,15 +422,3 @@ $Message2 = <<< EOD
 </body>
 
 </html>
-EOD;
-
-$mg->messages()->send('reservations.kurifturesorts.com', [
-    'from'    => 'Natty-Resort@kurifturesorts.com',
-    'to'      => 'samueladdisu7@gmail.com',
-    'subject' => 'Natty Man',
-    'html'    =>  $Message2
-  ]);
-
-  if($mg){
-    echo 'Message Sent';
-  }

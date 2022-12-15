@@ -5,6 +5,8 @@ require  '../admin/includes/db.php';
 require  '../admin/includes/functions.php';
 require '../vendor/autoload.php';
 
+// use Mailgun\Mailgun;
+
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
@@ -14,8 +16,11 @@ $received_data = json_decode(file_get_contents("php://input"));
 
 $tx_ref = $received_data->trx_ref;
 $status = $received_data->status;
-file_put_contents("chapa.txt", $received_data->trx_ref. PHP_EOL . PHP_EOL, FILE_APPEND);
-file_put_contents("chapa.txt", $received_data->success. PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("chapa.txt", $received_data->trx_ref . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("chapa.txt", $received_data->success . PHP_EOL . PHP_EOL, FILE_APPEND);
+
+
+// 
 
 if ($status == "success") {
 
@@ -155,6 +160,12 @@ if ($status == "success") {
         $delete_temp_query = "DELETE FROM temp_res WHERE userGID = '$tx_ref'";
         $delete_result = mysqli_query($connection, $delete_temp_query);
 
-        
+
+        // $mg->messages()->send('reservations.kurifturesorts.com', [
+        //     'from'    => 'Kuriftu Resort@kurifturesorts.com',
+        //     'to'      => 'nattynengeda@gmail.com',
+        //     'subject' => 'Kuriftu Resort and Spa',
+        //     'html'    =>  $Message
+        // ]);
     }
 }
