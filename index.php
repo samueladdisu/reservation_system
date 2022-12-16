@@ -16,18 +16,14 @@ if (isset($_GET['ref'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <script>
-        sessionStorage.clear()
-    </script>
+   
     <title>Kuriftu - Reservation</title>
 </head>
-
 <body>
     <header class="reserve-header">
         <nav class="nav-center">
@@ -179,9 +175,12 @@ if (isset($_GET['ref'])) {
 
     </footer>
 
+<<<<<<< HEAD
     <script>
         esk('track', 'Conversion');
     </script>
+=======
+>>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
 
 </body>
 

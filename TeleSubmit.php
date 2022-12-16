@@ -141,15 +141,15 @@ function cancelLitsener($Money)
     $publicKey = $_ENV['BPublic_Key'];
     $short_code = $_ENV['BShort_Code'];
     $receiveName = $_ENV['BName'];
-    $notify_url = "https://reservations.kurifturesorts.com/telebirrBishoftu/";
-  } else if ($loc === 'entoto') {
+    $notify_url = "https://test.kurifturesorts.com/telebirrBishoftu/";
+  } else if($loc === 'entoto'){
     $appKey = $_ENV['EApp_Key'];
     $appId  = $_ENV['EApp_ID'];
     $publicKey = $_ENV['EPublic_Key'];
     $short_code = $_ENV['EShort_Code'];
     $receiveName = $_ENV['EName'];
-    $notify_url = "https://reservations.kurifturesorts.com/telebirrEntoto/";
-    // $notify_url = "https://reservations.kurifturesorts.com/telebirrCompleted/";
+    $notify_url = "https://test.kurifturesorts.com/telebirrEntoto/";
+    // $notify_url = "https://test.kurifturesorts.com/telebirrCompleted/";
 
   } else if ($loc === 'Lake tana') {
     $appKey = $_ENV['TApp_Key'];
@@ -157,7 +157,8 @@ function cancelLitsener($Money)
     $publicKey = $_ENV['TPublic_Key'];
     $short_code = $_ENV['TShort_Code'];
     $receiveName = $_ENV['TName'];
-    $notify_url = "https://reservations.kurifturesorts.com/telebirrTana/";
+    $notify_url = "https://test.kurifturesorts.com/telebirrTana/";
+
   }
 
   $ConvertedMoney = converttoETB($Money);
@@ -166,11 +167,11 @@ function cancelLitsener($Money)
   $data = [
     'outTradeNo' => getName(10) . $_SESSION['Rtemp'],
     'subject' => 'Booking',
-    'totalAmount' => $ConvertedMoney,
-    // 'totalAmount' => 1,
+    // 'totalAmount' => $ConvertedMoney,
+    'totalAmount' => 1,
     'shortCode' =>  $short_code,
     'notifyUrl' => $notify_url,
-    'returnUrl' => 'https://reservations.kurifturesorts.com/Thankyou/',
+    'returnUrl' => 'https://test.kurifturesorts.com/Thankyou/',
     'receiveName' => $receiveName,
     'appId' => $appId,
     'timeoutExpress' => '30',
@@ -200,7 +201,7 @@ function cancelLitsener($Money)
     'ussd' => $ussd
   ];
 
-  $api = "https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/toTradeWebPay";
+  $api = "http://196.188.120.3:11443/service-openup/toTradeWebPay";
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $api);
