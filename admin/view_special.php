@@ -317,8 +317,15 @@
           await axios.post('load_modal.php', {
             action: "fetchReq"
           }).then(res => {
-            this.allData = res.data
-            this.table(res.data)
+            
+            console.log(res.data);
+            if(res.data === "empty"){
+              this.allData = {}
+              this.table({})
+            }else {
+              this.allData = res.data
+              this.table(res.data)
+            }
 
             console.log("all data", this.allData);
             console.log("res data", res.data);

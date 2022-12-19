@@ -23,6 +23,7 @@ $role = $_SESSION['user_role'];
 $filterd_data = array();
 $Not_booked_array = array();
 $allData = array();
+$dataReq = array();
 
 if($received_data->action == 'fetchReq'){
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
@@ -33,12 +34,21 @@ if($received_data->action == 'fetchReq'){
 
   $result = mysqli_query($connection, $query);
 
-  while ($row = mysqli_fetch_assoc($result)) {
+  $exists = mysqli_num_rows($result);
 
-    $data[] = $row;
+  if ($exists > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+      $dataReq[] = $row;
+    }
+  
+    echo json_encode($dataReq);
+  } else {
+    echo json_encode("empty");
   }
 
-  echo json_encode($data);
+
+
 }
 
 if($received_data->action == 'editSpecialRequest'){

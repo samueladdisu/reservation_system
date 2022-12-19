@@ -143,7 +143,7 @@
                     </div>
 
                     <div class="form-group">
-                      <input type="submit" class="btn btn-primary" name="add_req" value="Add Request">
+                      <input type="submit" class="btn btn-primary" name="add_req" value="Edit Special Request">
                     </div>
 
                   </form>
@@ -263,7 +263,7 @@
               remark: this.remark
             }).then(res => console.log(res.data))
             .then(() => {
-              
+              window.location = "view_special.php"
             })
         }
       },

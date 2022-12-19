@@ -238,6 +238,8 @@
               this.date = ""
               this.location = ""
               this.remark = ""
+
+              window.location = "view_special.php"
             })
         }
       }
