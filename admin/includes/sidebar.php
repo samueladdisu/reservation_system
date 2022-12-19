@@ -47,6 +47,20 @@
      </li>
 
      <li class="nav-item">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#special_request" aria-expanded="true" aria-controls="collapseTwo">
+             <i class="fas fa-newspaper fa-2x text-gray-300"></i>
+             <span>Special Request</span>
+             <i style="margin-left: 2.4rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+         </a>
+         <div id="special_request" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./view_special.php">View Special Request</a>
+                 <a class="collapse-item" href="./add_special.php">Add Special Request</a>
+             </div>
+         </div>
+     </li>
+
+     <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
              <i class="fas fa-newspaper fa-2x text-gray-300"></i>
              <span>Rooms</span>

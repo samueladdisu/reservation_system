@@ -2,10 +2,10 @@
 <?php include  './includes/db.php'; ?>
 <?php include  './includes/functions.php'; ?>
 <?php
-header("Content-Type: application/json"); 
-header("Access-Control-Allow-Origin: *"); 
-header("Access-Control-Allow-Methods: GET,POST,OPTIONS,DELETE,PUT"); 
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+// header("Content-Type: application/json"); 
+// header("Access-Control-Allow-Origin: *"); 
+// header("Access-Control-Allow-Methods: GET,POST,OPTIONS,DELETE,PUT"); 
+// header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 $received_data = json_decode(file_get_contents("php://input"));
 date_default_timezone_set('Africa/Addis_Ababa');
 
@@ -23,6 +23,71 @@ $role = $_SESSION['user_role'];
 $filterd_data = array();
 $Not_booked_array = array();
 $allData = array();
+
+if($received_data->action == 'fetchReq'){
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM special_request ORDER BY id DESC";
+  } else {
+    $query = "SELECT * FROM special_request WHERE location = '$location' ORDER BY id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
+}
+
+if($received_data->action == 'editSpecialRequest'){
+  $id = $received_data->id;
+  $guest_name = $received_data->guest;
+  $type = $received_data->type;
+  $otherType = $received_data->otherType;
+  $nop = $received_data->num;
+  $date = $received_data->date;
+  $remark = $received_data->remark;
+  $updated_at = Date("Y-m-d H:i:s");
+  $req_location = $received_data->location;
+  $updated_by = $_SESSION['username'];
+
+  $update_query = "UPDATE special_request SET guest_name = '$guest_name', type = '$type', other_type = '$otherType', number_of_people = $nop, location = '$req_location', date = '$date', updated_at = '$updated_at', updated_by = '$updated_by', remark = '$remark' WHERE id = $id";
+
+  $update_result = mysqli_query($connection, $update_query);
+
+  confirm($update_result);
+
+  echo json_encode($update_result);
+}
+if($received_data->action == 'addSpecialRequest'){
+
+  $guest_name = $received_data->guest;
+  $type = $received_data->type;
+  $otherType = $received_data->otherType;
+  $number_of_people = $received_data->num;
+  $date = $received_data->date;
+  $remark = $received_data->remark;
+  $created_at = Date("Y-m-d H:i:s");
+  $req_location = $received_data->location;
+  $created_by = $_SESSION['username'];
+
+  $query = "INSERT INTO special_request(guest_name, type, other_type, number_of_people, location, date, created_at, created_by, remark) VALUES('$guest_name', '$type', '$otherType', $number_of_people, '$req_location',  '$date', '$created_at', '$created_by', '$remark')";
+  $result = mysqli_query($connection, $query);
+
+  confirm($result);
+
+  echo json_encode($result);
+}
+
+if($received_data->action == 'deleteReq'){
+  $id = intval($received_data->id);
+  $query = "DELETE FROM special_request WHERE id = $id";
+  $result = mysqli_query($connection, $query);
+
+  echo json_encode($result);
+}
 
 if ($received_data->action == 'visitors'){
   $query = "SELECT 

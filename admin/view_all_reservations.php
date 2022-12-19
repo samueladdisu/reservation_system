@@ -81,39 +81,6 @@
               </div>
 
               <div class="card shadow mb-4">
-                <div class="card-header d-flex justify-content-between py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Reservations</h6>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    Exchange Rates
-                  </button>
-
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table display table-bordered" width="100%" id="viewResTable" cellspacing="0">
-
-
-                      <thead>
-                        <tr>
-                          <th>Id</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Phone</th>
-                          <th>Arrival</th>
-                          <th>Departure</th>
-                          <th>Total Price</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Room Status </h6>
                 </div>
@@ -210,6 +177,7 @@
                           <th>Arrival</th>
                           <th>Departure</th>
                           <th>Status</th>
+                          <th>Remark</th>
                           <th>Location</th>
                         </tr>
                       </thead>
@@ -220,6 +188,41 @@
                   </div>
                 </div>
               </div>
+
+              <div class="card shadow mb-4">
+                <div class="card-header d-flex justify-content-between py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Reservations</h6>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Exchange Rates
+                  </button>
+
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table display table-bordered" width="100%" id="viewResTable" cellspacing="0">
+
+
+                      <thead>
+                        <tr>
+                          <th>Id</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Phone</th>
+                          <th>Arrival</th>
+                          <th>Departure</th>
+                          <th>Total Price</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+
             </div>
           </div>
 
@@ -616,6 +619,7 @@
           $('#roomStatus').DataTable({
             destroy: true,
             dom: 'lBfrtip',
+            iDisplayLength: 50,
             buttons: [
               'excel',
               'print',
@@ -654,6 +658,9 @@
               },
               {
                 data: 'status',
+              },
+              {
+                data: 'res_remark'
               },
               {
                 data: 'room_location'

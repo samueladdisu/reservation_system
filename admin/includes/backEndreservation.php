@@ -186,7 +186,7 @@ if ($incoming->action == "roomStatus") {
 
   if($location == "all"){
 
-    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
     FROM rooms AS r
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
@@ -197,7 +197,7 @@ if ($incoming->action == "roomStatus") {
 
   }else {
 
-    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
     FROM rooms AS r
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
