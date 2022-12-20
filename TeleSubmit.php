@@ -91,7 +91,10 @@ function converttoETB($price)
   $row = mysqli_num_rows($rate_result);
   $rate_find = mysqli_fetch_assoc($rate_result);
   if (strtotime($rate_find['dateUpdated']) == strtotime($todaydate)) {
-    return $rate_find['rate'] * $price;
+    
+    $total = floatval($rate_find['rate']) * floatval($price);
+    $final = round(floatval($total), 2, PHP_ROUND_HALF_UP);
+    return $final;
   } else {
     $todayrate = CurrencyConverter();
     $rate_value = round($todayrate, 2);
@@ -102,7 +105,9 @@ function converttoETB($price)
     $insert_to_exrate = "INSERT INTO exchage_rates(date, rate) VALUES('$todaydate', $rate_value)";
     $insert_result = mysqli_query($connection, $insert_to_exrate);
     confirm($insert_result);
-    $final = round($price * $rate_value, 2);
+    $total = floatval($price)  * floatval($rate_value);
+    $final = round(floatval($total), 2, PHP_ROUND_HALF_UP);
+
     return $final;
   }
 }
@@ -117,6 +122,7 @@ function getTime()
 if ($received->action == 'submit') {
 
   echo json_encode(CancelLitsener($received->Money));
+  // echo json_encode(converttoETB($received->Money));
 }
 function cancelLitsener($Money)
 {

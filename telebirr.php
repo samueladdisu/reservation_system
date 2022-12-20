@@ -136,6 +136,8 @@
           ?>
           <script type="text/javascript">
             const SubmitPay = document.querySelector('#submit')
+            
+            // console.log(<?php echo $total_price;  ?>);
             SubmitPay.addEventListener('click', async e => {
               e.preventDefault();
               await axios.post('TeleSubmit.php', {
@@ -146,10 +148,6 @@
                 let respo = JSON.parse(res.data)
                 console.log(respo.data.toPayUrl)
                 window.location.href = respo.data.toPayUrl
-
-
-
-
               })
             })
           </script>
