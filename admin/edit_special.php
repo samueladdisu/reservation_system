@@ -114,7 +114,7 @@
                         </select>
                       </div>
                     <?php } else { ?>
-                      <input type="hidden" name="room_location" value="<?php echo $_SESSION['user_location']; ?>">
+                      <input type="hidden" name="room_location" id="hiddenlocation" value="<?php echo $_SESSION['user_location']; ?>">
 
 
                     <?php  }
@@ -242,6 +242,15 @@
         }
       },
       methods: {
+        checkLocation() {
+          if (document.getElementById("hiddenlocation").value) {
+            let location = document.getElementById("hiddenlocation").value
+
+            this.location = location
+          }
+
+          console.log(this.location);
+        },
         checkOther() {
           if (this.type == "other"){
             this.other = true
@@ -269,6 +278,20 @@
       },
       created() {
         this.checkOther()
+      },
+      mounted() {
+        <?php
+
+        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+        ?>
+          console.log("Super Admin")
+        <?php } else { ?>
+
+
+          this.checkLocation()
+
+        <?php  } ?>
       }
     })
 
