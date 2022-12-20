@@ -248,7 +248,7 @@
               this.location = ""
               this.remark = ""
 
-              // window.location = "view_special.php"
+              window.location = "view_special.php"
             })
         }
       },
