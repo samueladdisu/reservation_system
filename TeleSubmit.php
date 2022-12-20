@@ -102,7 +102,8 @@ function converttoETB($price)
     $insert_to_exrate = "INSERT INTO exchage_rates(date, rate) VALUES('$todaydate', $rate_value)";
     $insert_result = mysqli_query($connection, $insert_to_exrate);
     confirm($insert_result);
-    return $price * $rate_value;
+    $final = round($price * $rate_value, 2);
+    return $final;
   }
 }
 
