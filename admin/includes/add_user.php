@@ -79,11 +79,13 @@ if (isset($_POST['create_user'])) {
   
     
       if(empty($email_count) && empty($username_count)){
+
+        $ticket_token = getName(15);
   
         $encryptePwd = password_hash($user_pwd, PASSWORD_BCRYPT, ['cost' => 10]);
       
-        $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date) ";
-        $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role', now()) ";
+        $query = "INSERT INTO users(user_firstName,user_lastName, user_name, user_email, user_pwd,user_location, user_role, user_date, ticket_token) ";
+        $query .= "VALUES('$user_firstname', '$user_lastname', '$user_name', '$user_email', '$encryptePwd','$user_location','$user_role', now(), '$ticket_token') ";
       
         $user_result = mysqli_query($connection, $query);
       

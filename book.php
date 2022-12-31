@@ -30,11 +30,11 @@ if ($received_data->action == 'filter') {
   NOT IN 
       ( SELECT b_roomId
         FROM booked_rooms 
-        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
+        WHERE '$checkin' > b_checkin AND '$checkin' < b_checkout 
         UNION
         SELECT b_roomId
         FROM booked_rooms
-        WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
+        WHERE '$checkout' > b_checkin AND '$checkout' < b_checkout
         )
   AND room_location = '$location' AND room_status <> 'Hold' ORDER BY room_acc";
 
@@ -465,7 +465,7 @@ if ($received_data->action == 'insert') {
 
 if ($received_data->action == 'hold') {
 
-    date_default_timezone_set('Africa/Addis_Ababa');
+  date_default_timezone_set('Africa/Addis_Ababa');
   $id = intval($received_data->roomID);
 
   $query = "UPDATE rooms SET room_status = 'Hold' WHERE room_id = $id";
@@ -473,7 +473,7 @@ if ($received_data->action == 'hold') {
 
   confirm($result);
 
-  $name = "Room_NO_". $id;
+  $name = "Room_NO_" . $id;
 
   $after_15 = date("Y-m-d H:i:s", strtotime("now + 25 seconds"));
 

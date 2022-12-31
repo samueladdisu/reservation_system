@@ -141,8 +141,12 @@
 
      <?php   } ?>
 
-
-
+<!-- 
+     <li class="nav-item">
+         <a class="nav-link" href="./qrcode">
+             <i class="fas fa-clipboard-list"></i>
+             <span> Scan QR code </span></a>
+     </li> -->
 
 
 
