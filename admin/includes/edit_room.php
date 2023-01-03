@@ -21,7 +21,7 @@ if (isset($_GET['p_id'])) {
     $room_id = $row['room_id'];
     $room_acc = $row['room_acc'];
     $room_number = $row['room_number'];
-    $room_amt = json_decode($row['room_amenities']);
+    // $room_amt = json_decode($row['room_amenities']);
     $room_location = $row['room_location'];
     $room_desc = $row['room_desc'];
   }

@@ -138,7 +138,8 @@ if ($received_data->action == 'filter') {
         )
     AND room_acc = '$roomType'
     AND room_location = '$location'
-    AND room_status <> 'Hold'";
+    AND room_status <> 'Hold'
+    AND room_status <> 'bishoftu_hold'";
   } else if (($checkin && $checkout) && !$location && !$roomType) {
     $query = "SELECT * 
     FROM rooms 
@@ -152,7 +153,8 @@ if ($received_data->action == 'filter') {
         FROM booked_rooms
         WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
-    AND room_status <> 'Hold'";
+    AND room_status <> 'Hold'
+    AND room_status <> 'bishoftu_hold'";
   } else if (($checkin && $checkout) && !$location && $roomType) {
     $query = "SELECT * 
     FROM rooms 
@@ -167,7 +169,8 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
     AND room_acc = '$roomType'
-    AND room_status <> 'Hold'";
+    AND room_status <> 'Hold'
+    AND room_status <> 'bishoftu_hold'";
   } else if (($checkin && $checkout) && $location && !$roomType) {
     $query = "SELECT * 
     FROM rooms 
@@ -182,7 +185,8 @@ if ($received_data->action == 'filter') {
         WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
         )
     AND room_location = '$location'
-    AND room_status <> 'Hold'";
+    AND room_status <> 'Hold'
+    AND room_status <> 'bishoftu_hold'";
   }
 
   $result = mysqli_query($connection, $query);
@@ -220,7 +224,8 @@ if ($received_data->action == 'fetchAll') {
                   WHERE '$checkout'
                   BETWEEN b_checkin AND b_checkout
                   ) 
-              AND room_status <> 'Hold' ORDER BY room_acc";
+              AND room_status <> 'Hold' 
+              AND room_status <> 'bishoftu_hold' ORDER BY room_acc";
   } else {
 
     // $query = "SELECT * FROM rooms WHERE room_status = 'Not_booked' AND room_location = '$location'";
@@ -239,7 +244,10 @@ if ($received_data->action == 'fetchAll') {
                   WHERE '$checkout'
                   BETWEEN b_checkin AND b_checkout
                   )
-              AND room_location = '$location' AND room_status <> 'Hold' ORDER BY room_acc";
+              AND room_location = '$location' 
+              AND room_status <> 'Hold' 
+              AND room_status <> 'bishoftu_hold'
+              ORDER BY room_acc";
   }
 
   $result = mysqli_query($connection, $query);

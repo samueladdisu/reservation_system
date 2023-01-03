@@ -59,12 +59,25 @@
              </div>
          </div>
      </li>
+<!-- 
+     <li class="nav-item">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#activity" aria-expanded="true" aria-controls="collapseTwo">
+             <i class="fas fa-newspaper fa-2x text-gray-300"></i>
+             <span>Activity Reservations</span>
+             <i style="margin-left: 0.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+         </a>
+         <div id="activity" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./view_tickets.php">View Activity Reservations</a>
+             </div>
+         </div>
+     </li> -->
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
              <i class="fas fa-newspaper fa-2x text-gray-300"></i>
              <span>Rooms</span>
-             <i style="margin-left: 6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+             <i style="margin-left: 5.8rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
          <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
@@ -140,8 +153,8 @@
 
 
      <?php   } ?>
-
 <!-- 
+
      <li class="nav-item">
          <a class="nav-link" href="./qrcode">
              <i class="fas fa-clipboard-list"></i>
