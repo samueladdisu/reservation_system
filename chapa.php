@@ -105,11 +105,26 @@
 
   $response = curl_exec($curl);
   $response = json_decode($response);
-  $checkout_url = $response->data->checkout_url;
+  
+  if(isset($response)){
+    var_dump($response->status);
+
+    if($response->status == 'success'){
+      $checkout_url = $response->data->checkout_url;
+      header("Location: $checkout_url");
+    }else{
+      session_destroy();
+
+      echo "<script> 
+              alert('Payment Failed! Please try again!'); 
+              window.location.href = 'http://localhost:8080/reservation_system/';
+            </script>";
+
+      sleep(3);
+    }
+  }
   curl_close($curl);
-  var_dump($response);
-  // echo $checkout_url;
-  header("Location: $checkout_url");
+  
   ?>
 
 </body>
