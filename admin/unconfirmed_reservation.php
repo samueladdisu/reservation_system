@@ -223,14 +223,7 @@
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
-    $(document).ready(function() {
-
-      $('#exRates').DataTable({
-        order: [
-          [0, 'des']
-        ],
-      });
-    })
+  
     const app = Vue.createApp({
       data() {
         return {
