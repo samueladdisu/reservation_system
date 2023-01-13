@@ -39,6 +39,7 @@
          <div id="res" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
                  <a class="collapse-item" href="./reservations.php">View All reservations</a>
+                 <!-- <a class="collapse-item" href="./unconfirmed_reservation.php">Unconfirmed Reservation</a> -->
                  <a class="collapse-item" href="./reservations.php?source=add_reservation">Add Reservation</a>
                  <a class="collapse-item" href="./view_bulk_reservations.php">View Group Reservation</a>
                  <a class="collapse-item" href="./reservations.php?source=bulk">Add Group Reservation</a>
@@ -153,13 +154,13 @@
 
 
      <?php   } ?>
-<!-- 
+
 
      <li class="nav-item">
          <a class="nav-link" href="./qrcode">
              <i class="fas fa-clipboard-list"></i>
              <span> Scan QR code </span></a>
-     </li> -->
+     </li>
 
 
 
