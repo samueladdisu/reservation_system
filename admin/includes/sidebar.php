@@ -60,7 +60,7 @@
              </div>
          </div>
      </li>
-<!-- 
+
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#activity" aria-expanded="true" aria-controls="collapseTwo">
              <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -72,7 +72,7 @@
                  <a class="collapse-item" href="./view_tickets.php">View Activity Reservations</a>
              </div>
          </div>
-     </li> -->
+     </li> 
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">

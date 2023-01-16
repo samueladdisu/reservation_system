@@ -75,24 +75,25 @@ window.addEventListener('DOMContentLoaded', function () {
 
     function showResult (e) {
         const resultData = e.data;
-
+        const baseurl = 'http://localhost:8080/reservation_system/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
         // open a dialog with the result if found
         if (resultData !== false) {
             navigator.vibrate(200); // vibration is not supported on Edge, IE, Opera and Safari
             disableUI();
-
+            console.log(resultData);
             try {
-                url = new URL(resultData);
-                let linkToResult = document.createElement('a');
-                linkToResult.href = url;
-                linkToResult.innerText = resultData;
-                resultContainer.appendChild(linkToResult);
-                let redirect = resultData + '/' + role
-                console.log(redirect);
-                window.location.href = redirect
-                resultSearchGo.href = url;
-                resultSearchGo.innerText = "Go";
+                url = new URL(baseurl);
+                // let linkToResult = document.createElement('a');
+                // linkToResult.href = url;
+                // linkToResult.innerText = resultData;
+                // resultContainer.appendChild(linkToResult);
+                // let redirect = resultData + '&' + 'user_token=' + role
+                console.log(baseurl);
+                window.location.href = baseurl
+                // resultSearchGo.href = redirect;
+                // resultSearchGo.innerText = "Go";
             } catch (e) {
+                console.log(e);
                 resultContainer.innerText = resultData;
 
                 resultSearchGo.href = "https://www.google.com/search?q=" + encodeURIComponent(resultData);

@@ -475,7 +475,7 @@ if ($received_data->action == 'hold') {
 
   $name = "Room_NO_" . $id;
 
-  $after_15 = date("Y-m-d H:i:s", strtotime("now + 25 seconds"));
+  $after_15 = date("Y-m-d H:i:s", strtotime("now + 60 seconds"));
 
   $timer_query = "CREATE EVENT IF NOT EXISTS $name 
                   ON SCHEDULE AT  '$after_15' 
