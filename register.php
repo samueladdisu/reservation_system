@@ -218,8 +218,9 @@ function cutFromPromo($promo, $price)
 
 
 
+    
+    if (isset($_POST['res_guestNo']) && $_POST['res_guestNo'] != "") {
 
-    if (isset($_POST['res_guestNo'])) {
       if ($_SESSION["promoApp"] == false) {
         $total_price_promo = cutFromPromo($_POST['res_guestNo'], $total_price);
         if ($total_price_promo == $total_price) {
