@@ -275,7 +275,8 @@ function cutFromPromo($promo, $price)
         header("Location: ./telebirr.php");
         break;
       case 'amole':
-        header("Location: ./amole.php");
+        header("Location: ./chapa.php");
+        $_SESSION['currency'] = "USD";
         break;
       case 'chapa_usd':
         header("Location: ./chapa.php");
