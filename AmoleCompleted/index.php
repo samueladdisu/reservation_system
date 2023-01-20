@@ -1,16 +1,14 @@
 <?php
 // ob_start();
 // session_start();
-// require  '../admin/includes/db.php';
-// require  '../admin/includes/functions.php';
+require  '../admin/includes/db.php';
+require  '../admin/includes/functions.php';
 require '../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
-use Mailgun\Mailgun;
-// First, instantiate the SDK with your API credentials
-$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
+
 
 $cybsResponse = $_REQUEST;
 $Response = json_encode($cybsResponse);
@@ -29,7 +27,7 @@ function returnid(array $CHARS)
 $intoArray = str_split($jsonl["req_transaction_uuid"]);
 $PayerId = returnid($intoArray);
 
-$queryFetch = "SELECT * FROM temp_res WHERE temp_ID = '$PayerId'";
+$queryFetch = "SELECT * FROM temp_res WHERE userGID = '$PayerId'";
 $temp_res = mysqli_query($connection, $queryFetch);
 
 confirm($temp_res);
@@ -169,23 +167,10 @@ if ($decision == "ACCEPT" && $reason == "100") {
     $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
     $result_status = mysqli_query($connection, $status_query);
     confirm($result_status);
-
-    $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-      'from'    => 'no-reply@kurifturesorts.com',
-      'to'      => $email,
-      'subject' => 'Kuriftu Resort and Spa',
-      'html'    =>  "<h2>You have succesfully reserved a room</h2>
-          <p> Here is your confirmation code $res_confirmID </p>"
-    ]);
-
-    $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-      'from'    => 'no-reply@kurifturesorts.com',
-      'to'      => 'samueladdisu7@gmail.com',
-      'subject' => 'Kuriftu Resort and Spa',
-      'html'    =>  "<h2>You have succesfully reserved a room</h2>
-  <p> Here is your confirmation code </p>"
-    ]);
   }
+
+  $delete_temp_query = "DELETE FROM temp_res WHERE userGID = '$PayerId'";
+  $delete_result = mysqli_query($connection, $delete_temp_query);
 } elseif ($reason == "481") {
 
   file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
