@@ -30,18 +30,18 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
   </noscript>
 
   <header class="header reserve-header">
-      <div class="container">
-        <nav class="nav-center">
+    <div class="container">
+      <nav class="nav-center">
 
-          <div class="logo">
-            <img src="./img/black_logo.svg" alt="">
-          </div>
-          <div class="line">
-            <div class="container1">
-              <hr class="line1">
-              <ul class="justify-list">
+        <div class="logo">
+          <img src="./img/black_logo.svg" alt="">
+        </div>
+        <div class="line">
+          <div class="container1">
+            <hr class="line1">
+            <ul class="justify-list">
 
-                <!-- <li>
+              <!-- <li>
                   <a class="link-text" href="./">Back to Resorts</a>
                 </li>
                 <li>
@@ -50,21 +50,21 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
                 <li>
                   <a class="link-text" href="">Login</a>
                 </li> -->
-              </ul>
+            </ul>
 
 
-              <hr class="line2">
-            </div>
+            <hr class="line2">
           </div>
+        </div>
 
 
 
-        </nav>
+      </nav>
 
 
 
-      </div>
-    </header>
+    </div>
+  </header>
   <div id="formApp">
     <div class="container amole-confirm">
       <div class="card">
@@ -83,7 +83,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
               $items[$name1] = $val;
             } ?>
 
-            <h3 class="card-title"><?php echo $items['room_acc']; ?> 
+            <h3 class="card-title"><?php echo $items['room_acc']; ?>
             </h3>
             <p class="card-text">
               <?php echo $items['room_location']; ?>
@@ -114,9 +114,9 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
                   Check in: <?php echo $_SESSION['checkIn']; ?>
                 </p>
               </div>
-              <div  class="col-6">
+              <div class="col-6">
                 <p class="card-text">
-                Check out: <?php echo $_SESSION['checkOut']; ?>
+                  Check out: <?php echo $_SESSION['checkOut']; ?>
                 </p>
               </div>
             </div>
@@ -133,7 +133,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
           <?php
 
           $cart = $_SESSION['cart'];
-          $total_price = $_SESSION['total'];
+          $total_price = intval($_SESSION['total']);
           $access_key = $_ENV['ACCESS_KEY'];
           $profile_id = $_ENV['PROFILE_ID'];
 
@@ -165,8 +165,8 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
             "locale"  => "en",
             "transaction_type" => "sale",
             "reference_number" => "1643727245076",
-            // "amount" => $total_price,
-            "amount" => 0.5,
+            "amount" => $total_price,
+            // "amount" => 0.5,
             "currency" => "USD",
             "device_fingerprint_id" => 'amole_kuritfu_01' . $session_id,
             "customer_ip_address" => $customer_ip
@@ -198,7 +198,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
 
 
   </div>
- 
+
   <?php include_once './includes/footer.php' ?>
 </body>
 

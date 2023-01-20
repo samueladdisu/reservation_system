@@ -1412,17 +1412,6 @@ if (isset($_GET['checkout'])) {
           }
 
         }
-        // amenities(am) {
-
-        //   let amt = JSON.parse(JSON.parse(am))
-        //   let arryAmt = new Array()
-        //   arryAmt = amt
-
-        //   // arryAmt.filter(ary => {
-        //   //   return ary.replace("\"", '')
-        //   // })
-        //   return arryAmt
-        // },
 
       },
       computed: {
