@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/kuriftur/reservations.kurifturesorts.com
+    - export DEPLOYPATH=/home/kuriftur/test.kurifturesorts.com
     - /bin/cp -R * $DEPLOYPATH
