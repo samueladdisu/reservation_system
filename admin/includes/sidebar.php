@@ -61,7 +61,7 @@
          </div>
      </li>
 
-     <li class="nav-item">
+     <!-- <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#activity" aria-expanded="true" aria-controls="collapseTwo">
              <i class="fas fa-newspaper fa-2x text-gray-300"></i>
              <span>Activity Reservations</span>
@@ -72,7 +72,7 @@
                  <a class="collapse-item" href="./view_tickets.php">View Activity Reservations</a>
              </div>
          </div>
-     </li> 
+     </li>  -->
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
@@ -91,7 +91,7 @@
                  <?php
                     }
                     ?>
-                 
+
 
                  <?php if ($_SESSION['user_role'] == 'SA') {
                     ?>
@@ -115,11 +115,11 @@
              <span> Promo Code </span></a>
      </li>
 
-    
+
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#member" aria-expanded="true" aria-controls="collapseTwo">
-         <i class="fas fa-users"></i>
+             <i class="fas fa-users"></i>
              <span>Members</span>
              <i style="margin-left: 4.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
@@ -156,11 +156,11 @@
      <?php   } ?>
 
 
-     <li class="nav-item">
+     <!-- <li class="nav-item">
          <a class="nav-link" href="./qrcode">
              <i class="fas fa-clipboard-list"></i>
              <span> Scan QR code </span></a>
-     </li>
+     </li> -->
 
 
 
