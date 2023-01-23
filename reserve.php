@@ -15,7 +15,7 @@ if (isset($_GET['ref'])) {
 }
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
-  if ($Location !== "entoto") {
+  if ($Location !== "entoto" &&  $Location !== "bishoftu") {
     header("Location: ./");
   }
   if ($Location == 'Tana' || $Location == 'tana') {
