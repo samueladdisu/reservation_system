@@ -445,7 +445,7 @@ if (isset($_GET['checkout'])) {
                   </select>
 
                 </div>
-                <div class="col-3 offset-1">
+                <!-- <div class="col-3 offset-1">
                   <label class="form-label">Teens(12 - 17)</label>
                   <select name="adults" @change="CheckGuest" v-model="res_teen" class="form-select" :disabled="teen">
                     <option selected>Teens(12-17)</option>
@@ -453,8 +453,20 @@ if (isset($_GET['checkout'])) {
                     <option value="1">1</option>
                     <option value="2">2</option>
                   </select>
-                </div>
+                </div> -->
+
                 <div class="col-3 offset-1">
+                  <label class="form-label">Teens(12 - 17)</label>
+                  <select name="adults" @change="CheckGuest" v-model="res_teen" class="form-select" disabled="true">
+                    <option selected>Teens(12-17)</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                </div>
+
+
+                <!-- <div class="col-3 offset-1">
                   <label class="form-label">Kid (6-11)</label>
                   <select name="adults" @change="CheckGuest" v-model="res_kid" class="form-select" :disabled="kid">
                     <option selected>Kid (6-11)</option>
@@ -462,8 +474,17 @@ if (isset($_GET['checkout'])) {
                     <option value="1">1</option>
                     <option value="2">2</option>
                   </select>
-                </div>
+                </div> -->
 
+                <div class="col-3 offset-1">
+                  <label class="form-label">Kid (6-11)</label>
+                  <select name="adults" @change="CheckGuest" v-model="res_kid" class="form-select" disabled="true">
+                    <option selected>Kid (6-11)</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                </div>
 
               </div>
               <?php
