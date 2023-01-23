@@ -158,7 +158,7 @@ $data = array();
 $rooms = array();
 
 
-if ($received_data->action == "guestInfo"){
+if ($received_data->action == "guestInfo") {
   $id = $received_data->id;
   $query = "SELECT * FROM group_reservation WHERE group_id = $id";
   $result = mysqli_query($connection, $query);
@@ -354,77 +354,116 @@ if ($received_data->action == 'filter') {
   $roomQuantity = $received_data->roomQuantity;
 
   if (($checkin && $checkout) && ($location && $roomType)) {
-    $query = "SELECT * 
-    FROM rooms 
-    WHERE room_id 
-    NOT IN 
-      ( SELECT b_roomId
-        FROM booked_rooms 
-        WHERE '$checkin'
-        BETWEEN b_checkin AND b_checkout 
-        UNION
-        SELECT b_roomId
-        FROM booked_rooms
-        WHERE '$checkout'
-        BETWEEN b_checkin AND b_checkout
-        )
-    AND room_acc = '$roomType'
-    AND room_location = '$location'
-    AND room_status <> 'Hold'";
+    // $query = "SELECT * 
+    // FROM rooms 
+    // WHERE room_id 
+    // NOT IN 
+    //   ( SELECT b_roomId
+    //     FROM booked_rooms 
+    //     WHERE '$checkin'
+    //     BETWEEN b_checkin AND b_checkout 
+    //     UNION
+    //     SELECT b_roomId
+    //     FROM booked_rooms
+    //     WHERE '$checkout'
+    //     BETWEEN b_checkin AND b_checkout
+    //     )
+    // AND room_acc = '$roomType'
+    // AND room_location = '$location'
+    // AND room_status <> 'Hold'";
+
+    $query = "SELECT rooms.*
+    FROM rooms
+    LEFT JOIN booked_rooms
+    ON rooms.room_id = booked_rooms.b_roomId
+    AND (('$checkin' >= b_checkin AND '$checkin' < b_checkout)
+        OR ('$checkout' > b_checkin AND '$checkout' <= b_checkout)
+        OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
+    WHERE booked_rooms.b_roomId IS NULL
+    AND room_location = '$location' AND room_acc = '$roomType' AND room_status NOT IN ('Hold', 'bishoftu_hold')";
 
   } else if (($checkin && $checkout) && !$location && !$roomType) {
-    $query = "SELECT * 
-    FROM rooms 
-    WHERE room_id 
-    NOT IN 
-      ( SELECT b_roomId
-        FROM booked_rooms 
-        WHERE '$checkin'
-        BETWEEN b_checkin AND b_checkout 
-        UNION
-        SELECT b_roomId
-        FROM booked_rooms
-        WHERE '$checkout'
-        BETWEEN b_checkin AND b_checkout
-        )
-    AND room_status <> 'Hold'
-   ";
+  //   $query = "SELECT * 
+  //   FROM rooms 
+  //   WHERE room_id 
+  //   NOT IN 
+  //     ( SELECT b_roomId
+  //       FROM booked_rooms 
+  //       WHERE '$checkin'
+  //       BETWEEN b_checkin AND b_checkout 
+  //       UNION
+  //       SELECT b_roomId
+  //       FROM booked_rooms
+  //       WHERE '$checkout'
+  //       BETWEEN b_checkin AND b_checkout
+  //       )
+  //   AND room_status <> 'Hold'
+  //  ";
+
+    $query = "SELECT rooms.*
+    FROM rooms
+    LEFT JOIN booked_rooms
+    ON rooms.room_id = booked_rooms.b_roomId
+    AND (('$checkin' >= b_checkin AND '$checkin' < b_checkout)
+        OR ('$checkout' > b_checkin AND '$checkout' <= b_checkout)
+        OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
+    WHERE booked_rooms.b_roomId IS NULL
+    AND room_status NOT IN ('Hold', 'bishoftu_hold')";
 
   } else if (($checkin && $checkout) && !$location && $roomType) {
-    $query = "SELECT * 
-    FROM rooms 
-    WHERE room_id 
-    NOT IN 
-      ( SELECT b_roomId
-        FROM booked_rooms 
-        WHERE '$checkin'
-        BETWEEN b_checkin AND b_checkout 
-        UNION
-        SELECT b_roomId
-        FROM booked_rooms
-        WHERE '$checkout'
-        BETWEEN b_checkin AND b_checkout
-        )
-    AND room_acc = '$roomType'
-    AND room_status <> 'Hold'";
+    // $query = "SELECT * 
+    // FROM rooms 
+    // WHERE room_id 
+    // NOT IN 
+    //   ( SELECT b_roomId
+    //     FROM booked_rooms 
+    //     WHERE '$checkin'
+    //     BETWEEN b_checkin AND b_checkout 
+    //     UNION
+    //     SELECT b_roomId
+    //     FROM booked_rooms
+    //     WHERE '$checkout'
+    //     BETWEEN b_checkin AND b_checkout
+    //     )
+    // AND room_acc = '$roomType'
+    // AND room_status <> 'Hold'";
 
+    $query = "SELECT rooms.*
+    FROM rooms
+    LEFT JOIN booked_rooms
+    ON rooms.room_id = booked_rooms.b_roomId
+    AND (('$checkin' >= b_checkin AND '$checkin' < b_checkout)
+        OR ('$checkout' > b_checkin AND '$checkout' <= b_checkout)
+        OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
+    WHERE booked_rooms.b_roomId IS NULL
+    AND room_acc = '$roomType' AND room_status NOT IN ('Hold', 'bishoftu_hold')";
   } else if (($checkin && $checkout) && $location && !$roomType) {
-    $query = "SELECT * 
-    FROM rooms 
-    WHERE room_id 
-    NOT IN 
-      ( SELECT b_roomId
-        FROM booked_rooms 
-        WHERE '$checkin'
-        BETWEEN b_checkin AND b_checkout 
-        UNION
-        SELECT b_roomId
-        FROM booked_rooms
-        WHERE '$checkout'
-        BETWEEN b_checkin AND b_checkout
-        )
-    AND room_location = '$location'
-    AND room_status <> 'Hold'";
+    // $query = "SELECT * 
+    // FROM rooms 
+    // WHERE room_id 
+    // NOT IN 
+    //   ( SELECT b_roomId
+    //     FROM booked_rooms 
+    //     WHERE '$checkin'
+    //     BETWEEN b_checkin AND b_checkout 
+    //     UNION
+    //     SELECT b_roomId
+    //     FROM booked_rooms
+    //     WHERE '$checkout'
+    //     BETWEEN b_checkin AND b_checkout
+    //     )
+    // AND room_location = '$location'
+    // AND room_status <> 'Hold'";
+
+    $query = "SELECT rooms.*
+    FROM rooms
+    LEFT JOIN booked_rooms
+    ON rooms.room_id = booked_rooms.b_roomId
+    AND (('$checkin' >= b_checkin AND '$checkin' < b_checkout)
+        OR ('$checkout' > b_checkin AND '$checkout' <= b_checkout)
+        OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
+    WHERE booked_rooms.b_roomId IS NULL
+    AND room_location = '$location' AND room_status NOT IN ('Hold', 'bishoftu_hold')";
   }
 
   $result = mysqli_query($connection, $query);
@@ -885,7 +924,7 @@ if ($received_data->action === 'Newadd') {
     }
   }
 
- 
+
 
   $res_agent = $_SESSION['username'];
   $group_rooms = json_encode($rooms);
