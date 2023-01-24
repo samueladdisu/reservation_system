@@ -36,12 +36,56 @@
           <div class="row">
 
             <div class="col-12" id="viewSpecial">
+              <div class="card border-success" v-if="eligible">
+                <div class="card-header">
+                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                </div>
+                <div class="card-body">
+                  Purchased Tickets: <br>
+                  {{ allData.adult }} Ad - {{ allData.kids }} Kids <br> <br>
+                  Redeemed Tickes: <br>
+                  {{ allData.redeemed_adult_ticket
+                  }} Ad - {{ allData.redeemed_kids_ticket }} kids <br> <br>
+                  Available Ticket: <br>
+                  {{ ava_ad }} Ad - {{ ava_kid }} Kids <br> <br>
 
-              <div class="card">
+
+                  <form class="mt-3">
+                    <div class="form-group d-md-flex">
+
+                      <select class="form-control mr-2 mb-2" v-model="adult">
+                        <option disabled value="">--select--</option>
+                        <option v-for="amt in ava_ad" :value="amt">
+                          {{ amt }} Adult
+                        </option>
+                      </select>
+
+                      <select class="form-control" v-model="kid">
+                        <option disabled value="">--select--</option>
+                        <option v-for="amt in ava_kid" :value="amt">
+                          {{ amt }} Kid
+                        </option>
+                      </select>
+
+                    </div>
+                  </form>
+
+
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-primary mr-2 mb-2" @click="redeemTicket">Redeem Ticket</button>
+                  <a href="./qrcode/" class="btn btn-secondary">
+                    cancel
+                  </a>
+                </div>
+              </div>
+
+
+              <div class="card" v-else>
 
                 <div class="card-header">
-                  <h5 class="text-success" v-if="eligible">Guest is eligible</h5>
-                  <h5 class="text-danger" v-else>Ticket is already redeemed</h5>
+
+                  <h5 class="text-danger">Ticket is already redeemed</h5>
 
                 </div>
 
@@ -52,18 +96,62 @@
                   <li class="list-group-item">Location: {{ allData.location }} </li>
                   <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
                   <li class="list-group-item">Date: 11-1-2023</li>
-                  <li class="list-group-item">Guest: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
+                  <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
+                  <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
+                  }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
                   <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
                   <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
                   <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
                   <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
                 </ul>
                 <div class="card-footer">
-                  <a href="#" class="btn btn-secondary mr-2 mb-2">Go Back</a>
-                  <a href="#" class="btn btn-primary mb-2">View ticket Reservation</a>
+                  <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
+                  <a href="view_tickets.php" class="btn btn-primary mb-2">View ticket Reservation</a>
                 </div>
               </div>
 
+
+              <!-- Success Modal -->
+              <div id="ticket_success_tic" class="success_tic modal fade" role="dialog">
+                <div class="modal-dialog modal-dialog-centered">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <a class="close" href="#" data-dismiss="modal">&times;</a>
+                    <div class="page-body">
+                      <div class="text-center" v-if="spinner">
+                        <div class="spinner-border" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                      <div v-if="success">
+                        <div class="head">
+                          <h3 style="margin-top:5px;">Operation Successful!</h3>
+                          <!-- <h4>Lorem ipsum dolor sit amet</h4> -->
+                        </div>
+
+                        <h1 style="text-align:center;">
+                          <div class="checkmark-circle">
+                            <div class="background"></div>
+                            <div class="checkmark draw"></div>
+                          </div>
+                        </h1>
+                        <div style="text-align:center; margin-top: 2rem;">
+                          <a href="display_ticket.php">
+                            View reservation
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+
+                </div>
+
+              </div>
+              <!-- End of Success Modal -->
             </div>
           </div>
 
@@ -134,11 +222,9 @@
 
 
   <script>
-    
-
     let currentUrl = window.location.href;
     let urlParams = new URLSearchParams(currentUrl.split("?")[1]);
-   
+
     let g_token = urlParams.get("guest_token");
     let u_token = urlParams.get("user_token");
     console.log(g_token)
@@ -150,30 +236,76 @@
       data() {
         return {
           allData: {},
-          eligible: false
+          eligible: false,
+          url: 'https://tickets.kuriftucloud.com/verify',
+          // url: 'http://localhost:8000/verify',
+          ava_ad: 0,
+          ava_kid: 0,
+          adult: "",
+          kid: "",
+          spinner: false,
+          success: false,
         }
       },
       methods: {
         async send() {
           try {
-            await axios.post('https://tickets.kuriftucloud.com/verify', {
+            await axios.post(this.url, {
               guest_token: g_token,
               user_token: u_token
-            }).then((response) => {
-              console.log(response.data)
-              this.allData = response.data.data[0]
-              if(response.data.msg == "reserved") {
-                this.eligible = true
-              }else if(response.data.msg == "checked_in") {
-                this.eligible = false
+            }).then((res) => {
+              console.log(res.data)
 
+              if (res.data.msg == "already_checked_in") {
+                this.eligible = false
+                this.allData = res.data.data[0]
+              } else if (res.data.msg == "available tickets") {
+                this.eligible = true
+                this.allData = res.data.data.result[0]
+                this.ava_ad = res.data.data.ava_ad
+                this.ava_kid = res.data.data.ava_kid
+              } else {
+                this.eligible = false
               }
+
             })
 
           } catch (e) {
             console.log(e)
           }
 
+        },
+        async redeemTicket() {
+
+          if (this.adult == "" && this.kid == "") {
+            alert("Please select a ticket")
+            return
+          }
+          try {
+
+
+            $('#ticket_success_tic').modal('show')
+            this.spinner = true
+
+            await axios.post('https://tickets.kuriftucloud.com/checkGuest', {
+              guest_token: g_token,
+              redeemed_ad: this.adult,
+              redeemed_kid: this.kid
+            }).then(res => {
+              console.log(res.data);
+
+              if (res.data.msg == "checked_in") {
+                this.spinner = false
+                this.success = true
+
+                setTimeout(() => {
+                  window.location.href = "view_tickets.php"
+                }, 2000);
+              }
+            })
+          } catch (error) {
+
+          }
         }
       },
       mounted() {

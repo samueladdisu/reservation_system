@@ -132,7 +132,7 @@
                   </div>
 
                   <!-- Success Modal -->
-                  <div id="success_tic" class="modal fade" role="dialog">
+                  <div id="success_tic" class="success_tic modal fade" role="dialog">
                     <div class="modal-dialog modal-dialog-centered">
                       <!-- Modal content-->
                       <div class="modal-content">
