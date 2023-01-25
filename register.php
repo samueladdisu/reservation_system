@@ -398,7 +398,7 @@ function cutFromPromo($promo, $price)
           <label for="inputState" class="form-label payment">Payment Platform</label>
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
-            <option value="chapa_usd">Credit Card</option>
+            <option value="amole">Credit Card</option>
             <option value="chapa_etb">Amole</option>
             <!-- <option value="telebirr">Telebirr</option> -->
             <option value="chapa_etb">Bank of Abysiniya</option>
@@ -406,7 +406,6 @@ function cutFromPromo($promo, $price)
             <option value="chapa_usd">Pay Pal</option>
             <option value="chapa_etb">Wegagen Hello Cash</option>
             <option value="chapa_etb">E-birr</option>
-            <option value="amole">Test</option>
           </select>
         </div>
 
