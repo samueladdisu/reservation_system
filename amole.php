@@ -165,8 +165,8 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
             "locale"  => "en",
             "transaction_type" => "sale",
             "reference_number" => "1643727245076",
-            "amount" => $total_price,
-            // "amount" => 0.5,
+            // "amount" => $total_price,
+            "amount" => 0.01,
             "currency" => "USD",
             "device_fingerprint_id" => 'amole_kuritfu_01' . $session_id,
             "customer_ip_address" => $customer_ip
