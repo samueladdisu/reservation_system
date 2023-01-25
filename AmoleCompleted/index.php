@@ -48,6 +48,8 @@ $specReq = $temp_row['specialRequest'];
 $promoCode = $temp_row['promoCode'];
 $total = $temp_row['total'];
 $cart2 = $temp_row['cart'];
+$created_at = $temp_row['created_at'];
+$payment_confirmed_at = date('Y-m-d h:i:s');
 $PayMethod = $temp_row['paymentMethod'];
 $cart = json_decode($cart2);
 $room_ids = json_decode($temp_row['room_id']);
@@ -124,9 +126,9 @@ if ($decision == "ACCEPT" && $reason == "100") {
     $nowCI = strtotime($value['Checkin']);
     $nowCO = strtotime($value['Checkout']);
     if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
-      $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+      $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo, created_at, payment_confirmed_at) ";
       $query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
-             '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
+             '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}', '$created_at', '$payment_confirmed_at') ";
 
       $result = mysqli_query($connection, $query);
       confirm($result);
@@ -163,8 +165,8 @@ if ($decision == "ACCEPT" && $reason == "100") {
   $delete_result = mysqli_query($connection, $delete_temp_query);
 } elseif ($reason == "481") {
 
-  // file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
+  file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
 } else {
 
-  // file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
+  file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
 }
