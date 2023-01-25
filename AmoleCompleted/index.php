@@ -27,6 +27,8 @@ function returnid(array $CHARS)
 $intoArray = str_split($jsonl["req_transaction_uuid"]);
 $PayerId = returnid($intoArray);
 
+file_put_contents("Lemlem.txt", $PayerId . PHP_EOL . PHP_EOL, FILE_APPEND);
+
 $queryFetch = "SELECT * FROM temp_res WHERE userGID = '$PayerId'";
 $temp_res = mysqli_query($connection, $queryFetch);
 
