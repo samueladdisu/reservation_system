@@ -27,7 +27,8 @@ function returnid(array $CHARS)
 $intoArray = str_split($jsonl["req_transaction_uuid"]);
 $PayerId = returnid($intoArray);
 
-file_put_contents("Lemlem.txt", $PayerId . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", $decision . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 $queryFetch = "SELECT * FROM temp_res WHERE userGID = '$PayerId'";
 $temp_res = mysqli_query($connection, $queryFetch);
@@ -61,19 +62,6 @@ $board = json_decode($temp_row['temp_board']);
 
 
 
-
-function getName($n)
-{
-  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $randomString = '';
-
-  for ($i = 0; $i < $n; $i++) {
-    $index = rand(0, strlen($characters) - 1);
-    $randomString .= $characters[$index];
-  }
-
-  return $randomString;
-}
 
 // $checkinDate = "";
 // $checkoutDate = "";
@@ -175,8 +163,8 @@ if ($decision == "ACCEPT" && $reason == "100") {
   $delete_result = mysqli_query($connection, $delete_temp_query);
 } elseif ($reason == "481") {
 
-  file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
+  // file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
 } else {
 
-  file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
+  // file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
 }
