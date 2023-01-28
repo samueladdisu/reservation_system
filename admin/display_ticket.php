@@ -237,8 +237,8 @@
         return {
           allData: {},
           eligible: false,
-          url: 'https://tickets.kuriftucloud.com/verify',
-          // url: 'http://localhost:8000/verify',
+          // url: 'https://tickets.kuriftucloud.com/verify',
+          url: 'http://localhost:8000/verify',
           ava_ad: 0,
           ava_kid: 0,
           adult: "",
@@ -259,11 +259,13 @@
               if (res.data.msg == "already_checked_in") {
                 this.eligible = false
                 this.allData = res.data.data[0]
-              } else if (res.data.msg == "available tickets") {
+              } else if (res.data.msg == "waterpark tickets") {
                 this.eligible = true
                 this.allData = res.data.data.result[0]
                 this.ava_ad = res.data.data.ava_ad
                 this.ava_kid = res.data.data.ava_kid
+              } else if (res.data.msg == "entoto tickets") {
+
               } else {
                 this.eligible = false
               }

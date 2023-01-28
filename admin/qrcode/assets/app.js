@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // init dialog
     dialogPolyfill.registerDialog(resultDialog);
-    resultDialog.querySelector('button.continue').addEventListener('click', function() {
+    resultDialog.querySelector('button.continue').addEventListener('click', function () {
         resultDialog.close();
         resultContainer.innerText = "";
         flipCameraButton.disabled = false;
@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // init QRCode Web Worker
     const qrcodeWorker = new Worker("assets/qrcode_worker.js");
-    qrcodeWorker.postMessage({cmd: 'init'});
+    qrcodeWorker.postMessage({ cmd: 'init' });
     qrcodeWorker.addEventListener('message', showResult);
 
     let snapshotSquare;
@@ -39,8 +39,8 @@ window.addEventListener('DOMContentLoaded', function () {
         // get square of snapshot in the video
         let snapshotSize = overlay.offsetWidth;
         snapshotSquare = {
-            'x': ~~((video.videoWidth - snapshotSize)/2),
-            'y': ~~((video.videoHeight - snapshotSize)/2),
+            'x': ~~((video.videoWidth - snapshotSize) / 2),
+            'y': ~~((video.videoHeight - snapshotSize) / 2),
             'size': ~~(snapshotSize)
         };
 
@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     function scanCode(wasSuccess) {
-        setTimeout(function() {
+        setTimeout(function () {
             if (flipCameraButton.disabled) {
                 // terminate this loop
                 loadingElement.style.display = "none";
@@ -73,9 +73,10 @@ window.addEventListener('DOMContentLoaded', function () {
         }, wasSuccess ? 2000 : 120);
     }
 
-    function showResult (e) {
+    function showResult(e) {
         const resultData = e.data;
-        const baseurl = 'https://kuriftucloud.com/reservation/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
+        // const baseurl = 'https://kuriftucloud.com/reservation/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
+        const baseurl = 'http://localhost/reservation_system/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
         // open a dialog with the result if found
         if (resultData !== false) {
             navigator.vibrate(200); // vibration is not supported on Edge, IE, Opera and Safari
@@ -107,19 +108,19 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function disableUI () {
+    function disableUI() {
         flipCameraButton.disabled = true;
         loadingElement.style.display = "none";
     }
 
     // init video stream
     let currentDeviceId;
-    function initVideoStream () {
+    function initVideoStream() {
         let config = {
             audio: false,
             video: {}
         };
-        config.video = currentDeviceId ? {deviceId: currentDeviceId} : {facingMode: "environment"};
+        config.video = currentDeviceId ? { deviceId: currentDeviceId } : { facingMode: "environment" };
 
         stopStream();
 
@@ -127,7 +128,7 @@ window.addEventListener('DOMContentLoaded', function () {
             document.getElementById('about').style.display = 'none';
 
             video.srcObject = stream;
-            video.oncanplay = function() {
+            video.oncanplay = function () {
                 flipCameraButton.disabled = false;
                 calculateSquare();
                 scanCode();
@@ -151,33 +152,33 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // add flip camera button if necessary
     navigator.mediaDevices.enumerateDevices()
-    .then(function(devices) {
-        devices = devices.filter(function (device) {
-            return device.kind === 'videoinput';
+        .then(function (devices) {
+            devices = devices.filter(function (device) {
+                return device.kind === 'videoinput';
+            });
+
+            if (devices.length > 1) {
+                // add a flip camera button
+                flipCameraButton.style.display = "block";
+
+                currentDeviceId = devices[0].deviceId; // no way to know current MediaStream's device id so arbitrarily choose the first
+
+                flipCameraButton.addEventListener('click', function () {
+                    let targetDevice;
+                    for (let i = 0; i < devices.length; i++) {
+                        if (devices[i].deviceId === currentDeviceId) {
+                            targetDevice = (i + 1 < devices.length) ? devices[i + 1] : devices[0];
+                            break;
+                        }
+                    }
+                    currentDeviceId = targetDevice.deviceId;
+
+                    initVideoStream();
+                });
+            }
         });
 
-        if (devices.length > 1) {
-            // add a flip camera button
-            flipCameraButton.style.display = "block";
-
-            currentDeviceId = devices[0].deviceId; // no way to know current MediaStream's device id so arbitrarily choose the first
-
-            flipCameraButton.addEventListener('click', function() {
-                let targetDevice;
-                for (let i = 0; i < devices.length; i++) {
-                    if (devices[i].deviceId === currentDeviceId) {
-                        targetDevice = (i + 1 < devices.length) ? devices[i+1] : devices[0];
-                        break;
-                    }
-                }
-                currentDeviceId = targetDevice.deviceId;
-
-                initVideoStream();
-            });
-        }
-    });
-
-    document.addEventListener("visibilitychange", function() {
+    document.addEventListener("visibilitychange", function () {
         if (document.hidden) {
             stopStream();
         } else {
@@ -187,14 +188,14 @@ window.addEventListener('DOMContentLoaded', function () {
 });
 
 // listen for resize event
-(function() {
-    let throttle = function(type, name, obj) {
+(function () {
+    let throttle = function (type, name, obj) {
         obj = obj || window;
         let running = false;
-        let func = function() {
+        let func = function () {
             if (running) { return; }
             running = true;
-            requestAnimationFrame(function() {
+            requestAnimationFrame(function () {
                 obj.dispatchEvent(new CustomEvent(name));
                 running = false;
             });
@@ -204,6 +205,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
     /* init - you can init any event */
     throttle("resize", "optimizedResize");
-    
+
 })();
 
