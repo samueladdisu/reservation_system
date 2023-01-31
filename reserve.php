@@ -15,7 +15,7 @@ if (isset($_GET['ref'])) {
 }
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
-  if ($Location !== "entoto" &&  $Location !== "bishoftu") {
+  if ($Location !== "entoto" &&  $Location !== "bishoftu" && $Location !== "awash") {
     header("Location: ./");
   }
   if ($Location == 'Tana' || $Location == 'tana') {
@@ -438,7 +438,7 @@ if (isset($_GET['checkout'])) {
                 <div class="col-3">
                   <label class="form-label">Adults</label>
                   <select name="adults" v-model="res_adults" @change="CheckGuest" class="form-select">
-                    
+
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
