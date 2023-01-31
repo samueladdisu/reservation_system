@@ -33,9 +33,9 @@
 
           </div>
           <!-- Content Row -->
-          <div class="row">
+          <div>
 
-            <div class="col-12" id="viewSpecial">
+            <div id="viewSpecial">
               <div class="card border-success" v-if="eligible">
                 <div class="card-header">
                   <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
@@ -80,6 +80,122 @@
                 </div>
               </div>
 
+              <div class="card border-success" v-else-if="entoto_eligible">
+                <div class="card-header">
+                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                </div>
+                <div class="card-body">
+                  Purchased Tickets: <br>
+                  {{ amt[0].quantity }} {{ amt[0].package_type }} - {{ amt[1].quantity }} {{ amt[1].package_type }} - {{
+                  amt[2].quantity }} {{ amt[2].package_type }} <br> <br>
+                  Available Ticket: <br>
+
+
+                  <form class="mt-3 d-md-flex">
+                    <div class="form-group mr-2 mb-2">
+                      <label class="font-weight-bold my-4">For Kids</label>
+                      <select class="form-control mb-2" v-model="pedalKart">
+                        <option disabled value="">Pedal Kart</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[0].packages[0].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="trampoline">
+                        <option disabled value="">Trampoline</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[0].packages[1].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="childrenPlayground">
+                        <option disabled value="">Children playground</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[0].packages[2].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="wallClimbing">
+                        <option disabled value="">wall climbing</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[0].packages[3].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group mr-2 mb-2">
+                      <label class="font-weight-bold my-4">Adrenaline</label>
+                      <select class="form-control mb-2" v-model="zipAdre">
+                        <option disabled value="">Zip Line</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[1].packages[0].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="ropeCourse">
+                        <option disabled value="">Rope Course</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[1].packages[1].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="goKart">
+                        <option disabled value="">Go Kart</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[1].packages[2].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group mr-2 mb-2">
+                      <label class="font-weight-bold my-4">Entoto Adventure</label>
+                      <select class="form-control mb-2" v-model="horseRiding">
+                        <option disabled value="">Horse Riding</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[2].packages[0].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="paintBall">
+                        <option disabled value="">Paintball</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[2].packages[1].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="archery">
+                        <option disabled value="">Archery</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[2].packages[2].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+                      <select class="form-control mb-2" v-model="zipAdv">
+                        <option disabled value="">Zip Line</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[2].packages[3].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+                    </div>
+                  </form>
+
+
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-primary mr-2 mb-2" @click="redeemEntotoTicket">Redeem Ticket</button>
+                  <a href="./qrcode/" class="btn btn-secondary">
+                    cancel
+                  </a>
+                </div>
+              </div>
 
               <div class="card" v-else>
 
@@ -98,7 +214,7 @@
                   <li class="list-group-item">Date: 11-1-2023</li>
                   <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
                   <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
-                  }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
+                    }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
                   <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
                   <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
                   <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
@@ -165,7 +281,8 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Kuriftu resorts 2023. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+            <span>Copyright &copy; Kuriftu resorts 2023. Powered by <a href="https://versavvymedia.com">Versavvy
+                Media</a> </span>
           </div>
         </div>
       </footer>
@@ -237,6 +354,7 @@
         return {
           allData: {},
           eligible: false,
+          entoto_eligible: false,
           // url: 'https://tickets.kuriftucloud.com/verify',
           url: 'http://localhost:8000/verify',
           ava_ad: 0,
@@ -245,6 +363,26 @@
           kid: "",
           spinner: false,
           success: false,
+          amt: [],
+          redeemAmt: [],
+          avaAmt: [],
+          // entoto package values
+          // For kids
+          pedalKart: "",
+          trampoline: "",
+          childrenPlayground: "",
+          wallClimbing: "",
+
+          // Adrenaline
+          zipAdre: "",
+          ropeCourse: "",
+          goKart: "",
+
+          // Entoto Adventure
+          horseRiding: "",
+          paintBall: "",
+          archery: "",
+          zipAdv: "",
         }
       },
       methods: {
@@ -266,10 +404,16 @@
                 this.ava_kid = res.data.data.ava_kid
               } else if (res.data.msg == "entoto tickets") {
 
+                this.entoto_eligible = true
+                this.allData = res.data.data.result[0]
+                this.amt = res.data.data.amt
+                this.redeemAmt = res.data.data.redeemed_amt
+                this.avaAmt = res.data.data.ava_amt
               } else {
                 this.eligible = false
               }
 
+              console.log(this.allData);
             })
 
           } catch (e) {
@@ -293,6 +437,47 @@
               guest_token: g_token,
               redeemed_ad: this.adult,
               redeemed_kid: this.kid
+            }).then(res => {
+              console.log(res.data);
+
+              if (res.data.msg == "checked_in") {
+                this.spinner = false
+                this.success = true
+
+                setTimeout(() => {
+                  window.location.href = "view_tickets.php"
+                }, 2000);
+              }
+            })
+          } catch (error) {
+
+          }
+        },
+        async redeemEntotoTicket() {
+
+          if (this.pedalKart == "" && this.trampoline == "" && this.childrenPlayground == "" && this.walClimbing == "" && this.zipAdre == "" && this.ropeCourse == "" && this.goKart == "" && this.horseRiding == "" && this.paintBall == "" && this.archery == "" && this.zipAdv == "") {
+            alert("Please select a ticket")
+            return
+          }
+          try {
+            $('#ticket_success_tic').modal('show')
+            this.spinner = true
+
+            await axios.post('http://localhost:8000/checkEntotoGuest', {
+              guest_token: g_token,
+              data: {
+                pedalKart: this.pedalKart,
+                trampoline: this.trampoline,
+                childrenPlayground: this.childrenPlayground,
+                wallClimbing: this.wallClimbing,
+                zipAdre: this.zipAdre,
+                ropeCourse: this.ropeCourse,
+                goKart: this.goKart,
+                horseRiding: this.horseRiding,
+                paintBall: this.paintBall,
+                archery: this.archery,
+                zipAdv: this.zipAdv
+              }
             }).then(res => {
               console.log(res.data);
 
