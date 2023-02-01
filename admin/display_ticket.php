@@ -197,6 +197,73 @@
                 </div>
               </div>
 
+              <div class="card border-success" v-else-if="boston_eligible">
+                <div class="card-header">
+                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                </div>
+                <div class="card-body">
+                  Purchased Tickets: <br>
+                  {{ amt[0].quantity }} {{ amt[0].name }}<br> 
+                  {{ amt[1].quantity }} {{ amt[1].name }} <br> 
+                  {{ amt[2].quantity }} {{ amt[2].name }}<br> 
+                  {{ amt[3].quantity }} {{ amt[3].name }} 
+                  <br> <br>
+                  Available Ticket: <br>
+                  {{ avaAmt[0].quantity }} {{ avaAmt[0].name }} <br> 
+                  {{ avaAmt[1].quantity }} {{ avaAmt[1].name }} <br> 
+                  {{ avaAmt[2].quantity }} {{ avaAmt[2].name }} <br>
+                  {{ avaAmt[3].quantity }} {{ avaAmt[3].name }} 
+                  
+                  <br> <br>
+
+                  <form class="mt-3 d-md-flex">
+                    <div class="form-group mr-2 mb-2">
+                      <label class="font-weight-bold my-4">Packages</label>
+                      <select class="form-control mb-2" v-model="pediMani">
+                        <option disabled value="">Peedcure & deep manicure</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[0].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="aroma">
+                        <option disabled value="">Aroma massage</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[1].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="spa">
+                        <option disabled value="">Spa</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[2].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+
+                      <select class="form-control mb-2" v-model="hair">
+                        <option disabled value="">Hair</option>
+                        <option value="0">0</option>
+                        <option v-for="amt in avaAmt[3].quantity" :value="amt">
+                          {{ amt }}
+                        </option>
+                      </select>
+                    </div>
+                  </form>
+
+
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-primary mr-2 mb-2" @click="redeemBoston">Redeem Ticket</button>
+                  <a href="./qrcode/" class="btn btn-secondary">
+                    cancel
+                  </a>
+                </div>
+              </div>
+
+              
               <div class="card" v-else>
 
                 <div class="card-header">
@@ -355,6 +422,7 @@
           allData: {},
           eligible: false,
           entoto_eligible: false,
+          boston_eligible: false,
           // url: 'https://tickets.kuriftucloud.com/verify',
           url: 'http://localhost:8000/verify',
           ava_ad: 0,
@@ -383,6 +451,12 @@
           paintBall: "",
           archery: "",
           zipAdv: "",
+
+          //boston package values
+          pediMani: "",
+          aroma: "",
+          spa: "",
+          hair: ""
         }
       },
       methods: {
@@ -409,6 +483,12 @@
                 this.amt = res.data.data.amt
                 this.redeemAmt = res.data.data.redeemed_amt
                 this.avaAmt = res.data.data.ava_amt
+              } else if (res.data.msg == "boston tickets") {
+                this.boston_eligible = true
+                this.allData = res.data.result[0] 
+                this.amt = res.data.amt
+                this.redeemAmt = res.data.redeemed_amt
+                this.avaAmt = res.data.ava_amt
               } else {
                 this.eligible = false
               }
@@ -492,6 +572,40 @@
             })
           } catch (error) {
 
+          }
+        },
+        async redeemBoston() {
+          if (this.pediMani == "" && this.aroma == "" && this.spa == "" && this.hair == "") {
+            alert("Please select a ticket")
+            return
+          }
+
+          try {
+            $('#ticket_success_tic').modal('show')
+            this.spinner = true
+
+            await axios.post('http://localhost:8000/checkBostonGuest', {
+              guest_token: g_token,
+              data: {
+                pediMani: this.pediMani,
+                aroma: this.aroma,
+                spa: this.spa,
+                hair: this.hair
+              }
+            }).then(res => {
+              console.log(res.data);
+
+              if (res.data.msg == "checked_in") {
+                this.spinner = false
+                this.success = true
+
+                setTimeout(() => {
+                  window.location.href = "view_tickets.php"
+                }, 2000);
+              }
+            })
+          } catch (error) {
+            console.log(error);
           }
         }
       },

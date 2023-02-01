@@ -743,16 +743,33 @@ if (isset($_GET['checkout'])) {
         $('#date').data('daterangepicker').setStartDate(today);
         $('#date').data('daterangepicker').setEndDate(tomorrow);
 
-        $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // $('#date').on('apply.daterangepicker', function(ev, picker) {
+        //   // console.log(picker.startDate.format('YYYY-MM-DD'));
+        //   // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        //   console.log("apply")
+        //   start = picker.startDate.format('YYYY-MM-DD')
+        //   end = picker.endDate.format('YYYY-MM-DD')
+        //   console.log("updated start", start);
+        //   console.log("updated end", end);
+
+        //   // vm.submitData()
+
+
+        // });
+
+        $('#date').on('hide.daterangepicker', function(ev, picker) {
           // console.log(picker.startDate.format('YYYY-MM-DD'));
           // console.log(picker.endDate.format('YYYY-MM-DD'));
 
+          console.log("hide")
           start = picker.startDate.format('YYYY-MM-DD')
           end = picker.endDate.format('YYYY-MM-DD')
-          // console.log("updated start", start);
-          // console.log("updated end", end);
+          console.log("updated start", start);
+          console.log("updated end", end);
 
           vm.submitData()
+
 
 
         });
