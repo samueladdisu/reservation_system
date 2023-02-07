@@ -203,17 +203,17 @@
                 </div>
                 <div class="card-body">
                   Purchased Tickets: <br>
-                  {{ amt[0].quantity }} {{ amt[0].name }}<br> 
-                  {{ amt[1].quantity }} {{ amt[1].name }} <br> 
-                  {{ amt[2].quantity }} {{ amt[2].name }}<br> 
-                  {{ amt[3].quantity }} {{ amt[3].name }} 
+                  {{ amt[0].quantity }} {{ amt[0].name }}<br>
+                  {{ amt[1].quantity }} {{ amt[1].name }} <br>
+                  {{ amt[2].quantity }} {{ amt[2].name }}<br>
+                  {{ amt[3].quantity }} {{ amt[3].name }}
                   <br> <br>
                   Available Ticket: <br>
-                  {{ avaAmt[0].quantity }} {{ avaAmt[0].name }} <br> 
-                  {{ avaAmt[1].quantity }} {{ avaAmt[1].name }} <br> 
+                  {{ avaAmt[0].quantity }} {{ avaAmt[0].name }} <br>
+                  {{ avaAmt[1].quantity }} {{ avaAmt[1].name }} <br>
                   {{ avaAmt[2].quantity }} {{ avaAmt[2].name }} <br>
-                  {{ avaAmt[3].quantity }} {{ avaAmt[3].name }} 
-                  
+                  {{ avaAmt[3].quantity }} {{ avaAmt[3].name }}
+
                   <br> <br>
 
                   <form class="mt-3 d-md-flex">
@@ -263,7 +263,7 @@
                 </div>
               </div>
 
-              
+
               <div class="card" v-else>
 
                 <div class="card-header">
@@ -485,7 +485,7 @@
                 this.avaAmt = res.data.data.ava_amt
               } else if (res.data.msg == "boston tickets") {
                 this.boston_eligible = true
-                this.allData = res.data.result[0] 
+                this.allData = res.data.result[0]
                 this.amt = res.data.amt
                 this.redeemAmt = res.data.redeemed_amt
                 this.avaAmt = res.data.ava_amt
@@ -525,7 +525,7 @@
                 this.success = true
 
                 setTimeout(() => {
-                  window.location.href = "view_tickets.php"
+                  window.location.href = "view_tickets.php?location=waterpark"
                 }, 2000);
               }
             })
@@ -566,7 +566,7 @@
                 this.success = true
 
                 setTimeout(() => {
-                  window.location.href = "view_tickets.php"
+                  window.location.href = "view_tickets.php?location=entoto"
                 }, 2000);
               }
             })
@@ -600,7 +600,7 @@
                 this.success = true
 
                 setTimeout(() => {
-                  window.location.href = "view_tickets.php"
+                  window.location.href = "view_tickets.php?location=boston"
                 }, 2000);
               }
             })

@@ -25,8 +25,8 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Water park ticket
-
+            <h1 class="h3 mb-0 text-gray-800">
+              Tickets Reservation
             </h1>
 
           </div>
@@ -41,6 +41,20 @@
 
                 </div>
                 <div class="card-body">
+
+                  <div class="form-group col-3">
+                    <label for="location">Location</label>
+
+                    <select v-model="location" @change="fetchLocation" class="custom-select">
+
+                      <option value="all">All</option>
+                      <option value="boston">Boston</option>
+                      <option value="waterpark">Water Park</option>
+                      <option value="entoto">Entoto</option>
+                    </select>
+                  </div>
+
+
                   <div class="table-responsive">
                     <table class="table display table-bordered" width="100%" id="viewTicket" cellspacing="0">
 
@@ -74,6 +88,79 @@
               </div>
 
 
+                <!-- View Full Reservation Details Modal -->
+      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div>
+                <h1 class="my-2">Room Info</h1>
+
+                <div class="card-group">
+
+                  <div class="card" style="width: 18rem;" >
+                    <div class="card-body">
+                      <h5 class="card-title font-weight-bold">  </span> </h5>
+
+                    </div>
+                    <ul class="list-group list-group-flush">
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+
+              <h1 class="my-2">Detail Guest Info</h1>
+
+              <div class="card-group mt-4">
+                <div class="card" style="width: 18rem;">
+                  <ul class="list-group">
+               
+                  </ul>
+                </div>
+
+                <div class="card" style="width: 18rem;">
+
+                  <ul class="list-group">
+                 
+                  </ul>
+                </div>
+
+              </div>
+
+              <div class="card-group  mt-4">
+                <div class="card" style="width: 18rem;">
+                  <ul class="list-group">
+                
+                  </ul>
+                </div>
+                <div class="card" style="width: 18rem;">
+                  <ul class="list-group">
+                    
+                  </ul>
+                </div>
+
+
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- End of View Full Reservation Details -->
+
+
+
               <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -99,50 +186,6 @@
 
       </div>
       <!-- End of Main Content -->
-
-      <!-- View Full Reservation Details Modal -->
-      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">
-                {{ tempRow.group_name }}
-              </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-
-              <table class="table table-bordered table-hover" width="100%" cellspacing="0">
-                <thead>
-                  <th>
-                    Name
-                  </th>
-                  <th>
-                    Value
-                  </th>
-                </thead>
-                <tbody>
-                  <tr v-for="(value, key) in tempRow">
-                    <td>
-                      {{ key }}
-                    </td>
-                    <td>
-                      {{ value }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- End of View Full Reservation Details -->
-
 
       <!-- Delete Modal  -->
 
@@ -213,10 +256,20 @@
       data() {
         return {
           allData: [],
-          tempDelete: {}
+          tempRow: {},
+          location: "all"
         }
       },
       methods: {
+        dateFunction(ts) {
+          let date_ob = new Date(ts);
+          let date = date_ob.getDate();
+          let month = date_ob.getMonth() + 1;
+          let year = date_ob.getFullYear();
+
+          var final = year + "-" + month + "-" + date;
+          return final;
+        },
         table(row) {
           $('#viewTicket').DataTable({
             destroy: true,
@@ -246,8 +299,11 @@
                 data: 'confirmation_code'
               },
               {
-                data: 'reservation_date'
-              }, 
+                data: 'createdAt',
+                render: function(data, type, row) {
+                  return reqApp.dateFunction(data)
+                }
+              },
               {
                 data: 'adult',
                 render: function(data, type, row) {
@@ -263,27 +319,6 @@
                   return data + ' ' + row.currency
                 }
               },
-              // {
-              //   data: 'tx_ref'
-              // },
-              // {
-              //   data: 'payment_status'
-              // },
-              // {
-              //   data: 'payment_method'
-              // },
-              // {
-              //   data: 'order_status'
-              // },
-              // {
-              //   data: 'addons'
-              // },
-              // {
-              //   data: 'createdAt'
-              // },
-              // {
-              //   data: 'updatedAt'
-              // },
               {
                 data: 'id',
                 render: function(data) {
@@ -316,30 +351,51 @@
 
           let vm = this
 
-          $(document).on('click', '#delete', function() {
-            // get room id from the table
-            let ids = $(this).data("id")
+          $(document).on('click', "#view", function() {
+            let ids = $(this).data('id')
             let temprow = {}
 
             // filter alldata which is equal to the room id
-            vm.allData.forEach(item => {
+            vm.alldata.forEach(item => {
               if (item.id == ids) {
                 temprow = item
               }
             })
 
             // assign to temp row
-            vm.tempDelete = temprow
-            console.log("temp row", vm.tempDelete);
-            $('#deleteModal').modal('show')
+            vm.tempRow = temprow
+            console.log("temp row", vm.tempRow);
+            $('#exampleModalLong').modal('show')
           })
 
 
         },
         async fetchReq() {
 
+          const currentUrl = window.location.href;
+          const urlParams = new URLSearchParams(currentUrl.split('?')[1])
+
+          const location = urlParams.get('location') || this.location
+
+
+          console.log(location);
           try {
-            const res = await axios.get('https://tickets.kuriftucloud.com/view_activity_reservation')
+            const res = await axios.post('https://tickets.kuriftucloud.com/view_activity_reservation', {
+              location
+            })
+            console.log(res.data);
+
+            this.alldata = res.data
+            this.table(this.alldata)
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        async fetchLocation() {
+          try {
+            const res = await axios.post('https://tickets.kuriftucloud.com/view_activity_reservation', {
+              location: this.location
+            })
             console.log(res.data);
 
             this.alldata = res.data

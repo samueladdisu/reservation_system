@@ -278,10 +278,6 @@ function cutFromPromo($promo, $price)
         header("Location: ./amole.php");
         // $_SESSION['currency'] = "USD";
         break;
-      case 'chapa_usd':
-        header("Location: ./chapa.php");
-        $_SESSION['currency'] = "USD";
-        break;
       case 'chapa_etb':
         header("Location: ./chapa.php");
         $_SESSION['currency'] = "ETB";
@@ -403,7 +399,7 @@ function cutFromPromo($promo, $price)
             <!-- <option value="telebirr">Telebirr</option> -->
             <option value="chapa_etb">Bank of Abysiniya</option>
             <option value="chapa_etb">CBE Birr</option>
-            <option value="chapa_usd">Pay Pal</option>
+            <!-- <option value="chapa_usd">Pay Pal</option> -->
             <option value="chapa_etb">Wegagen Hello Cash</option>
             <option value="chapa_etb">E-birr</option>
           </select>
