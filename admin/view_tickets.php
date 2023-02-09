@@ -66,11 +66,11 @@
                           <th>Phone</th>
                           <th>Confirmation code</th>
                           <th>Date</th>
-                          <th>Guests</th>
+                          <th>Tickets</th>
                           <th>Location</th>
                           <th>Price</th>
-                          <!-- <th>Txn ref</th>
                           <th>Payment status</th>
+                          <!-- <th>Txn ref</th>
                           <th>Payment method</th>
                           <th>Order status</th>
                           <th> Remarks</th>
@@ -88,76 +88,130 @@
               </div>
 
 
-                <!-- View Full Reservation Details Modal -->
-      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">
-              </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div>
-                <h1 class="my-2">Room Info</h1>
+              <!-- View Full Reservation Details Modal -->
+              <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div>
+                        <h1 class="my-2">Info</h1>
 
-                <div class="card-group">
+                        <div class="card-group">
 
-                  <div class="card" style="width: 18rem;" >
-                    <div class="card-body">
-                      <h5 class="card-title font-weight-bold">  </span> </h5>
+                          <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h5 class="card-title font-weight-bold">
+                                {{ tempRow.first_name + " " + tempRow.last_name }}
+                              </h5>
+
+                            </div>
+                            <ul class="list-group list-group-flush">
+                              <li class="list-group-item">
+                                <span class="font-weight-bold">Email:</span>
+                                {{ tempRow.email }}
+                              </li>
+                              <li class="list-group-item">
+                                <span class="font-weight-bold">Phone:</span>
+                                {{ tempRow.phone_number }}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <h1 class="my-2"></h1>
+
+                      <div class="card-group mt-4">
+                        <div class="card" style="width: 18rem;">
+                          <div class="card-header">
+
+                            <h5 class="card-title font-weight-bold">
+                              Tickets
+                            </h5>
+                          </div>
+                          <ul class="list-group">
+                            <div v-if="tempRow.location == 'boston'">
+                              <li class="list-group-item" v-for="item in total_amt">
+                                <span class="font-weight-bold">{{ item.name }}:</span>
+                                {{ item.quantity  }}
+                              </li>
+                            </div>
+
+                            <div v-else-if="tempRow.location == 'waterpark'">
+                              <li class="list-group-item">
+                                <span class="font-weight-bold">Adult:</span>
+                                {{ tempRow.adult }}
+                              </li>
+                              <li class="list-group-item">
+                                <span class="font-weight-bold">Kids:</span>
+                                {{ tempRow.kids }}
+                              </li>
+                            </div>
+
+                          </ul>
+                        </div>
+
+                        <div class="card" style="width: 18rem;">
+                          <div class="card-header">
+                            <h5 class="card-title font-weight-bold">
+                              Redeemed Tickets
+                            </h5>
+                          </div>
+
+                          <ul class="list-group">
+                            <div v-if="tempRow.location == 'boston'">
+                              <li class="list-group-item" v-for="item in ava_amt">
+                                <span class="font-weight-bold">{{ item.name }}:</span>
+                                {{ item.quantity  }}
+                              </li>
+
+                            </div>
+                            <div v-else-if="tempRow.location == 'waterpark'">
+                              <li class="list-group-item">
+                                <span class="font-weight-bold">Adult:</span>
+                                {{ tempRow.redeemed_adult_ticket }}
+                              </li>
+                              <li class="list-group-item">
+                                <span class="font-weight-bold">Kids:</span>
+                                {{ tempRow.redeemed_kids_ticket }}
+                              </li>
+                            </div>
+                          </ul>
+                        </div>
+
+                      </div>
+
+                      <div class="card-group  mt-4">
+                        <div class="card" style="width: 18rem;">
+                          <ul class="list-group">
+
+                          </ul>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                          <ul class="list-group">
+
+                          </ul>
+                        </div>
+
+
+
+                      </div>
 
                     </div>
-                    <ul class="list-group list-group-flush">
-                    </ul>
+
                   </div>
                 </div>
-
               </div>
 
-              <h1 class="my-2">Detail Guest Info</h1>
-
-              <div class="card-group mt-4">
-                <div class="card" style="width: 18rem;">
-                  <ul class="list-group">
-               
-                  </ul>
-                </div>
-
-                <div class="card" style="width: 18rem;">
-
-                  <ul class="list-group">
-                 
-                  </ul>
-                </div>
-
-              </div>
-
-              <div class="card-group  mt-4">
-                <div class="card" style="width: 18rem;">
-                  <ul class="list-group">
-                
-                  </ul>
-                </div>
-                <div class="card" style="width: 18rem;">
-                  <ul class="list-group">
-                    
-                  </ul>
-                </div>
-
-
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- End of View Full Reservation Details -->
+              <!-- End of View Full Reservation Details -->
 
 
 
@@ -257,7 +311,11 @@
         return {
           allData: [],
           tempRow: {},
-          location: "all"
+          location: "all",
+          // proUrl: "https://tickets.kuriftucloud.com/",
+          proUrl: "http://localhost:8000/",
+          ava_amt: [],
+          total_amt: [],
         }
       },
       methods: {
@@ -307,7 +365,11 @@
               {
                 data: 'adult',
                 render: function(data, type, row) {
-                  return "Ad: " + data + ' ' + "kids: " + row.kids
+                  if (row.location == 'waterpark') {
+                    return "Ad: " + data + ' ' + "kids: " + row.kids
+                  } else if (row.location == 'boston') {
+                    return row.quantity
+                  }
                 }
               },
               {
@@ -318,6 +380,9 @@
                 render: function(data, type, row) {
                   return data + ' ' + row.currency
                 }
+              },
+              {
+                data: 'payment_status'
               },
               {
                 data: 'id',
@@ -364,6 +429,8 @@
 
             // assign to temp row
             vm.tempRow = temprow
+            vm.total_amt = JSON.parse(temprow.amt)
+            vm.ava_amt = JSON.parse(temprow.redeemed_amt)
             console.log("temp row", vm.tempRow);
             $('#exampleModalLong').modal('show')
           })
@@ -380,7 +447,7 @@
 
           console.log(location);
           try {
-            const res = await axios.post('https://tickets.kuriftucloud.com/view_activity_reservation', {
+            const res = await axios.post(this.proUrl + 'view_activity_reservation', {
               location
             })
             console.log(res.data);
@@ -393,7 +460,7 @@
         },
         async fetchLocation() {
           try {
-            const res = await axios.post('https://tickets.kuriftucloud.com/view_activity_reservation', {
+            const res = await axios.post(this.proUrl + 'view_activity_reservation', {
               location: this.location
             })
             console.log(res.data);
