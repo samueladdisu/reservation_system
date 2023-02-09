@@ -312,8 +312,8 @@
           allData: [],
           tempRow: {},
           location: "all",
-          // proUrl: "https://tickets.kuriftucloud.com/",
-          proUrl: "http://localhost:8000/",
+          proUrl: "https://tickets.kuriftucloud.com/",
+          // proUrl: "http://localhost:8000/",
           ava_amt: [],
           total_amt: [],
         }
