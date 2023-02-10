@@ -139,7 +139,7 @@
                           </div>
                           <ul class="list-group">
                             <div v-if="tempRow.location == 'boston'">
-                              <li class="list-group-item" v-for="item in total_amt">
+                              <li class="list-group-item" v-for="item in tempRow.amt">
                                 <span class="font-weight-bold">{{ item.name }}:</span>
                                 {{ item.quantity  }}
                               </li>
@@ -168,7 +168,7 @@
 
                           <ul class="list-group">
                             <div v-if="tempRow.location == 'boston'">
-                              <li class="list-group-item" v-for="item in ava_amt">
+                              <li class="list-group-item" v-for="item in tempRow.redeemed_amt">
                                 <span class="font-weight-bold">{{ item.name }}:</span>
                                 {{ item.quantity  }}
                               </li>
@@ -429,8 +429,8 @@
 
             // assign to temp row
             vm.tempRow = temprow
-            vm.total_amt = JSON.parse(temprow.amt)
-            vm.ava_amt = JSON.parse(temprow.redeemed_amt)
+            // vm.total_amt = JSON.parse(temprow.amt)
+            // vm.ava_amt = JSON.parse(temprow.redeemed_amt)
             console.log("temp row", vm.tempRow);
             $('#exampleModalLong').modal('show')
           })
