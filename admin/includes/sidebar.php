@@ -22,7 +22,7 @@
 
      <li class="nav-item">
          <a class="nav-link" href="./qrcode">
-             <i class="fas fa-clipboard-list"></i>
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
              <span> Scan QR code </span></a>
      </li>
 
@@ -69,8 +69,8 @@
      
      <li class="nav-item">
          <a class="nav-link" href="./view_tickets.php">
-             <i class="fas fa-clipboard-list"></i>
-             <span> Activity Reservations </span></a>
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+             <span> Ticket Reservations </span></a>
      </li>
 
 
@@ -111,7 +111,7 @@
 
      <li class="nav-item">
          <a class="nav-link" href="./promo.php">
-             <i class="fas fa-clipboard-list"></i>
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
              <span> Promo Code </span></a>
      </li>
 
@@ -119,7 +119,7 @@
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#member" aria-expanded="true" aria-controls="collapseTwo">
-             <i class="fas fa-users"></i>
+             <i class="fas fa-users fa-2x text-gray-300"></i>
              <span>Members</span>
              <i style="margin-left: 4.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
@@ -137,7 +137,7 @@
         ?>
          <li class="nav-item">
              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                 <i class="fas fa-users"></i>
+                 <i class="fas fa-users fa-2x text-gray-300"></i>
 
                  <span>Users</span>
                  <i style="margin-left: 6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>

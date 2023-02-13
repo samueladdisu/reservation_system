@@ -27,6 +27,26 @@ if ($incoming->action == 'fetchRes') {
   echo json_encode($data);
 }
 
+if ($incoming->action == 'fetchResDaily') {
+  $date = date('Y-m-d');
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM reservations WHERE res_checkin = '$date' ORDER BY res_id DESC";
+  } else {
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = '$date' ORDER BY res_id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
+}
+
+
+
 if ($incoming->action == 'filter') {
   $location = $incoming->location;
   $date = $incoming->date;

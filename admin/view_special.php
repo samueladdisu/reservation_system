@@ -87,6 +87,7 @@
                 </div>
               </div>
             </div>
+          
           </div>
 
         </div>
@@ -272,9 +273,7 @@
                           <a data-toggle="modal" :data-target="modal" class="dropdown-item">
                             Add
                           </a>
-                          <a class="dropdown-item" data-id="${data}" id="view">
-                            View
-                          </a>
+                        
                           <a class="dropdown-item" id="edit" href="edit_special.php?id=${data}">
                             Edit
                           </a>

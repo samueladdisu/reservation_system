@@ -157,6 +157,29 @@ $allData = array();
 $data = array();
 $rooms = array();
 
+if ($received_data->action == "fetchResDaily") {
+  $date = date('Y-m-d');
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM group_reservation WHERE group_checkin = '$date' ORDER BY group_id DESC";
+  } else {
+    $query = "SELECT * FROM group_reservation WHERE group_checkin = '$date' AND group_location = '$location' ORDER BY group_id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  $exists = mysqli_num_rows($result);
+
+  if ($exists > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+      $data[] = $row;
+    }
+  
+    echo json_encode($data);
+  } else {
+    echo json_encode("empty");
+  }
+}
 
 if ($received_data->action == "guestInfo") {
   $id = $received_data->id;

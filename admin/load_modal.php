@@ -25,6 +25,30 @@ $Not_booked_array = array();
 $allData = array();
 $dataReq = array();
 
+if($received_data->action == 'fetchReqDaily') {
+  $date = date('Y-m-d');
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM special_request WHERE date = '$date' ORDER BY id DESC";
+  } else {
+    $query = "SELECT * FROM special_request WHERE location = '$location' AND date = '$date' ORDER BY id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  $exists = mysqli_num_rows($result);
+
+  if ($exists > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+      $dataReq[] = $row;
+    }
+  
+    echo json_encode($dataReq);
+  } else {
+    echo json_encode("empty");
+  }
+}
+
 if($received_data->action == 'fetchReq'){
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
     $query = "SELECT * FROM special_request ORDER BY id DESC";

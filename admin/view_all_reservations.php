@@ -485,21 +485,21 @@
                 data: 'res_id',
                 render: function(data) {
                   return `<div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                        <a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown">
                           <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
-                          <a data-toggle="modal" :data-target="modal" class="dropdown-item" href="#">
+                          <a data-toggle="modal" :data-target="modal" class="dropdown-item" >
                             Add
                           </a>
-                          <a class="dropdown-item" data-id="${data}" id="view" href="#">
+                          <a class="dropdown-item" data-id="${data}" id="view" >
                             View
                           </a>
-                          <a class="dropdown-item" id="edit" href="edit_reservation.php?id=${data}" href="#">
+                          <a class="dropdown-item" id="edit" href="edit_reservation.php?id=${data}" >
                             Edit
                           </a>
                           <div class="dropdown-divider"></div>
-                          <a data-id="${data}" id="delete" href="#" class="dropdown-item text-danger">
+                          <a data-id="${data}" id="delete"  class="dropdown-item text-danger">
                             Delete
                           </a>
 
