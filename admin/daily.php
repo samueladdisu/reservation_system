@@ -1386,8 +1386,16 @@
             action: 'fetchResDaily'
           }).then(res => {
             console.log("comes from api", res.data);
-            this.posts = res.data
-            this.table(res.data)
+        
+            if (res.data === "empty") {
+              this.allData = {}
+              this.table({})
+              this.posts = {}
+            } else {
+              this.allData = res.data
+              this.table(res.data)
+              this.posts = res.data
+            }
           })
         }
       },
