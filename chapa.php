@@ -96,6 +96,7 @@
     $chapa_sec = $_ENV['CHAPA_SECK_ENTOTO'];
     $chapa_pub = $_ENV['CHAPA_PUB_ENTOTO'];
     // $callback_url = 'https://reservations.kurifturesorts.com/chapaEntotoCompleted/';
+    $callback_url = 'https://test.kurifturesorts.com/chapaEntotoCompleted/';
     // $callback_url = 'http://localhost/reservation_system/chapaEntotoCompleted/';
   } else {
     $chapa_sec = $_ENV['CHAPA_SECK'];
