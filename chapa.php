@@ -115,7 +115,7 @@
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS => array(
       // 'amount' =>  $price,
-      'amount' =>  0.01,
+      'amount' =>  1,
       // 'key' => $_ENV['CHAPA_PUB'],
       'currency' => $currency,
       'email' => $_SESSION['email'],
