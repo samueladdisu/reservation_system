@@ -25,6 +25,7 @@ $Not_booked_array = array();
 $allData = array();
 $dataReq = array();
 
+
 if($received_data->action == 'fetchReqDaily') {
   $date = date('Y-m-d');
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {

@@ -13,8 +13,7 @@
     <div id="content-wrapper" class="d-flex flex-column">
 
       <!-- Main Content -->
-      <div id="content">
-
+      <div id="dashboard">
         <!-- Topbar -->
         <?php include './includes/topbar.php'; ?>
         <!-- End of Topbar -->
@@ -67,72 +66,9 @@
                       <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                           Rooms</div>
-                        
-                        <?php
-                        $location = $_SESSION['user_location'];
-                        $today = date("Y-m-d");
-                        if ($location == "Boston") {
-                          $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
-                          FROM rooms AS r
-                          LEFT JOIN booked_rooms AS b
-                          ON r.room_id = b.b_roomId AND '$today' BETWEEN b_checkin AND b_checkout
-                          LEFT JOIN reservations AS res
-                          ON res.res_id = b.b_res_id
-                          LEFT JOIN guest_info AS g
-                          ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId";
-                        } else {
-                          $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
-                          FROM rooms AS r
-                          LEFT JOIN booked_rooms AS b
-                          ON r.room_id = b.b_roomId AND '$today' BETWEEN b_checkin AND b_checkout
-                          LEFT JOIN reservations AS res
-                          ON res.res_id = b.b_res_id
-                          LEFT JOIN guest_info AS g
-                          ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId
-                          WHERE r.room_location = '$location'";
-                        }
-                        $select_all_posts = mysqli_query($connection, $query);
-                        $post_counts = mysqli_num_rows($select_all_posts);
-                        $result = mysqli_query($connection, $query);
-
-                        confirm($result);
-                        $available = 0;
-                        $booked = 0;
-                        $arrivals = 0;
-                        $departures = 0;
-
-                        while ($row = mysqli_fetch_assoc($result)) {
-                          $room_id = $row['room_id'];
-                          $room_acc = $row['room_acc'];
-                          $room_number = $row['room_number'];
-                          $res_firstname = $row['res_firstname'];
-                          $info_adults = $row['info_adults'];
-                          $info_kids = $row['info_kids'];
-                          $info_teens = $row['info_teens'];
-                          $b_checkin = $row['b_checkin'];
-                          $b_checkout = $row['b_checkout'];
-                          $room_location = $row['room_location'];
-                          $res_remark = $row['res_remark'];
-
-                          if ($b_checkin == null) {
-                            $available++;
-                          } else {
-                            $booked++;
-                          }
-
-                          if ($b_checkin == $today) {
-                            $arrivals++;
-                          } else if ($b_checkout == $today) {
-                            $departures++;
-                          }
-                        }
-
-                        echo "<div class='h6 mb-0 mt-2 text-gray-600'>
-                        $available Available/ $booked Booked
-                      </div>";
-
-                        ?>
-
+                        <div class='h6 mb-0 mt-2 text-gray-600'>
+                          {{ available }} Available/ {{ booked }} Booked
+                        </div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -154,7 +90,7 @@
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                           Arrival & departure</div>
                         <div class='h6 mb-0 mt-2 text-gray-600'>
-                         <?php echo $arrivals; ?> Arrivals/  <?php echo $departures; ?>  Departures
+                         {{ arrivals }} Arrivals/ {{ departures }} Departures
                         </div>
                       </div>
                       <div class="col-auto">
@@ -173,22 +109,12 @@
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">New Bookings
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Inhouse 
                         </div>
-                        <?php
-                       
 
-                        if ($location == "Boston") {
-                          $query = "SELECT * FROM reservations WHERE res_checkin = '$today' ORDER BY res_id DESC";
-                        } else {
-                          $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = '$today' ORDER BY res_id DESC";
-                        }
-                        $result = mysqli_query($connection, $query);
-                        $new_bookings = mysqli_num_rows($result);
-                         echo "<div class='h6 mb-0 mt-2 text-gray-600'>$new_bookings</div>";
-
-                        ?>
-
+                        <div class='h6 mb-0 mt-2 text-gray-600'>
+                          11
+                        </div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -208,20 +134,7 @@
                       <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                           Special Requests</div>
-                        <?php
-
-                          if ($location == 'Boston') {
-                            $query = "SELECT * FROM special_request WHERE date = '$today' ORDER BY id DESC";
-                          } else {
-                            $query = "SELECT * FROM special_request WHERE location = '$location' AND date = '$today' ORDER BY id DESC";
-                          }
-                        
-                          $result = mysqli_query($connection, $query);
-                        
-                          $special = mysqli_num_rows($result);
-                          echo "<div class='h6 mb-0 mt-2 text-gray-600'>$special</div>";
-
-                        ?>
+                          <div class='h6 mb-0 mt-2 text-gray-600'>21</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -447,6 +360,34 @@
       }
 
     });
+
+    const dashboardApp = Vue.createApp({
+      data() {
+        return {
+          available: 0,
+          booked: 0,
+          arrivals: 0,
+          departures: 0,
+        }
+      },
+      methods: {
+        // write a method that fetch the above datas from localhost:5000
+        async getDashboardData() {
+          const response = await axios.get('http://localhost:5000/dailyRoomStatus/Boston')
+          const data = response.data
+          this.available = data.available
+          this.booked = data.booked
+          this.arrivals = data.arrivals
+          this.departures = data.departures
+        }
+      },
+      mounted() {
+        this.getDashboardData()
+      }
+
+    })
+
+    const dashboard = dashboardApp.mount('#dashboard')
   </script>
 
 </body>

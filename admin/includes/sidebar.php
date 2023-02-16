@@ -66,6 +66,20 @@
              </div>
          </div>
      </li>
+
+     <li class="nav-item">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#inhouse" aria-expanded="true" aria-controls="collapseTwo">
+             <i class="fas fa-newspaper fa-2x text-gray-300"></i>
+             <span>Inhouse </span>
+             <i style="margin-left: 5.6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+         </a>
+         <div id="inhouse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./view_inhouse.php">View</a>
+                 <a class="collapse-item" href="./add_inhouse.php">Add </a>
+             </div>
+         </div>
+     </li>
      
      <li class="nav-item">
          <a class="nav-link" href="./view_tickets.php">
