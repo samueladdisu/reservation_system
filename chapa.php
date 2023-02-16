@@ -144,7 +144,7 @@
 
       echo "<script> 
               alert('Payment Failed! Please try again!'); 
-              window.location.href = 'http://localhost:8080/reservation_system/';
+              window.location.href = 'https://reservations.kurifturesorts.com/';
             </script>";
 
       sleep(3);
