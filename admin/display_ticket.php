@@ -543,7 +543,7 @@
             $('#ticket_success_tic').modal('show')
             this.spinner = true
 
-            await axios.post('http://localhost:8000/checkEntotoGuest', {
+            await axios.post('https://tickets.kuriftucloud.com/checkEntotoGuest', {
               guest_token: g_token,
               data: {
                 pedalKart: this.pedalKart,
@@ -584,7 +584,7 @@
             $('#ticket_success_tic').modal('show')
             this.spinner = true
 
-            await axios.post('http://localhost:8000/checkBostonGuest', {
+            await axios.post('https://tickets.kuriftucloud.com/checkBostonGuest', {
               guest_token: g_token,
               data: {
                 pediMani: this.pediMani,
