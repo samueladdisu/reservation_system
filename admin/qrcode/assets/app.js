@@ -75,8 +75,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     function showResult(e) {
         const resultData = e.data;
-        // const baseurl = 'https://kuriftucloud.com/reservation/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
-        const baseurl = 'http://localhost/reservation_system/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
+        const baseurl = 'https://kuriftucloud.com/reservation/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
+        // const baseurl = 'http://localhost/reservation_system/admin/display_ticket.php?guest_token=' + resultData + '&user_token=' + role;
         // open a dialog with the result if found
         if (resultData !== false) {
             navigator.vibrate(200); // vibration is not supported on Edge, IE, Opera and Safari
