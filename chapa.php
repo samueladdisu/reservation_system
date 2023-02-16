@@ -75,8 +75,33 @@
     $price = converttoETB($price);
   }
 
+  $cart = $_SESSION['cart'];
+  // print_r($cart);
+
+  foreach ($cart as $name => $value) {
+
+    $item[$name] = $value;
+    foreach ($item[$name] as $name1 => $val) {
 
 
+      $items[$name1] = $val;
+    }
+  }
+
+  $loc =  $items['room_location'];
+
+
+
+  if ($loc == 'entoto') {
+    $chapa_sec = $_ENV['CHAPA_SECK_ENTOTO'];
+    $chapa_pub = $_ENV['CHAPA_PUB_ENTOTO'];
+    // $callback_url = 'https://reservations.kurifturesorts.com/chapaEntotoCompleted/';
+    // $callback_url = 'http://localhost/reservation_system/chapaEntotoCompleted/';
+  } else {
+    $chapa_sec = $_ENV['CHAPA_SECK'];
+    $chapa_pub = $_ENV['CHAPA_PUB'];
+    $callback_url = 'https://reservations.kurifturesorts.com/chapaCompleted/';
+  }
 
   curl_setopt_array($curl, array(
     CURLOPT_URL => 'https://api.chapa.co/v1/transaction/initialize',
@@ -95,11 +120,11 @@
       'first_name' => $_SESSION['fName'],
       'last_name' => $_SESSION['lName'],
       'tx_ref' =>  $tx_ref,
-      'callback_url' => 'https://reservations.kurifturesorts.com/chapaCompleted/',
+      'callback_url' => $callback_url,
       'return_url' => 'https://reservations.kurifturesorts.com/Thankyou/'
     ),
     CURLOPT_HTTPHEADER => array(
-      'Authorization: Bearer ' . $_ENV['CHAPA_SECK']
+      'Authorization: Bearer ' . $chapa_sec
     ),
   ));
 
