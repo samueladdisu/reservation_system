@@ -84,11 +84,10 @@ if($received_data->action == 'editSpecialRequest'){
   $nop = $received_data->num;
   $date = $received_data->date;
   $remark = $received_data->remark;
-  $updated_at = Date("Y-m-d H:i:s");
   $req_location = $received_data->location;
   $updated_by = $_SESSION['username'];
 
-  $update_query = "UPDATE special_request SET guest_name = '$guest_name', type = '$type', other_type = '$otherType', number_of_people = $nop, location = '$req_location', date = '$date', updated_at = '$updated_at', updated_by = '$updated_by', remark = '$remark' WHERE id = $id";
+  $update_query = "UPDATE special_request SET guest_name = '$guest_name', type = '$type', other_type = '$otherType', number_of_people = $nop, location = '$req_location', date = '$date', updated_by = '$updated_by', remark = '$remark' WHERE id = $id";
 
   $update_result = mysqli_query($connection, $update_query);
 
@@ -104,11 +103,10 @@ if($received_data->action == 'addSpecialRequest'){
   $number_of_people = $received_data->num;
   $date = $received_data->date;
   $remark = $received_data->remark;
-  $created_at = Date("Y-m-d H:i:s");
   $req_location = $received_data->location;
   $created_by = $_SESSION['username'];
 
-  $query = "INSERT INTO special_request(guest_name, type, other_type, number_of_people, location, date, created_at, created_by, remark) VALUES('$guest_name', '$type', '$otherType', $number_of_people, '$req_location',  '$date', '$created_at', '$created_by', '$remark')";
+  $query = "INSERT INTO special_request(guest_name, type, other_type, number_of_people, location, date, created_by, remark) VALUES('$guest_name', '$type', '$otherType', $number_of_people, '$req_location',  '$date', '$created_by', '$remark')";
   $result = mysqli_query($connection, $query);
 
   confirm($result);

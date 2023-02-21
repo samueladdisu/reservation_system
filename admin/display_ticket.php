@@ -36,7 +36,7 @@
           <div>
 
             <div id="viewSpecial">
-              <div class="card border-success" v-if="eligible">
+              <!-- <div class="card border-success" v-if="eligible">
                 <div class="card-header">
                   <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
                 </div>
@@ -78,7 +78,38 @@
                     cancel
                   </a>
                 </div>
+              </div> -->
+
+              
+              <div class="card border-success" v-if="eligible">
+
+                <div class="card-header">
+
+                <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Name: {{ allData.first_name }} - {{ allData.last_name }}</li>
+                  <li class="list-group-item">Email: {{ allData.email }} </li>
+                  <li class="list-group-item">Phone: {{ allData.phone_number }} </li>
+                  <li class="list-group-item">Location: {{ allData.location }} </li>
+                  <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
+                  <li class="list-group-item">Date: 11-1-2023</li>
+                  <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
+                  <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
+                    }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
+                  <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
+                  <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
+                  <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
+                  <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
+                </ul>
+                <div class="card-footer">
+                  <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
+                  <a href="view_tickets.php" class="btn btn-primary mb-2">View ticket Reservation</a>
+                </div>
               </div>
+
+
 
               <div class="card border-success" v-else-if="entoto_eligible">
                 <div class="card-header">
@@ -471,12 +502,17 @@
               if (res.data.msg == "already_checked_in") {
                 this.eligible = false
                 this.allData = res.data.data[0]
-              } else if (res.data.msg == "waterpark tickets") {
+              } else if (res.data.msg == "waterpark_checked_in") {
                 this.eligible = true
                 this.allData = res.data.data.result[0]
-                this.ava_ad = res.data.data.ava_ad
-                this.ava_kid = res.data.data.ava_kid
-              } else if (res.data.msg == "entoto tickets") {
+              }
+              // else if (res.data.msg == "waterpark tickets") {
+              //   this.eligible = true
+              //   this.allData = res.data.data.result[0]
+              //   this.ava_ad = res.data.data.ava_ad
+              //   this.ava_kid = res.data.data.ava_kid
+              // }  
+              else if (res.data.msg == "entoto tickets") {
 
                 this.entoto_eligible = true
                 this.allData = res.data.data.result[0]

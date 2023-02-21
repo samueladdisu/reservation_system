@@ -90,7 +90,7 @@
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                           Arrival & departure</div>
                         <div class='h6 mb-0 mt-2 text-gray-600'>
-                         {{ arrivals }} Arrivals/ {{ departures }} Departures
+                          {{ arrivals }} Arrivals/ {{ departures }} Departures
                         </div>
                       </div>
                       <div class="col-auto">
@@ -109,7 +109,7 @@
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Inhouse 
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Inhouse
                         </div>
 
                         <div class='h6 mb-0 mt-2 text-gray-600'>
@@ -134,7 +134,7 @@
                       <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                           Special Requests</div>
-                          <div class='h6 mb-0 mt-2 text-gray-600'>21</div>
+                        <div class='h6 mb-0 mt-2 text-gray-600'>21</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -188,12 +188,76 @@
 
             </div>
 
+
+
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Visitors</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Special Requests</h6>
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-2 pb-2">
+
+                    <?php
+
+                    if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+                    ?>
+                      <div class="row">
+                        <div class="form-group col-6">
+                          <label for="location">Location</label>
+
+                          <select v-model="location" @change="getSpecialRequests" class="custom-select">
+
+                            <option value="all">All</option>
+                            <option value="boston">Boston</option>
+                            <option value="bishoftu">Bishoftu</option>
+                            <option value="entoto">Entoto</option>
+                            <option value="awash">Awash</option>
+                            <option value="tana">Lake tana</option>
+                          </select>
+                        </div>
+                      </div>
+                    <?php } ?>
+                    <div class="row">
+                      <ul class="list-group col-6">
+                        <li class="list-group-item">Lunch/Dinner: {{ special.lunch }} </li>
+                        <li class="list-group-item">Wedding: {{ special.wedding }}</li>
+                        <li class="list-group-item">Birthday: {{ special.birthday }}</li>
+                        <li class="list-group-item">Anniversary: {{ special.anniversary }}</li>
+                      </ul>
+                      <ul class="list-group col-6">
+                        <li class="list-group-item">Proposal: {{ special.proposal }}</li>
+                        <li class="list-group-item">Shuttle: {{ special.shuttle }}</li>
+                        <li class="list-group-item">Landscape: {{ special.landscape }}</li>
+                        <li class="list-group-item">Other: {{ special.other }}</li>
+                      </ul>
+                      <div class="col-12">
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                      <!-- <i class="fas fa-circle" style="color: #4e73df"></i> Homepage banner -->
+                    </span>
+                    <span class="mr-2">
+                      <!-- <i class="fas fa-circle" style="color: #1cc88a"></i> Homepage Button -->
+                    </span>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Pie Chart -->
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Payment Types</h6>
 
                 </div>
                 <!-- Card Body -->
@@ -208,9 +272,7 @@
                     <span class="mr-2">
                       <i class="fas fa-circle" style="color: #1cc88a"></i> Homepage Button
                     </span>
-                    <!-- <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
-                    </span> -->
+
                   </div>
                 </div>
               </div>
@@ -284,7 +346,6 @@
 
   <!-- data table plugin  -->
 
-  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 
 
@@ -293,12 +354,6 @@
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
   <script src="./js/load.js"></script>
-  <script src="./js/chart.js"></script>
-
-
-
-
-
   <script src="./js/room.js"></script>
   <div class="modal fade" id="ReportModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -364,25 +419,70 @@
     const dashboardApp = Vue.createApp({
       data() {
         return {
+          location: "all",
           available: 0,
           booked: 0,
           arrivals: 0,
           departures: 0,
+          special: {
+            lunch: 0,
+            wedding: 0,
+            birthday: 0,
+            anniversary: 0,
+            proposal: 0,
+            shuttle: 0,
+            landscape: 0,
+            other: 0
+          }
         }
       },
       methods: {
         // write a method that fetch the above datas from localhost:5000
+
+
         async getDashboardData() {
-          const response = await axios.get('http://localhost:5000/dailyRoomStatus/Boston')
+          const location = "<?php echo $_SESSION['user_location'] ?>"
+          const response = await axios.get(`http://localhost:5000/dailyRoomStatus/${location}`)
           const data = response.data
           this.available = data.available
           this.booked = data.booked
           this.arrivals = data.arrivals
           this.departures = data.departures
+        },
+        getSpecialRequests() {
+          var location
+
+          <?php
+
+          if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+          ?>
+            location = this.location
+          <?php } else { ?>
+
+            location = "<?php echo $_SESSION['user_location'] ?>"
+
+          <?php  } ?>
+
+          axios.get(`http://localhost:5000/specialRequest/${location}`)
+            .then(response => {
+              console.log(response.data)
+              this.special.lunch = response.data.lunch || 0
+              this.special.wedding = response.data.wedding || 0
+              this.special.birthday = response.data.birthday || 0
+              this.special.anniversary = response.data.anniversary || 0
+              this.special.proposal = response.data.proposal || 0
+              this.special.shuttle = response.data.shuttle || 0
+              this.special.landscape = response.data.landscape || 0
+              this.special.other = response.data.other || 0
+            })
+            .catch(error => {
+              console.log(error)
+            })
         }
       },
       mounted() {
         this.getDashboardData()
+        this.getSpecialRequests()
       }
 
     })
@@ -390,6 +490,7 @@
     const dashboard = dashboardApp.mount('#dashboard')
   </script>
 
+  <script src="./js/chart.js"></script>
 </body>
 
 </html>

@@ -117,27 +117,41 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
-
-
+ 
 // Pie Chart 
 
-const fetchVisitor = () => {
-  return axios.post('load_modal.php', {
-    action: "visitors"
-  }).then(res => res.data)
+// const fetchVisitor = () => {
+//   return axios.post('load_modal.php', {
+//     action: "visitors"
+//   }).then(res => res.data)
+// }
+
+const paymentStats = () => {
+  return axios.get("http://localhost:5000/paymentStat")
+          .then(res => res.data)
 }
 
-fetchVisitor()
+paymentStats()
   .then(data => {
-    console.log(data);
+  
+    const labels = Object.keys(data);
+    const values = Object.values(data);
+
+    console.log(labels);
+    console.log(values);
+
+    
+
+    
+
 
     var ctx1 = document.getElementById("myPieChart");
     var myPieChart = new Chart(ctx1, {
       type: 'doughnut',
       data: {
-        labels: ["Homepage Banner", "Homepage Button"],
+        labels: labels,
         datasets: [{
-          data: data,
+          data: values,
           // backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
           // hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
           backgroundColor: ['#4e73df', '#1cc88a'],
@@ -164,8 +178,7 @@ fetchVisitor()
       },
     });
   })
-
-
+  .catch(err => console.log(err))
 
 
 // // Bar Chart 
