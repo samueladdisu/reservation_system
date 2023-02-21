@@ -504,7 +504,7 @@
                 this.allData = res.data.data[0]
               } else if (res.data.msg == "waterpark_checked_in") {
                 this.eligible = true
-                this.allData = res.data.data.result[0]
+                this.allData = res.data.data[0]
               }
               // else if (res.data.msg == "waterpark tickets") {
               //   this.eligible = true
