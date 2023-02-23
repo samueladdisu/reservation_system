@@ -64,15 +64,15 @@
                           <th>Id</th>
                           <th>Name</th>
                           <th>Phone</th>
-                          <th>Confirmation code</th>
+                          <th>Email</th>
                           <th>Date</th>
                           <th>Tickets</th>
                           <th>Location</th>
                           <th>Price</th>
                           <th>Payment status</th>
+                          <th>Order status</th>
                           <!-- <th>Txn ref</th>
                           <th>Payment method</th>
-                          <th>Order status</th>
                           <th> Remarks</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th> -->
@@ -354,7 +354,7 @@
                 data: 'phone_number'
               },
               {
-                data: 'confirmation_code'
+                data: 'email'
               },
               {
                 data: 'createdAt',
@@ -383,6 +383,9 @@
               },
               {
                 data: 'payment_status'
+              },
+              {
+                data: 'order_status'
               },
               {
                 data: 'id',
