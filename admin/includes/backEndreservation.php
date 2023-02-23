@@ -12,9 +12,34 @@ $data = array();
 $filterd_data = array();
 if ($incoming->action == 'fetchRes') {
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
-    $query = "SELECT * FROM reservations ORDER BY res_id DESC";
+    // $query = "SELECT * FROM reservations ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() ORDER BY res_id DESC";
   } else {
-    $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE() ORDER BY res_id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
+}
+
+
+if ($incoming->action == 'fetchResDate') {
+
+  $select_start_date = $incoming->startDate;
+  $select_end_date = $incoming->endDate;
+
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM reservations WHERE res_checkin >= STR_TO_DATE('$select_start_date','%Y-%m-%d') 
+    AND res_checkout <= STR_TO_DATE('$select_end_date','%Y-%m-%d') ORDER BY res_id DESC";
+  } else {
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin >= STR_TO_DATE('$select_start_date','%Y-%m-%d') 
+    AND res_checkout <= STR_TO_DATE('$select_end_date','%Y-%m-%d') ORDER BY res_id DESC";
   }
 
   $result = mysqli_query($connection, $query);
@@ -204,29 +229,31 @@ if ($incoming->action == "roomStatus") {
   $location = $incoming->location;
   $date = $incoming->date;
 
-  if($location == "all"){
+  if ($location == "all") {
 
-    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, gr.group_name, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
     FROM rooms AS r
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
     LEFT JOIN reservations AS res
     ON res.res_id = b.b_res_id
+    LEFT JOIN group_reservation AS gr
+    ON gr.group_id = b.b_group_res_id
     LEFT JOIN guest_info AS g
     ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId";
+  } else {
 
-  }else {
-
-    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, gr.group_name, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
     FROM rooms AS r
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
     LEFT JOIN reservations AS res
     ON res.res_id = b.b_res_id
+    LEFT JOIN group_reservation AS gr
+    ON gr.group_id = b.b_group_res_id
     LEFT JOIN guest_info AS g
     ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId
     WHERE r.room_location = '$location'";
-
   }
 
   $result = mysqli_query($connection, $query);

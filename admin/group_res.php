@@ -174,7 +174,7 @@ if ($received_data->action == "fetchResDaily") {
 
       $data[] = $row;
     }
-  
+
     echo json_encode($data);
   } else {
     echo json_encode("empty");
@@ -367,6 +367,30 @@ if ($received_data->action == 'fetchRes') {
   echo json_encode($data);
 }
 
+if ($received_data->action == 'fetchResDate') {
+  
+  $select_start_date = $received_data->startDate;
+  $select_end_date = $received_data->endDate;
+
+
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM group_reservation WHERE group_checkin >= STR_TO_DATE('$select_start_date','%Y-%m-%d') 
+    AND group_checkout <= STR_TO_DATE('$select_end_date','%Y-%m-%d') ORDER BY group_id DESC";
+  } else {
+    $query = "SELECT * FROM group_reservation WHERE group_location = '$location' AND group_checkin >= STR_TO_DATE('$select_start_date','%Y-%m-%d') 
+    AND group_checkout <= STR_TO_DATE('$select_end_date','%Y-%m-%d') ORDER BY group_id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
+}
+
 if ($received_data->action == 'filter') {
 
   $room_quantity_array = array();
@@ -404,24 +428,23 @@ if ($received_data->action == 'filter') {
         OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
     WHERE booked_rooms.b_roomId IS NULL
     AND room_location = '$location' AND room_acc = '$roomType' AND room_status NOT IN ('Hold', 'bishoftu_hold')";
-
   } else if (($checkin && $checkout) && !$location && !$roomType) {
-  //   $query = "SELECT * 
-  //   FROM rooms 
-  //   WHERE room_id 
-  //   NOT IN 
-  //     ( SELECT b_roomId
-  //       FROM booked_rooms 
-  //       WHERE '$checkin'
-  //       BETWEEN b_checkin AND b_checkout 
-  //       UNION
-  //       SELECT b_roomId
-  //       FROM booked_rooms
-  //       WHERE '$checkout'
-  //       BETWEEN b_checkin AND b_checkout
-  //       )
-  //   AND room_status <> 'Hold'
-  //  ";
+    //   $query = "SELECT * 
+    //   FROM rooms 
+    //   WHERE room_id 
+    //   NOT IN 
+    //     ( SELECT b_roomId
+    //       FROM booked_rooms 
+    //       WHERE '$checkin'
+    //       BETWEEN b_checkin AND b_checkout 
+    //       UNION
+    //       SELECT b_roomId
+    //       FROM booked_rooms
+    //       WHERE '$checkout'
+    //       BETWEEN b_checkin AND b_checkout
+    //       )
+    //   AND room_status <> 'Hold'
+    //  ";
 
     $query = "SELECT rooms.*
     FROM rooms
@@ -432,7 +455,6 @@ if ($received_data->action == 'filter') {
         OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
     WHERE booked_rooms.b_roomId IS NULL
     AND room_status NOT IN ('Hold', 'bishoftu_hold')";
-
   } else if (($checkin && $checkout) && !$location && $roomType) {
     // $query = "SELECT * 
     // FROM rooms 

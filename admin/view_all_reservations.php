@@ -171,6 +171,7 @@
                           <th>Type</th>
                           <th>Room no.</th>
                           <th>Guest Name</th>
+                          <th>Group Name</th>
                           <th>Adults</th>
                           <th>Kids</th>
                           <th>teens</th>
@@ -197,6 +198,25 @@
                   </button>
 
                 </div>
+                <!------------------------- t-date picker  --------------------->
+
+
+                <div class="card mb-2">
+                  <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Pick a Date & Filter </h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="row py-1">
+
+                      <div class="form-group col-3">
+                        <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!------------------------- t-date picker end  ------------------>
+
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table display table-bordered" width="100%" id="viewResTable" cellspacing="0">
@@ -208,6 +228,7 @@
                           <th>First Name</th>
                           <th>Last Name</th>
                           <th>Phone</th>
+                          <th>Room No.s</th>
                           <th>Arrival</th>
                           <th>Departure</th>
                           <th>Total Price</th>
@@ -417,6 +438,53 @@
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
+    // Enable pusher logging - don't include this in production
+
+    var start, end
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    let tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    const td = String(tomorrow.getDate()).padStart(2, '0');
+    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const ty = tomorrow.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    tomorrow = tm + '/' + td + '/' + ty;
+
+    start = yyyy + '-' + mm + '-' + dd;
+    end = ty + '-' + tm + '-' + td;
+
+    console.log("inital start", start);
+    console.log("inital end", end);
+
+    $(document).ready(function() {
+
+      console.log("initial start", start);
+      console.log("initial end", end);
+      $('#date').daterangepicker();
+      $('#date').data('daterangepicker').setStartDate(today);
+      $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+      $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // console.log(picker.startDate.format('YYYY-MM-DD'));
+        // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        start = picker.startDate.format('YYYY-MM-DD')
+        end = picker.endDate.format('YYYY-MM-DD')
+        console.log("updated start", start);
+        console.log("updated end", end);
+        app.fetchReserveDateRange(start, end);
+      });
+    })
+
+
+
     $(document).ready(function() {
 
       $('#exRates').DataTable({
@@ -471,6 +539,9 @@
               },
               {
                 data: 'res_phone'
+              },
+              {
+                data: 'res_roomNo'
               },
               {
                 data: 'res_checkin'
@@ -556,6 +627,19 @@
           })
 
         },
+
+        async fetchReserveDateRange(sDate, eDate) {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'fetchResDate',
+            startDate: sDate,
+            endDate: eDate
+          }).then(res => {
+            console.log(res.data)
+            this.posts = res.data
+            this.table(res.data)
+          })
+
+        },
         async deleteRes() {
           await axios.post('./includes/backEndreservation.php', {
             action: 'delete',
@@ -569,7 +653,7 @@
           axios.post('./includes/backEndreservation.php', {
             action: 'fetchRes'
           }).then(res => {
-            // console.log("comes from api", res.data);
+            console.log("comes from api", res.data);
             this.posts = res.data
             this.table(res.data)
           })
@@ -593,7 +677,7 @@
             location: flocation,
             date: this.filterDate
           }).then(res => {
-            // console.log(res.data[0].b_checkin);
+            console.log(res.data[0].b_checkin);
 
             res.data.forEach(item => {
               item.status = ""
@@ -640,6 +724,9 @@
               },
               {
                 data: 'res_firstname'
+              },
+              {
+                data: 'group_name'
               },
               {
                 data: 'info_adults'
