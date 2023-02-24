@@ -894,7 +894,8 @@
           $('#roomStatus').DataTable({
             destroy: true,
             dom: 'lBfrtip',
-            iDisplayLength: 10,
+            iDisplayLength: 150,
+            scrollY: "500px",
             buttons: [
               'excel',
               'print',

@@ -689,7 +689,7 @@
               } else if (this.filterDate > item.b_checkin && this.filterDate < item.b_checkout) {
                 item.status = "Stay over"
               } else if (item.b_checkout === this.filterDate) {
-                item.status = "Departure"
+                item.status = "Free"
               }
 
 
@@ -703,7 +703,8 @@
           $('#roomStatus').DataTable({
             destroy: true,
             dom: 'lBfrtip',
-            iDisplayLength: 50,
+            iDisplayLength: 150,
+            scrollY: "500px",
             buttons: [
               'excel',
               'print',
