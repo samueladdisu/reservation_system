@@ -100,7 +100,7 @@
                   <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
 
                   <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
-                  <li class="list-group-item">Date: {{ allData.updatedAt.toLocaleDateString('en-GB') }}</li>
+                  <li class="list-group-item">Date: {{ allData.updatedAt }}</li>
                   <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
                   <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
                     }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
