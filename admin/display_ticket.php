@@ -80,12 +80,12 @@
                 </div>
               </div> -->
 
-              
+
               <div class="card border-success" v-if="eligible">
 
                 <div class="card-header">
 
-                <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
                 </div>
 
                 <ul class="list-group list-group-flush">
@@ -93,15 +93,18 @@
                   <li class="list-group-item">Email: {{ allData.email }} </li>
                   <li class="list-group-item">Phone: {{ allData.phone_number }} </li>
                   <li class="list-group-item">Location: {{ allData.location }} </li>
+                  <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
+                  <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
+                  <li class="list-group-item">Transaction Number: {{ allData.tx_ref }}</li>
+                  <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
+                  <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
+
                   <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
                   <li class="list-group-item">Date: 11-1-2023</li>
                   <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
                   <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
                     }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
-                  <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
-                  <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
-                  <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
-                  <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
+
                 </ul>
                 <div class="card-footer">
                   <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
@@ -552,7 +555,8 @@
             await axios.post('https://tickets.kuriftucloud.com/checkGuest', {
               guest_token: g_token,
               redeemed_ad: this.adult,
-              redeemed_kid: this.kid
+              redeemed_kid: this.kid,
+
             }).then(res => {
               console.log(res.data);
 

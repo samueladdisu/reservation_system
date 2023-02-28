@@ -1,5 +1,5 @@
- <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+ <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark daccordion" id="accordionSidebar">
+ <!-- navbar-nav bg-gradient-dark sidebar sidebar-dark daccordion -->
      <!-- Sidebar - Brand -->
      <a class="sidebar-brand my-3 d-flex align-items-center justify-content-center" href="dashboard.php">
          <div class="sidebar-brand-icon rotate-n-15">
@@ -80,12 +80,27 @@
              </div>
          </div>
      </li>
+
      
      <li class="nav-item">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ticket" aria-expanded="true" aria-controls="collapseTick">
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+             <span>Tickets </span>
+             <i style="margin-left: 5.6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+         </a>
+         <div id="ticket" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./view_tickets.php">View Tickets</a>
+                 <a class="collapse-item" href="./scanned_tickets.php">Scanned Tickets </a>
+             </div>
+         </div>
+     </li>
+     
+     <!-- <li class="nav-item">
          <a class="nav-link" href="./view_tickets.php">
              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
              <span> Ticket Reservations </span></a>
-     </li>
+     </li> -->
 
 
      <li class="nav-item">
