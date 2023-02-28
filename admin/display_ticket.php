@@ -100,7 +100,7 @@
                   <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
 
                   <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
-                  <li class="list-group-item">Date: 11-1-2023</li>
+                  <li class="list-group-item">Date: {{ allData.updatedAt.toLocaleDateString('en-GB'); }}</li>
                   <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
                   <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
                     }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
@@ -493,7 +493,27 @@
           hair: ""
         }
       },
+      // computed: {
+      //   formatedate() {
+      //     let date_ob = new Date(this.allData.updatedAt);
+      //     let date = date_ob.getDate();
+      //     let month = date_ob.getMonth() + 1;
+      //     let year = date_ob.getFullYear();
+
+      //     var final = year + "-" + month + "-" + date;
+      //     return final;
+      //   }
+      // },
       methods: {
+        dateFunction(ts) {
+          let date_ob = new Date(ts);
+          let date = date_ob.getDate();
+          let month = date_ob.getMonth() + 1;
+          let year = date_ob.getFullYear();
+
+          var final = year + "-" + month + "-" + date;
+          return final;
+        },
         async send() {
           try {
             await axios.post(this.url, {
