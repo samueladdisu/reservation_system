@@ -9,7 +9,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <?php include './includes/sidebar.php'; ?>
+
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -26,11 +26,11 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Guest Information
-
-            </h1>
-
+          <div class="d-sm-flex d-flex justify-content-center align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Guest Information</h1>
+            <a href="./dashboard.php">
+              <span>Back Dashboard</span>
+            </a>
           </div>
           <!-- Content Row -->
           <div>
@@ -326,7 +326,11 @@
                   <a href="view_tickets.php" class="btn btn-primary mb-2">View ticket Reservation</a>
                 </div>
               </div>
-
+              <!-- Scan Button -->
+              <div class="scan-button" style="border-radius:5rem; position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: center;">
+                <a href="./qrcode"><button class="btn btn-circle" style="width:70px; height:70px; background-color: #c2874a;"><i class="bi bi-camera" style="font-size: 2rem; color: #fff;"></i></button></a>
+                <div class="qr-code" style="width: 50px; height: 50px; margin-top: 10px; border-radius: 50%;"></div>
+              </div>
 
               <!-- Success Modal -->
               <div id="ticket_success_tic" class="success_tic modal fade" role="dialog">
