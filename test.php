@@ -65,7 +65,7 @@ foreach ($roomIDs as $val) {
   if($num_row === 0){
     // echo "Must be Not booked".$val . "<br>";
 
-    $realse_room = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $val";
+    $realse_room = "UPDATE rooms SET room_status = 'Not_booked' WHERE room_id = $val AND room_status <> 'bishoftu_hold'";
     $realse_result = mysqli_query($connection, $realse_room);
     confirm($realse_result);
   }else {

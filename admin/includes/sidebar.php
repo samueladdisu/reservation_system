@@ -1,5 +1,5 @@
- <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+ <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark daccordion" id="accordionSidebar">
+ <!-- navbar-nav bg-gradient-dark sidebar sidebar-dark daccordion -->
      <!-- Sidebar - Brand -->
      <a class="sidebar-brand my-3 d-flex align-items-center justify-content-center" href="dashboard.php">
          <div class="sidebar-brand-icon rotate-n-15">
@@ -18,6 +18,12 @@
          <a class="nav-link" href="dashboard.php">
              <i class="fas fa-fw fa-tachometer-alt"></i>
              <span>Dashboard</span></a>
+     </li>
+
+     <li class="nav-item">
+         <a class="nav-link" href="./qrcode">
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+             <span> Scan QR code </span></a>
      </li>
 
      <!-- Divider -->
@@ -62,17 +68,40 @@
      </li>
 
      <li class="nav-item">
-         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#activity" aria-expanded="true" aria-controls="collapseTwo">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#inhouse" aria-expanded="true" aria-controls="collapseTwo">
              <i class="fas fa-newspaper fa-2x text-gray-300"></i>
-             <span>Activity Reservations</span>
-             <i style="margin-left: 0.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+             <span>Inhouse </span>
+             <i style="margin-left: 5.6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
-         <div id="activity" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+         <div id="inhouse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
-                 <a class="collapse-item" href="./view_tickets.php">View Activity Reservations</a>
+                 <a class="collapse-item" href="./view_inhouse.php">View</a>
+                 <a class="collapse-item" href="./add_inhouse.php">Add </a>
              </div>
          </div>
-     </li> 
+     </li>
+
+     
+     <li class="nav-item">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ticket" aria-expanded="true" aria-controls="collapseTick">
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+             <span>Tickets </span>
+             <i style="margin-left: 5.6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+         </a>
+         <div id="ticket" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./view_tickets.php">View Tickets</a>
+                 <a class="collapse-item" href="./scanned_tickets.php">Scanned Tickets </a>
+             </div>
+         </div>
+     </li>
+     
+     <!-- <li class="nav-item">
+         <a class="nav-link" href="./view_tickets.php">
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+             <span> Ticket Reservations </span></a>
+     </li> -->
+
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
@@ -91,7 +120,7 @@
                  <?php
                     }
                     ?>
-                 
+
 
                  <?php if ($_SESSION['user_role'] == 'SA') {
                     ?>
@@ -111,15 +140,15 @@
 
      <li class="nav-item">
          <a class="nav-link" href="./promo.php">
-             <i class="fas fa-clipboard-list"></i>
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
              <span> Promo Code </span></a>
      </li>
 
-    
+
 
      <li class="nav-item">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#member" aria-expanded="true" aria-controls="collapseTwo">
-         <i class="fas fa-users"></i>
+             <i class="fas fa-users fa-2x text-gray-300"></i>
              <span>Members</span>
              <i style="margin-left: 4.5rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
          </a>
@@ -137,7 +166,7 @@
         ?>
          <li class="nav-item">
              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                 <i class="fas fa-users"></i>
+                 <i class="fas fa-users fa-2x text-gray-300"></i>
 
                  <span>Users</span>
                  <i style="margin-left: 6rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
@@ -156,11 +185,7 @@
      <?php   } ?>
 
 
-     <li class="nav-item">
-         <a class="nav-link" href="./qrcode">
-             <i class="fas fa-clipboard-list"></i>
-             <span> Scan QR code </span></a>
-     </li>
+    
 
 
 

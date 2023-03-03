@@ -1,16 +1,14 @@
 <?php
 // ob_start();
 // session_start();
-// require  '../admin/includes/db.php';
-// require  '../admin/includes/functions.php';
+require  '../admin/includes/db.php';
+require  '../admin/includes/functions.php';
 require '../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 $dotenv->load();
 
-use Mailgun\Mailgun;
-// First, instantiate the SDK with your API credentials
-$mg = Mailgun::create($_ENV['MAILGUN_API_KEY']);
+
 
 $cybsResponse = $_REQUEST;
 $Response = json_encode($cybsResponse);
@@ -29,7 +27,10 @@ function returnid(array $CHARS)
 $intoArray = str_split($jsonl["req_transaction_uuid"]);
 $PayerId = returnid($intoArray);
 
-$queryFetch = "SELECT * FROM temp_res WHERE temp_ID = '$PayerId'";
+file_put_contents("Lemlem.txt", $decision . PHP_EOL . PHP_EOL, FILE_APPEND);
+file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);
+
+$queryFetch = "SELECT * FROM temp_res WHERE userGID = '$PayerId'";
 $temp_res = mysqli_query($connection, $queryFetch);
 
 confirm($temp_res);
@@ -47,6 +48,8 @@ $specReq = $temp_row['specialRequest'];
 $promoCode = $temp_row['promoCode'];
 $total = $temp_row['total'];
 $cart2 = $temp_row['cart'];
+$created_at = $temp_row['created_at'];
+$payment_confirmed_at = date('Y-m-d h:i:s');
 $PayMethod = $temp_row['paymentMethod'];
 $cart = json_decode($cart2);
 $room_ids = json_decode($temp_row['room_id']);
@@ -61,19 +64,6 @@ $board = json_decode($temp_row['temp_board']);
 
 
 
-
-function getName($n)
-{
-  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $randomString = '';
-
-  for ($i = 0; $i < $n; $i++) {
-    $index = rand(0, strlen($characters) - 1);
-    $randomString .= $characters[$index];
-  }
-
-  return $randomString;
-}
 
 // $checkinDate = "";
 // $checkoutDate = "";
@@ -136,9 +126,9 @@ if ($decision == "ACCEPT" && $reason == "100") {
     $nowCI = strtotime($value['Checkin']);
     $nowCO = strtotime($value['Checkout']);
     if (($nowCI != $oldCI || $nowCO != $oldCO) || ($oldCI == '' && $oldCO == '')) {
-      $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo) ";
+      $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_checkin, res_checkout, res_country, res_address, res_city, res_zipcode, res_paymentMethod, res_roomIDs, res_price, res_location, res_confirmID, res_specialRequest, res_guestNo, 	res_agent, res_cart, res_roomType, res_roomNo, created_at, payment_confirmed_at) ";
       $query .= "VALUES('$firstName', '$lastName', '$phonNum', '$email', '{$value['Checkin']}', '{$value['Checkout']}', '$country', '$address', '$city', '$zipCode', '$PayMethod', '{$value['room_id']}',
-             '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}') ";
+             '{$total}', '{$value['room_location']}', '{$res_confirmID}', '$specReq', '{$temp_row['guestInfo']}', 'website', '$cartStingfy', '{$temp_row['room_acc']}', '{$temp_row['room_num']}', '$created_at', '$payment_confirmed_at') ";
 
       $result = mysqli_query($connection, $query);
       confirm($result);
@@ -169,23 +159,10 @@ if ($decision == "ACCEPT" && $reason == "100") {
     $status_query = "UPDATE `rooms` SET `room_status` = 'booked' WHERE `room_id` = '{$value['room_id']}'";
     $result_status = mysqli_query($connection, $status_query);
     confirm($result_status);
-
-    $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-      'from'    => 'no-reply@kurifturesorts.com',
-      'to'      => $email,
-      'subject' => 'Kuriftu Resort and Spa',
-      'html'    =>  "<h2>You have succesfully reserved a room</h2>
-          <p> Here is your confirmation code $res_confirmID </p>"
-    ]);
-
-    $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-      'from'    => 'no-reply@kurifturesorts.com',
-      'to'      => 'samueladdisu7@gmail.com',
-      'subject' => 'Kuriftu Resort and Spa',
-      'html'    =>  "<h2>You have succesfully reserved a room</h2>
-  <p> Here is your confirmation code </p>"
-    ]);
   }
+
+  $delete_temp_query = "DELETE FROM temp_res WHERE userGID = '$PayerId'";
+  $delete_result = mysqli_query($connection, $delete_temp_query);
 } elseif ($reason == "481") {
 
   file_put_contents("Lemlem.txt", $reason . PHP_EOL . PHP_EOL, FILE_APPEND);

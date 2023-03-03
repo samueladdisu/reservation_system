@@ -52,9 +52,13 @@
                       <label for="post_tags"> Type </label>
                       <select name="type" v-model="type" class="custom-select" required>
                         <option value="" disabled>--select--</option>
+                        <option value="lunch">Lunch/Dinner Reservation</option>
+                        <option value="wedding">Wedding</option>
                         <option value="birthday">Birthday</option>
-                        <option value="landscape">Landscape</option>
+                        <option value="anniversary">Anniversary</option>
+                        <option value="proposal">Proposal</option>
                         <option value="shuttle">Shuttle</option>
+                        <option value="landscape">Landscape</option>
                         <option value="other">Other</option>
                       </select>
 

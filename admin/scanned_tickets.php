@@ -26,7 +26,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">
-              Tickets Reservation
+              Redeemed Tickets
             </h1>
 
           </div>
@@ -53,19 +53,6 @@
                       <option value="entoto">Entoto</option>
                     </select>
                   </div>
-
-                  <div class="form-group col-3">
-                    <label for="paymentStatus">Payment Status</label>
-
-                    <select v-model="paymentStatus" @change="fetchUnpaid" class="custom-select">
-
-                      <option value="paid">Paid</option>
-                      <option value="unpaid">Unpaid</option>
-
-                    </select>
-                  </div>
-
-
                   <div class="table-responsive">
                     <table class="table display table-bordered" width="100%" id="viewTicket" cellspacing="0">
 
@@ -76,15 +63,16 @@
                           <th>Name</th>
                           <th>Phone</th>
                           <th>Email</th>
+                          <th>Agent</th>
+                          <th>Scanned Date</th>
                           <th>Date</th>
                           <th>Tickets</th>
                           <th>Location</th>
                           <th>Price</th>
                           <th>Payment status</th>
                           <th>Order status</th>
-                          <!-- <th>Txn ref</th>
-                          <th>Payment method</th>
-                          <th> Remarks</th>
+
+                          <!--<th> Remarks</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th> -->
                           <th></th>
@@ -369,6 +357,15 @@
                 data: 'email'
               },
               {
+                data: 'scanned_agent'
+              },
+              {
+                data: 'updatedAt',
+                render: function(data, type, row) {
+                  return reqApp.dateFunction(data)
+                }
+              },
+              {
                 data: 'createdAt',
                 render: function(data, type, row) {
                   return reqApp.dateFunction(data)
@@ -462,22 +459,21 @@
 
           console.log(location);
           try {
-            const res = await axios.post(this.proUrl + 'view_activity_reservation', {
+            const res = await axios.post(this.proUrl + 'view_redemed_reservation', {
               location
             })
             console.log(res.data);
 
             this.alldata = res.data
-            const filteredData = this.alldata.filter(item => item.payment_status === 'paid');
 
-            this.table(filteredData)
+            this.table(this.alldata)
           } catch (error) {
             console.log(error);
           }
         },
         async fetchLocation() {
           try {
-            const res = await axios.post(this.proUrl + 'view_activity_reservation', {
+            const res = await axios.post(this.proUrl + 'reddeem_activity_reservation', {
               location: this.location
             })
             console.log(res.data);
@@ -490,15 +486,6 @@
           }
         },
 
-        async fetchUnpaid() {
-
-          try {
-            const filteredData = this.alldata.filter(item => item.payment_status === this.paymentStatus);
-            this.table(filteredData)
-          } catch (error) {
-            console.log(error);
-          }
-        },
         async deleteReq() {
           await axios.post('load_modal.php', {
             action: 'deleteReq',

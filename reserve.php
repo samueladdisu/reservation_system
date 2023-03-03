@@ -15,7 +15,7 @@ if (isset($_GET['ref'])) {
 }
 if (isset($_GET['location'])) {
   $Location = $_GET['location'];
-  if ($Location !== "entoto" &&  $Location !== "bishoftu") {
+  if ($Location !== "entoto" &&  $Location !== "bishoftu" && $Location !== "awash") {
     header("Location: ./");
   }
   if ($Location == 'Tana' || $Location == 'tana') {
@@ -438,14 +438,14 @@ if (isset($_GET['checkout'])) {
                 <div class="col-3">
                   <label class="form-label">Adults</label>
                   <select name="adults" v-model="res_adults" @change="CheckGuest" class="form-select">
-                    <option selected>Adults *</option>
+
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                   </select>
 
                 </div>
-                <div class="col-3 offset-1">
+                <!-- <div class="col-3 offset-1">
                   <label class="form-label">Teens(12 - 17)</label>
                   <select name="adults" @change="CheckGuest" v-model="res_teen" class="form-select" :disabled="teen">
                     <option selected>Teens(12-17)</option>
@@ -453,8 +453,20 @@ if (isset($_GET['checkout'])) {
                     <option value="1">1</option>
                     <option value="2">2</option>
                   </select>
-                </div>
+                </div> -->
+
                 <div class="col-3 offset-1">
+                  <label class="form-label">Teens(12 - 17)</label>
+                  <select name="adults" @change="CheckGuest" v-model="res_teen" class="form-select" disabled="true">
+                    <option selected>Teens(12-17)</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                </div>
+
+
+                <!-- <div class="col-3 offset-1">
                   <label class="form-label">Kid (6-11)</label>
                   <select name="adults" @change="CheckGuest" v-model="res_kid" class="form-select" :disabled="kid">
                     <option selected>Kid (6-11)</option>
@@ -462,8 +474,17 @@ if (isset($_GET['checkout'])) {
                     <option value="1">1</option>
                     <option value="2">2</option>
                   </select>
-                </div>
+                </div> -->
 
+                <div class="col-3 offset-1">
+                  <label class="form-label">Kid (6-11)</label>
+                  <select name="adults" @change="CheckGuest" v-model="res_kid" class="form-select" disabled="true">
+                    <option selected>Kid (6-11)</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                </div>
 
               </div>
               <?php
@@ -722,16 +743,33 @@ if (isset($_GET['checkout'])) {
         $('#date').data('daterangepicker').setStartDate(today);
         $('#date').data('daterangepicker').setEndDate(tomorrow);
 
-        $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // $('#date').on('apply.daterangepicker', function(ev, picker) {
+        //   // console.log(picker.startDate.format('YYYY-MM-DD'));
+        //   // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        //   console.log("apply")
+        //   start = picker.startDate.format('YYYY-MM-DD')
+        //   end = picker.endDate.format('YYYY-MM-DD')
+        //   console.log("updated start", start);
+        //   console.log("updated end", end);
+
+        //   // vm.submitData()
+
+
+        // });
+
+        $('#date').on('hide.daterangepicker', function(ev, picker) {
           // console.log(picker.startDate.format('YYYY-MM-DD'));
           // console.log(picker.endDate.format('YYYY-MM-DD'));
 
+          console.log("hide")
           start = picker.startDate.format('YYYY-MM-DD')
           end = picker.endDate.format('YYYY-MM-DD')
-          // console.log("updated start", start);
-          // console.log("updated end", end);
+          console.log("updated start", start);
+          console.log("updated end", end);
 
           vm.submitData()
+
 
 
         });
@@ -1412,17 +1450,6 @@ if (isset($_GET['checkout'])) {
           }
 
         }
-        // amenities(am) {
-
-        //   let amt = JSON.parse(JSON.parse(am))
-        //   let arryAmt = new Array()
-        //   arryAmt = amt
-
-        //   // arryAmt.filter(ary => {
-        //   //   return ary.replace("\"", '')
-        //   // })
-        //   return arryAmt
-        // },
 
       },
       computed: {

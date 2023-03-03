@@ -1,4 +1,4 @@
-<?php $currentPage = "Edit Special Request"; ?>
+<?php $currentPage = "Add Inhouse Update"; ?>
 <?php include './includes/admin_header.php'; ?>
 
 <body id="page-top">
@@ -33,121 +33,24 @@
 
             <div id="special_app" class="col-12">
 
-
-              <?php 
-
-                if(isset($_GET['id'])){
-                  $id = escape($_GET['id']);
-
-                  $query = "SELECT * FROM special_request WHERE id = $id LIMIT 1";
-                  $result = mysqli_query($connection, $query);
-
-                  confirm($result);
-
-                  $row = mysqli_fetch_assoc($result);
-
-
-                  $edit_info = json_encode($row);
-                }
-              
-              
-              ?>
-
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Edit Special Request</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Add Inhouse Update</h6>
                 </div>
 
                 <div class="card-body d-flex justify-content-center">
                   <form action="" method="POST" @submit.prevent="submitForm" class="col-6" enctype="multipart/form-data">
 
                     <div class="form-group">
-                      <label for="room_acc"> Guest / Company Name</label>
+                      <label for="room_acc"> Update Info</label>
                       <input type="text" v-model="guestName" class="form-control" required>
 
 
                     </div>
 
-                    <div class="form-group">
-                      <label for="post_tags"> Type </label>
-                      <select name="type" v-model="type" class="custom-select" required>
-                      <option value="" disabled>--select--</option>
-                        <option value="lunch">Lunch/Dinner Reservation</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="birthday">Birthday</option>
-                        <option value="anniversary">Anniversary</option>
-                        <option value="proposal">Proposal</option>
-                        <option value="shuttle">Shuttle</option>
-                        <option value="landscape">Landscape</option>
-                        <option value="other">Other</option>
-                      </select>
-
-                    </div>
-
-                    <div class="form-group" v-show="other">
-                      <label for="post_tags"> If other selected specify type </label>
-                      <input type="text" v-model="otherType" class="form-control">
-
-                    </div>
-
-                    <?php
-
-                    if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
-
-                    ?>
-                      <div class="form-group">
-                        <label for="post_tags"> Location </label>
-                        <select name="room_location" class="custom-select" v-model="location" id="">
-                          <option value="" disabled>Resort Location</option>
-                          <?php
-
-                          $query = "SELECT * FROM locations";
-                          $result = mysqli_query($connection, $query);
-                          confirm($result);
-
-                          while ($row = mysqli_fetch_assoc($result)) {
-                            $location_id = $row['location_id'];
-                            $location_name = $row['location_name'];
-
-                            if ($location_name != 'Boston') {
-
-                              echo "<option value='$location_name'>{$location_name}</option>";
-                            }
-                          }
-                          ?>
-                        </select>
-                      </div>
-                    <?php } else { ?>
-                      <input type="hidden" name="room_location" id="hiddenlocation" value="<?php echo $_SESSION['user_location']; ?>">
-
-
-                    <?php  }
-
-
-                    ?>
-
-                    
 
                     <div class="form-group">
-                      <label for="room_acc"> # of people</label>
-                      <input type="number" v-model="numberOfPeople" class="form-control" required>
-
-                    </div>
-
-                    <div class="form-group">
-                      <label for="room_acc"> Date</label>
-                      <input type="date" v-model="date" class="form-control" required>
-
-                    </div>
-
-                    <div class="form-group">
-                      <label for="room_acc"> Remark</label>
-                      <textarea cols="30" rows="10" v-model="remark" class="form-control"></textarea>
-
-                    </div>
-
-                    <div class="form-group">
-                      <input type="submit" class="btn btn-primary" name="add_req" value="Edit Special Request">
+                      <input type="submit" class="btn btn-primary" name="add_req" value="Add">
                     </div>
 
                   </form>
@@ -219,19 +122,16 @@
   <!-- data table plugin  -->
 
   <script>
-
-    let data = <?= $edit_info ?>
-
     const app = Vue.createApp({
       data() {
         return {
-          guestName: data.guest_name,
-          type: data.type,
-          otherType: data.other_type,
-          numberOfPeople: data.number_of_people,
-          date: data.date,
-          remark: data.remark,
-          location: data.location,
+          guestName: "",
+          type: "",
+          otherType: "",
+          numberOfPeople: "",
+          date: "",
+          remark: "",
+          location: "",
           other: false
         }
       },
@@ -255,18 +155,9 @@
 
           console.log(this.location);
         },
-        checkOther() {
-          if (this.type == "other"){
-            this.other = true
-          } else {
-            this.other = false
-            this.otherType = ""
-          }
-        },
         async submitForm() {
           await axios.post('load_modal.php', {
-              action: 'editSpecialRequest',
-              id: data.id,
+              action: 'addSpecialRequest',
               guest: this.guestName,
               type: this.type,
               otherType: this.otherType,
@@ -276,12 +167,17 @@
               remark: this.remark
             }).then(res => console.log(res.data))
             .then(() => {
+              this.guestName = ""
+              this.type= ""
+              this.otherType = ""
+              this.numberOfPeople = ""
+              this.date = ""
+              this.location = ""
+              this.remark = ""
+
               window.location = "view_special.php"
             })
         }
-      },
-      created() {
-        this.checkOther()
       },
       mounted() {
         <?php

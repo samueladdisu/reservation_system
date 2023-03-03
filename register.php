@@ -218,7 +218,7 @@ function cutFromPromo($promo, $price)
 
 
 
-    
+
     if (isset($_POST['res_guestNo']) && $_POST['res_guestNo'] != "") {
 
       if ($_SESSION["promoApp"] == false) {
@@ -230,7 +230,7 @@ function cutFromPromo($promo, $price)
           $_SESSION['total'] = "$total_price_promo";
           $_SESSION["promoApp"] = true;
 
-          
+
           // } else {
           // }
         }
@@ -239,50 +239,50 @@ function cutFromPromo($promo, $price)
 
 
     date_default_timezone_set('Africa/Addis_Ababa');
-          $roomID = json_encode($id);
-          $guestInfoAlls = json_encode($guestInfoAll);
-          $roomNums = json_encode($roomNum);
-          $roomAccs =  json_encode($roomAcc);
-          $roomLocas = json_encode($roomLoca);
-          $CICOAlls  = json_encode($CICOAll);
-          $boardeArrs = json_encode($boardeArr);
+    $roomID = json_encode($id);
+    $guestInfoAlls = json_encode($guestInfoAll);
+    $roomNums = json_encode($roomNum);
+    $roomAccs =  json_encode($roomAcc);
+    $roomLocas = json_encode($roomLoca);
+    $CICOAlls  = json_encode($CICOAll);
+    $boardeArrs = json_encode($boardeArr);
 
-          $created_at = date('Y-m-d h:i:s');
+    $created_at = date('Y-m-d h:i:s');
 
-          $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board, created_at) 
+    $queryDB = "INSERT INTO temp_res(firstName, lastName, phoneNum, email, country, resAddress, city, zipCode, paymentMethod, total, specialRequest, userGID, promoCode, room_id, guestInfo, room_num, room_acc, room_location, CinCoutInfo, temp_board, created_at) 
           VALUES('{$params['res_firstname']}', '{$params['res_lastname']}', '{$params['res_phone']}', '{$params['res_email']}', '{$params['res_country']}', '{$params['res_address']}', '{$params['res_city']}', '{$params['res_zip']}', '{$params['res_paymentMethod']}', '{$total_price}', '{$params['res_specialRequest']}', '$GID', '{$params['res_guestNo']}', '$roomID', '$guestInfoAlls', '$roomNums', '$roomAccs', '$roomLocas', '$CICOAlls', '$boardeArrs', '$created_at')";
 
-          $result = mysqli_query($connection, $queryDB);
-          confirm($result);
+    $result = mysqli_query($connection, $queryDB);
+    confirm($result);
 
 
-          // get id of the regestered and send to payment provaider 
+    // get id of the regestered and send to payment provaider 
 
-          // $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
-          // $result = mysqli_query($connection, $querySelect);
-          // confirm($result);
-          // $resultNum = mysqli_num_rows($result);
-          // if ($resultNum == 1) {
-          //   $temprec = mysqli_fetch_assoc($result);
-
-
-          $_SESSION['Rtemp'] = $GID;
+    // $querySelect = "SELECT * FROM temp_res WHERE userGID = '$GID'";
+    // $result = mysqli_query($connection, $querySelect);
+    // confirm($result);
+    // $resultNum = mysqli_num_rows($result);
+    // if ($resultNum == 1) {
+    //   $temprec = mysqli_fetch_assoc($result);
 
 
+    $_SESSION['Rtemp'] = $GID;
 
-          switch ($params['res_paymentMethod']) {
-            case 'telebirr':
-              header("Location: ./telebirr.php");
-              break;
-            case 'chapa_usd':
-              header("Location: ./chapa.php");
-              $_SESSION['currency'] = "USD";
-              break;
-            case 'chapa_etb':
-              header("Location: ./chapa.php");
-              $_SESSION['currency'] = "ETB";
-              break;
-          }
+
+
+    switch ($params['res_paymentMethod']) {
+      case 'telebirr':
+        header("Location: ./telebirr.php");
+        break;
+      case 'amole':
+        header("Location: ./amole.php");
+        // $_SESSION['currency'] = "USD";
+        break;
+      case 'chapa_etb':
+        header("Location: ./chapa.php");
+        $_SESSION['currency'] = "ETB";
+        break;
+    }
   }
 
   //   if ($params['res_paymentMethod'] == 'arrival') {
@@ -394,10 +394,14 @@ function cutFromPromo($promo, $price)
           <label for="inputState" class="form-label payment">Payment Platform</label>
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
-            <option value="chapa_usd">Credit Card</option>
-            <!-- <option value="amole">Amole</option> -->
+            <option value="amole">Credit Card</option>
+            <option value="chapa_etb">Amole</option>
             <!-- <option value="telebirr">Telebirr</option> -->
             <option value="chapa_etb">Bank of Abysiniya</option>
+            <option value="chapa_etb">CBE Birr</option>
+            <!-- <option value="chapa_usd">Pay Pal</option> -->
+            <option value="chapa_etb">Wegagen Hello Cash</option>
+            <option value="chapa_etb">E-birr</option>
           </select>
         </div>
 
