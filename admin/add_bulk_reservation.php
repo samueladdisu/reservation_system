@@ -391,7 +391,6 @@ if (!isset($_SESSION['user_role'])) {
                           <label>BBQ Guests </label>
                           <input type="text" class="form-control" v-model="formData.group_BBQ">
                         </div>
-
                         <div class="form-group col-6">
                           <label for="">Tea Break*</label>
                           <select type="text" class="custom-select" v-model="formData.group_TeaBreak">
@@ -400,7 +399,18 @@ if (!isset($_SESSION['user_role'])) {
                             <option value="2">2 (Both Morning and Afternoon)</option>
                           </select>
                         </div>
-
+                        <div class="form-group col-6">
+                          <label>Payment Status</label>
+                          <select v-model="formData.group_status" @change="customChecker" class="custom-select" required>
+                            <option value="def">Add Guaranteed</option>
+                            <option value="cus">Non-Guaranteed</option>
+                            <option value="ten">Tentative</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-6" :class="{ 'd-none': formData.group_status !== 'def', 'd-block': formData.group_status === 'def' }" style="width:30rem">
+                          <label>Attachments</label>
+                          <input type="file" />
+                        </div>
                         <div class="form-group col-12">
                           <textarea v-model="formData.group_remark" placeholder="Remark*" id="" cols="30" rows="5" class="form-control"></textarea>
                         </div>
@@ -997,23 +1007,23 @@ if (!isset($_SESSION['user_role'])) {
 
                 }
                 let limit = parseInt(this.room_quantity)
-                
+
 
                 let sliced = [];
                 let size = Object.keys(this.allData).length;
-                console.log("Size",size)
+                console.log("Size", size)
 
-                if(size > limit ){
+                if (size > limit) {
 
                   for (let i = 0; i < limit; i++)
                     sliced[i] = this.allData[i];
                   console.log("sliced", sliced);
-  
+
                   this.allData = sliced
                 }
                 // console.log("after fileter", this.allData);
                 // let limit = parseInt(this.room_quantity) - 1
-               
+
                 // console.log("limit", limit);
                 // this.allData = res.data.slice(limit)
 

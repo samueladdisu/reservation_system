@@ -26,7 +26,7 @@ $allData = array();
 $dataReq = array();
 
 
-if($received_data->action == 'fetchReqDaily') {
+if ($received_data->action == 'fetchReqDaily') {
   $date = date('Y-m-d');
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
     $query = "SELECT * FROM special_request WHERE date = '$date' ORDER BY id DESC";
@@ -43,14 +43,14 @@ if($received_data->action == 'fetchReqDaily') {
 
       $dataReq[] = $row;
     }
-  
+
     echo json_encode($dataReq);
   } else {
     echo json_encode("empty");
   }
 }
 
-if($received_data->action == 'fetchReq'){
+if ($received_data->action == 'fetchReq') {
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
     $query = "SELECT * FROM special_request ORDER BY id DESC";
   } else {
@@ -66,17 +66,14 @@ if($received_data->action == 'fetchReq'){
 
       $dataReq[] = $row;
     }
-  
+
     echo json_encode($dataReq);
   } else {
     echo json_encode("empty");
   }
-
-
-
 }
 
-if($received_data->action == 'editSpecialRequest'){
+if ($received_data->action == 'editSpecialRequest') {
   $id = $received_data->id;
   $guest_name = $received_data->guest;
   $type = $received_data->type;
@@ -95,7 +92,7 @@ if($received_data->action == 'editSpecialRequest'){
 
   echo json_encode($update_result);
 }
-if($received_data->action == 'addSpecialRequest'){
+if ($received_data->action == 'addSpecialRequest') {
 
   $guest_name = $received_data->guest;
   $type = $received_data->type;
@@ -114,7 +111,7 @@ if($received_data->action == 'addSpecialRequest'){
   echo json_encode($result);
 }
 
-if($received_data->action == 'deleteReq'){
+if ($received_data->action == 'deleteReq') {
   $id = intval($received_data->id);
   $query = "DELETE FROM special_request WHERE id = $id";
   $result = mysqli_query($connection, $query);
@@ -122,7 +119,7 @@ if($received_data->action == 'deleteReq'){
   echo json_encode($result);
 }
 
-if ($received_data->action == 'visitors'){
+if ($received_data->action == 'visitors') {
   $query = "SELECT 
               SUM(IF(source = 'homepage_banner', 1, 0)) AS banner,
               SUM(IF(source = 'homepage_button', 1, 0)) AS button
@@ -173,7 +170,6 @@ if ($received_data->action == 'filter') {
         OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
     WHERE booked_rooms.b_roomId IS NULL
     AND room_location = '$location' AND room_acc = '$roomType' AND room_status NOT IN ('Hold', 'bishoftu_hold') ORDER BY room_acc;";
-
   } else if (($checkin && $checkout) && !$location && !$roomType) {
     // $query = "SELECT * 
     // FROM rooms 
@@ -199,7 +195,6 @@ if ($received_data->action == 'filter') {
         OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
     WHERE booked_rooms.b_roomId IS NULL
     AND room_status NOT IN ('Hold', 'bishoftu_hold') ORDER BY room_acc;";
-
   } else if (($checkin && $checkout) && !$location && $roomType) {
     // $query = "SELECT * 
     // FROM rooms 
@@ -226,7 +221,6 @@ if ($received_data->action == 'filter') {
         OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
     WHERE booked_rooms.b_roomId IS NULL
     AND room_acc = '$roomType' AND room_status NOT IN ('Hold', 'bishoftu_hold') ORDER BY room_acc;";
-
   } else if (($checkin && $checkout) && $location && !$roomType) {
     // $query = "SELECT * 
     // FROM rooms 
@@ -711,6 +705,9 @@ if ($received_data->action == 'editReservation') {
   $start      = new DateTime($checkin);
   $end        = new DateTime($checkout);
 
+
+  $start_str = $start->format('Y-m-d H:i:s');
+  $end_str = $end->format('Y-m-d H:i:s');
   // delete guest info to reenter the record from the scratch
   $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $id";
   $guest_info_result = mysqli_query($connection, $guest_info_query);
@@ -750,7 +747,7 @@ if ($received_data->action == 'editReservation') {
       "room_price"    => $value->room_price
     );
 
-    if($value->room_location === "awash") {
+    if ($value->room_location === "awash") {
       $guest_info_query = "INSERT INTO guest_info(info_res_id, info_adults, info_kids, info_teens, info_room_id, info_room_number, info_room_acc, info_board, info_room_location) ";
 
       $guest_info_query .= "VALUES ($last_id, $adults, $kids, $teens, $value->room_id, '$value->room_number', '$value->room_acc', '$value->board', '$value->room_location')";
@@ -911,7 +908,7 @@ if ($received_data->action == 'editReservation') {
   }
   // echo json_encode($cart);
 
- 
+
 
 
 
@@ -931,7 +928,7 @@ if ($received_data->action == 'editReservation') {
 
 
   $res_agent = $_SESSION['username'];
-  $query = "UPDATE `reservations` SET `res_firstname` = '{$form_data->res_firstname}', `res_lastname` = '{$form_data->res_lastname}', `res_phone` = '{$form_data->res_phone}', `res_email` = '{$form_data->res_email}', `res_guestNo` = '{$res_guests}', `res_cart` = '{$res_cart}', `res_groupName` = '{$form_data->res_groupName}', `res_checkin` = '{$checkin}', `res_checkout` = '{$checkout}', `res_paymentMethod` = '{$form_data->res_paymentMethod}', `res_roomIDs` = '{$roomIds}', `res_roomNo` = '{$roomNumbers}', `res_roomType` = '{$roomTypes}', `res_location` = '{$res_location}', `res_specialRequest` = '{$form_data->res_specialRequest}', `res_agent` = '{$res_agent}', `res_paymentStatus` = '{$form_data->res_paymentStatus}', `res_remark` = '{$form_data->res_remark}', `res_promo` = '{$form_data->res_promo}', `res_extraBed` = Null, `res_confirmID` = '$res_confirmID', `res_price` = $price WHERE `reservations`.`res_id` = $id";
+  $query = "UPDATE `reservations` SET `res_firstname` = '{$form_data->res_firstname}', `res_lastname` = '{$form_data->res_lastname}', `res_phone` = '{$form_data->res_phone}', `res_email` = '{$form_data->res_email}', `res_guestNo` = '{$res_guests}', `res_cart` = '{$res_cart}', `res_groupName` = '{$form_data->res_groupName}', `res_checkin` = '{$start_str}', `res_checkout` = '{$end_str}', `res_paymentMethod` = '{$form_data->res_paymentMethod}', `res_roomIDs` = '{$roomIds}', `res_roomNo` = '{$roomNumbers}', `res_roomType` = '{$roomTypes}', `res_location` = '{$res_location}', `res_specialRequest` = '{$form_data->res_specialRequest}', `res_agent` = '{$res_agent}', `res_paymentStatus` = '{$form_data->res_paymentStatus}', `res_remark` = '{$form_data->res_remark}', `res_promo` = '{$form_data->res_promo}', `res_extraBed` = Null, `res_confirmID` = '$res_confirmID', `res_price` = $price WHERE `reservations`.`res_id` = $id";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
