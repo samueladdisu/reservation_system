@@ -36,6 +36,7 @@
           <div>
 
             <div id="viewSpecial">
+              <button class="btn btn-primary mb-2" @click="downloadPdf" id="download-pdf">Download Receipt</button>
               <!-- <div class="card border-success" v-if="eligible">
                 <div class="card-header">
                   <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
@@ -80,251 +81,248 @@
                 </div>
               </div> -->
 
+              <div id="lastReadem">
+                <div class="card border-success" v-if="eligible">
 
-              <div class="card border-success" v-if="eligible">
+                  <div class="card-header">
 
-                <div class="card-header">
+                    <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
 
-                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
-                </div>
+                  </div>
 
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Name: {{ allData.first_name }} - {{ allData.last_name }}</li>
-                  <li class="list-group-item">Email: {{ allData.email }} </li>
-                  <li class="list-group-item">Phone: {{ allData.phone_number }} </li>
-                  <li class="list-group-item">Location: {{ allData.location }} </li>
-                  <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
-                  <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
-                  <li class="list-group-item">Transaction Number: {{ allData.tx_ref }}</li>
-                  <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
-                  <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Name: {{ allData.first_name }} - {{ allData.last_name }}</li>
+                    <li class="list-group-item">Email: {{ allData.email }} </li>
+                    <li class="list-group-item">Phone: {{ allData.phone_number }} </li>
+                    <li class="list-group-item">Location: {{ allData.location }} </li>
+                    <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
+                    <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
+                    <li class="list-group-item">Transaction Number: {{ allData.tx_ref }}</li>
+                    <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
+                    <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
 
-                  <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
-                  <li class="list-group-item">Date: {{ allData.updatedAt }}</li>
-                  <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
-                  <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
+                    <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
+                    <li class="list-group-item">Date: {{ allData.updatedAt }}</li>
+                    <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
+                    <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
                     }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
 
-                </ul>
-                <div class="card-footer">
-                  <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
-                  <a href="view_tickets.php" class="btn btn-primary mb-2">View ticket Reservation</a>
+                  </ul>
+                  <div class="card-footer">
+                    <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
+                    <a href="view_tickets.php" class="btn btn-primary mb-2">View Ticket Reservation</a>
+                  </div>
                 </div>
-              </div>
-
-
-
-              <div class="card border-success" v-else-if="entoto_eligible">
-                <div class="card-header">
-                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
-                </div>
-                <div class="card-body">
-                  Purchased Tickets: <br>
-                  {{ amt[0].quantity }} {{ amt[0].package_type }} - {{ amt[1].quantity }} {{ amt[1].package_type }} - {{
+                <div class="card border-success" v-else-if="entoto_eligible">
+                  <div class="card-header">
+                    <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                  </div>
+                  <div class="card-body">
+                    Purchased Tickets: <br>
+                    {{ amt[0].quantity }} {{ amt[0].package_type }} - {{ amt[1].quantity }} {{ amt[1].package_type }} - {{
                   amt[2].quantity }} {{ amt[2].package_type }} <br> <br>
-                  Available Ticket: <br>
+                    Available Ticket: <br>
+                    <form class="mt-3 d-md-flex">
+                      <div class="form-group mr-2 mb-2">
+                        <label class="font-weight-bold my-4">For Kids</label>
+                        <select class="form-control mb-2" v-model="pedalKart">
+                          <option disabled value="">Pedal Kart</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[0].packages[0].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                        <select class="form-control mb-2" v-model="trampoline">
+                          <option disabled value="">Trampoline</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[0].packages[1].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                        <select class="form-control mb-2" v-model="childrenPlayground">
+                          <option disabled value="">Children Playground</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[0].packages[2].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="wallClimbing">
+                          <option disabled value="">wall climbing</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[0].packages[3].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="form-group mr-2 mb-2">
+                        <label class="font-weight-bold my-4">Adrenaline</label>
+                        <select class="form-control mb-2" v-model="zipAdre">
+                          <option disabled value="">Zip Line</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[1].packages[0].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="ropeCourse">
+                          <option disabled value="">Rope Course</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[1].packages[1].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="goKart">
+                          <option disabled value="">Go Kart</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[1].packages[2].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="form-group mr-2 mb-2">
+                        <label class="font-weight-bold my-4">Entoto Adventure</label>
+                        <select class="form-control mb-2" v-model="horseRiding">
+                          <option disabled value="">Horse Riding</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[2].packages[0].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="paintBall">
+                          <option disabled value="">Paintball</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[2].packages[1].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="archery">
+                          <option disabled value="">Archery</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[2].packages[2].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                        <select class="form-control mb-2" v-model="zipAdv">
+                          <option disabled value="">Zip Line</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[2].packages[3].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                      </div>
+                    </form>
 
 
-                  <form class="mt-3 d-md-flex">
-                    <div class="form-group mr-2 mb-2">
-                      <label class="font-weight-bold my-4">For Kids</label>
-                      <select class="form-control mb-2" v-model="pedalKart">
-                        <option disabled value="">Pedal Kart</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[0].packages[0].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="trampoline">
-                        <option disabled value="">Trampoline</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[0].packages[1].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="childrenPlayground">
-                        <option disabled value="">Children playground</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[0].packages[2].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="wallClimbing">
-                        <option disabled value="">wall climbing</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[0].packages[3].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="form-group mr-2 mb-2">
-                      <label class="font-weight-bold my-4">Adrenaline</label>
-                      <select class="form-control mb-2" v-model="zipAdre">
-                        <option disabled value="">Zip Line</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[1].packages[0].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="ropeCourse">
-                        <option disabled value="">Rope Course</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[1].packages[1].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="goKart">
-                        <option disabled value="">Go Kart</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[1].packages[2].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="form-group mr-2 mb-2">
-                      <label class="font-weight-bold my-4">Entoto Adventure</label>
-                      <select class="form-control mb-2" v-model="horseRiding">
-                        <option disabled value="">Horse Riding</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[2].packages[0].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="paintBall">
-                        <option disabled value="">Paintball</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[2].packages[1].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="archery">
-                        <option disabled value="">Archery</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[2].packages[2].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-                      <select class="form-control mb-2" v-model="zipAdv">
-                        <option disabled value="">Zip Line</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[2].packages[3].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-                    </div>
-                  </form>
-
-
-                </div>
-                <div class="card-footer">
-                  <button class="btn btn-primary mr-2 mb-2" @click="redeemEntotoTicket">Redeem Ticket</button>
-                  <a href="./qrcode/" class="btn btn-secondary">
-                    cancel
-                  </a>
-                </div>
-              </div>
-
-              <div class="card border-success" v-else-if="boston_eligible">
-                <div class="card-header">
-                  <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
-                </div>
-                <div class="card-body">
-                  Purchased Tickets: <br>
-                  {{ amt[0].quantity }} {{ amt[0].name }}<br>
-                  {{ amt[1].quantity }} {{ amt[1].name }} <br>
-                  {{ amt[2].quantity }} {{ amt[2].name }}<br>
-                  {{ amt[3].quantity }} {{ amt[3].name }}
-                  <br> <br>
-                  Available Ticket: <br>
-                  {{ avaAmt[0].quantity }} {{ avaAmt[0].name }} <br>
-                  {{ avaAmt[1].quantity }} {{ avaAmt[1].name }} <br>
-                  {{ avaAmt[2].quantity }} {{ avaAmt[2].name }} <br>
-                  {{ avaAmt[3].quantity }} {{ avaAmt[3].name }}
-
-                  <br> <br>
-
-                  <form class="mt-3 d-md-flex">
-                    <div class="form-group mr-2 mb-2">
-                      <label class="font-weight-bold my-4">Packages</label>
-                      <select class="form-control mb-2" v-model="pediMani">
-                        <option disabled value="">Peedcure & deep manicure</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[0].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="aroma">
-                        <option disabled value="">Aroma massage</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[1].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="spa">
-                        <option disabled value="">Spa</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[2].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-
-                      <select class="form-control mb-2" v-model="hair">
-                        <option disabled value="">Hair</option>
-                        <option value="0">0</option>
-                        <option v-for="amt in avaAmt[3].quantity" :value="amt">
-                          {{ amt }}
-                        </option>
-                      </select>
-                    </div>
-                  </form>
-
-
-                </div>
-                <div class="card-footer">
-                  <button class="btn btn-primary mr-2 mb-2" @click="redeemBoston">Redeem Ticket</button>
-                  <a href="./qrcode/" class="btn btn-secondary">
-                    cancel
-                  </a>
-                </div>
-              </div>
-
-
-              <div class="card" v-else>
-
-                <div class="card-header">
-
-                  <h5 class="text-danger">Ticket is already redeemed</h5>
-
+                  </div>
+                  <div class="card-footer">
+                    <button class="btn btn-primary mr-2 mb-2" @click="redeemEntotoTicket">Redeem Ticket</button>
+                    <a href="./qrcode/" class="btn btn-secondary">
+                      cancel
+                    </a>
+                  </div>
                 </div>
 
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Name: {{ allData.first_name }} - {{ allData.last_name }}</li>
-                  <li class="list-group-item">Email: {{ allData.email }} </li>
-                  <li class="list-group-item">Phone: {{ allData.phone_number }} </li>
-                  <li class="list-group-item">Location: {{ allData.location }} </li>
-                  <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
-                  <li class="list-group-item">Date: 11-1-2023</li>
-                  <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
-                  <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
+                <div class="card border-success" v-else-if="boston_eligible">
+                  <div class="card-header">
+                    <h5 class="text-success">{{ allData.first_name }} {{ allData.last_name }} is eligible</h5>
+                  </div>
+                  <div class="card-body">
+                    Purchased Tickets: <br>
+                    {{ amt[0].quantity }} {{ amt[0].name }}<br>
+                    {{ amt[1].quantity }} {{ amt[1].name }} <br>
+                    {{ amt[2].quantity }} {{ amt[2].name }}<br>
+                    {{ amt[3].quantity }} {{ amt[3].name }}
+                    <br> <br>
+                    Available Ticket: <br>
+                    {{ avaAmt[0].quantity }} {{ avaAmt[0].name }} <br>
+                    {{ avaAmt[1].quantity }} {{ avaAmt[1].name }} <br>
+                    {{ avaAmt[2].quantity }} {{ avaAmt[2].name }} <br>
+                    {{ avaAmt[3].quantity }} {{ avaAmt[3].name }}
+
+                    <br> <br>
+
+                    <form class="mt-3 d-md-flex">
+                      <div class="form-group mr-2 mb-2">
+                        <label class="font-weight-bold my-4">Packages</label>
+                        <select class="form-control mb-2" v-model="pediMani">
+                          <option disabled value="">Peedcure & deep manicure</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[0].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="aroma">
+                          <option disabled value="">Aroma massage</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[1].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="spa">
+                          <option disabled value="">Spa</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[2].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+
+                        <select class="form-control mb-2" v-model="hair">
+                          <option disabled value="">Hair</option>
+                          <option value="0">0</option>
+                          <option v-for="amt in avaAmt[3].quantity" :value="amt">
+                            {{ amt }}
+                          </option>
+                        </select>
+                      </div>
+                    </form>
+
+
+                  </div>
+                  <div class="card-footer">
+                    <button class="btn btn-primary mr-2 mb-2" @click="redeemBoston">Redeem Ticket</button>
+                    <a href="./qrcode/" class="btn btn-secondary">
+                      cancel
+                    </a>
+                  </div>
+                </div>
+
+
+                <div class="card" v-else>
+
+                  <div class=" card-header">
+
+                    <h5 class=" text-danger">Ticket is already redeemed</h5>
+
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Name: {{ allData.first_name }} - {{ allData.last_name }}</li>
+                    <li class="list-group-item">Email: {{ allData.email }} </li>
+                    <li class="list-group-item">Phone: {{ allData.phone_number }} </li>
+                    <li class="list-group-item">Location: {{ allData.location }} </li>
+                    <li class="list-group-item">Confirmation Code: {{ allData.confirmation_code }} </li>
+                    <li class="list-group-item">Date: 11-1-2023</li>
+                    <li class="list-group-item">Tickets: {{ allData.adult }} Ad, {{ allData.kids }} kids</li>
+                    <li class="list-group-item">Redeemed Tickets: {{ allData.redeemed_adult_ticket
                     }} Ad, {{ allData.redeemed_kids_ticket }} kids</li>
-                  <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
-                  <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
-                  <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
-                  <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
-                </ul>
-                <div class="card-footer">
-                  <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
-                  <a href="view_tickets.php" class="btn btn-primary mb-2">View ticket Reservation</a>
+                    <li class="list-group-item">Price: {{ allData.price }} {{ allData.currency }} </li>
+                    <li class="list-group-item">Payment method: {{ allData.payment_method }}</li>
+                    <li class="list-group-item">Payment Status: {{ allData.payment_status }}</li>
+                    <li class="list-group-item">Order Status: {{ allData.order_status }}</li>
+                  </ul>
+                  <div class="card-footer">
+                    <a href="./qrcode/" class="btn btn-secondary mr-2 mb-2">Go Back</a>
+                    <a href="view_tickets.php" class="btn btn-primary mb-2">View ticket Reservation</a>
+                  </div>
                 </div>
+
+
+
               </div>
               <!-- Scan Button -->
               <div class="scan-button" style="border-radius:5rem; position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: center;">
@@ -435,7 +433,7 @@
   <script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
   <!-- Core plugin JavaScript-->
 
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
@@ -451,6 +449,8 @@
     let u_token = urlParams.get("user_token");
     console.log(g_token)
     console.log(u_token)
+
+
 
 
 
@@ -517,6 +517,15 @@
 
           var final = year + "-" + month + "-" + date;
           return final;
+        },
+        downloadPdf() {
+          const today = new Date();
+          var todayString = today.toLocaleDateString("en-GB").toString();
+          var pdf = new jsPDF();
+          var pdfContent = document.getElementById("lastReadem");
+          pdf.fromHTML(pdfContent, 15, 15);
+          pdf.save(todayString + "ticket-pdf.pdf");
+
         },
         async send() {
           try {

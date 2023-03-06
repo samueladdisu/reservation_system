@@ -231,12 +231,12 @@ if (!isset($_SESSION['user_role'])) {
             <div id="app">
 
 
-              <?php 
-              
+              <?php
+
               if (isset($_GET['id'])) {
                 $id = escape($_GET['id']);
                 $group = array();
-
+                $selectedRoom = array();
                 $query = "SELECT * FROM group_reservation WHERE group_id = $id";
                 $result = mysqli_query($connection, $query);
                 confirm($result);
@@ -246,6 +246,16 @@ if (!isset($_SESSION['user_role'])) {
                 }
 
                 $encoded_group = json_encode($group);
+
+                $groupId = $group[0]['group_id'];
+
+                $query2 = "SELECT * FROM group_rooms WHERE g_res_id = $groupId";
+                $result2 = mysqli_query($connection, $query2);
+                confirm($result2);
+                while ($rows = mysqli_fetch_assoc($result2)) {
+                  $selectedRoom[] = $rows;
+                }
+                $encoded_Rooms = json_encode($selectedRoom);
               }
               ?>
               <!-- Success Modal -->
@@ -677,10 +687,12 @@ if (!isset($_SESSION['user_role'])) {
   <!-- data table plugin  -->
 
   <script>
-
-    let group = <?= $encoded_group ?>
+    let group = <?= $encoded_group; ?>
 
     console.log(group)
+    let selectedRoomsA = <?= $encoded_Rooms; ?>
+    // console.log( selectedRoomsA)
+
     var start, end
     var today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -757,7 +769,7 @@ if (!isset($_SESSION['user_role'])) {
             custom_Extrabed: '',
 
           },
-          bookedRooms: [],
+          bookedRooms: selectedRoomsA,
           selectAllRoom: false,
           allData: '',
 
@@ -773,7 +785,7 @@ if (!isset($_SESSION['user_role'])) {
             ],
             data: row,
             columns: [{
-                data: 'room_number'
+                data: 'g_res_id'
               },
               {
                 data: 'room_acc'
@@ -1042,8 +1054,9 @@ if (!isset($_SESSION['user_role'])) {
       },
       created() {
         this.fetchAll()
+        this.selectedRoomsTable(this.bookedRooms)
         // Pusher.logToConsole = true;
-
+        console.log(this.bookedRooms)
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
         let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
