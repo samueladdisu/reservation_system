@@ -302,8 +302,11 @@ if (!isset($_SESSION['user_role'])) {
                           <label> Payment Status * </label>
                           <select v-model="formData.group_paymentStatus" class="custom-select" required>
                             <option disabled value="">-select-</option>
-                            <option value="payed">Paid</option>
-                            <option value="pending_payment">pending payment</option>
+                            <!-- <option value="payed">Paid</option>
+                            <option value="pending_payment">pending payment</option> -->
+                            <option value="Guaranteed">Add Guaranteed</option>
+                            <option value="Non-Guaranteed">Non-Guaranteed</option>
+                            <option value="Tentative">Tentative</option>
                           </select>
                         </div>
 
@@ -399,7 +402,7 @@ if (!isset($_SESSION['user_role'])) {
                             <option value="2">2 (Both Morning and Afternoon)</option>
                           </select>
                         </div>
-                        <div class="form-group col-6">
+                        <!-- <div class="form-group col-6">
                           <label>Payment Status</label>
                           <select v-model="formData.group_status" @change="customChecker" class="custom-select" required>
                             <option value="def">Add Guaranteed</option>
@@ -410,7 +413,7 @@ if (!isset($_SESSION['user_role'])) {
                         <div class="form-group col-6" :class="{ 'd-none': formData.group_status !== 'def', 'd-block': formData.group_status === 'def' }" style="width:30rem">
                           <label>Attachments</label>
                           <input type="file" />
-                        </div>
+                        </div> -->
                         <div class="form-group col-12">
                           <textarea v-model="formData.group_remark" placeholder="Remark*" id="" cols="30" rows="5" class="form-control"></textarea>
                         </div>
@@ -906,7 +909,12 @@ if (!isset($_SESSION['user_role'])) {
 
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
-
+            console.log(start);
+                console.log(end);
+                console.log(this.bookedRooms);
+                console.log(this.formData);
+                console.log(this.room_quantity);
+                console.log(this.location)
             if (this.formData.group_GNum >= this.bookedRooms.length) {
 
               if (capacity >= this.formData.group_GNum) {
