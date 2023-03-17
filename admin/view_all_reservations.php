@@ -192,7 +192,7 @@
 
               <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Reservations</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Today's Reservations</h6>
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                     Exchange Rates
                   </button>
