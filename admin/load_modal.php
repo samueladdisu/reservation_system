@@ -26,6 +26,16 @@ $allData = array();
 $dataReq = array();
 
 
+if ($received_data->action == 'noRoomsAvailable') {
+  $location = $received_data->location;
+  $update_query = "SELECT  SUM(CASE WHEN room_status = 'booked' THEN 1 ELSE 0 END) AS booked_rooms, SUM(CASE WHEN room_status = 'Not_booked' THEN 1 ELSE 0 END) AS available_rooms FROM  rooms";
+  $update_result = mysqli_query($connection, $update_query);
+
+  // confirm($update_result);
+
+  echo json_encode($update_result);
+}
+
 if ($received_data->action == 'fetchReqDaily') {
   $date = date('Y-m-d');
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {

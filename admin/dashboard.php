@@ -449,6 +449,27 @@
           this.arrivals = data.arrivals
           this.departures = data.departures
         },
+        async getNoAvailableRooms() {
+          await axios.post("dashboardFunctions.php", {
+            action: "noRoomsAvailable",
+            location: "Suyper"
+          }).then((respo) => {
+            this.available = respo.data.available_rooms
+            this.booked = respo.data.booked_rooms
+            // console.log(respo.data);
+          })
+        },
+        async arrivalAndDeparture() {
+          await axios.post("dashboardFunctions.php", {
+            action: "arrivalDeparture",
+            location: "Suyper"
+          }).then((respo) => {
+
+            this.arrivals = respo.data.rooms_arriving_today
+            this.departures = respo.data.rooms_leaving_today
+            // console.log(respo.data);
+          })
+        },
         getSpecialRequests() {
           var location
 
@@ -481,6 +502,8 @@
         }
       },
       mounted() {
+        this.getNoAvailableRooms()
+        this.arrivalAndDeparture()
         this.getDashboardData()
         this.getSpecialRequests()
       }
