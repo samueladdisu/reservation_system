@@ -40,17 +40,25 @@
                                 <a class="dropdown-item" href="./export.php?report=members">Members</a>
                             </div>
                         </div> -->
+            <?php
 
+            if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+            ?>
+              <select name="" id="" v-model="location" @change="setLocation" class="custom-select col-1">
+                <option value="all">All</option>
+
+                <option value="Bishoftu">Bishoftu</option>
+                <option value="entoto">Entoto</option>
+                <option value="awash">Awash</option>
+                <option value="Lake tana">Lake tana</option>
+              </select>
+            <?php } ?>
             <select name="" id="" class="custom-select col-1">
               <option value="">today</option>
               <option value="">this week</option>
               <option value="">this month</option>
               <option value="">this year</option>
             </select>
-
-
-
-
           </div>
 
           <!-- Content Row -->
@@ -102,6 +110,27 @@
               </a>
             </div>
 
+
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <a href="./daily.php#viewSpecial">
+                <div class="card border-left-info shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                          Special Requests</div>
+                        <div class='h6 mb-0 mt-2 text-gray-600'>{{ special.total }}</div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
               <a href="./daily.php#resTable">
@@ -124,26 +153,6 @@
                 </div>
               </a>
             </div>
-
-            <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <a href="./daily.php#viewSpecial">
-                <div class="card border-left-info shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                          Special Requests</div>
-                        <div class='h6 mb-0 mt-2 text-gray-600'>21</div>
-                      </div>
-                      <div class="col-auto">
-                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
           </div>
 
           <!-- Content Row -->
@@ -156,21 +165,43 @@
 
               <!-- Area Chart -->
 
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <!-- <div class="card shadow mb-4"> -->
+              <!-- Card Header - Dropdown -->
+              <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Total Sales</h6>
 
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
+                </div> -->
+              <!-- Card Body -->
+              <!-- <div class="card-body">
                   <div class="chart-area">
                     <canvas id="myAreaChart"></canvas>
                   </div>
                 </div>
+              </div> -->
+
+              <!-- Pie Chart -->
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Payment Types</h6>
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myPieChart"></canvas>
+                  </div>
+                  <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                      <i class="fas fa-circle" style="color: #4e73df"></i> Homepage banner
+                    </span>
+                    <span class="mr-2">
+                      <i class="fas fa-circle" style="color: #1cc88a"></i> Homepage Button
+                    </span>
+
+                  </div>
+                </div>
               </div>
-
-
 
 
               <!-- Bar Chart -->
@@ -253,29 +284,7 @@
 
               </div>
 
-              <!-- Pie Chart -->
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Payment Types</h6>
 
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                  <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
-                  </div>
-                  <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle" style="color: #4e73df"></i> Homepage banner
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle" style="color: #1cc88a"></i> Homepage Button
-                    </span>
-
-                  </div>
-                </div>
-              </div>
             </div>
 
           </div>
@@ -432,13 +441,18 @@
             proposal: 0,
             shuttle: 0,
             landscape: 0,
-            other: 0
-          }
+            other: 0,
+            total: 0
+          },
+
         }
       },
       methods: {
         // write a method that fetch the above datas from localhost:5000
-
+        setLocation() {
+          this.getNoAvailableRooms()
+          this.arrivalAndDeparture()
+        },
 
         async getDashboardData() {
           const location = "<?php echo $_SESSION['user_location'] ?>"
@@ -452,17 +466,17 @@
         async getNoAvailableRooms() {
           await axios.post("dashboardFunctions.php", {
             action: "noRoomsAvailable",
-            location: "Suyper"
+            location: this.location
           }).then((respo) => {
-            this.available = respo.data.available_rooms
-            this.booked = respo.data.booked_rooms
-            // console.log(respo.data);
+            this.available = respo.data.AvailableRooms
+            this.booked = respo.data.booked
+            console.log(respo.data);
           })
         },
         async arrivalAndDeparture() {
           await axios.post("dashboardFunctions.php", {
             action: "arrivalDeparture",
-            location: "Suyper"
+            location: this.location
           }).then((respo) => {
 
             this.arrivals = respo.data.rooms_arriving_today
@@ -484,17 +498,20 @@
 
           <?php  } ?>
 
-          axios.get(`http://localhost:5000/specialRequest/${location}`)
-            .then(response => {
+          axios.post("dashboardFunctions.php", {
+              action: "specialRequest",
+              location: this.location
+            }).then(response => {
               console.log(response.data)
-              this.special.lunch = response.data.lunch || 0
-              this.special.wedding = response.data.wedding || 0
-              this.special.birthday = response.data.birthday || 0
-              this.special.anniversary = response.data.anniversary || 0
-              this.special.proposal = response.data.proposal || 0
-              this.special.shuttle = response.data.shuttle || 0
-              this.special.landscape = response.data.landscape || 0
-              this.special.other = response.data.other || 0
+              this.special.lunch = response.data.lunch_count || 0
+              this.special.wedding = response.data.wedding_count || 0
+              this.special.birthday = response.data.birthday_count || 0
+              this.special.anniversary = response.data.anniversary_count || 0
+              this.special.proposal = response.data.proposal_count || 0
+              this.special.shuttle = response.data.shuttle_count || 0
+              this.special.landscape = response.data.landscape_count || 0
+              this.special.other = response.data.other_count || 0
+              this.special.total = response.data.total_count || 0
             })
             .catch(error => {
               console.log(error)
