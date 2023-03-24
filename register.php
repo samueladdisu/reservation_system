@@ -396,6 +396,7 @@ function cutFromPromo($promo, $price)
             <option disabled value="">Select Option</option>
 <!--             <option value="amole">Credit Card</option> -->
             <option value="chapa_etb">Amole</option>
+            <option value="chapa_etb">Telebirr</option>
             <!-- <option value="telebirr">Telebirr</option> -->
             <option value="chapa_etb">Bank of Abysiniya</option>
             <option value="chapa_etb">CBE Birr</option>
