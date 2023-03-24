@@ -52,23 +52,25 @@
    <!-- Core plugin JavaScript-->
    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-   <script src="vendor/chart.js/Chart.min.js"></script>
+
 
    <!-- data table plugin  -->
 
    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 
-
+   <script src="vendor/chart.js/Chart.min.js"></script>
 
 
    <!-- Custom scripts for all pages-->
    <script src="js/sb-admin-2.js"></script>
    <script src="./js/load.js"></script>
-   <script src="./js/chart.js"></script>
 
+   <!-- <script src="./js/chart.js"></script> -->
 
-
+   <script src="js/demo/chart-area-demo.js"></script>
+   <script src="js/demo/chart-pie-demo.js"></script>
+   <script src="js/demo/chart-bar-demo.js"></script>
 
 
    <script src="./js/room.js"></script>
@@ -105,11 +107,11 @@
        </div>
    </div>
 
-  
+
    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
    <script>
        $(function() {
-        
+
            var dateFormat = "mm/dd/yy";
            var minDatefrom;
 
@@ -132,7 +134,6 @@
            }
 
        });
-     
    </script>
 
    </body>

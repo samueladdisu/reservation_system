@@ -363,20 +363,63 @@
       </footer>
       <!-- End of Footer -->
 
+      <!-- Checkin Modal  -->
+      <div class="modal fade" id="checkedInModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Are you sure the guest checked in?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" @click="CheckedIN" data-dismiss="modal">CheckedIN</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout Modal  -->
+      <div class="modal fade" id="checkedOutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Are you sure the guest checked out?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" @click="CheckedOut" data-dismiss="modal">CheckedOut</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <!-- Delete Modal  -->
       <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Are you sure You want to Delete?</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Cancelation Form?</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body">Select "Delete" to confirm deletion.</div>
+            <div class="modal-body">
+              <textarea name="res_cancel" v-model='reason_cancel' placeholder="Reservation cancellation justification" id="" cols="30" rows="10" class="form-control" required></textarea>
+            </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Delete</button>
+              <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Cancel Reservation</button>
             </div>
           </div>
         </div>
@@ -511,7 +554,8 @@
           dob: '',
           remark: '',
           tempDelete: {},
-          guestInfo: []
+          guestInfo: [],
+          reason_cancel: '',
         }
       },
       methods: {
@@ -570,6 +614,14 @@
                             Edit
                           </a>
                           <div class="dropdown-divider"></div>
+                          <a data-id="${data}" id="checkedIn"  class="dropdown-item text-danger">
+                            CheckedIn
+                          </a>
+                          <div class="dropdown-divider"></div>
+                          <a data-id="${data}" id="checkedOut"  class="dropdown-item text-danger">
+                            CheckedOut
+                          </a>
+                          <div class="dropdown-divider"></div>
                           <a data-id="${data}" id="delete"  class="dropdown-item text-danger">
                             Delete
                           </a>
@@ -588,6 +640,42 @@
           //   let res_id = $(this).data("id")
 
           // })
+
+          $(document).on('click', '#checkedIn', function() {
+            // get room id from the table
+            let ids = $(this).data("id")
+            let temprow = {}
+
+            // filter alldata which is equal to the room id
+            vm.posts.forEach(item => {
+              if (item.res_id == ids) {
+                temprow = item
+              }
+            })
+
+            // assign to temp row
+            vm.tempDelete = temprow
+            console.log("temp row", vm.tempDelete);
+            $('#checkedInModal').modal('show')
+          })
+
+          $(document).on('click', '#checkedOut', function() {
+            // get room id from the table
+            let ids = $(this).data("id")
+            let temprow = {}
+
+            // filter alldata which is equal to the room id
+            vm.posts.forEach(item => {
+              if (item.res_id == ids) {
+                temprow = item
+              }
+            })
+
+            // assign to temp row
+            vm.tempDelete = temprow
+            console.log("temp row", vm.tempDelete);
+            $('#checkedOutModal').modal('show')
+          })
 
           $(document).on('click', '#delete', function() {
             // get room id from the table
@@ -640,10 +728,34 @@
           })
 
         },
+        async CheckedIN() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'checkedIn',
+            row: this.tempDelete,
+            reason: this.reason_cancel,
+            agent_name: '<?php echo $_SESSION['username']; ?>'
+          }).then(res => {
+            console.log(res.data);
+            this.fetchData()
+          })
+        },
+        async CheckedOut() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'checkedOut',
+            row: this.tempDelete,
+            reason: this.reason_cancel,
+            agent_name: '<?php echo $_SESSION['username']; ?>'
+          }).then(res => {
+            console.log(res.data);
+            this.fetchData()
+          })
+        },
         async deleteRes() {
           await axios.post('./includes/backEndreservation.php', {
             action: 'delete',
-            row: this.tempDelete
+            row: this.tempDelete,
+            reason: this.reason_cancel,
+            agent_name: '<?php echo $_SESSION['username']; ?>'
           }).then(res => {
             console.log(res.data);
             this.fetchData()

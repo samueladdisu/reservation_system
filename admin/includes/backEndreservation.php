@@ -138,10 +138,38 @@ if ($incoming->action == "guestInfo") {
   }
   echo json_encode($data);
 }
+
+if ($incoming->action == "checkedIn") {
+  $res_id = $incoming->row->res_id;
+  $group_name = $incoming->row->res_groupName;
+  $group_id = $incoming->row->res_groupID;
+  $reason = $incoming->reason;
+  $agent_name = $incoming->agent_name;
+
+  $delete_query = "UPDATE reservations SET res_status = 'checkedIn' WHERE res_id = $res_id";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
+
+if ($incoming->action == "checkedOut") {
+  $res_id = $incoming->row->res_id;
+  $group_name = $incoming->row->res_groupName;
+  $group_id = $incoming->row->res_groupID;
+  $reason = $incoming->reason;
+  $agent_name = $incoming->agent_name;
+
+  $delete_query = "UPDATE reservations SET res_status = 'checkedOut' WHERE res_id = $res_id";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
 if ($incoming->action == "delete") {
   $res_id = $incoming->row->res_id;
   $group_name = $incoming->row->res_groupName;
   $group_id = $incoming->row->res_groupID;
+  $reason = $incoming->reason;
+  $agent_name = $incoming->agent_name;
+  print_r($reason);
+
   $rooms = array();
 
   if ($group_name == "") {
@@ -176,20 +204,33 @@ if ($incoming->action == "delete") {
       }
     }
 
-    $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
+    // $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
+    // $delete_result = mysqli_query($connection, $delete_query);
+    // confirm($delete_result);
+
+    // $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
+    // $guest_info_result = mysqli_query($connection, $guest_info_query);
+    // confirm($guest_info_result);
+
+    // $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_res_id = $res_id";
+    // $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+    $delete_query = "UPDATE reservations SET res_status = 'Canceled' WHERE res_id = $res_id";
     $delete_result = mysqli_query($connection, $delete_query);
     confirm($delete_result);
 
-    $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
-    $guest_info_result = mysqli_query($connection, $guest_info_query);
-    confirm($guest_info_result);
 
-    $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_res_id = $res_id";
-    $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+    $insert_group_query = "INSERT INTO cancelation_report(cancel_agent, cancel_remark, res_id) ";
 
-    confirm($delete_booked_rooms_result);
+    $insert_group_query .= "VALUES ('Aklile', '$reason', '$res_id')";
 
-    echo json_encode(confirm($delete_booked_rooms_result));
+
+
+    $cancel_result = mysqli_query($connection, $insert_group_query);
+    confirm($cancel_result);
+
+    confirm($cancel_result);
+
+    echo json_encode(confirm($cancel_result));
   } else {
     echo json_encode($incoming->row);
 

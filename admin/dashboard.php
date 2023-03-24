@@ -187,16 +187,22 @@
 
                 </div>
                 <!-- Card Body -->
-                <div class="card-body">
+                <div class="card-body ">
                   <div class="chart-pie pt-4 pb-2">
                     <canvas id="myPieChart"></canvas>
                   </div>
                   <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle" style="color: #4e73df"></i> Homepage banner
+                    <span class=" mr-2">
+                      <i class=" fas fa-circle" style='color: red'></i> Family
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle" style="color: #1cc88a"></i> Homepage Button
+                      <i class=" fas fa-circle" style='color: green'></i> King Size Bed
+                    </span>
+                    <span class="mr-2">
+                      <i class=" fas fa-circle" style='color: blue'></i> Twin Beds
+                    </span>
+                    <span class="mr-2">
+                      <i class=" fas fa-circle" style='color: yellow'></i> King/ Twin
                     </span>
 
                   </div>
@@ -364,6 +370,10 @@
   <script src="js/sb-admin-2.min.js"></script>
   <script src="./js/load.js"></script>
   <script src="./js/room.js"></script>
+  <script src="vendor/chart.js/Chart.min.js"></script>
+  <script src="js/demo/chart-area-demo.js"></script>
+  <script src="js/demo/chart-pie-demo.js"></script>
+  <script src="js/demo/chart-bar-demo.js"></script>
   <div class="modal fade" id="ReportModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -444,6 +454,23 @@
             other: 0,
             total: 0
           },
+          Chartlabel: [{
+              name: "Family",
+              color: "red"
+            },
+            {
+              name: "King Size Bed",
+              color: "#F78304"
+            },
+            {
+              name: "Twin Beds",
+              color: "#000000"
+            },
+            {
+              name: "King/ Twin",
+              color: "#100091"
+            },
+          ]
 
         }
       },

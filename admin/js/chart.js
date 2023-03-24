@@ -139,12 +139,6 @@ paymentStats()
 
     console.log(labels);
     console.log(values);
-
-    
-
-    
-
-
     var ctx1 = document.getElementById("myPieChart");
     var myPieChart = new Chart(ctx1, {
       type: 'doughnut',
