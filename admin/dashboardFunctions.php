@@ -159,3 +159,8 @@ if ($received_data->action == 'specialRequest') {
         echo json_encode($row);
     }
 }
+
+
+if ($received_data->action == 'DonutChart') {
+    $location = $received_data->location;
+}

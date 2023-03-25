@@ -3,7 +3,7 @@
   '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = "#858796";
 
-function getDataDonut() {
+async function getDataDonut () {
   var dta;
   const d = new Date();
   const monthNames = [
@@ -20,7 +20,7 @@ function getDataDonut() {
     "Nov",
     "Dec",
   ];
-  axios
+  await axios
     .post("./js/demo/GetChart.php", {
       action: "DonutChart",
       CMonth: monthNames[d.getMonth()],

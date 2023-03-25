@@ -183,8 +183,15 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Payment Types</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Room Description</h6>
+                  <select name="" id="" v-model="donutLocation" @change="setLocation" class="custom-select col-2">
+                    <option value="all">All</option>
 
+                    <option value="Bishoftu">Bishoftu</option>
+                    <option value="entoto">Entoto</option>
+                    <option value="awash">Awash</option>
+                    <option value="Lake tana">Lake tana</option>
+                  </select>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body ">
@@ -438,6 +445,7 @@
     const dashboardApp = Vue.createApp({
       data() {
         return {
+          donutLocation: "all",
           location: "all",
           available: 0,
           booked: 0,
@@ -482,13 +490,13 @@
         },
 
         async getDashboardData() {
-          const location = "<?php echo $_SESSION['user_location'] ?>"
-          const response = await axios.get(`http://localhost:5000/dailyRoomStatus/${location}`)
-          const data = response.data
-          this.available = data.available
-          this.booked = data.booked
-          this.arrivals = data.arrivals
-          this.departures = data.departures
+          // const location = "<?php echo $_SESSION['user_location'] ?>"
+          // const response = await axios.get(`http://localhost:5000/dailyRoomStatus/${location}`)
+          // const data = response.data
+          // this.available = data.available
+          // this.booked = data.booked
+          // this.arrivals = data.arrivals
+          // this.departures = data.departures
         },
         async getNoAvailableRooms() {
           await axios.post("dashboardFunctions.php", {
@@ -511,6 +519,53 @@
             // console.log(respo.data);
           })
         },
+
+        async getDataDonut() {
+          var dta;
+          const d = new Date();
+
+          await axios
+            .post("dashboardFunctions.php", {
+              action: "DonutChart",
+              location: this.donutLocation
+            })
+            .then((res) => {
+              console.log(res.data);
+
+              var ctx = document.getElementById("myPieChart");
+              var myPieChart = new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                  labels: ["Family", "King Size Bed", "Twin Beds", "King/Twin"],
+                  datasets: [{
+                    data: ['80', '20', '30', '40'],
+                    backgroundColor: ["#000000", "#8b4513", "#CCAE88", "#CCAE88"],
+                    hoverBackgroundColor: ["#000000", "#8b4513", "#CCAE88", "#CCAE88"],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                  }, ],
+                },
+                options: {
+                  maintainAspectRatio: false,
+                  tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#ea8016",
+                    borderColor: "#ea8016",
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                  },
+                  legend: {
+                    display: false,
+                  },
+                  cutoutPercentage: 80,
+                },
+              });
+            });
+        },
+
+
         getSpecialRequests() {
           var location
 
@@ -546,6 +601,7 @@
         }
       },
       mounted() {
+        this.getDataDonut()
         this.getNoAvailableRooms()
         this.arrivalAndDeparture()
         this.getDashboardData()
