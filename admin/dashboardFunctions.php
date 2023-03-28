@@ -163,4 +163,12 @@ if ($received_data->action == 'specialRequest') {
 
 if ($received_data->action == 'DonutChart') {
     $location = $received_data->location;
+    $query = "SELECT rooms.room_acc, COUNT(rooms.room_acc) - COUNT(reservations.res_roomType) AS free_rooms FROM rooms LEFT JOIN reservations ON rooms.room_acc = reservations.res_roomType AND reservations.res_checkin <= CURRENT_DATE() AND reservations.res_checkout >= CURRENT_DATE() AND reservations.res_location = '$location' WHERE
+    rooms.room_location = '$location' GROUP BY rooms.room_acc";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    $row = mysqli_fetch_assoc($update_result);
+    echo json_encode($row);
 }

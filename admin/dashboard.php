@@ -445,7 +445,7 @@
     const dashboardApp = Vue.createApp({
       data() {
         return {
-          donutLocation: "all",
+          donutLocation: "Bishoftu",
           location: "all",
           available: 0,
           booked: 0,
