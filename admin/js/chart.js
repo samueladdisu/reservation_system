@@ -137,8 +137,8 @@ paymentStats()
     const labels = Object.keys(data);
     const values = Object.values(data);
 
-    console.log(labels);
-    console.log(values);
+    // console.log(labels);
+    console.log('Natty' + values);
     var ctx1 = document.getElementById("myPieChart");
     var myPieChart = new Chart(ctx1, {
       type: 'doughnut',

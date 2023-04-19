@@ -57,7 +57,7 @@ function getDataBar() {
       // Bar Chart Example
       var ctx = document.getElementById("myBarChart");
       var myBarChart = new Chart(ctx, {
-        type: "horizontalBar",
+        type: "verticalBar",
         data: {
           labels: [
             "Historical",

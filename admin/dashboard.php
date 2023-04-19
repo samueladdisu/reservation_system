@@ -184,7 +184,7 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Room Description</h6>
-                  <select name="" id="" v-model="donutLocation" @change="setLocation" class="custom-select col-2">
+                  <select name="" id="" v-model="donutLocation" @change="setDonutLocation" class="custom-select col-2">
                     <option value="all">All</option>
 
                     <option value="Bishoftu">Bishoftu</option>
@@ -198,7 +198,7 @@
                   <div class="chart-pie pt-4 pb-2">
                     <canvas id="myPieChart"></canvas>
                   </div>
-                  <div class="mt-4 text-center small">
+                  <!-- <div class="mt-4 text-center small">
                     <span class=" mr-2">
                       <i class=" fas fa-circle" style='color: red'></i> Family
                     </span>
@@ -212,15 +212,19 @@
                       <i class=" fas fa-circle" style='color: yellow'></i> King/ Twin
                     </span>
 
+                  </div> -->
+
+                  <div class="mt-4 text-center small">
+                    <span v-for="(item, index) in items" :key="index" class="mr-2">
+                      <i class="fas fa-circle" :style="{ color: item.color }"></i> {{ item.name }}
+                    </span>
                   </div>
                 </div>
               </div>
-
-
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Bed Chart</h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
@@ -462,6 +466,8 @@
             other: 0,
             total: 0
           },
+          pickedColors: [],
+          roomNames: [],
           Chartlabel: [{
               name: "Family",
               color: "red"
@@ -487,6 +493,14 @@
         setLocation() {
           this.getNoAvailableRooms()
           this.arrivalAndDeparture()
+        },
+        setDonutLocation() {
+          this.getDataDonut()
+        },
+        getColors(length) {
+          let colors = ["#FF5733", "#7D3C98", "#3498DB", "#1ABC9C", "#F1C40F", "#E67E22", "#2ECC71", "#9B59B6", "#2C3E50", "#F39C12", "#16A085", "#8E44AD", "#27AE60", "#2980B9", "#D35400", "#FFC300", "#8B0000", "#FFFF00", "#00FF00", "#00FFFF"];
+
+          return colors.slice(0, length);
         },
 
         async getDashboardData() {
@@ -531,16 +545,26 @@
             })
             .then((res) => {
               console.log(res.data);
+              var roomNames = res.data.map((eachdata) =>
+                eachdata.room_acc
+              )
+              this.roomNames = roomNames
+              var freeRooms = res.data.map((eachdata) =>
+                eachdata.free_rooms
+              )
+
+              var colorsPicked = this.getColors(roomNames.length)
+              this.pickedColors = colorsPicked
 
               var ctx = document.getElementById("myPieChart");
               var myPieChart = new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                  labels: ["Family", "King Size Bed", "Twin Beds", "King/Twin"],
+                  labels: roomNames,
                   datasets: [{
-                    data: ['80', '20', '30', '40'],
-                    backgroundColor: ["#000000", "#8b4513", "#CCAE88", "#CCAE88"],
-                    hoverBackgroundColor: ["#000000", "#8b4513", "#CCAE88", "#CCAE88"],
+                    data: freeRooms,
+                    backgroundColor: colorsPicked,
+                    hoverBackgroundColor: colorsPicked,
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                   }, ],
                 },
@@ -550,11 +574,11 @@
                     backgroundColor: "rgb(255,255,255)",
                     bodyFontColor: "#ea8016",
                     borderColor: "#ea8016",
-                    borderWidth: 1,
-                    xPadding: 15,
-                    yPadding: 15,
+                    borderWidth: 5,
+                    xPadding: 20,
+                    yPadding: 20,
                     displayColors: false,
-                    caretPadding: 10,
+                    caretPadding: 30,
                   },
                   legend: {
                     display: false,
@@ -598,6 +622,15 @@
             .catch(error => {
               console.log(error)
             })
+        }
+      },
+
+      computed: {
+        items() {
+          return this.roomNames.map((name, index) => ({
+            name,
+            color: this.pickedColors[index]
+          }));
         }
       },
       mounted() {

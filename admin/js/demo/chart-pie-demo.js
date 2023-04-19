@@ -36,7 +36,7 @@ async function getDataDonut () {
           labels: ["Family", "King Size Bed", "Twin Beds", "King/Twin"],
           datasets: [
             {
-              data: ['10','20','30','40'],
+              data: ['90','2','30','40'],
               backgroundColor: ["#000000", "#8b4513", "#CCAE88", "#CCAE88"],
               hoverBackgroundColor: ["#000000", "#8b4513", "#CCAE88", "#CCAE88"],
               hoverBorderColor: "rgba(234, 236, 244, 1)",

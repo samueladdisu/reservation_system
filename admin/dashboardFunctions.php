@@ -169,6 +169,10 @@ if ($received_data->action == 'DonutChart') {
     $update_result = mysqli_query($connection, $query);
 
     $exists = mysqli_num_rows($update_result);
-    $row = mysqli_fetch_assoc($update_result);
-    echo json_encode($row);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+        $data[] = $row;
+    }
+
+
+    echo json_encode($data);
 }

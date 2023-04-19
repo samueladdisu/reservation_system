@@ -8,7 +8,7 @@ if ($received->action === "Chart") {
 }
 
 if ($received->action === "DonutChart") {
-    echo json_encode("hello pie");
+    echo json_encode("hello pies");
 }
 
 

@@ -510,9 +510,6 @@ if (isset($_GET['checkout'])) {
                         Bed and Breakfast
                       </label>
                     </div>
-
-
-
                   </div>
                 </form>
               <?php
