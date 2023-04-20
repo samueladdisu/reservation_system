@@ -75,7 +75,7 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                           Rooms</div>
                         <div class='h6 mb-0 mt-2 text-gray-600'>
-                          {{ available }} Available/ {{ booked }} Booked
+                          {{ available }} Available/ {{ booked }} Booked/ {{ cancelation }} Cancelation
                         </div>
                       </div>
                       <div class="col-auto">
@@ -258,7 +258,7 @@
                         <div class="form-group col-6">
                           <label for="location">Location</label>
 
-                          <select v-model="location" @change="getSpecialRequests" class="custom-select">
+                          <select v-model="spec_location" @change="getSpecialRequests" class="custom-select">
 
                             <option value="all">All</option>
                             <option value="boston">Boston</option>
@@ -451,9 +451,11 @@
         return {
           donutLocation: "Bishoftu",
           location: "all",
+          spec_location: "",
           available: 0,
           booked: 0,
           arrivals: 0,
+          cancelation: 0,
           departures: 0,
           special: {
             lunch: 0,
@@ -489,6 +491,17 @@
         }
       },
       methods: {
+        async getCancelation() {
+          await axios.post("dashboardFunctions.php", {
+            action: "cancelation",
+            location: this.location
+          }).then((respo) => {
+            console.log(respo.data);
+            this.cancelation = respo.data.canceled
+
+
+          })
+        },
         // write a method that fetch the above datas from localhost:5000
         setLocation() {
           this.getNoAvailableRooms()
@@ -597,7 +610,7 @@
 
           if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
           ?>
-            location = this.location
+            location = this.spec_location
           <?php } else { ?>
 
             location = "<?php echo $_SESSION['user_location'] ?>"
@@ -622,6 +635,107 @@
             .catch(error => {
               console.log(error)
             })
+        },
+
+        drawBarGraph() {
+          axios.post("dashboardFunctions.php", {
+            action: "specialRequest",
+            location: this.location
+          }).then(response => {
+            var colorsPicked = this.getColors(6)
+            var ctx = document.getElementById("myBarChart");
+            var myBarChart = new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: [
+                  "a", "b", "c", "c", "f", "h"
+                ],
+                datasets: [{
+                  label: "Number of Orders",
+                  backgroundColor: "#ea8016",
+                  hoverBackgroundColor: "#c08d00bf",
+                  borderColor: "#4e73df",
+                  data: [
+                    0,
+                    10, 5, 53, 12, 56
+
+                  ],
+                }, ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                indexAxis: "y",
+
+                layout: {
+                  padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0,
+                  },
+                },
+                scales: {
+                  yAxes: [{
+                    time: {
+                      unit: "Shop",
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    },
+                    ticks: {
+                      maxTicksLimit: 21,
+                      padding: 10,
+                    },
+
+                    maxBarThickness: 90,
+                  }, ],
+                  xAxes: [{
+                    ticks: {
+                      maxTicksLimit: 10,
+                      padding: 10,
+                      // Include a dollar sign in the ticks
+                      callback: function(value, index, values) {
+                        return "#" + number_format(value);
+                      },
+                    },
+                    gridLines: {
+                      color: "rgb(0, 236, 244)",
+                      zeroLineColor: "rgb(234, 236, 244)",
+                      drawBorder: false,
+                      borderDash: [2],
+                      zeroLineBorderDash: [2],
+                    },
+                  }, ],
+                },
+                legend: {
+                  display: false,
+                },
+                tooltips: {
+                  titleMarginBottom: 10,
+                  titleFontColor: "#6e707e",
+                  titleFontSize: 14,
+                  backgroundColor: "rgb(255,255,255)",
+                  bodyFontColor: "#000000",
+                  borderColor: "#000000",
+                  borderWidth: 1,
+                  xPadding: 15,
+                  yPadding: 15,
+                  displayColors: false,
+                  caretPadding: 10,
+                  callbacks: {
+                    label: function(tooltipItem, chart) {
+                      var datasetLabel =
+                        chart.datasets[tooltipItem.datasetIndex].label || "";
+                      return datasetLabel + ": #" + number_format(tooltipItem.xLabel);
+                    },
+                  },
+                },
+              },
+            })
+
+
+          })
         }
       },
 
@@ -639,6 +753,8 @@
         this.arrivalAndDeparture()
         this.getDashboardData()
         this.getSpecialRequests()
+        this.drawBarGraph()
+        this.getCancelation()
       }
 
     })

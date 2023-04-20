@@ -692,6 +692,7 @@ if ($received_data->action === 'Newadd') {
   $Dineer = $form->group_Dinner;
   $LunchNum  = $form->group_Lunch;
   $status = $form->group_status;
+
   $group_rooms = json_encode($rooms);
   $Roomquantity = count($rooms);
 
@@ -701,7 +702,7 @@ if ($received_data->action === 'Newadd') {
   $extraBed = 0.00;
   $teaBreak = 0.00;
   $LunchBBQ = 0.00;
-
+  $filepath = "garantes/";
 
   $price = 0.00;
   // calculate number of days
@@ -975,14 +976,46 @@ if ($received_data->action === 'Newadd') {
   $group_rooms = json_encode($rooms);
   $quantity = count($rooms);
 
-  $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location) ";
+  if ($form->group_paymentStatus == "Guaranteed") {
 
-  $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}')";
+    if (isset($_FILES['file'])) {
+      // Your desired directory
 
-  $result = mysqli_query($connection, $query);
-  confirm($result);
+      if (!file_exists($filepath)) {
+        mkdir($target_dir, 0777, true);
+      }
+      $target_file = $filepath . basename($_FILES["file"]["name"]);
 
-  echo json_encode($result);
+
+
+      if ($res = move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+        $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location, garante_file) ";
+
+        $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}', '{$target_file}')";
+
+        $result = mysqli_query($connection, $query);
+        confirm($result);
+
+        echo json_encode($target_file);
+      } else {
+
+        echo json_encode($res);
+        // Error uploading file
+      }
+    } else {
+      $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location) ";
+
+      $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}')";
+
+      $result = mysqli_query($connection, $query);
+      confirm($result);
+
+      echo json_encode($result);
+    }
+  }
+
+
+
 
   $data = true;
 

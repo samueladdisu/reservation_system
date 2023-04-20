@@ -176,3 +176,17 @@ if ($received_data->action == 'DonutChart') {
 
     echo json_encode($data);
 }
+
+
+if ($received_data->action == 'cancelation') {
+    $location = $received_data->location;
+    $query = "SELECT COUNT(*) AS canceled FROM reservations WHERE res_status = 'Canceled' AND res_checkin = CURDATE() AND res_location = '$location'";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    $row = mysqli_fetch_assoc($update_result);
+
+
+    echo json_encode($row);
+}
