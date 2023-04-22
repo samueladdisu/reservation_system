@@ -410,7 +410,7 @@ if (!isset($_SESSION['user_role'])) {
                         </div>-->
                         <div class="form-group col-6" :class="{ 'd-none': formData.group_paymentStatus !== 'Guaranteed', 'd-block':formData.group_paymentStatus == 'Guaranteed' }" style="width:30rem">
                           <label>Attachments</label>
-                          <input type="file" @change="onFileChange" />
+                          <input type="file" ref="file" />
                           <p v-if="fileSizeExceeded" style="color:red">File size exceeds 20MB limit</p>
                           <p v-else-if="file">File size: {{ getFileSize(file.size) }}</p>
                         </div>
@@ -747,7 +747,6 @@ if (!isset($_SESSION['user_role'])) {
             custom_Lunch: '',
             custom_Breakfast: '',
             custom_Extrabed: '',
-            file: null
           },
           bookedRooms: [],
           selectAllRoom: false,
@@ -764,7 +763,9 @@ if (!isset($_SESSION['user_role'])) {
           if (file.size > 20000000) {
             this.fileSizeExceeded = true;
           } else {
-            this.file = file;
+
+            this.file = event.target.files[0];
+            // this.formData.file = file;
             this.fileSizeExceeded = false;
           }
         },
@@ -928,7 +929,10 @@ if (!isset($_SESSION['user_role'])) {
           return Object.keys(obj).length === 0;
         },
         async addbulk() {
+          file = app.$refs.file.files[0];
 
+
+          formData.append('file', $refs.file.files[0]);
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
             console.log(start);
@@ -941,7 +945,7 @@ if (!isset($_SESSION['user_role'])) {
 
               if (capacity >= this.formData.group_GNum) {
                 $('#success_tic').modal('show')
-
+                console.log("file maybe", this.file)
                 await axios.post('group_res.php', {
                   action: 'Newadd',
                   checkin: start,
@@ -949,10 +953,11 @@ if (!isset($_SESSION['user_role'])) {
                   rooms: this.bookedRooms,
                   form: this.formData,
                   RoomNum: this.room_quantity,
-                  location: this.location
+                  location: this.location,
+                  gfile: formDatas
                 }, {
                   headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                   }
                 }).then(res => {
                   // window.location.href = 'view_bulk_reservations.php'
