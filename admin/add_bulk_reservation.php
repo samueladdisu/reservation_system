@@ -9,6 +9,20 @@ if (!isset($_SESSION['user_role'])) {
   header("Location: ./index.php");
 }
 
+if (isset($_FILES['file'])) {
+
+$diractory = 'uploads/';
+$name = $_FILES['file']['name'];
+$filename = basename($name);
+$extension = pathinfo($filename, PATHINFO_EXTENSION);
+if (!file_exists($diractory)) {
+  mkdir($diractory, 0777, true);
+}
+$target_file = $_POST['savedDiractory']. '.' . $extension ;
+  move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
+  echo json_encode($name);
+  return $name;
+}
 
 
 ?>
@@ -410,7 +424,7 @@ if (!isset($_SESSION['user_role'])) {
                         </div>-->
                         <div class="form-group col-6" :class="{ 'd-none': formData.group_paymentStatus !== 'Guaranteed', 'd-block':formData.group_paymentStatus == 'Guaranteed' }" style="width:30rem">
                           <label>Attachments</label>
-                          <input type="file" ref="file" />
+                          <input type="file" @change="onFileChange" name="file" id="file" class="form-control" />
                           <p v-if="fileSizeExceeded" style="color:red">File size exceeds 20MB limit</p>
                           <p v-else-if="file">File size: {{ getFileSize(file.size) }}</p>
                         </div>
@@ -726,7 +740,7 @@ if (!isset($_SESSION['user_role'])) {
           custom: false,
           chekedList: false,
           defualt_value: '',
-
+          pathSaved: '',
           types: [],
           formData: {
             group_name: '',
@@ -751,7 +765,7 @@ if (!isset($_SESSION['user_role'])) {
           bookedRooms: [],
           selectAllRoom: false,
           allData: [],
-          file: null,
+          file: '',
           fileSizeExceeded: false,
 
         }
@@ -929,10 +943,7 @@ if (!isset($_SESSION['user_role'])) {
           return Object.keys(obj).length === 0;
         },
         async addbulk() {
-          file = app.$refs.file.files[0];
-
-
-          formData.append('file', $refs.file.files[0]);
+         
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
             console.log(start);
@@ -954,16 +965,26 @@ if (!isset($_SESSION['user_role'])) {
                   form: this.formData,
                   RoomNum: this.room_quantity,
                   location: this.location,
-                  gfile: formDatas
-                }, {
-                  headers: {
-                    'Content-Type': 'application/json'
-                  }
-                }).then(res => {
+                 
+                }).then(async res => {
                   // window.location.href = 'view_bulk_reservations.php'
-                  console.log(res.data);
+console.log(res.data)
 
-                  if (res.data == true) {
+                  if(this.formData.group_paymentStatus == "Guaranteed"){
+                    const formData = new FormData();
+                  formData.append('file', this.file);
+                  formData.append('savedDiractory', res.data);
+
+                  console.log(formData);
+                    await axios.post('add_bulk_reservation.php', formData, {                      
+                                  headers: {                                        
+                                   'Content-Type': 'multipart/form-data' 
+                                   }}).then(res => {
+                                     console.log(res.data);
+                 } )
+                  }else{
+
+                    if (res.data == true) {
                     this.spinner = false
                     this.success = true
                     this.bookedRooms = []
@@ -971,6 +992,11 @@ if (!isset($_SESSION['user_role'])) {
                     this.room_quantity = ''
                     this.location = ''
                   }
+                  }
+                 
+      
+                
+
                 })
               } else {
                 alert("Rooms capacity exceeded reduce guest number!")

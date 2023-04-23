@@ -682,8 +682,7 @@ if ($received_data->action === 'Newadd') {
   $form = $received_data->form;
   $reason = $received_data->form->group_reason;
   $location =  $received_data->location;
-  $Gfile =  $received_data->gfile;
-  echo json_encode($received_data);
+
   $created_at = date('Y-m-d H:i:s');
 
   $placement = [];
@@ -979,17 +978,9 @@ if ($received_data->action === 'Newadd') {
 
 
   if ($form->group_paymentStatus == "Guaranteed") {
-    echo json_encode($Gfile);
-    $filepath = "garantes/";
-    echo json_encode($_FILES['gfile']);
-    // Your desired directory
+    $random_string = bin2hex(random_bytes(5));
+    $target_file = "uploads/" . $random_string ;
 
-    if (!file_exists($filepath)) {
-      mkdir($filepath, 0777, true);
-    }
-    // $file = $_FILES['Gfile'];
-    $target_file = $filepath . basename($Gfile['file']['name']);
-    if (move_uploaded_file($Gfile['file']['tmp_name'], $target_file)) {
       $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location, garante_file) ";
 
       $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}', '{$target_file}')";
@@ -998,11 +989,7 @@ if ($received_data->action === 'Newadd') {
       confirm($result);
 
       echo json_encode($target_file);
-    } else {
-
-      echo json_encode($res);
-      // Error uploading file
-    }
+    
   } else {
     $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location) ";
 

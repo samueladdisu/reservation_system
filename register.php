@@ -395,6 +395,9 @@ function cutFromPromo($promo, $price)
           <select required id="inputState" value="<?php echo isset($params['res_paymentMethod']) ? $params['res_paymentMethod'] : '';   ?>" name="res_paymentMethod" class="form-select">
             <option disabled value="">Select Option</option>
 <!--             <option value="amole">Credit Card</option> -->
+<?php if ($slocation == "entoto") { ?>
+             <option value="amole">Credit Card</option> 
+<?php } ?>
             <option value="chapa_etb">Amole</option>
             <option value="chapa_etb">Telebirr</option>
             <!-- <option value="telebirr">Telebirr</option> -->
