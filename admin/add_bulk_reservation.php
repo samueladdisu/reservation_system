@@ -980,7 +980,12 @@ console.log(res.data)
                                   headers: {                                        
                                    'Content-Type': 'multipart/form-data' 
                                    }}).then(res => {
-                                     console.log(res.data);
+                                    this.spinner = false
+                    this.success = true
+                    this.bookedRooms = []
+                    this.formData = {}
+                    this.room_quantity = ''
+                    this.location = ''
                  } )
                   }else{
 

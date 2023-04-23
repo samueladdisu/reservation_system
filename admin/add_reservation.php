@@ -19,7 +19,20 @@
         <!-- Topbar -->
         <?php include './includes/topbar.php'; ?>
         <!-- End of Topbar -->
+<?php    if (isset($_FILES['file'])) {
 
+$diractory = 'uploads/';
+$name = $_FILES['file']['name'];
+$filename = basename($name);
+$extension = pathinfo($filename, PATHINFO_EXTENSION);
+if (!file_exists($diractory)) {
+  mkdir($diractory, 0777, true);
+}
+$target_file = $_POST['savedDiractory']. '.' . $extension ;
+  move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
+  echo json_encode($name);
+  return $name;
+}?>
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -506,11 +519,12 @@
                         <div class="form-group col-6">
                           <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" required>
                             <option value="">Payment Status*</option>
+                            <option value="AA Paid">AA Paid</option>
                             <option value="paid">Paid</option>
                             <option value="pending_payment">pending payment</option>
                           </select>
                         </div>
-
+                   
 
 
                         <div class="form-group col-6">
@@ -529,6 +543,12 @@
                           </div>
 
 
+                        </div>
+                        <div class="form-group col-6" :class="{ 'd-none': formData.res_paymentStatus !== 'AA Paid', 'd-block':formData.res_paymentStatus == 'AA Paid' }" style="width:30rem">
+                          <label>Attachments</label>
+                          <input type="file" @change="onFileChange" name="file" id="file" class="form-control" />
+                          <p v-if="fileSizeExceeded" style="color:red">File size exceeds 20MB limit</p>
+                          <p v-else-if="file">File size: {{ getFileSize(file.size) }}</p>
                         </div>
 
                         <div class="form-group col-12">
@@ -866,6 +886,8 @@
           res_adults: '',
           res_teen: '',
           res_kid: '',
+          file:'',
+          fileSizeExceeded: false
         }
 
       },
@@ -888,6 +910,26 @@
         }
       },
       methods: {
+        onFileChange(event) {
+          const file = event.target.files[0];
+          if (file.size > 20000000) {
+            this.fileSizeExceeded = true;
+          } else {
+
+            this.file = event.target.files[0];
+            // this.formData.file = file;
+            this.fileSizeExceeded = false;
+          }
+        },
+        getFileSize(size) {
+          const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+          let unitIndex = 0;
+          while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+          }
+          return `${size.toFixed(2)} ${units[unitIndex]}`;
+        },
         async checkLocationLoaded() {
           if (document.getElementById("hiddenlocation").value) {
             let location = document.getElementById("hiddenlocation").value
@@ -1316,10 +1358,31 @@
                 checkin: start,
                 checkout: end,
                 rooms: this.cart,
-              }).then(res => {
+              }).then(async res => {
                 // window.location.href = 'view_all_reservations.php'
                 console.log(res.data);
-                if (res.data == true) {
+                if(this.formData.res_paymentStatus == 'AA Paid'){
+                  const formData = new FormData();
+                  formData.append('file', this.file);
+                  formData.append('savedDiractory', res.data);
+
+                  console.log(formData);
+                  await axios.post('add_reservation.php', formData, {                      
+                                  headers: {                                        
+                                   'Content-Type': 'multipart/form-data' 
+                                   }}).then(res => {
+                                    this.spinner = false
+                    this.success = true
+                    this.bookedRooms = []
+                    this.formData = {}
+                    this.room_quantity = ''
+                    this.location = ''
+                    setTimeout(() => {
+                    window.location.href = "./view_all_reservations.php"
+                  }, 2000)
+                 } )
+                }else{
+                  if (res.data == true) {
                   this.spinner = false
                   this.success = true
                   this.formData = {}
@@ -1335,6 +1398,8 @@
                 } else {
 
                 }
+                }
+              
 
 
               })
