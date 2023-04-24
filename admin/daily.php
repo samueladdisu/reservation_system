@@ -606,31 +606,64 @@
                 </div>
               </div>
 
-            </div>
-          </div>
 
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Cancelation Report</h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table display table-bordered" width="100%" id="viewCancelationTable" cellspacing="0">
+
+
+                      <thead>
+                        <tr>
+                          <th>cancel_date</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Room Number</th>
+
+                          <th>Location</th>
+                          <th>Agent</th>
+                          <th>Reason</th>
+
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <!-- /.container-fluid -->
 
       </div>
-      <!-- End of Main Content -->
-
-
-
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Kuriftu resorts 2022. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
-
-
+      <!-- /.container-fluid -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
+
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>Copyright &copy; Kuriftu resorts 2022. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
+
+
+
+  </div>
+  <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->
@@ -718,7 +751,8 @@
           dob: '',
           remark: '',
           tempDelete: {},
-          guestInfo: []
+          guestInfo: [],
+          cancelation: []
         }
       },
       methods: {
@@ -1220,6 +1254,9 @@
           });
 
 
+
+
+
           let vm = this
           $(document).on('click', '#add', function() {
             // get room id from the table
@@ -1278,6 +1315,51 @@
 
 
         },
+
+
+        tableCancel(row) {
+          $('#viewCancelationTable').DataTable({
+            destroy: true,
+            dom: 'lBfrtip',
+            buttons: [
+              'excel',
+              'print',
+              'csv'
+            ],
+            order: [
+              [0, 'desc']
+            ],
+            data: row,
+            columns: [{
+                data: 'cancel_date'
+              },
+              {
+                data: 'res_firstname'
+              },
+              {
+                data: 'res_lastname'
+              },
+              {
+                data: 'res_roomNo'
+              },
+              {
+                data: 'res_location'
+              },
+              {
+                data: 'cancel_agent'
+              },
+              {
+                data: 'cancel_remark'
+              },
+
+            ],
+          });
+
+        },
+
+
+
+
         async fetchGuestinfo() {
           await axios.post('group_res.php', {
             action: 'guestInfo',
@@ -1288,6 +1370,21 @@
             this.guestInfo = res.data
           })
         },
+
+        async fetchCancelation() {
+          await axios.post('group_res.php', {
+            action: 'guestCancelation',
+
+          }).then(res => {
+            console.log("Reseravation", res.data);
+            this.tableCancel(res.data);
+
+            // this.guestInfo = res.data
+          })
+        },
+
+
+
         async getRooms(id) {
           console.log(id);
           await axios.post('group_res.php', {
@@ -1387,7 +1484,7 @@
             action: 'fetchResDaily'
           }).then(res => {
             console.log("comes from api", res.data);
-        
+
             if (res.data === "empty") {
               this.allData = {}
               this.table({})
@@ -1402,6 +1499,7 @@
       },
       created() {
         this.fetchData()
+        this.fetchCancelation()
       }
     })
 

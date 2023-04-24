@@ -648,16 +648,15 @@
               type: "bar",
               data: {
                 labels: [
-                  "a", "b", "c", "c", "f", "h"
+                  "arrivals", "departures", "cancelation"
                 ],
                 datasets: [{
-                  label: "Number of Orders",
+                  label: "Booking",
                   backgroundColor: "#ea8016",
                   hoverBackgroundColor: "#c08d00bf",
                   borderColor: "#4e73df",
                   data: [
-                    0,
-                    10, 5, 53, 12, 56
+                    0, 1, 2
 
                   ],
                 }, ],
@@ -675,7 +674,7 @@
                   },
                 },
                 scales: {
-                  yAxes: [{
+                  xAxes: [{
                     time: {
                       unit: "Shop",
                     },
@@ -690,7 +689,7 @@
 
                     maxBarThickness: 90,
                   }, ],
-                  xAxes: [{
+                  yAxes: [{
                     ticks: {
                       maxTicksLimit: 10,
                       padding: 10,
@@ -727,7 +726,7 @@
                     label: function(tooltipItem, chart) {
                       var datasetLabel =
                         chart.datasets[tooltipItem.datasetIndex].label || "";
-                      return datasetLabel + ": #" + number_format(tooltipItem.xLabel);
+                      return datasetLabel + ": #" + number_format(tooltipItem.yLabel);
                     },
                   },
                 },

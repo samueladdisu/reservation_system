@@ -65,6 +65,7 @@
                                 <th>Check in</th>
                                 <th>Check out</th>
                                 <th>Reason</th>
+                                <th>Payment Status</th>
                                 <th>Remark</th>
                                 <th>Location</th>
                                 <th>Total Price</th>
@@ -234,10 +235,12 @@
                     <h5 class="modal-title" id="exampleModalLongTitle">Select Room
 
                     </h5>
+
                     <button type="button" class="close" data-dismiss="modal">
                       <span>&times;</span>
                     </button>
                   </div>
+
                   <div class="modal-body">
                     <div class="container-fluid">
 
@@ -281,16 +284,14 @@
                     <h5 class="modal-title" id="exampleModalLongTitle">Select Room
 
                     </h5>
+
                     <button type="button" class="close" data-dismiss="modal">
                       <span>&times;</span>
                     </button>
+
                   </div>
                   <div class="modal-body">
                     <div class="container-fluid">
-
-
-
-
                       <div class="table-responsive">
 
                         <table class="table display table-bordered table-hover" id="viewGroupRooms" width="100%" cellspacing="0">
@@ -414,6 +415,10 @@
             });
           })
 
+          function downloadDocument(row) {
+            // Get the ID or other necessary data from the row
+            console.log(row)
+          }
 
 
 
@@ -438,7 +443,9 @@
                 tempDelete: {},
                 g_res_id: '',
                 group_name: '',
-                rooms: {}
+                rooms: {},
+                pats: '',
+                payStatus: ''
               }
             },
             methods: {
@@ -485,6 +492,33 @@
                           return `Wedding`
                         }
 
+                      }
+                    },
+                    {
+                      data: 'group_paymentStatus',
+                      render: function(data, type, row) {
+                        if (data == 'Guaranteed') {
+                          var id = 'download-btn-' + row.group_id; // Generate a unique ID for the button
+                          var buttonHtml = `<button id="${id}" type="button" class="btn btn-primary 0px -0px" style="margin-bottom: 10px" >
+                          Download
+                        </button>`; // Create the button element with the unique ID
+                          setTimeout(function() {
+                            // Attach an event listener to the button
+                            var button = document.getElementById(id);
+                            button.addEventListener('click', function() {
+
+                              const link = document.createElement('a');
+                              link.href = row.garante_file;
+                              link.setAttribute('download', '');
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            });
+                          }, 0);
+                          return buttonHtml;
+                        } else {
+                          return data;
+                        }
                       }
                     },
                     {
@@ -580,6 +614,9 @@
                   // console.log("temp row", vm.tempRow);
 
                   let ids = $(this).data("id")
+                  vm.payStatus = $(this).data("group_location")
+                  console.log("pay status", vm.payStatus);
+                  vm.pats = $(this).data("group_paymentStatus")
                   let temprow = {}
                   vm.g_res_id = ids
                   // filter alldata which is equal to the room id
@@ -610,6 +647,7 @@
                   this.table(res.data)
                 })
               },
+
               async fetchGuestinfo() {
                 await axios.post('group_res.php', {
                   action: 'guestInfo',

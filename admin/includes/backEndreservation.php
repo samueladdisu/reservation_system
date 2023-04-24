@@ -13,9 +13,9 @@ $filterd_data = array();
 if ($incoming->action == 'fetchRes') {
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
     // $query = "SELECT * FROM reservations ORDER BY res_id DESC";
-    $query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() AND res_status !='Canceled' ORDER BY res_id DESC";
   } else {
-    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE() ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE() AND res_status !='Canceled ORDER BY res_id DESC";
   }
 
   $result = mysqli_query($connection, $query);
@@ -151,6 +151,13 @@ if ($incoming->action == "checkedIn") {
   confirm($delete_result);
 }
 
+if ($incoming->action == "UpdateRate") {
+  $rate = $incoming->rate;
+  $delete_query = "UPDATE convertusd SET rate = $rate, dateUpdated = CURDATE() WHERE rate_id = 1";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
+
 if ($incoming->action == "checkedOut") {
   $res_id = $incoming->row->res_id;
   $group_name = $incoming->row->res_groupName;
@@ -277,11 +284,11 @@ if ($incoming->action == "roomStatus") {
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
     LEFT JOIN reservations AS res
-    ON res.res_id = b.b_res_id
+    ON res.res_id = b.b_res_id AND res.res_status != 'Canceled'
     LEFT JOIN group_reservation AS gr
     ON gr.group_id = b.b_group_res_id
     LEFT JOIN guest_info AS g
-    ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId";
+    ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId;";
   } else {
 
     $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, gr.group_name, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
@@ -289,7 +296,7 @@ if ($incoming->action == "roomStatus") {
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
     LEFT JOIN reservations AS res
-    ON res.res_id = b.b_res_id
+    ON res.res_id = b.b_res_id AND res.res_status != 'Canceled'
     LEFT JOIN group_reservation AS gr
     ON gr.group_id = b.b_group_res_id
     LEFT JOIN guest_info AS g

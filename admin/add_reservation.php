@@ -19,20 +19,20 @@
         <!-- Topbar -->
         <?php include './includes/topbar.php'; ?>
         <!-- End of Topbar -->
-<?php    if (isset($_FILES['file'])) {
+        <?php if (isset($_FILES['file'])) {
 
-$diractory = 'uploads/';
-$name = $_FILES['file']['name'];
-$filename = basename($name);
-$extension = pathinfo($filename, PATHINFO_EXTENSION);
-if (!file_exists($diractory)) {
-  mkdir($diractory, 0777, true);
-}
-$target_file = $_POST['savedDiractory']. '.' . $extension ;
-  move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
-  echo json_encode($name);
-  return $name;
-}?>
+          $diractory = 'uploads/';
+          $name = $_FILES['file']['name'];
+          $filename = basename($name);
+          $extension = pathinfo($filename, PATHINFO_EXTENSION);
+          if (!file_exists($diractory)) {
+            mkdir($diractory, 0777, true);
+          }
+          $target_file = $_POST['savedDiractory'] ;
+          move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
+          echo json_encode($name);
+          return $name;
+        } ?>
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -524,7 +524,7 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
                             <option value="pending_payment">pending payment</option>
                           </select>
                         </div>
-                   
+
 
 
                         <div class="form-group col-6">
@@ -886,8 +886,9 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
           res_adults: '',
           res_teen: '',
           res_kid: '',
-          file:'',
-          fileSizeExceeded: false
+          file: '',
+          fileSizeExceeded: false,
+          ext: ''
         }
 
       },
@@ -917,6 +918,8 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
           } else {
 
             this.file = event.target.files[0];
+            var fileExtension = this.file.name;
+            this.ext = fileExtension.split('.').pop();
             // this.formData.file = file;
             this.fileSizeExceeded = false;
           }
@@ -1358,48 +1361,50 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
                 checkin: start,
                 checkout: end,
                 rooms: this.cart,
+                EXT: this.ext
               }).then(async res => {
                 // window.location.href = 'view_all_reservations.php'
                 console.log(res.data);
-                if(this.formData.res_paymentStatus == 'AA Paid'){
+                if (this.formData.res_paymentStatus == 'AA Paid') {
                   const formData = new FormData();
                   formData.append('file', this.file);
                   formData.append('savedDiractory', res.data);
 
                   console.log(formData);
-                  await axios.post('add_reservation.php', formData, {                      
-                                  headers: {                                        
-                                   'Content-Type': 'multipart/form-data' 
-                                   }}).then(res => {
-                                    this.spinner = false
+                  await axios.post('add_reservation.php', formData, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  }).then(res => {
+                    this.spinner = false
                     this.success = true
                     this.bookedRooms = []
                     this.formData = {}
                     this.room_quantity = ''
                     this.location = ''
                     setTimeout(() => {
-                    window.location.href = "./view_all_reservations.php"
-                  }, 2000)
-                 } )
-                }else{
-                  if (res.data == true) {
-                  this.spinner = false
-                  this.success = true
-                  this.formData = {}
-                  this.cart = {}
-                  console.log("Selected room", this.cart);
-                  console.log("check in", start);
-                  console.log("check out", end);
-                  console.log("Form Data", this.formData);
-
-                  setTimeout(() => {
-                    window.location.href = "./view_all_reservations.php"
-                  }, 2000)
+                      window.location.href = "./view_all_reservations.php"
+                    }, 2000)
+                  })
                 } else {
+                  if (res.data == true) {
+                    this.spinner = false
+                    this.success = true
+                    this.formData = {}
+                    this.cart = {}
+                    console.log("Selected room", this.cart);
+                    console.log("check in", start);
+                    console.log("check out", end);
+                    console.log("Form Data", this.formData);
 
+                    setTimeout(() => {
+                      window.location.href = "./view_all_reservations.php"
+                    }, 2000)
+                  } else {
+
+                  }
                 }
-                }
-              
+
 
 
               })

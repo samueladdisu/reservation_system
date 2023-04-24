@@ -181,6 +181,33 @@ if ($received_data->action == "fetchResDaily") {
   }
 }
 
+if ($received_data->action == "guestCancelation") {
+
+  // change the query pls 
+  $date = date('Y-m-d');
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM reservations INNER JOIN cancelation_report ON reservations.res_id = cancelation_report.res_id WHERE reservations.res_checkin = CURDATE()";
+  } else {
+    $query = "SELECT * FROM reservations INNER JOIN cancelation_report ON reservations.res_id = cancelation_report.res_id WHERE reservations.res_checkin = CURDATE() AND r.res_location = '$location'";
+  }
+
+
+  $result = mysqli_query($connection, $query);
+
+  $exists = mysqli_num_rows($result);
+
+  if ($exists > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+      $data[] = $row;
+    }
+
+    echo json_encode($data);
+  } else {
+    echo json_encode("empty");
+  }
+}
+
 if ($received_data->action == "guestInfo") {
   $id = $received_data->id;
   $query = "SELECT * FROM group_reservation WHERE group_id = $id";
@@ -979,17 +1006,16 @@ if ($received_data->action === 'Newadd') {
 
   if ($form->group_paymentStatus == "Guaranteed") {
     $random_string = bin2hex(random_bytes(5));
-    $target_file = "uploads/" . $random_string ;
+    $target_file = "uploads/" . $random_string . "." . $received_data->EXT;
 
-      $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location, garante_file) ";
+    $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location, garante_file) ";
 
-      $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}', '{$target_file}')";
+    $query .= "VALUES ('{$form->group_name}', $gustNum, $quantity, $quantity, '{$checkin}', '{$checkout}', '{$form->group_paymentStatus}', '{$form->group_reason}', $price, '{$form->group_remark}', '{$res_agent}', '{$group_location}', '{$target_file}')";
 
-      $result = mysqli_query($connection, $query);
-      confirm($result);
+    $result = mysqli_query($connection, $query);
+    confirm($result);
 
-      echo json_encode($target_file);
-    
+    echo json_encode($target_file);
   } else {
     $query = "INSERT INTO group_reservation(group_name, group_guest, group_roomQuantity, group_remainingRooms, group_checkin, group_checkout, group_paymentStatus, group_reason, group_price, group_remark, group_agent, group_location) ";
 

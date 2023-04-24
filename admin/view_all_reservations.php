@@ -51,11 +51,12 @@
                               <th>Id</th>
                               <th>Date</th>
                               <th>Rate</th>
+                              <th>Update</th>
                             </tr>
                           </thead>
                           <?php
 
-                          $ex_query = "SELECT * FROM exchage_rates ORDER BY id DESC";
+                          $ex_query = "SELECT * FROM convertusd";
                           $ex_result = mysqli_query($connection, $ex_query);
 
                           confirm($ex_result);
@@ -63,9 +64,12 @@
                           while ($row = mysqli_fetch_assoc($ex_result)) {
                           ?>
                             <tr>
-                              <td><?php echo $row['id'] ?></td>
-                              <td><?php echo $row['date'] ?></td>
+                              <td><?php echo $row['rate_id'] ?></td>
+                              <td><?php echo $row['dateUpdated'] ?></td>
                               <td><?php echo $row['rate'] ?></td>
+                              <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exchangeUpdater">
+                                  Update Rates
+                                </button></td>
                             </tr>
                           <?php
                           }
@@ -76,6 +80,29 @@
                       </div>
                     </div>
 
+                  </div>
+                </div>
+              </div>
+              <!-- Modal 2 -->
+
+              <div class="modal fade" id="exchangeUpdater" tabindex="-1" role="dialog" aria-labelledby="exchangeUpdaterTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exchangeUpdaterTitle">Update Todays Rate</h5>
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+                    <h5 style="margin-left: 10px; ">Insert Todays Rate</h5>
+
+                    <div class="modal-body">
+                      <input name="res_cancel" v-model='todaysRate' placeholder="Todays Rate" id="" cols="30" rows="10" class="form-control" required></input>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                      <button class="btn btn-primary" @click="UpdateRate" data-dismiss="modal">Update Rate</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -323,6 +350,10 @@
                     <li class="list-group-item"> <strong>Confirm ID:</strong> {{ tempRow.res_confirmID }}</li>
                     <li class="list-group-item"> <strong> Special Request: </strong>{{ tempRow.res_specialRequest }}</li>
                     <li class="list-group-item"> <strong>Payment Status:</strong> {{ tempRow.res_paymentStatus }}</li>
+                    <li v-if="tempRow.res_paymentStatus=='AA Paid'" class="list-group-item"> <strong>Download Document:</strong><button type="button" class="btn btn-primary" @click="downloadDoc(tempRow.upload_AA)">
+                        Document
+                      </button></li>
+
                     <li class="list-group-item"> <strong>Check out:</strong> {{ tempRow.res_checkout }}</li>
                     <li class="list-group-item"> <strong>Booked At:</strong> {{ tempRow.created_at }}</li>
                   </ul>
@@ -556,6 +587,7 @@
           tempDelete: {},
           guestInfo: [],
           reason_cancel: '',
+          todaysRate: 0.00
         }
       },
       methods: {
@@ -623,7 +655,7 @@
                           </a>
                           <div class="dropdown-divider"></div>
                           <a data-id="${data}" id="delete"  class="dropdown-item text-danger">
-                            Delete
+                            Cancel
                           </a>
 
                         </div>
@@ -746,6 +778,7 @@
             reason: this.reason_cancel,
             agent_name: '<?php echo $_SESSION['username']; ?>'
           }).then(res => {
+           
             console.log(res.data);
             this.fetchData()
           })
@@ -760,6 +793,55 @@
             console.log(res.data);
             this.fetchData()
           })
+        },
+
+        async UpdateRate() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'UpdateRate',
+            rate: this.todaysRate,
+          }).then(res => {
+
+            this.fetchData()
+          })
+        },
+
+        async extractFile(file_name) {
+          const fs = require('fs');
+          const path = require('path');
+
+          const directoryPath = 'uploads/';
+          const fileName = file_name; // name of the file without extension
+
+          await fs.readdir(directoryPath, (err, files) => {
+            if (err) {
+              console.log('Unable to read directory: ' + err);
+              return;
+            }
+
+            // Find the file by name
+            const foundFile = files.find(file => file.startsWith(fileName));
+            if (!foundFile) {
+              console.log('File not found');
+              return;
+            }
+
+            // Get the full file name with extension
+            const fileExt = path.extname(foundFile);
+            const fullFileName = foundFile.replace(fileExt, '');
+
+            return fullFileName + fileExt;
+          });
+        },
+        async downloadDoc(path) {
+          const parts = path.split('/');
+          const filename = parts[parts.length - 1];
+
+          const link = document.createElement('a');
+          link.href = path;
+          link.setAttribute('download', '');
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         },
         fetchData() {
           axios.post('./includes/backEndreservation.php', {

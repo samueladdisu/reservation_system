@@ -633,32 +633,32 @@ if ($received_data->action == 'addReservation') {
   $res_guests      = json_encode($guests);
   $res_cart        = json_encode($cart);
 
-if($form_data->res_paymentStatus == 'AA Paid'){
-  $random_string = bin2hex(random_bytes(5));
-  $target_file = "uploads/" . $random_string ;
-  $res_agent = $_SESSION['username'];
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_cart, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_roomNo, res_roomType, res_location, res_specialRequest, res_agent, res_paymentStatus, res_remark, res_promo, res_extraBed, res_confirmID, res_price, upload_AA) ";
+  if ($form_data->res_paymentStatus == 'AA Paid') {
+    $random_string = bin2hex(random_bytes(5));
+    $target_file = "uploads/" . $random_string . "." . $received_data->EXT;
+    $res_agent = $_SESSION['username'];
+    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_cart, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_roomNo, res_roomType, res_location, res_specialRequest, res_agent, res_paymentStatus, res_remark, res_promo, res_extraBed, res_confirmID, res_price, upload_AA) ";
 
-  $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', '{$res_guests}', '{$res_cart}', '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$roomNumbers}', '{$roomTypes}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_paymentStatus}', '{$form_data->res_remark}', '{$form_data->res_promo}', 'Null', '$res_confirmID', $price, '$target_file') ";
+    $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', '{$res_guests}', '{$res_cart}', '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$roomNumbers}', '{$roomTypes}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_paymentStatus}', '{$form_data->res_remark}', '{$form_data->res_promo}', 'Null', '$res_confirmID', $price, '$target_file') ";
 
-  $result = mysqli_query($connection, $query);
-  confirm($result);
-
-
-  echo json_encode($target_file);
-}else{
-  $res_agent = $_SESSION['username'];
-  $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_cart, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_roomNo, res_roomType, res_location, res_specialRequest, res_agent, res_paymentStatus, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
-
-  $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', '{$res_guests}', '{$res_cart}', '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$roomNumbers}', '{$roomTypes}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_paymentStatus}', '{$form_data->res_remark}', '{$form_data->res_promo}', 'Null', '$res_confirmID', $price) ";
-
-  $result = mysqli_query($connection, $query);
-  confirm($result);
+    $result = mysqli_query($connection, $query);
+    confirm($result);
 
 
-  echo json_encode($result);
-}
-  
+    echo json_encode($target_file);
+  } else {
+    $res_agent = $_SESSION['username'];
+    $query = "INSERT INTO reservations(res_firstname, res_lastname, res_phone, res_email, res_guestNo, res_cart, res_groupName, res_checkin, res_checkout, res_paymentMethod, res_roomIDs, res_roomNo, res_roomType, res_location, res_specialRequest, res_agent, res_paymentStatus, res_remark, res_promo, res_extraBed, res_confirmID, res_price) ";
+
+    $query .= "VALUES ('{$form_data->res_firstname}', '{$form_data->res_lastname}', '{$form_data->res_phone}', '{$form_data->res_email}', '{$res_guests}', '{$res_cart}', '{$form_data->res_groupName}', '{$checkin}', '{$checkout}', '{$form_data->res_paymentMethod}', '{$roomIds}', '{$roomNumbers}', '{$roomTypes}', '{$res_location}', '{$form_data->res_specialRequest}', '{$res_agent}', '{$form_data->res_paymentStatus}', '{$form_data->res_remark}', '{$form_data->res_promo}', 'Null', '$res_confirmID', $price) ";
+
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+
+
+    echo json_encode($result);
+  }
+
   $data = true;
   $pusher->trigger('back_notifications', 'backend_reservation', $data);
 }

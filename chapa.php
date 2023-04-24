@@ -40,7 +40,7 @@
     if ($result['success'] == true) {
       return $result['result'];
     } else {
-      return 20;
+      return false;
     }
   }
 
@@ -58,11 +58,15 @@
       return $rate_find['rate'] * $price;
     } else {
       $todayrate = CurrencyConverter();
-      $rate_value = round($todayrate, 2);
-      $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
-      $rate_result = mysqli_query($connection, $rate_query);
-      confirm($rate_result);
-      return $price * $rate_value;
+      if($todayrate){
+        $rate_value = round($todayrate, 2);
+        $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
+        $rate_result = mysqli_query($connection, $rate_query);
+        confirm($rate_result);
+        return $price * $rate_value;
+        }else{
+            header("Location: index.php");
+        }
     }
   }
 

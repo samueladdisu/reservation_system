@@ -11,14 +11,14 @@ if (!isset($_SESSION['user_role'])) {
 
 if (isset($_FILES['file'])) {
 
-$diractory = 'uploads/';
-$name = $_FILES['file']['name'];
-$filename = basename($name);
-$extension = pathinfo($filename, PATHINFO_EXTENSION);
-if (!file_exists($diractory)) {
-  mkdir($diractory, 0777, true);
-}
-$target_file = $_POST['savedDiractory']. '.' . $extension ;
+  $diractory = 'uploads/';
+  $name = $_FILES['file']['name'];
+  $filename = basename($name);
+  $extension = pathinfo($filename, PATHINFO_EXTENSION);
+  if (!file_exists($diractory)) {
+    mkdir($diractory, 0777, true);
+  }
+  $target_file = $_POST['savedDiractory'];
   move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
   echo json_encode($name);
   return $name;
@@ -767,6 +767,7 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
           allData: [],
           file: '',
           fileSizeExceeded: false,
+          ext: ''
 
         }
 
@@ -779,6 +780,8 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
           } else {
 
             this.file = event.target.files[0];
+            var fileExtension = this.file.name;
+            this.ext = fileExtension.split('.').pop();
             // this.formData.file = file;
             this.fileSizeExceeded = false;
           }
@@ -943,7 +946,7 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
           return Object.keys(obj).length === 0;
         },
         async addbulk() {
-         
+
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
             console.log(start);
@@ -965,42 +968,44 @@ $target_file = $_POST['savedDiractory']. '.' . $extension ;
                   form: this.formData,
                   RoomNum: this.room_quantity,
                   location: this.location,
-                 
+                  EXT: this.ext
+
                 }).then(async res => {
                   // window.location.href = 'view_bulk_reservations.php'
-console.log(res.data)
+                  console.log(res.data)
 
-                  if(this.formData.group_paymentStatus == "Guaranteed"){
+                  if (this.formData.group_paymentStatus == "Guaranteed") {
                     const formData = new FormData();
-                  formData.append('file', this.file);
-                  formData.append('savedDiractory', res.data);
+                    formData.append('file', this.file);
+                    formData.append('savedDiractory', res.data);
 
-                  console.log(formData);
-                    await axios.post('add_bulk_reservation.php', formData, {                      
-                                  headers: {                                        
-                                   'Content-Type': 'multipart/form-data' 
-                                   }}).then(res => {
-                                    this.spinner = false
-                    this.success = true
-                    this.bookedRooms = []
-                    this.formData = {}
-                    this.room_quantity = ''
-                    this.location = ''
-                 } )
-                  }else{
+                    console.log(formData);
+                    await axios.post('add_bulk_reservation.php', formData, {
+                      headers: {
+                        'Content-Type': 'multipart/form-data'
+                      }
+                    }).then(res => {
+                      this.spinner = false
+                      this.success = true
+                      this.bookedRooms = []
+                      this.formData = {}
+                      this.room_quantity = ''
+                      this.location = ''
+                    })
+                  } else {
 
                     if (res.data == true) {
-                    this.spinner = false
-                    this.success = true
-                    this.bookedRooms = []
-                    this.formData = {}
-                    this.room_quantity = ''
-                    this.location = ''
+                      this.spinner = false
+                      this.success = true
+                      this.bookedRooms = []
+                      this.formData = {}
+                      this.room_quantity = ''
+                      this.location = ''
+                    }
                   }
-                  }
-                 
-      
-                
+
+
+
 
                 })
               } else {
