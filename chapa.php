@@ -58,15 +58,15 @@
       return $rate_find['rate'] * $price;
     } else {
       $todayrate = CurrencyConverter();
-      if($todayrate){
+      if ($todayrate) {
         $rate_value = round($todayrate, 2);
         $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
         $rate_result = mysqli_query($connection, $rate_query);
         confirm($rate_result);
         return $price * $rate_value;
-        }else{
-            header("Location: index.php");
-        }
+      } else {
+        return $rate_find['rate'] * $price;
+      }
     }
   }
 
@@ -136,14 +136,14 @@
 
   $response = curl_exec($curl);
   $response = json_decode($response);
-  
-  if(isset($response)){
+
+  if (isset($response)) {
     var_dump($response->status);
 
-    if($response->status == 'success'){
+    if ($response->status == 'success') {
       $checkout_url = $response->data->checkout_url;
       header("Location: $checkout_url");
-    }else{
+    } else {
       session_destroy();
 
       echo "<script> 
@@ -155,7 +155,7 @@
     }
   }
   curl_close($curl);
-  
+
   ?>
 
 </body>
