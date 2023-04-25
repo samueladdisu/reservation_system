@@ -14,7 +14,7 @@ if ($received_data->action == 'noRoomsAvailable') {
     $availableRooms = 0;
     if ($location == "all") {
 
-        $update_query = "SELECT * FROM reservations WHERE res_checkin = CURDATE()";
+        $update_query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() AND res_status != 'Canceled'";
         $update_result = mysqli_query($connection, $update_query);
 
         $exists = mysqli_num_rows($update_result);
@@ -39,7 +39,7 @@ if ($received_data->action == 'noRoomsAvailable') {
 
             $combined = implode(",", $rooms); // Combining both array into a single string
             $results = json_decode("[" . $combined . "]", true); // Converting string into array
-            $count = count($results); // Counting the number of elements in array
+            $count = count($results[0]); // Counting the number of elements in array
 
             $bookedRoomsNumber =  $count; // Output the result
 
@@ -58,7 +58,7 @@ if ($received_data->action == 'noRoomsAvailable') {
         // echo json_encode($exists);
     } else {
 
-        $update_query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() AND res_location = '$location'";
+        $update_query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() AND res_location = '$location' AND res_status != 'Canceled'";
         $update_result = mysqli_query($connection, $update_query);
 
         $exists = mysqli_num_rows($update_result);
@@ -78,11 +78,13 @@ if ($received_data->action == 'noRoomsAvailable') {
             echo json_encode($response);
         } else {
             while ($row = mysqli_fetch_assoc($update_result)) {
-                $rooms[] = $row['res_roomIDs'];
+                $roomIDs = json_decode($row['res_roomIDs']); // Convert the string to an array
+                $rooms[] = $roomIDs;
             }
+            // echo json_encode($rooms);
 
-            $combined = implode(",", $rooms); // Combining both array into a single string
-            $results = json_decode("[" . $combined . "]", true); // Converting string into array
+            // $combined = implode(",", $rooms); // Combining both array into a single string
+            $results = array_merge(...$rooms); // Converting string into array
             $count = count($results); // Counting the number of elements in array
 
             $bookedRoomsNumber =  $count; // Output the result
@@ -106,16 +108,26 @@ if ($received_data->action == 'noRoomsAvailable') {
 if ($received_data->action == 'arrivalDeparture') {
     $location = $received_data->location;
     if ($location == "all") {
-        $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations";
+        $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations WHERE res_status != 'Canceled' ";
         $update_result = mysqli_query($connection, $update_query);
         $row = mysqli_fetch_assoc($update_result);
         echo json_encode($row);
     } else {
-        $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations WHERE res_location = '$location'";
+        $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations WHERE res_location = '$location' AND res_status != 'Canceled'";
         $update_result = mysqli_query($connection, $update_query);
         $row = mysqli_fetch_assoc($update_result);
         echo json_encode($row);
     }
+}
+
+if ($received_data->action == 'barGraph') {
+    $location = $received_data->location;
+
+    $update_query = "SELECT COUNT(CASE WHEN res_status = 'checkedIn' THEN 1 ELSE NULL END) AS checkedIn, COUNT(CASE WHEN res_status = 'checkedOut' THEN 1 ELSE NULL END) AS checkedout FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE()";
+
+    $update_result = mysqli_query($connection, $update_query);
+    $row = mysqli_fetch_assoc($update_result);
+    echo json_encode($row);
 }
 
 if ($received_data->action == 'specialRequest') {
@@ -163,7 +175,7 @@ if ($received_data->action == 'specialRequest') {
 
 if ($received_data->action == 'DonutChart') {
     $location = $received_data->location;
-    $query = "SELECT rooms.room_acc, COUNT(rooms.room_acc) - COUNT(reservations.res_roomType) AS free_rooms FROM rooms LEFT JOIN reservations ON rooms.room_acc = reservations.res_roomType AND reservations.res_checkin <= CURRENT_DATE() AND reservations.res_checkout >= CURRENT_DATE() AND reservations.res_location = '$location' WHERE
+    $query = "SELECT rooms.room_acc, COUNT(rooms.room_acc) - COUNT(reservations.res_roomType) AS free_rooms FROM rooms LEFT JOIN reservations ON rooms.room_acc = reservations.res_roomType AND reservations.res_checkin <= CURRENT_DATE() AND reservations.res_checkout >= CURRENT_DATE() AND reservations.res_location = '$location' AND reservations.res_status != 'Canceled' WHERE
     rooms.room_location = '$location' GROUP BY rooms.room_acc";
 
     $update_result = mysqli_query($connection, $query);

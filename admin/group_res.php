@@ -204,7 +204,7 @@ if ($received_data->action == "guestCancelation") {
 
     echo json_encode($data);
   } else {
-    echo json_encode("empty");
+    echo json_encode([]);
   }
 }
 

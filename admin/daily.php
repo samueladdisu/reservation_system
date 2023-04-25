@@ -604,62 +604,57 @@
                     </div>
                   </div>
                 </div>
-              </div>
 
 
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Cancelation Report</h6>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table display table-bordered" width="100%" id="viewCancelationTable" cellspacing="0">
+
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Cancelation Report</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table display table-bordered" width="100%" id="viewCancelationTable" cellspacing="0">
 
 
-                      <thead>
-                        <tr>
-                          <th>cancel_date</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Room Number</th>
+                        <thead>
+                          <tr>
+                            <th>cancel_date</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Room Number</th>
+                            <th>Location</th>
+                            <th>Agent</th>
+                            <th>Reason</th>
 
-                          <th>Location</th>
-                          <th>Agent</th>
-                          <th>Reason</th>
 
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
 
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-
-                    </table>
+                      </table>
+                    </div>
                   </div>
                 </div>
+
               </div>
             </div>
-
           </div>
         </div>
 
       </div>
       <!-- /.container-fluid -->
-
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Kuriftu resorts 2023. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
     </div>
     <!-- End of Main Content -->
-
-
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-          <span>Copyright &copy; Kuriftu resorts 2022. Powered by <a href="https://versavvymedia.com">Versavvy Media</a> </span>
-        </div>
-      </div>
-    </footer>
-    <!-- End of Footer -->
-
 
 
   </div>
@@ -1378,7 +1373,6 @@
           }).then(res => {
             console.log("Reseravation", res.data);
             this.tableCancel(res.data);
-
             // this.guestInfo = res.data
           })
         },

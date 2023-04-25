@@ -45,7 +45,7 @@
             if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
             ?>
               <select name="" id="" v-model="location" @change="setLocation" class="custom-select col-1">
-                <option value="all">All</option>
+
 
                 <option value="Bishoftu">Bishoftu</option>
                 <option value="entoto">Entoto</option>
@@ -185,8 +185,6 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Room Description</h6>
                   <select name="" id="" v-model="donutLocation" @change="setDonutLocation" class="custom-select col-2">
-                    <option value="all">All</option>
-
                     <option value="Bishoftu">Bishoftu</option>
                     <option value="entoto">Entoto</option>
                     <option value="awash">Awash</option>
@@ -260,7 +258,7 @@
 
                           <select v-model="spec_location" @change="getSpecialRequests" class="custom-select">
 
-                            <option value="all">All</option>
+
                             <option value="boston">Boston</option>
                             <option value="bishoftu">Bishoftu</option>
                             <option value="entoto">Entoto</option>
@@ -449,8 +447,10 @@
     const dashboardApp = Vue.createApp({
       data() {
         return {
+          checkedIn: 0,
+          checkedout: 0,
           donutLocation: "Bishoftu",
-          location: "all",
+          location: "",
           spec_location: "",
           available: 0,
           booked: 0,
@@ -506,6 +506,7 @@
         setLocation() {
           this.getNoAvailableRooms()
           this.arrivalAndDeparture()
+          this.getCancelation()
         },
         setDonutLocation() {
           this.getDataDonut()
@@ -639,16 +640,19 @@
 
         drawBarGraph() {
           axios.post("dashboardFunctions.php", {
-            action: "specialRequest",
+            action: "barGraph",
             location: this.location
           }).then(response => {
+            console.log("Cancelation", response)
+            this.checkedIn = response.data.checkedIn
+            this.checkedout = response.data.checkedout
             var colorsPicked = this.getColors(6)
             var ctx = document.getElementById("myBarChart");
             var myBarChart = new Chart(ctx, {
               type: "bar",
               data: {
                 labels: [
-                  "arrivals", "departures", "cancelation"
+                  "arrivals", "departures", "cancelation", "Checked In", "Checked Out"
                 ],
                 datasets: [{
                   label: "Booking",
@@ -656,7 +660,7 @@
                   hoverBackgroundColor: "#c08d00bf",
                   borderColor: "#4e73df",
                   data: [
-                    0, 1, 2
+                    this.arrivals, this.departures, this.cancelation, this.checkedIn, this.checkedout
 
                   ],
                 }, ],
@@ -747,13 +751,27 @@
         }
       },
       mounted() {
+
+        <?php
+
+        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+        ?>
+          this.location = 'Bishoftu'
+          this.donutLocation = 'Bishoftu'
+        <?php } else { ?>
+
+          this.location = "<?php echo $_SESSION['user_location'] ?>"
+          this.donutLocation = "<?php echo $_SESSION['user_location'] ?>"
+
+        <?php  } ?>
         this.getDataDonut()
         this.getNoAvailableRooms()
         this.arrivalAndDeparture()
         this.getDashboardData()
         this.getSpecialRequests()
-        this.drawBarGraph()
+
         this.getCancelation()
+        this.drawBarGraph()
       }
 
     })
