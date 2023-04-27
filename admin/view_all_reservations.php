@@ -644,11 +644,11 @@
                             Edit
                           </a>
                           <div class="dropdown-divider"></div>
-                          <a data-id="${data}" id="checkedIn"  class="dropdown-item text-danger">
+                          <a data-id="${data}"  id="checkedIn"  class="dropdown-item text-danger">
                             CheckedIn
                           </a>
                           <div class="dropdown-divider"></div>
-                          <a data-id="${data}" id="checkedOut"  class="dropdown-item text-danger">
+                          <a data-id="${data}" v-if="row.res_status === 'checkedIn'"  id="checkedOut"  class="dropdown-item text-danger">
                             CheckedOut
                           </a>
                           <div class="dropdown-divider"></div>

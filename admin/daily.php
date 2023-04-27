@@ -637,6 +637,38 @@
                   </div>
                 </div>
 
+
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">CheckIn/CheckOut Status</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table display table-bordered" width="100%" id="viewCancelationTable" cellspacing="0">
+
+
+                        <thead>
+                          <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Room Number</th>
+                            <th>Checkin Date and Time</th>
+                            <th>Checkout Date And Time</th>
+                            <th>Agent Checked In</th>
+                            <th>Agent Checked Out</th>
+                            <th>location</th>
+
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>

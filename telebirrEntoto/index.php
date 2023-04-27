@@ -1,9 +1,6 @@
 <?php
-<<<<<<< HEAD
-=======
 
-file_put_contents("Lemlem1.txt", "hello world". PHP_EOL . PHP_EOL, FILE_APPEND);
->>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
+file_put_contents("Lemlem1.txt", "hello world" . PHP_EOL . PHP_EOL, FILE_APPEND);
 // ob_start();
 session_start();
 require  '../admin/includes/db.php';
@@ -62,11 +59,7 @@ $response = [
   "code" => 0,
   "msg" => "success"
 ];
-<<<<<<< HEAD
-echo json_encode($response);
-=======
 // echo json_encode($response);
->>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
 $jsonnofityData = json_decode($nofityData, true);
 file_put_contents("Lemlem.txt", $jsonnofityData['outTradeNo'] . PHP_EOL . PHP_EOL, FILE_APPEND);
 
@@ -187,23 +180,13 @@ foreach ($carts  as $value) {
   $result_status = mysqli_query($connection, $status_query);
   confirm($result_status);
 
-<<<<<<< HEAD
-  // $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-  //   'from'    => 'no-reply@kurifturesorts.com',
-  //   'to'      => $email,
-  //   'subject' => 'Kuriftu Resort and Spa',
-  //   'html'    =>  "<h2>You have succesfully reserved a room</h2>
-  //   <p> Here is your confirmation code $res_confirmID </p>"
-  // ]);
-=======
-//   $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
-//     'from'    => 'no-reply@kurifturesorts.com',
-//     'to'      => $email,
-//     'subject' => 'Kuriftu Resort and Spa',
-//     'html'    =>  "<h2>You have succesfully reserved a room</h2>
-//     <p> Here is your confirmation code $res_confirmID </p>"
-//   ]);
->>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
+  //   $mg->messages()->send($_ENV['MAILGUN_DOMAIN'], [
+  //     'from'    => 'no-reply@kurifturesorts.com',
+  //     'to'      => $email,
+  //     'subject' => 'Kuriftu Resort and Spa',
+  //     'html'    =>  "<h2>You have succesfully reserved a room</h2>
+  //     <p> Here is your confirmation code $res_confirmID </p>"
+  //   ]);
 }
 
 
@@ -211,10 +194,6 @@ $delete_temp_query = "DELETE FROM temp_res WHERE userGID = '$PayerId'";
 $delete_result = mysqli_query($connection, $delete_temp_query);
 
 confirm($delete_result)
-<<<<<<< HEAD
-
-=======
->>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
 
 
 

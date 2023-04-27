@@ -146,6 +146,10 @@ if ($incoming->action == "checkedIn") {
   $reason = $incoming->reason;
   $agent_name = $incoming->agent_name;
 
+  $delete_query1 = "INSERT INTO checkinout (res_id, checkinDate, agent_checkin) VALUES ($res_id, NOW(), '$agent_name')";
+  $delete_result1 = mysqli_query($connection, $delete_query1);
+  confirm($delete_result1);
+
   $delete_query = "UPDATE reservations SET res_status = 'checkedIn' WHERE res_id = $res_id";
   $delete_result = mysqli_query($connection, $delete_query);
   confirm($delete_result);
@@ -164,6 +168,10 @@ if ($incoming->action == "checkedOut") {
   $group_id = $incoming->row->res_groupID;
   $reason = $incoming->reason;
   $agent_name = $incoming->agent_name;
+
+  $delete_query1 = "UPDATE checkinout SET checkoutDate = NOW(), agent_checkout = '$agent_name' WHERE res_id = $res_id";
+  $delete_result1 = mysqli_query($connection, $delete_query1);
+  confirm($delete_result1);
 
   $delete_query = "UPDATE reservations SET res_status = 'checkedOut' WHERE res_id = $res_id";
   $delete_result = mysqli_query($connection, $delete_query);
