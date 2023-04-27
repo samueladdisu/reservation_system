@@ -9,6 +9,20 @@ if (!isset($_SESSION['user_role'])) {
   header("Location: ./index.php");
 }
 
+if (isset($_FILES['file'])) {
+
+  $diractory = 'uploads/';
+  $name = $_FILES['file']['name'];
+  $filename = basename($name);
+  $extension = pathinfo($filename, PATHINFO_EXTENSION);
+  if (!file_exists($diractory)) {
+    mkdir($diractory, 0777, true);
+  }
+  $target_file = $_POST['savedDiractory'];
+  move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
+  echo json_encode($name);
+  return $name;
+}
 
 
 ?>
@@ -302,8 +316,9 @@ if (!isset($_SESSION['user_role'])) {
                           <label> Payment Status * </label>
                           <select v-model="formData.group_paymentStatus" class="custom-select" required>
                             <option disabled value="">-select-</option>
-                            <option value="payed">Paid</option>
-                            <option value="pending_payment">pending payment</option>
+                            <option value="Guaranteed">Add Guaranteed</option>
+                            <option value="Non-Guaranteed">Non-Guaranteed</option>
+                            <option value="Tentative">Tentative</option>
                           </select>
                         </div>
 
@@ -391,7 +406,6 @@ if (!isset($_SESSION['user_role'])) {
                           <label>BBQ Guests </label>
                           <input type="text" class="form-control" v-model="formData.group_BBQ">
                         </div>
-
                         <div class="form-group col-6">
                           <label for="">Tea Break*</label>
                           <select type="text" class="custom-select" v-model="formData.group_TeaBreak">
@@ -400,7 +414,20 @@ if (!isset($_SESSION['user_role'])) {
                             <option value="2">2 (Both Morning and Afternoon)</option>
                           </select>
                         </div>
-
+                        <!-- <div class="form-group col-6">
+                          <label>Payment Status</label>
+                          <select v-model="formData.group_status" @change="customChecker" class="custom-select" required>
+                            <option value="def">Add Guaranteed</option>
+                            <option value="cus">Non-Guaranteed</option>
+                            <option value="ten">Tentative</option>
+                          </select>
+                        </div>-->
+                        <div class="form-group col-6" :class="{ 'd-none': formData.group_paymentStatus !== 'Guaranteed', 'd-block':formData.group_paymentStatus == 'Guaranteed' }" style="width:30rem">
+                          <label>Attachments</label>
+                          <input type="file" @change="onFileChange" name="file" id="file" class="form-control" />
+                          <p v-if="fileSizeExceeded" style="color:red">File size exceeds 20MB limit</p>
+                          <p v-else-if="file">File size: {{ getFileSize(file.size) }}</p>
+                        </div>
                         <div class="form-group col-12">
                           <textarea v-model="formData.group_remark" placeholder="Remark*" id="" cols="30" rows="5" class="form-control"></textarea>
                         </div>
@@ -713,6 +740,7 @@ if (!isset($_SESSION['user_role'])) {
           custom: false,
           chekedList: false,
           defualt_value: '',
+          pathSaved: '',
           types: [],
           formData: {
             group_name: '',
@@ -733,16 +761,41 @@ if (!isset($_SESSION['user_role'])) {
             custom_Lunch: '',
             custom_Breakfast: '',
             custom_Extrabed: '',
-
           },
           bookedRooms: [],
           selectAllRoom: false,
           allData: [],
+          file: '',
+          fileSizeExceeded: false,
+          ext: ''
 
         }
 
       },
       methods: {
+        onFileChange(event) {
+          const file = event.target.files[0];
+          if (file.size > 20000000) {
+            this.fileSizeExceeded = true;
+          } else {
+
+            this.file = event.target.files[0];
+            var fileExtension = this.file.name;
+            this.ext = fileExtension.split('.').pop();
+            // this.formData.file = file;
+            this.fileSizeExceeded = false;
+          }
+        },
+        getFileSize(size) {
+          const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+          let unitIndex = 0;
+          while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+          }
+          return `${size.toFixed(2)} ${units[unitIndex]}`;
+        },
+
         selectedRoomsTable(row) {
           const dataTable = $('#selectedRooms').DataTable({
             destroy: true,
@@ -896,11 +949,17 @@ if (!isset($_SESSION['user_role'])) {
 
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
-
+            console.log(start);
+            console.log(end);
+            console.log(this.bookedRooms);
+            console.log(this.formData);
+            console.log(this.room_quantity);
+            console.log(this.location)
             if (this.formData.group_GNum >= this.bookedRooms.length) {
 
               if (capacity >= this.formData.group_GNum) {
                 $('#success_tic').modal('show')
+                console.log("file maybe", this.file)
                 await axios.post('group_res.php', {
                   action: 'Newadd',
                   checkin: start,
@@ -908,19 +967,46 @@ if (!isset($_SESSION['user_role'])) {
                   rooms: this.bookedRooms,
                   form: this.formData,
                   RoomNum: this.room_quantity,
-                  location: this.location
-                }).then(res => {
-                  window.location.href = 'view_bulk_reservations.php'
-                  console.log(res.data);
+                  location: this.location,
+                  EXT: this.ext
 
-                  if (res.data == true) {
-                    this.spinner = false
-                    this.success = true
-                    this.bookedRooms = []
-                    this.formData = {}
-                    this.room_quantity = ''
-                    this.location = ''
+                }).then(async res => {
+                  // window.location.href = 'view_bulk_reservations.php'
+                  console.log(res.data)
+
+                  if (this.formData.group_paymentStatus == "Guaranteed") {
+                    const formData = new FormData();
+                    formData.append('file', this.file);
+                    formData.append('savedDiractory', res.data);
+
+                    console.log(formData);
+                    await axios.post('add_bulk_reservation.php', formData, {
+                      headers: {
+                        'Content-Type': 'multipart/form-data'
+                      }
+                    }).then(res => {
+                      this.spinner = false
+                      this.success = true
+                      this.bookedRooms = []
+                      this.formData = {}
+                      this.room_quantity = ''
+                      this.location = ''
+                    })
+                  } else {
+
+                    if (res.data == true) {
+                      this.spinner = false
+                      this.success = true
+                      this.bookedRooms = []
+                      this.formData = {}
+                      this.room_quantity = ''
+                      this.location = ''
+                    }
                   }
+
+
+
+
                 })
               } else {
                 alert("Rooms capacity exceeded reduce guest number!")
@@ -997,23 +1083,23 @@ if (!isset($_SESSION['user_role'])) {
 
                 }
                 let limit = parseInt(this.room_quantity)
-                
+
 
                 let sliced = [];
                 let size = Object.keys(this.allData).length;
-                console.log("Size",size)
+                console.log("Size", size)
 
-                if(size > limit ){
+                if (size > limit) {
 
                   for (let i = 0; i < limit; i++)
                     sliced[i] = this.allData[i];
                   console.log("sliced", sliced);
-  
+
                   this.allData = sliced
                 }
                 // console.log("after fileter", this.allData);
                 // let limit = parseInt(this.room_quantity) - 1
-               
+
                 // console.log("limit", limit);
                 // this.allData = res.data.slice(limit)
 

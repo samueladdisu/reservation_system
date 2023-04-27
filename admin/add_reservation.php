@@ -19,7 +19,20 @@
         <!-- Topbar -->
         <?php include './includes/topbar.php'; ?>
         <!-- End of Topbar -->
+        <?php if (isset($_FILES['file'])) {
 
+          $diractory = 'uploads/';
+          $name = $_FILES['file']['name'];
+          $filename = basename($name);
+          $extension = pathinfo($filename, PATHINFO_EXTENSION);
+          if (!file_exists($diractory)) {
+            mkdir($diractory, 0777, true);
+          }
+          $target_file = $_POST['savedDiractory'] ;
+          move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
+          echo json_encode($name);
+          return $name;
+        } ?>
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -132,7 +145,7 @@
                   </div>
 
                   <!-- Success Modal -->
-                  <div id="success_tic" class="modal fade" role="dialog">
+                  <div id="success_tic" class="success_tic modal fade" role="dialog">
                     <div class="modal-dialog modal-dialog-centered">
                       <!-- Modal content-->
                       <div class="modal-content">
@@ -214,25 +227,36 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
-                                <option value="" disabled>Adults*</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
+                              <div class="col-6 ">
 
-                              <select @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
-                                <option value="" disabled>Teens(12-17)</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
+                                <label for="">Adults *</label>
+                                <select v-model="res_adults" @change="CheckGuest" class="custom-select col-6">
+                                  <!-- <option value="" disabled>Adults*</option> -->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
+                              <div>
 
-                              <select @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
-                                <option value="" disabled>kid(6-11)</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
+                                <label for="">Teens(12-17)</label>
+                                <select @change="CheckGuest" v-model="res_teen" class="custom-select col-6 " :disabled="teen">
+
+                                  <!-- <option value="" disabled>Teens(12-17)</option> -->
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
+                              <div>
+
+                                <label for="">kid(6-11)</label>
+                                <select @change="CheckGuest" v-model="res_kid" class="custom-select col-6 " :disabled="kid">
+                                  <!-- <option value="" disabled>kid(6-11)</option> -->
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
 
 
                             </div>
@@ -260,25 +284,33 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select name="adults" @change="checkLoft" v-model="res_adults" class="custom-select col-3">
-                                <option value="" disabled>Guests</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                              </select>
+                              <div>
+                                <label for="">Adults *</label>
+                                <select name="adults" @change="checkLoft" v-model="res_adults" class="custom-select col-3">
+                                  <!-- <option value="" disabled>Guests</option> -->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label for="">Teens(12-17)</label>
+                                <select name="teen" @change="checkLoft" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
+                                  <!-- <option value="" disabled>Teens(12-17)</option> -->
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                </select>
+                              </div>
 
-                              <select name="teen" @change="checkLoft" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
-                                <option value="" disabled>Teens(12-17)</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                              </select>
-
-                              <select name="kid" @change="checkLoft" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
-                                <option value="" disabled>kid(6-11)</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                              </select>
+                              <div>
+                                <label for="">kid(6-11)</label>
+                                <select name="kid" @change="checkLoft" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
+                                  <!-- <option value="" disabled>kid(6-11)</option> -->
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                </select>
+                              </div>
 
 
                             </div>
@@ -305,25 +337,32 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
-                                <option value="" disabled>Adults*</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
-
-                              <select @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
-                                <option value="" disabled>Teens(12-17)</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
-
-                              <select @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
-                                <option value="" disabled>kid(6-11)</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                              </select>
+                              <div>
+                                <label for="">Adults *</label>
+                                <select v-model="res_adults" @change="CheckGuest" class="custom-select col-6 w-100">
+                                  <!-- <option value="" disabled>Adults*</option> -->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label for="">Teens(12-17)</label>
+                                <select @change="CheckGuest" v-model="res_teen" class="custom-select col-6 w-100 " :disabled="teen">
+                                  <!-- <option value="" disabled>Teens(12-17)</option> -->
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label for="">kid(6-11)</label>
+                                <select @change="CheckGuest" v-model="res_kid" class="custom-select col-6 w-100 " :disabled="kid">
+                                  <!-- <option value="" disabled>kid(6-11)</option> -->
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
 
 
                             </div>
@@ -411,7 +450,7 @@
 
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary">Available Rooms </h6>
+                      <h6 class="m-0 font-weight-bold text-primary">Available Rooms</h6>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -424,7 +463,6 @@
                               <!-- <th>Occupancy</th> -->
                               <th>Accomodation</th>
                               <th>Price</th>
-
                               <!-- <th>Room Status</th> -->
                               <th>Hotel Location</th>
                               <th>Select Room</th>
@@ -437,6 +475,141 @@
                     </div>
                   </div>
 
+
+
+                </div>
+
+
+
+                <div class=" shadow d-flex  justify-content-between mb-4  ">
+                  <div class="card">
+
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
+                    </div>
+                    <div class="card-body d-flex justify-content-left">
+                      <div class="col-12 row">
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname" required>
+                        </div>
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname" required>
+                        </div>
+
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone" required>
+                        </div>
+
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email" required>
+                        </div>
+                        <div class="form-group col-6">
+                          <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" required>
+                            <option value="">Payment Method*</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="cash">Cash</option>
+                            <option value="GC1">Gift Card 1</option>
+                            <option value="GC2">Gift Card 2</option>
+                            <option value="GC3">Gift Card 3</option>
+                          </select>
+
+                        </div>
+
+
+                        <div class="form-group col-6">
+                          <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" required>
+                            <option value="">Payment Status*</option>
+                            <option value="AA Paid">AA Paid</option>
+                            <option value="paid">Paid</option>
+                            <option value="pending_payment">pending payment</option>
+                          </select>
+                        </div>
+
+
+
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="Special Request" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
+                        </div>
+
+                        <div class="form-group col-6">
+                          <input type="text" placeholder="Promo Code" v-model="formData.res_promo" @keyup="getData()" class="form-control">
+
+                          <div class="panel-footer" v-if="search_data.length">
+                            <ul class="list-group">
+                              <p class="list-group-item" @click="getName(data1.promo_code)" v-for="data1 in search_data">
+                                {{ data1.promo_code }} {{ data1.promo_active }}
+                              </p>
+                            </ul>
+                          </div>
+
+
+                        </div>
+                        <div class="form-group col-6" :class="{ 'd-none': formData.res_paymentStatus !== 'AA Paid', 'd-block':formData.res_paymentStatus == 'AA Paid' }" style="width:30rem">
+                          <label>Attachments</label>
+                          <input type="file" @change="onFileChange" name="file" id="file" class="form-control" />
+                          <p v-if="fileSizeExceeded" style="color:red">File size exceeds 20MB limit</p>
+                          <p v-else-if="file">File size: {{ getFileSize(file.size) }}</p>
+                        </div>
+
+                        <div class="form-group col-12">
+                          <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark" id="" cols="30" rows="10" class="form-control"></textarea>
+                        </div>
+
+
+                        <div class="form-group">
+                          <input type="submit" class="btn btn-primary" name="add_res" value="Add Reservation">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card d-flex col-5 p-10 mt-10">
+
+                    <div>
+                      <div>
+                        <h5 class="" id="exampleModalLongTitle">Selected Rooms</h5>
+                      </div>
+                      <div class="" style="max-height: 600px; overflow-y: auto;">
+
+                        <!-- cart items  -->
+                        <div class="list-group">
+
+                          <div v-if="cart.length">
+                            <a href="#" v-for="item in cart" :key="item.room_id" class="list-group-item list-group-item-action flex-column align-items-start ">
+                              <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ item.room_acc }} - {{ item.room_number }}</h5>
+                                <small> ${{ item.room_price }} / night</small>
+                              </div>
+                              <p class="mb-1"> Adults: {{ item.adults }} </p>
+                              <p class="mb-1"> Teens: {{ item.teens }} </p>
+                              <p class="mb-1"> Kids: {{ item.kids }} </p>
+
+                              <div class="d-flex w-100 justify-content-between">
+                                <small>{{ item.room_location }} </small>
+
+                                <div class="d-flex">
+
+                                  <p class="ml-2">
+                                    <i style='color: red;' @click="deleteCart(item)" class='far fa-trash-alt'></i>
+                                  </p>
+                                </div>
+                              </div>
+                            </a>
+                          </div>
+
+                          <div v-else>
+                            <h2> No Room Selected </h2>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div> -->
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-12">
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
                       <h6 class="m-0 font-weight-bold text-primary">Room Status </h6>
@@ -538,85 +711,6 @@
                           </tbody>
 
                         </table>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="card shadow mb-4">
-                  <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
-                  </div>
-                  <div class="card-body d-flex justify-content-center">
-                    <div class="col-6 row">
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname" required>
-                      </div>
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname" required>
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone" required>
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email" required>
-                      </div>
-
-
-
-
-
-                      <div class="form-group col-6">
-                        <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" required>
-                          <option value="">Payment Method*</option>
-                          <option value="bank_transfer">Bank Transfer</option>
-                          <option value="cash">Cash</option>
-                          <option value="GC1">Gift Card 1</option>
-                          <option value="GC2">Gift Card 2</option>
-                          <option value="GC3">Gift Card 3</option>
-                        </select>
-
-                      </div>
-
-
-                      <div class="form-group col-6">
-                        <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" required>
-                          <option value="">Payment Status*</option>
-                          <option value="paid">Paid</option>
-                          <option value="pending_payment">pending payment</option>
-                        </select>
-                      </div>
-
-
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Special Request" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Promo Code" v-model="formData.res_promo" @keyup="getData()" class="form-control">
-
-                        <div class="panel-footer" v-if="search_data.length">
-                          <ul class="list-group">
-                            <p class="list-group-item" @click="getName(data1.promo_code)" v-for="data1 in search_data">
-                              {{ data1.promo_code }} {{ data1.promo_active }}
-                            </p>
-                          </ul>
-                        </div>
-
-
-                      </div>
-
-                      <div class="form-group col-12">
-                        <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark" id="" cols="30" rows="10" class="form-control"></textarea>
-                      </div>
-
-
-                      <div class="form-group">
-                        <input type="submit" class="btn btn-primary" name="add_res" value="Add Reservation">
                       </div>
                     </div>
                   </div>
@@ -792,6 +886,9 @@
           res_adults: '',
           res_teen: '',
           res_kid: '',
+          file: '',
+          fileSizeExceeded: false,
+          ext: ''
         }
 
       },
@@ -814,6 +911,28 @@
         }
       },
       methods: {
+        onFileChange(event) {
+          const file = event.target.files[0];
+          if (file.size > 20000000) {
+            this.fileSizeExceeded = true;
+          } else {
+
+            this.file = event.target.files[0];
+            var fileExtension = this.file.name;
+            this.ext = fileExtension.split('.').pop();
+            // this.formData.file = file;
+            this.fileSizeExceeded = false;
+          }
+        },
+        getFileSize(size) {
+          const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+          let unitIndex = 0;
+          while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+          }
+          return `${size.toFixed(2)} ${units[unitIndex]}`;
+        },
         async checkLocationLoaded() {
           if (document.getElementById("hiddenlocation").value) {
             let location = document.getElementById("hiddenlocation").value
@@ -1137,17 +1256,17 @@
 
           // console.log(this.tempRow.room_id)
           console.log(this.isEmpty(this.cart))
-          if(this.isEmpty(this.cart)){
+          if (this.isEmpty(this.cart)) {
             this.cart.push(guests);
             console.log("emp push")
-          }else {
+          } else {
             let exits = this.cart.filter(row => {
               return this.tempRow.room_id === row.room_id
             })
 
-            if(this.isEmpty(exits)){
+            if (this.isEmpty(exits)) {
               this.cart.push(guests);
-            }else {
+            } else {
               console.log(exits)
               alert("Room Already Selected")
             }
@@ -1242,25 +1361,50 @@
                 checkin: start,
                 checkout: end,
                 rooms: this.cart,
-              }).then(res => {
+                EXT: this.ext
+              }).then(async res => {
                 // window.location.href = 'view_all_reservations.php'
                 console.log(res.data);
-                if (res.data == true) {
-                  this.spinner = false
-                  this.success = true
-                  this.formData = {}
-                  this.cart = {}
-                  console.log("Selected room", this.cart);
-                  console.log("check in", start);
-                  console.log("check out", end);
-                  console.log("Form Data", this.formData);
+                if (this.formData.res_paymentStatus == 'AA Paid') {
+                  const formData = new FormData();
+                  formData.append('file', this.file);
+                  formData.append('savedDiractory', res.data);
 
-                  setTimeout(() => {
-                    window.location.href = "./view_all_reservations.php"
-                  }, 2000)
+                  console.log(formData);
+                  await axios.post('add_reservation.php', formData, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  }).then(res => {
+                    this.spinner = false
+                    this.success = true
+                    this.bookedRooms = []
+                    this.formData = {}
+                    this.room_quantity = ''
+                    this.location = ''
+                    setTimeout(() => {
+                      window.location.href = "./view_all_reservations.php"
+                    }, 2000)
+                  })
                 } else {
+                  if (res.data == true) {
+                    this.spinner = false
+                    this.success = true
+                    this.formData = {}
+                    this.cart = {}
+                    console.log("Selected room", this.cart);
+                    console.log("check in", start);
+                    console.log("check out", end);
+                    console.log("Form Data", this.formData);
 
+                    setTimeout(() => {
+                      window.location.href = "./view_all_reservations.php"
+                    }, 2000)
+                  } else {
+
+                  }
                 }
+
 
 
               })
@@ -1295,10 +1439,10 @@
             checkout: end
           }).then(res => {
             console.log(res.data);
-            if(res.data !== "empty"){
+            if (res.data !== "empty") {
               this.allData = res.data
               this.table(res.data)
-            }else {
+            } else {
               this.allData = {}
               this.table({})
               alert("No Room Avaliable Please Try different Dates")

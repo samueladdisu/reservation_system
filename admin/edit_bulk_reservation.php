@@ -23,7 +23,7 @@ if (!isset($_SESSION['user_role'])) {
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Add Group Reservation - Dashboard</title>
+  <title>Edit Group Reservation - Dashboard</title>
 
   <!-- Custom fonts for this template-->
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
@@ -231,12 +231,12 @@ if (!isset($_SESSION['user_role'])) {
             <div id="app">
 
 
-              <?php 
-              
+              <?php
+
               if (isset($_GET['id'])) {
                 $id = escape($_GET['id']);
                 $group = array();
-
+                $selectedRoom = array();
                 $query = "SELECT * FROM group_reservation WHERE group_id = $id";
                 $result = mysqli_query($connection, $query);
                 confirm($result);
@@ -246,6 +246,16 @@ if (!isset($_SESSION['user_role'])) {
                 }
 
                 $encoded_group = json_encode($group);
+
+                $groupId = $group[0]['group_id'];
+
+                $query2 = "SELECT * FROM group_rooms WHERE g_res_id = $groupId";
+                $result2 = mysqli_query($connection, $query2);
+                confirm($result2);
+                while ($rows = mysqli_fetch_assoc($result2)) {
+                  $selectedRoom[] = $rows;
+                }
+                $encoded_Rooms = json_encode($selectedRoom);
               }
               ?>
               <!-- Success Modal -->
@@ -291,7 +301,7 @@ if (!isset($_SESSION['user_role'])) {
               <!-- End of Success Modal -->
               <form action="" method="POST" @submit.prevent="addbulk" id="reservation" class="col-12 row" enctype="multipart/form-data">
 
-                <h1 class="mb-4">Group Reservation</h1>
+                <h1 class="mb-4">Edit Group Reservation</h1>
 
 
 
@@ -301,7 +311,7 @@ if (!isset($_SESSION['user_role'])) {
 
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
+                      <h6 class="m-0 font-weight-bold text-primary">Edit Guest Information</h6>
                     </div>
                     <div class="card-body d-flex">
                       <div class="col-6 row">
@@ -320,8 +330,11 @@ if (!isset($_SESSION['user_role'])) {
                           <label> Payment Status * </label>
                           <select v-model="formData.group_paymentStatus" class="custom-select" required>
                             <option disabled value="">-select-</option>
-                            <option value="payed">Paid</option>
-                            <option value="pending_payment">pending payment</option>
+                            <!-- <option value="payed">Paid</option>
+                            <option value="pending_payment">pending payment</option> -->
+                            <option value="Guaranteed">Guaranteed</option>
+                            <option value="Non-Guaranteed">Non-Guaranteed</option>
+                            <option value="Tentative">Tentative</option>
                           </select>
                         </div>
 
@@ -677,10 +690,12 @@ if (!isset($_SESSION['user_role'])) {
   <!-- data table plugin  -->
 
   <script>
-
-    let group = <?= $encoded_group ?>
+    let group = <?= $encoded_group; ?>
 
     console.log(group)
+    let selectedRoomsA = <?= $encoded_Rooms; ?>
+    // console.log( selectedRoomsA)
+
     var start, end
     var today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -698,8 +713,16 @@ if (!isset($_SESSION['user_role'])) {
     today = mm + '/' + dd + '/' + yyyy;
     tomorrow = tm + '/' + td + '/' + ty;
 
-    start = yyyy + '-' + mm + '-' + dd;
-    end = ty + '-' + tm + '-' + td;
+    start = group[0].group_checkin;
+    end = group[0].group_checkout;
+    // Split the date string into an array
+    const startDateArray = start.split('-');
+    const endDateArray = end.split('-');
+
+    // Create a new date string in mm/dd/yyyy format
+    const newDateStart = startDateArray[1] + '/' + startDateArray[2] + '/' + startDateArray[0];
+    const newDateEnd = endDateArray[1] + '/' + endDateArray[2] + '/' + endDateArray[0];
+
 
     console.log("inital start", start);
     console.log("inital end", end);
@@ -709,8 +732,8 @@ if (!isset($_SESSION['user_role'])) {
       console.log("initial start", start);
       console.log("initial end", end);
       $('#date').daterangepicker();
-      $('#date').data('daterangepicker').setStartDate(today);
-      $('#date').data('daterangepicker').setEndDate(tomorrow);
+      $('#date').data('daterangepicker').setStartDate(newDateStart);
+      $('#date').data('daterangepicker').setEndDate(newDateEnd);
 
       $('#date').on('apply.daterangepicker', function(ev, picker) {
         // console.log(picker.startDate.format('YYYY-MM-DD'));
@@ -758,6 +781,7 @@ if (!isset($_SESSION['user_role'])) {
 
           },
           bookedRooms: [],
+          oldRooms: [],
           selectAllRoom: false,
           allData: '',
 
@@ -782,7 +806,7 @@ if (!isset($_SESSION['user_role'])) {
                 data: 'room_location'
               },
               {
-                data: 'room_id',
+                data: 'g_room_number',
                 render: function(data, type, row) {
                   return `<a data-row="${data}"  id="deleteRow"><i style='color: red;' class='far fa-trash-alt'></i></a>`
                 }
@@ -795,7 +819,7 @@ if (!isset($_SESSION['user_role'])) {
           $(document).on('click', '#deleteRow', function() {
             let id = $(this).data('row')
             console.log("from table", id)
-            vm.bookedRooms = vm.bookedRooms.filter(item => item.room_id != id)
+            vm.bookedRooms = vm.bookedRooms.filter(item => item.g_room_number != id)
             dataTable.clear();
             dataTable.rows.add(vm.bookedRooms);
             dataTable.draw();
@@ -829,8 +853,6 @@ if (!isset($_SESSION['user_role'])) {
 
         },
         SetGuests() {
-
-
           this.formData.group_BBQ = this.formData.group_GNum;
           this.formData.group_Dinner = this.formData.group_GNum;
           this.formData.group_Lunch = this.formData.group_GNum;
@@ -886,7 +908,21 @@ if (!isset($_SESSION['user_role'])) {
 
           if (event.target.checked) {
             console.log(row);
-            this.bookedRooms.push(row)
+            const updatedObj = {};
+            for (const [key, value] of Object.entries(row)) {
+              switch (key) {
+                case "room_acc":
+                  updatedObj["room_acc"] = value;
+                  break;
+                case "room_id":
+                  updatedObj["g_room_number"] = value;
+                  break;
+                default:
+                  updatedObj[key] = value;
+              }
+            }
+
+            this.bookedRooms.push(updatedObj)
           } else {
             // let rowIndex = this.bookedRooms.indexOf(row)
 
@@ -920,16 +956,26 @@ if (!isset($_SESSION['user_role'])) {
 
               if (capacity >= this.formData.group_GNum) {
                 $('#success_tic').modal('show')
+                console.log(start);
+                console.log(end);
+                console.log(this.bookedRooms);
+                console.log(this.formData);
+                console.log(this.room_quantity);
+                console.log(this.location)
                 await axios.post('group_res.php', {
-                  action: 'Newadd',
+                  action: 'EditBulkRes',
                   checkin: start,
                   checkout: end,
                   rooms: this.bookedRooms,
                   form: this.formData,
                   RoomNum: this.room_quantity,
-                  location: this.location
+                  location: this.location,
+                  oldRooms: this.oldRooms,
+                  GID: <?php echo $_GET['id']; ?>
                 }).then(res => {
                   window.location.href = 'view_bulk_reservations.php'
+                  // window.location.href = 'group_res.php'
+
                   console.log(res.data);
 
                   if (res.data == true) {
@@ -1042,8 +1088,9 @@ if (!isset($_SESSION['user_role'])) {
       },
       created() {
         this.fetchAll()
-        // Pusher.logToConsole = true;
 
+        // Pusher.logToConsole = true;
+        console.log(selectedRoomsA)
         let fKey = '<?php echo $_ENV['FRONT_KEY'] ?>'
         let bKey = '<?php echo $_ENV['BACK_SINGLE_KEY'] ?>'
         let gKey = '<?php echo $_ENV['BACK_GROUP_KEY'] ?>'
@@ -1094,6 +1141,27 @@ if (!isset($_SESSION['user_role'])) {
         })
       },
       mounted() {
+        const newArrayOfObj = selectedRoomsA.map(({
+          g_room_acc: room_acc,
+          g_room_location: room_location,
+          g_room_id: room_number,
+          ...rest
+        }) => ({
+          room_acc,
+          room_location,
+          room_number,
+          ...rest,
+        }));
+        this.selectedRoomsTable(newArrayOfObj)
+        newArrayOfObj.map((row) => {
+          this.bookedRooms.push(row);
+          this.oldRooms.push(row);
+        })
+        this.room_quantity = this.bookedRooms.length
+        this.location = newArrayOfObj[0].room_location
+
+
+        console.log(this.bookedRooms)
         <?php
 
         if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {

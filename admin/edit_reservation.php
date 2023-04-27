@@ -285,6 +285,158 @@
                     </div>
                   </div>
 
+                  <!-- nardi -->
+                  <div class="d-flex justfiy-content-between">
+                    <div class="card shadow mb-4 ">
+                      <div class="card-header ">
+                        <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
+                      </div>
+                      <div class="card-body d-flex w-100 ">
+                        <div class="col-12 row">
+                          <div class="form-group col-6">
+                            <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname">
+                          </div>
+                          <div class="form-group col-6">
+                            <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname">
+                          </div>
+
+                          <div class="form-group col-6">
+                            <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone">
+                          </div>
+
+                          <div class="form-group col-6">
+                            <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email">
+                          </div>
+
+
+
+
+
+                          <div class="form-group col-6">
+                            <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" id="">
+                              <option value="">Payment Method*</option>
+                              <option value="bank_transfer">Bank Transfer</option>
+                              <option value="cash">Cash</option>
+                              <option value="GC1">Gift Card 1</option>
+                              <option value="GC2">Gift Card 2</option>
+                              <option value="GC3">Gift Card 3</option>
+                            </select>
+
+                          </div>
+
+
+                          <div class="form-group col-6">
+                            <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" id="">
+                              <option value="">Payment Status*</option>
+                              <option value="paid">paid</option>
+                              <option value="pending_payment">pending payment</option>
+                            </select>
+                          </div>
+
+
+
+                          <div class="form-group col-6">
+                            <input type="text" placeholder="Special Request*" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
+                            <!-- <textarea name="res_specialRequest" id="" cols="30" rows="10" placeholder="Special Request" class="form-control"></textarea> -->
+                          </div>
+
+                          <div class="form-group col-6">
+                            <input type="text" placeholder="Promo Code" v-model="formData.res_promo" @keyup="getData()" class="form-control">
+
+                            <div class="panel-footer" v-if="search_data.length">
+                              <ul class="list-group">
+                                <p class="list-group-item" @click="getName(data1.promo_code)" v-for="data1 in search_data">
+                                  {{ data1.promo_code }} {{ data1.promo_active }}
+                                </p>
+                              </ul>
+                            </div>
+
+
+                          </div>
+
+                          <div class="form-group col-12">
+                            <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark*" id="" cols="30" rows="10" class="form-control"></textarea>
+                          </div>
+
+
+                          <div class="form-group">
+                            <input type="submit" class="btn btn-primary" name="add_res" value="Update Reservation">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card col-5 mb-4 ">
+                      <div class="" id="cart">
+                        <div class="" role="document">
+                          <div class="">
+                            <div class="mt-4">
+                              <h5 class="" id="exampleModalLongTitle">Selected Rooms</h5>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+
+                              <!-- cart items  -->
+                              <div class="list-group">
+                                <div v-if="cart.length">
+                                  <a href="#" v-for="item in cart" :key="item.room_id" class="list-group-item list-group-item-action flex-column align-items-start ">
+                                    <div class="d-flex w-100 justify-content-between">
+                                      <h5 class="mb-1">{{ item.room_acc }} - {{ item.room_number }}</h5>
+                                      <small> ${{ item.room_price }} / night</small>
+                                    </div>
+                                    <p class="mb-1">
+                                      Adults:
+                                      <select name="adults" v-model="item.adults" class="custom-select col-2">
+                                        <option value="" disabled>Adults*</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                      </select>
+                                    </p>
+                                    <p class="mb-1">
+                                      Teens:
+                                      <select name="adults" @change="checkItemTeen" v-model="item.teens" class="custom-select col-2 offset-1">
+                                        <option value="" disabled>Teens(12-17)</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                      </select>
+                                    </p>
+                                    <p class="mb-1"> Kids: {{ }}
+                                      <select name="adults" @change="checkItemKid" v-model="item.kids" class="custom-select col-2 offset-1">
+                                        <option value="" disabled>kid(6-11)</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                      </select>
+                                    </p>
+
+                                    <div class="d-flex w-100 justify-content-between">
+                                      <small>{{ item.room_location }} </small>
+
+                                      <div class="d-flex">
+
+                                        <p class="ml-2">
+                                          <i style='color: red;' @click="deleteCart(item)" class='far fa-trash-alt'></i>
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>
+
+                                <div v-else>
+                                  <h2> No Room Selected </h2>
+                                </div>
+
+
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
                       <h6 class="m-0 font-weight-bold text-primary">Available Rooms </h6>
@@ -292,7 +444,7 @@
                     <div class="card-body">
                       <div class="table-responsive">
 
-                        <table class="table display table-bordered table-hover" id="addReserveTable" width="100%" cellspacing="0">
+                        <table class="table display table-bordered table-hover " id="addReserveTable" style="width:100%" cellspacing="0">
 
                           <thead>
                             <tr>
@@ -315,84 +467,6 @@
 
                 </div>
 
-                <div class="card shadow mb-4">
-                  <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Fill in Guest Information</h6>
-                  </div>
-                  <div class="card-body d-flex justify-content-center">
-                    <div class="col-6 row">
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="First Name*" class="form-control" v-model="formData.res_firstname" name="res_firstname">
-                      </div>
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Last Name*" class="form-control" v-model="formData.res_lastname" name="res_lastname">
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Phone No.*" class="form-control" v-model="formData.res_phone" name="res_phone">
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Email*" class="form-control" v-model="formData.res_email" name="res_email">
-                      </div>
-
-
-
-
-
-                      <div class="form-group col-6">
-                        <select name="res_paymentMethod" v-model="formData.res_paymentMethod" class="custom-select" id="">
-                          <option value="">Payment Method*</option>
-                          <option value="bank_transfer">Bank Transfer</option>
-                          <option value="cash">Cash</option>
-                          <option value="GC1">Gift Card 1</option>
-                          <option value="GC2">Gift Card 2</option>
-                          <option value="GC3">Gift Card 3</option>
-                        </select>
-
-                      </div>
-
-
-                      <div class="form-group col-6">
-                        <select name="res_paymentStatus" v-model="formData.res_paymentStatus" class="custom-select" id="">
-                          <option value="">Payment Status*</option>
-                          <option value="paid">paid</option>
-                          <option value="pending_payment">pending payment</option>
-                        </select>
-                      </div>
-
-
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Special Request*" class="form-control" v-model="formData.res_specialRequest" name="res_specialRequest" id="">
-                        <!-- <textarea name="res_specialRequest" id="" cols="30" rows="10" placeholder="Special Request" class="form-control"></textarea> -->
-                      </div>
-
-                      <div class="form-group col-6">
-                        <input type="text" placeholder="Promo Code" v-model="formData.res_promo" @keyup="getData()" class="form-control">
-
-                        <div class="panel-footer" v-if="search_data.length">
-                          <ul class="list-group">
-                            <p class="list-group-item" @click="getName(data1.promo_code)" v-for="data1 in search_data">
-                              {{ data1.promo_code }} {{ data1.promo_active }}
-                            </p>
-                          </ul>
-                        </div>
-
-
-                      </div>
-
-                      <div class="form-group col-12">
-                        <textarea name="res_remark" v-model="formData.res_remark" placeholder="Remark*" id="" cols="30" rows="10" class="form-control"></textarea>
-                      </div>
-
-
-                      <div class="form-group">
-                        <input type="submit" class="btn btn-primary" name="add_res" value="Update Reservation">
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
 
 
@@ -476,10 +550,10 @@
   <script>
     let rooms = <?= $encoded_rooms ?>
 
-    let res_id = <?= $id ?>
+    let res_id = <?php echo $_GET['id']; ?>
 
 
-    let editTemp = <?= $encoded_res ?>
+    let editTemp = <?php echo $encoded_res; ?>
 
 
     let cart = JSON.parse(editTemp[0].res_cart)
@@ -766,8 +840,8 @@
           let arrival, departure
 
           if (start && end) {
-            // console.log("start", start)
-            // console.log("end", end)
+            console.log(" this  start", start)
+            console.log(" this end", end)
 
             // const [ month, day , year] = start.split('/');
             // const [month2, day2, year2] = end.split('/');
@@ -775,7 +849,7 @@
             // console.log([month2, day2, year2])
             // arrival = [ year, month, day].join('-')
             // departure = [year2, month2, day2].join('-')
-            arrival = start 
+            arrival = start
             departure = end
 
           } else {
@@ -813,9 +887,14 @@
             checkin: start,
             checkout: end
           }).then(res => {
-            console.log(res.data);
+            console.log(typeof res.data);
             this.allData = res.data
-            this.table(res.data)
+            if (res.data == 'empty') {
+              alert("No Room Available in the selected Date!")
+            } else {
+              console.log("here")
+              this.table(res.data)
+            }
           }).catch(err => console.log(err.message))
 
           console.log("filtered data", this.allData);

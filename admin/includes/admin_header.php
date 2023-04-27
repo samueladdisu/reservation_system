@@ -47,17 +47,17 @@ if (!isset($_SESSION['user_role'])) {
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <style>
 
-    #success_tic .page-body {
+    .success_tic .page-body {
       max-width: 300px;
       background-color: #FFFFFF;
       margin: 10% auto;
     }
 
-    #success_tic .page-body .head {
+    .success_tic .page-body .head {
       text-align: center;
     }
 
-    #success_tic .close {
+    .success_tic .close {
       opacity: 1;
       position: absolute;
       right: 0px;
@@ -66,7 +66,7 @@ if (!isset($_SESSION['user_role'])) {
       margin-bottom: 10px;
     }
 
-    #success_tic .checkmark-circle {
+    .success_tic .checkmark-circle {
       width: 150px;
       height: 150px;
       position: relative;
@@ -82,11 +82,11 @@ if (!isset($_SESSION['user_role'])) {
       position: absolute;
     }
 
-    #success_tic .checkmark-circle .checkmark {
+    .success_tic .checkmark-circle .checkmark {
       border-radius: 5px;
     }
 
-    #success_tic .checkmark-circle .checkmark.draw:after {
+    .success_tic .checkmark-circle .checkmark.draw:after {
       -webkit-animation-delay: 300ms;
       -moz-animation-delay: 300ms;
       animation-delay: 300ms;
@@ -109,7 +109,7 @@ if (!isset($_SESSION['user_role'])) {
       animation-fill-mode: forwards;
     }
 
-    #success_tic .checkmark-circle .checkmark:after {
+    .success_tic .checkmark-circle .checkmark:after {
       opacity: 1;
       height: 75px;
       width: 37.5px;

@@ -40,7 +40,7 @@
     if ($result['success'] == true) {
       return $result['result'];
     } else {
-      return 20;
+      return false;
     }
   }
 
@@ -58,11 +58,15 @@
       return $rate_find['rate'] * $price;
     } else {
       $todayrate = CurrencyConverter();
-      $rate_value = round($todayrate, 2);
-      $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
-      $rate_result = mysqli_query($connection, $rate_query);
-      confirm($rate_result);
-      return $price * $rate_value;
+      if ($todayrate) {
+        $rate_value = round($todayrate, 2);
+        $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
+        $rate_result = mysqli_query($connection, $rate_query);
+        confirm($rate_result);
+        return $price * $rate_value;
+      } else {
+        return $rate_find['rate'] * $price;
+      }
     }
   }
 
@@ -75,8 +79,34 @@
     $price = converttoETB($price);
   }
 
+  $cart = $_SESSION['cart'];
+  // print_r($cart);
+
+  foreach ($cart as $name => $value) {
+
+    $item[$name] = $value;
+    foreach ($item[$name] as $name1 => $val) {
 
 
+      $items[$name1] = $val;
+    }
+  }
+
+  $loc =  $items['room_location'];
+
+
+
+  if ($loc == 'entoto') {
+    $chapa_sec = $_ENV['CHAPA_SECK_ENTOTO'];
+    $chapa_pub = $_ENV['CHAPA_PUB_ENTOTO'];
+    // $callback_url = 'https://reservations.kurifturesorts.com/chapaEntotoCompleted/';
+    $callback_url = 'https://reservations.kurifturesorts.com/chapaEntotoCompleted/';
+    // $callback_url = 'http://localhost/reservation_system/chapaEntotoCompleted/';
+  } else {
+    $chapa_sec = $_ENV['CHAPA_SECK'];
+    $chapa_pub = $_ENV['CHAPA_PUB'];
+    $callback_url = 'https://reservations.kurifturesorts.com/chapaCompleted/';
+  }
 
   curl_setopt_array($curl, array(
     CURLOPT_URL => 'https://api.chapa.co/v1/transaction/initialize',
@@ -89,29 +119,43 @@
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS => array(
       'amount' =>  $price,
+      // 'amount' =>  1,
       // 'key' => $_ENV['CHAPA_PUB'],
       'currency' => $currency,
       'email' => $_SESSION['email'],
       'first_name' => $_SESSION['fName'],
       'last_name' => $_SESSION['lName'],
       'tx_ref' =>  $tx_ref,
-      // 'callback_url' => 'http://localhost/reservation_system/chapaCompleted/',
-      // 'return_url' => 'http://localhost/reservation_system/',
-      'callback_url' => 'https://test.kurifturesorts.com/chapaCompleted/',
-      'return_url' => 'https://test.kurifturesorts.com/Thankyou/'
+      'callback_url' => $callback_url,
+      'return_url' => 'https://reservations.kurifturesorts.com/Thankyou/'
     ),
     CURLOPT_HTTPHEADER => array(
-      'Authorization: Bearer ' . $_ENV['CHAPA_SECK']
+      'Authorization: Bearer ' . $chapa_sec
     ),
   ));
 
   $response = curl_exec($curl);
   $response = json_decode($response);
-  $checkout_url = $response->data->checkout_url;
+
+  if (isset($response)) {
+    var_dump($response->status);
+
+    if ($response->status == 'success') {
+      $checkout_url = $response->data->checkout_url;
+      header("Location: $checkout_url");
+    } else {
+      session_destroy();
+
+      echo "<script> 
+              alert('Payment Failed! Please try again!'); 
+              window.location.href = 'https://reservations.kurifturesorts.com/';
+            </script>";
+
+      sleep(3);
+    }
+  }
   curl_close($curl);
-  var_dump($response);
-  // echo $checkout_url;
-  header("Location: $checkout_url");
+
   ?>
 
 </body>

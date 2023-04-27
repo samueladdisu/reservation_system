@@ -24,19 +24,29 @@ if ($received_data->action == 'filter') {
   $roomLocation = '';
   $dataCount = [];
 
-  $query = "SELECT * 
-  FROM rooms 
-  WHERE room_id 
-  NOT IN 
-      ( SELECT b_roomId
-        FROM booked_rooms 
-        WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
-        UNION
-        SELECT b_roomId
-        FROM booked_rooms
-        WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
-        )
-  AND room_location = '$location' AND room_status <> 'Hold' ORDER BY room_acc";
+  // $query = "SELECT * 
+  // FROM rooms 
+  // WHERE room_id 
+  // NOT IN 
+  //     ( SELECT b_roomId
+  //       FROM booked_rooms 
+  //       WHERE '$checkin' >= b_checkin AND '$checkin' < b_checkout 
+  //       UNION
+  //       SELECT b_roomId
+  //       FROM booked_rooms
+  //       WHERE '$checkout' >= b_checkin AND '$checkout' < b_checkout
+  //       )
+  // AND room_location = '$location' AND room_status <> 'Hold' AND room_status <> 'bishoftu_hold' ORDER BY room_acc";
+
+  $query = "SELECT rooms.*
+  FROM rooms
+  LEFT JOIN booked_rooms
+  ON rooms.room_id = booked_rooms.b_roomId
+  AND (('$checkin' >= b_checkin AND '$checkin' < b_checkout)
+      OR ('$checkout' > b_checkin AND '$checkout' <= b_checkout)
+      OR ('$checkin' <= b_checkin AND '$checkout' >= b_checkout))
+  WHERE booked_rooms.b_roomId IS NULL
+  AND room_location = '$location' AND room_status NOT IN ('Hold', 'bishoftu_hold') ORDER BY room_acc;";
 
   $result = mysqli_query($connection, $query);
   confirm($result);
@@ -465,7 +475,7 @@ if ($received_data->action == 'insert') {
 
 if ($received_data->action == 'hold') {
 
-    date_default_timezone_set('Africa/Addis_Ababa');
+  date_default_timezone_set('Africa/Addis_Ababa');
   $id = intval($received_data->roomID);
 
   $query = "UPDATE rooms SET room_status = 'Hold' WHERE room_id = $id";
@@ -473,9 +483,9 @@ if ($received_data->action == 'hold') {
 
   confirm($result);
 
-  $name = "Room_NO_". $id;
+  $name = "Room_NO_" . $id;
 
-  $after_15 = date("Y-m-d H:i:s", strtotime("now + 25 seconds"));
+  $after_15 = date("Y-m-d H:i:s", strtotime("now + 60 seconds"));
 
   $timer_query = "CREATE EVENT IF NOT EXISTS $name 
                   ON SCHEDULE AT  '$after_15' 

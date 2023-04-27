@@ -51,11 +51,12 @@
                               <th>Id</th>
                               <th>Date</th>
                               <th>Rate</th>
+                              <th>Update</th>
                             </tr>
                           </thead>
                           <?php
 
-                          $ex_query = "SELECT * FROM exchage_rates ORDER BY id DESC";
+                          $ex_query = "SELECT * FROM convertusd";
                           $ex_result = mysqli_query($connection, $ex_query);
 
                           confirm($ex_result);
@@ -63,9 +64,12 @@
                           while ($row = mysqli_fetch_assoc($ex_result)) {
                           ?>
                             <tr>
-                              <td><?php echo $row['id'] ?></td>
-                              <td><?php echo $row['date'] ?></td>
+                              <td><?php echo $row['rate_id'] ?></td>
+                              <td><?php echo $row['dateUpdated'] ?></td>
                               <td><?php echo $row['rate'] ?></td>
+                              <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exchangeUpdater">
+                                  Update Rates
+                                </button></td>
                             </tr>
                           <?php
                           }
@@ -79,36 +83,26 @@
                   </div>
                 </div>
               </div>
+              <!-- Modal 2 -->
 
-              <div class="card shadow mb-4">
-                <div class="card-header d-flex justify-content-between py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Reservations</h6>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    Exchange Rates
-                  </button>
+              <div class="modal fade" id="exchangeUpdater" tabindex="-1" role="dialog" aria-labelledby="exchangeUpdaterTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exchangeUpdaterTitle">Update Todays Rate</h5>
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+                    <h5 style="margin-left: 10px; ">Insert Todays Rate</h5>
 
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table display table-bordered" width="100%" id="viewResTable" cellspacing="0">
-
-
-                      <thead>
-                        <tr>
-                          <th>Id</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Phone</th>
-                          <th>Arrival</th>
-                          <th>Departure</th>
-                          <th>Total Price</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-
-                    </table>
+                    <div class="modal-body">
+                      <input name="res_cancel" v-model='todaysRate' placeholder="Todays Rate" id="" cols="30" rows="10" class="form-control" required></input>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                      <button class="btn btn-primary" @click="UpdateRate" data-dismiss="modal">Update Rate</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -204,12 +198,14 @@
                           <th>Type</th>
                           <th>Room no.</th>
                           <th>Guest Name</th>
+                          <th>Group Name</th>
                           <th>Adults</th>
                           <th>Kids</th>
                           <th>teens</th>
                           <th>Arrival</th>
                           <th>Departure</th>
                           <th>Status</th>
+                          <th>Remark</th>
                           <th>Location</th>
                         </tr>
                       </thead>
@@ -220,6 +216,61 @@
                   </div>
                 </div>
               </div>
+
+              <div class="card shadow mb-4">
+                <div class="card-header d-flex justify-content-between py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Today's Reservations</h6>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Exchange Rates
+                  </button>
+
+                </div>
+                <!------------------------- t-date picker  --------------------->
+
+
+                <div class="card mb-2">
+                  <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Pick a Date & Filter </h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="row py-1">
+
+                      <div class="form-group col-3">
+                        <input type="text" class="form-control" name="daterange" id="date" value="" readonly />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!------------------------- t-date picker end  ------------------>
+
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table display table-bordered" width="100%" id="viewResTable" cellspacing="0">
+
+
+                      <thead>
+                        <tr>
+                          <th>Id</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Phone</th>
+                          <th>Room No.s</th>
+                          <th>Arrival</th>
+                          <th>Departure</th>
+                          <th>Total Price</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+
             </div>
           </div>
 
@@ -299,6 +350,10 @@
                     <li class="list-group-item"> <strong>Confirm ID:</strong> {{ tempRow.res_confirmID }}</li>
                     <li class="list-group-item"> <strong> Special Request: </strong>{{ tempRow.res_specialRequest }}</li>
                     <li class="list-group-item"> <strong>Payment Status:</strong> {{ tempRow.res_paymentStatus }}</li>
+                    <li v-if="tempRow.res_paymentStatus=='AA Paid'" class="list-group-item"> <strong>Download Document:</strong><button type="button" class="btn btn-primary" @click="downloadDoc(tempRow.upload_AA)">
+                        Document
+                      </button></li>
+
                     <li class="list-group-item"> <strong>Check out:</strong> {{ tempRow.res_checkout }}</li>
                     <li class="list-group-item"> <strong>Booked At:</strong> {{ tempRow.created_at }}</li>
                   </ul>
@@ -339,20 +394,63 @@
       </footer>
       <!-- End of Footer -->
 
+      <!-- Checkin Modal  -->
+      <div class="modal fade" id="checkedInModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Are you sure the guest checked in?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" @click="CheckedIN" data-dismiss="modal">CheckedIN</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout Modal  -->
+      <div class="modal fade" id="checkedOutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Are you sure the guest checked out?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" @click="CheckedOut" data-dismiss="modal">CheckedOut</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <!-- Delete Modal  -->
       <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Are you sure You want to Delete?</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Cancelation Form?</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body">Select "Delete" to confirm deletion.</div>
+            <div class="modal-body">
+              <textarea name="res_cancel" v-model='reason_cancel' placeholder="Reservation cancellation justification" id="" cols="30" rows="10" class="form-control" required></textarea>
+            </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Delete</button>
+              <button class="btn btn-primary" @click="deleteRes" data-dismiss="modal">Cancel Reservation</button>
             </div>
           </div>
         </div>
@@ -414,6 +512,53 @@
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
+    // Enable pusher logging - don't include this in production
+
+    var start, end
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    let tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    const td = String(tomorrow.getDate()).padStart(2, '0');
+    const tm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const ty = tomorrow.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    tomorrow = tm + '/' + td + '/' + ty;
+
+    start = yyyy + '-' + mm + '-' + dd;
+    end = ty + '-' + tm + '-' + td;
+
+    console.log("inital start", start);
+    console.log("inital end", end);
+
+    $(document).ready(function() {
+
+      console.log("initial start", start);
+      console.log("initial end", end);
+      $('#date').daterangepicker();
+      $('#date').data('daterangepicker').setStartDate(today);
+      $('#date').data('daterangepicker').setEndDate(tomorrow);
+
+      $('#date').on('apply.daterangepicker', function(ev, picker) {
+        // console.log(picker.startDate.format('YYYY-MM-DD'));
+        // console.log(picker.endDate.format('YYYY-MM-DD'));
+
+        start = picker.startDate.format('YYYY-MM-DD')
+        end = picker.endDate.format('YYYY-MM-DD')
+        console.log("updated start", start);
+        console.log("updated end", end);
+        app.fetchReserveDateRange(start, end);
+      });
+    })
+
+
+
     $(document).ready(function() {
 
       $('#exRates').DataTable({
@@ -440,7 +585,9 @@
           dob: '',
           remark: '',
           tempDelete: {},
-          guestInfo: []
+          guestInfo: [],
+          reason_cancel: '',
+          todaysRate: 0.00
         }
       },
       methods: {
@@ -470,6 +617,9 @@
                 data: 'res_phone'
               },
               {
+                data: 'res_roomNo'
+              },
+              {
                 data: 'res_checkin'
               },
               {
@@ -482,22 +632,30 @@
                 data: 'res_id',
                 render: function(data) {
                   return `<div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                        <a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown">
                           <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
-                          <a data-toggle="modal" :data-target="modal" class="dropdown-item" href="#">
+                          <a data-toggle="modal" :data-target="modal" class="dropdown-item" >
                             Add
                           </a>
-                          <a class="dropdown-item" data-id="${data}" id="view" href="#">
+                          <a class="dropdown-item" data-id="${data}" id="view" >
                             View
                           </a>
-                          <a class="dropdown-item" id="edit" href="edit_reservation.php?id=${data}" href="#">
+                          <a class="dropdown-item" id="edit" href="edit_reservation.php?id=${data}" >
                             Edit
                           </a>
                           <div class="dropdown-divider"></div>
-                          <a data-id="${data}" id="delete" href="#" class="dropdown-item text-danger">
-                            Delete
+                          <a data-id="${data}" id="checkedIn"  class="dropdown-item text-danger">
+                            CheckedIn
+                          </a>
+                          <div class="dropdown-divider"></div>
+                          <a data-id="${data}" id="checkedOut"  class="dropdown-item text-danger">
+                            CheckedOut
+                          </a>
+                          <div class="dropdown-divider"></div>
+                          <a data-id="${data}" id="delete"  class="dropdown-item text-danger">
+                            Cancel
                           </a>
 
                         </div>
@@ -514,6 +672,42 @@
           //   let res_id = $(this).data("id")
 
           // })
+
+          $(document).on('click', '#checkedIn', function() {
+            // get room id from the table
+            let ids = $(this).data("id")
+            let temprow = {}
+
+            // filter alldata which is equal to the room id
+            vm.posts.forEach(item => {
+              if (item.res_id == ids) {
+                temprow = item
+              }
+            })
+
+            // assign to temp row
+            vm.tempDelete = temprow
+            console.log("temp row", vm.tempDelete);
+            $('#checkedInModal').modal('show')
+          })
+
+          $(document).on('click', '#checkedOut', function() {
+            // get room id from the table
+            let ids = $(this).data("id")
+            let temprow = {}
+
+            // filter alldata which is equal to the room id
+            vm.posts.forEach(item => {
+              if (item.res_id == ids) {
+                temprow = item
+              }
+            })
+
+            // assign to temp row
+            vm.tempDelete = temprow
+            console.log("temp row", vm.tempDelete);
+            $('#checkedOutModal').modal('show')
+          })
 
           $(document).on('click', '#delete', function() {
             // get room id from the table
@@ -553,20 +747,107 @@
           })
 
         },
-        async deleteRes() {
+
+        async fetchReserveDateRange(sDate, eDate) {
           await axios.post('./includes/backEndreservation.php', {
-            action: 'delete',
-            row: this.tempDelete
+            action: 'fetchResDate',
+            startDate: sDate,
+            endDate: eDate
+          }).then(res => {
+            console.log(res.data)
+            this.posts = res.data
+            this.table(res.data)
+          })
+
+        },
+        async CheckedIN() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'checkedIn',
+            row: this.tempDelete,
+            reason: this.reason_cancel,
+            agent_name: '<?php echo $_SESSION['username']; ?>'
           }).then(res => {
             console.log(res.data);
             this.fetchData()
           })
         },
+        async CheckedOut() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'checkedOut',
+            row: this.tempDelete,
+            reason: this.reason_cancel,
+            agent_name: '<?php echo $_SESSION['username']; ?>'
+          }).then(res => {
+           
+            console.log(res.data);
+            this.fetchData()
+          })
+        },
+        async deleteRes() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'delete',
+            row: this.tempDelete,
+            reason: this.reason_cancel,
+            agent_name: '<?php echo $_SESSION['username']; ?>'
+          }).then(res => {
+            console.log(res.data);
+            this.fetchData()
+          })
+        },
+
+        async UpdateRate() {
+          await axios.post('./includes/backEndreservation.php', {
+            action: 'UpdateRate',
+            rate: this.todaysRate,
+          }).then(res => {
+
+            this.fetchData()
+          })
+        },
+
+        async extractFile(file_name) {
+          const fs = require('fs');
+          const path = require('path');
+
+          const directoryPath = 'uploads/';
+          const fileName = file_name; // name of the file without extension
+
+          await fs.readdir(directoryPath, (err, files) => {
+            if (err) {
+              console.log('Unable to read directory: ' + err);
+              return;
+            }
+
+            // Find the file by name
+            const foundFile = files.find(file => file.startsWith(fileName));
+            if (!foundFile) {
+              console.log('File not found');
+              return;
+            }
+
+            // Get the full file name with extension
+            const fileExt = path.extname(foundFile);
+            const fullFileName = foundFile.replace(fileExt, '');
+
+            return fullFileName + fileExt;
+          });
+        },
+        async downloadDoc(path) {
+          const parts = path.split('/');
+          const filename = parts[parts.length - 1];
+
+          const link = document.createElement('a');
+          link.href = path;
+          link.setAttribute('download', '');
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        },
         fetchData() {
           axios.post('./includes/backEndreservation.php', {
             action: 'fetchRes'
           }).then(res => {
-            // console.log("comes from api", res.data);
+            console.log("comes from api", res.data);
             this.posts = res.data
             this.table(res.data)
           })
@@ -590,7 +871,7 @@
             location: flocation,
             date: this.filterDate
           }).then(res => {
-            // console.log(res.data[0].b_checkin);
+            console.log(res.data[0].b_checkin);
 
             res.data.forEach(item => {
               item.status = ""
@@ -602,7 +883,7 @@
               } else if (this.filterDate > item.b_checkin && this.filterDate < item.b_checkout) {
                 item.status = "Stay over"
               } else if (item.b_checkout === this.filterDate) {
-                item.status = "Departure"
+                item.status = "Free"
               }
 
 
@@ -616,6 +897,8 @@
           $('#roomStatus').DataTable({
             destroy: true,
             dom: 'lBfrtip',
+            iDisplayLength: 150,
+            scrollY: "500px",
             buttons: [
               'excel',
               'print',
@@ -638,6 +921,9 @@
                 data: 'res_firstname'
               },
               {
+                data: 'group_name'
+              },
+              {
                 data: 'info_adults'
               },
               {
@@ -654,6 +940,9 @@
               },
               {
                 data: 'status',
+              },
+              {
+                data: 'res_remark'
               },
               {
                 data: 'room_location'

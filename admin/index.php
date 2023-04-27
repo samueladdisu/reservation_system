@@ -51,6 +51,7 @@
           $_SESSION['lastname'] = $data['user_lastName'];
           $_SESSION['user_role'] = $data['user_role'];
           $_SESSION['user_location'] = $data['user_location'];
+          $_SESSION['ticket_token'] = $data['ticket_token'];
 
           header("Location: ./dashboard.php");
         } else {

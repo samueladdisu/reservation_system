@@ -12,9 +12,10 @@ $data = array();
 $filterd_data = array();
 if ($incoming->action == 'fetchRes') {
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
-    $query = "SELECT * FROM reservations ORDER BY res_id DESC";
+    // $query = "SELECT * FROM reservations ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() AND res_status !='Canceled' ORDER BY res_id DESC";
   } else {
-    $query = "SELECT * FROM reservations WHERE res_location = '$location' ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE() AND res_status !='Canceled ORDER BY res_id DESC";
   }
 
   $result = mysqli_query($connection, $query);
@@ -26,6 +27,50 @@ if ($incoming->action == 'fetchRes') {
 
   echo json_encode($data);
 }
+
+
+if ($incoming->action == 'fetchResDate') {
+
+  $select_start_date = $incoming->startDate;
+  $select_end_date = $incoming->endDate;
+
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM reservations WHERE res_checkin >= STR_TO_DATE('$select_start_date','%Y-%m-%d') 
+    AND res_checkout <= STR_TO_DATE('$select_end_date','%Y-%m-%d') ORDER BY res_id DESC";
+  } else {
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin >= STR_TO_DATE('$select_start_date','%Y-%m-%d') 
+    AND res_checkout <= STR_TO_DATE('$select_end_date','%Y-%m-%d') ORDER BY res_id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
+}
+
+if ($incoming->action == 'fetchResDaily') {
+  $date = date('Y-m-d');
+  if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
+    $query = "SELECT * FROM reservations WHERE res_checkin >= '$date' ORDER BY res_id DESC";
+  } else {
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin >= '$date' ORDER BY res_id DESC";
+  }
+
+  $result = mysqli_query($connection, $query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
+}
+
+
 
 if ($incoming->action == 'filter') {
   $location = $incoming->location;
@@ -93,10 +138,45 @@ if ($incoming->action == "guestInfo") {
   }
   echo json_encode($data);
 }
+
+if ($incoming->action == "checkedIn") {
+  $res_id = $incoming->row->res_id;
+  $group_name = $incoming->row->res_groupName;
+  $group_id = $incoming->row->res_groupID;
+  $reason = $incoming->reason;
+  $agent_name = $incoming->agent_name;
+
+  $delete_query = "UPDATE reservations SET res_status = 'checkedIn' WHERE res_id = $res_id";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
+
+if ($incoming->action == "UpdateRate") {
+  $rate = $incoming->rate;
+  $delete_query = "UPDATE convertusd SET rate = $rate, dateUpdated = CURDATE() WHERE rate_id = 1";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
+
+if ($incoming->action == "checkedOut") {
+  $res_id = $incoming->row->res_id;
+  $group_name = $incoming->row->res_groupName;
+  $group_id = $incoming->row->res_groupID;
+  $reason = $incoming->reason;
+  $agent_name = $incoming->agent_name;
+
+  $delete_query = "UPDATE reservations SET res_status = 'checkedOut' WHERE res_id = $res_id";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
 if ($incoming->action == "delete") {
   $res_id = $incoming->row->res_id;
   $group_name = $incoming->row->res_groupName;
   $group_id = $incoming->row->res_groupID;
+  $reason = $incoming->reason;
+  $agent_name = $incoming->agent_name;
+  print_r($reason);
+
   $rooms = array();
 
   if ($group_name == "") {
@@ -131,20 +211,33 @@ if ($incoming->action == "delete") {
       }
     }
 
-    $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
+    // $delete_query = "DELETE FROM reservations WHERE res_id = $res_id";
+    // $delete_result = mysqli_query($connection, $delete_query);
+    // confirm($delete_result);
+
+    // $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
+    // $guest_info_result = mysqli_query($connection, $guest_info_query);
+    // confirm($guest_info_result);
+
+    // $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_res_id = $res_id";
+    // $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+    $delete_query = "UPDATE reservations SET res_status = 'Canceled' WHERE res_id = $res_id";
     $delete_result = mysqli_query($connection, $delete_query);
     confirm($delete_result);
 
-    $guest_info_query = "DELETE FROM guest_info WHERE info_res_id = $res_id";
-    $guest_info_result = mysqli_query($connection, $guest_info_query);
-    confirm($guest_info_result);
 
-    $delete_booked_rooms = "DELETE FROM booked_rooms WHERE b_res_id = $res_id";
-    $delete_booked_rooms_result = mysqli_query($connection, $delete_booked_rooms);
+    $insert_group_query = "INSERT INTO cancelation_report(cancel_agent, cancel_remark, res_id) ";
 
-    confirm($delete_booked_rooms_result);
+    $insert_group_query .= "VALUES ('Aklile', '$reason', '$res_id')";
 
-    echo json_encode(confirm($delete_booked_rooms_result));
+
+
+    $cancel_result = mysqli_query($connection, $insert_group_query);
+    confirm($cancel_result);
+
+    confirm($cancel_result);
+
+    echo json_encode(confirm($cancel_result));
   } else {
     echo json_encode($incoming->row);
 
@@ -184,29 +277,31 @@ if ($incoming->action == "roomStatus") {
   $location = $incoming->location;
   $date = $incoming->date;
 
-  if($location == "all"){
+  if ($location == "all") {
 
-    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, gr.group_name, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
     FROM rooms AS r
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
     LEFT JOIN reservations AS res
-    ON res.res_id = b.b_res_id
+    ON res.res_id = b.b_res_id AND res.res_status != 'Canceled'
+    LEFT JOIN group_reservation AS gr
+    ON gr.group_id = b.b_group_res_id
     LEFT JOIN guest_info AS g
-    ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId";
+    ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId;";
+  } else {
 
-  }else {
-
-    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location
+    $query = "SELECT r.room_id, r.room_acc, r.room_number, res.res_firstname, gr.group_name, g.info_adults, g.info_kids, g.info_teens,b.b_checkin, b.b_checkout, r.room_location, res.res_remark
     FROM rooms AS r
     LEFT JOIN booked_rooms AS b
     ON r.room_id = b.b_roomId AND '$date' BETWEEN b_checkin AND b_checkout
     LEFT JOIN reservations AS res
-    ON res.res_id = b.b_res_id
+    ON res.res_id = b.b_res_id AND res.res_status != 'Canceled'
+    LEFT JOIN group_reservation AS gr
+    ON gr.group_id = b.b_group_res_id
     LEFT JOIN guest_info AS g
     ON g.info_res_id = b.b_res_id AND g.info_room_id = b.b_roomId
     WHERE r.room_location = '$location'";
-
   }
 
   $result = mysqli_query($connection, $query);

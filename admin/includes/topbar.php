@@ -41,9 +41,9 @@
         </li>
 
         <li class="nav-item p-3">
+        <button data-toggle="modal" data-target="#ReportModalCenter" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Sales Report</button>
 
-         
-           
+
 
 
         </li>
