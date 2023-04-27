@@ -636,9 +636,7 @@
                           <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
-                          <a data-toggle="modal" :data-target="modal" class="dropdown-item" >
-                            Add
-                          </a>
+                         
                           <a class="dropdown-item" data-id="${data}" id="view" >
                             View
                           </a>
@@ -778,7 +776,7 @@
             reason: this.reason_cancel,
             agent_name: '<?php echo $_SESSION['username']; ?>'
           }).then(res => {
-           
+
             console.log(res.data);
             this.fetchData()
           })
@@ -800,8 +798,9 @@
             action: 'UpdateRate',
             rate: this.todaysRate,
           }).then(res => {
+            window.location.href = 'view_all_reservations.php'
+            this.fetchData();
 
-            this.fetchData()
           })
         },
 
