@@ -76,7 +76,7 @@ function CurrencyConverter()
   if ($result['success'] == true) {
     return $result['result'];
   } else {
-    return 20;
+    return false;
   }
 }
 
@@ -91,24 +91,30 @@ function converttoETB($price)
   $row = mysqli_num_rows($rate_result);
   $rate_find = mysqli_fetch_assoc($rate_result);
   if (strtotime($rate_find['dateUpdated']) == strtotime($todaydate)) {
-    
+
     $total = floatval($rate_find['rate']) * floatval($price);
     $final = round(floatval($total), 2, PHP_ROUND_HALF_UP);
     return $final;
   } else {
     $todayrate = CurrencyConverter();
-    $rate_value = round($todayrate, 2);
-    $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
-    $rate_result = mysqli_query($connection, $rate_query);
-    confirm($rate_result);
+    if ($todayrate) {
+      $rate_value = round($todayrate, 2);
+      $rate_query = "UPDATE convertusd SET dateUpdated = '$todaydate', rate = '$rate_value' WHERE rate_id = 1";
+      $rate_result = mysqli_query($connection, $rate_query);
+      confirm($rate_result);
 
-    $insert_to_exrate = "INSERT INTO exchage_rates(date, rate) VALUES('$todaydate', $rate_value)";
-    $insert_result = mysqli_query($connection, $insert_to_exrate);
-    confirm($insert_result);
-    $total = floatval($price)  * floatval($rate_value);
-    $final = round(floatval($total), 2, PHP_ROUND_HALF_UP);
+      $insert_to_exrate = "INSERT INTO exchage_rates(date, rate) VALUES('$todaydate', $rate_value)";
+      $insert_result = mysqli_query($connection, $insert_to_exrate);
+      confirm($insert_result);
+      $total = floatval($price)  * floatval($rate_value);
+      $final = round(floatval($total), 2, PHP_ROUND_HALF_UP);
 
-    return $final;
+      return $final;
+    } else {
+      $total = floatval($rate_find['rate']) * floatval($price);
+      $final = round(floatval($total), 2, PHP_ROUND_HALF_UP);
+      return $final;
+    }
   }
 }
 
@@ -149,7 +155,7 @@ function cancelLitsener($Money)
     $short_code = $_ENV['BShort_Code'];
     $receiveName = $_ENV['BName'];
     $notify_url = "https://test.kurifturesorts.com/telebirrBishoftu/";
-  } else if($loc === 'entoto'){
+  } else if ($loc === 'entoto') {
     $appKey = $_ENV['EApp_Key'];
     $appId  = $_ENV['EApp_ID'];
     $publicKey = $_ENV['EPublic_Key'];
@@ -165,7 +171,6 @@ function cancelLitsener($Money)
     $short_code = $_ENV['TShort_Code'];
     $receiveName = $_ENV['TName'];
     $notify_url = "https://test.kurifturesorts.com/telebirrTana/";
-
   }
 
   $ConvertedMoney = converttoETB($Money);

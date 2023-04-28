@@ -630,13 +630,24 @@
               },
               {
                 data: 'res_id',
-                render: function(data) {
+                render: function(data, type, row) {
+                  let checkoutOption = '';
+                  let checkedInOption = '';
+                  if (row.res_status === 'checkedIn') {
+                    checkoutOption = `<a data-id="${data}" id="checkedOut" class="dropdown-item text-danger">CheckedOut</a><div class="dropdown-divider"></div>`;
+
+                  } else if (row.res_status === '') {
+                    checkedInOption = `<a data-id="${data}" id="checkedIn" class="dropdown-item text-danger">CheckedIn</a><div class="dropdown-divider"></div>`;
+                  } else if (row.res_status === 'checkedOut') {
+                    checkoutOption = '';
+                    checkedInOption = '';
+
+                  }
                   return `<div class="dropdown no-arrow">
                         <a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown">
                           <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
-                         
                           <a class="dropdown-item" data-id="${data}" id="view" >
                             View
                           </a>
@@ -644,18 +655,13 @@
                             Edit
                           </a>
                           <div class="dropdown-divider"></div>
-                          <a data-id="${data}"  id="checkedIn"  class="dropdown-item text-danger">
-                            CheckedIn
-                          </a>
+                          ${checkedInOption}
                           <div class="dropdown-divider"></div>
-                          <a data-id="${data}" v-if="row.res_status === 'checkedIn'"  id="checkedOut"  class="dropdown-item text-danger">
-                            CheckedOut
-                          </a>
+                          ${checkoutOption}
                           <div class="dropdown-divider"></div>
                           <a data-id="${data}" id="delete"  class="dropdown-item text-danger">
                             Cancel
                           </a>
-
                         </div>
                       </div>`
                 }

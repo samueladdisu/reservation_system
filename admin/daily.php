@@ -644,7 +644,7 @@
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="table display table-bordered" width="100%" id="viewCancelationTable" cellspacing="0">
+                      <table class="table display table-bordered" width="100%" id="viewCinCoutTable" cellspacing="0">
 
 
                         <thead>
@@ -779,7 +779,8 @@
           remark: '',
           tempDelete: {},
           guestInfo: [],
-          cancelation: []
+          cancelation: [],
+
         }
       },
       methods: {
@@ -950,6 +951,75 @@
             console.log(res.data)
             this.roomStatusTable(res.data)
           })
+        },
+
+
+        viewCinCoutTable(row) {
+          $('#viewCinCoutTable').DataTable({
+            destroy: true,
+            dom: 'lBfrtip',
+            iDisplayLength: 150,
+            scrollY: "500px",
+            buttons: [
+              'excel',
+              'print',
+              'csv'
+            ],
+            order: [
+              [0, 'asc']
+            ],
+            data: row,
+            columns: [{
+                data: 'room_id'
+              },
+              {
+                data: 'room_acc'
+              },
+              {
+                data: 'room_number'
+              },
+              {
+                data: 'res_firstname'
+              },
+              {
+                data: 'info_adults'
+              },
+              {
+                data: 'info_kids'
+              },
+              {
+                data: 'info_teens'
+              },
+              {
+                data: 'b_checkin'
+              },
+              {
+                data: 'b_checkout'
+              },
+              {
+                data: 'status',
+              },
+              {
+                data: 'res_remark'
+              },
+              {
+                data: 'room_location'
+              }
+            ],
+          });
+
+        },
+
+        fetchCheckinout() {
+
+          axios.post('./includes/backEndreservation.php', {
+            action: "Checkinout",
+            location: this.location
+          }).then(res => {
+            
+          })
+
+
         },
         roomStatusTable(row) {
           $('#roomStatus').DataTable({

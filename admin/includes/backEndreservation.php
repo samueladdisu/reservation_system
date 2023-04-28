@@ -162,6 +162,14 @@ if ($incoming->action == "UpdateRate") {
   confirm($delete_result);
 }
 
+if ($incoming->action == "Checkinout") {
+  $rate = $incoming->rate;
+  $delete_query = "SELECT * FROM";
+  $delete_result = mysqli_query($connection, $delete_query);
+  confirm($delete_result);
+}
+
+
 if ($incoming->action == "checkedOut") {
   $res_id = $incoming->row->res_id;
   $group_name = $incoming->row->res_groupName;
