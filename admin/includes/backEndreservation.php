@@ -29,6 +29,24 @@ if ($incoming->action == 'fetchRes') {
 }
 
 
+
+if ($received_data->action == 'fetchCancelationReport') {
+  $location = $received_data->location;
+  $startDate = $received_data->startDate;
+  $endDate = $received_data->endDate;
+  $query = "SELECT * FROM reservations AS r, cancelation_report AS cr WHERE res_location = '$location' AND res_checkin BETWEEN '$startDate' AND '$endDate' AND r.res_id = cr.res_id";
+
+  $update_result = mysqli_query($connection, $query);
+
+  $exists = mysqli_num_rows($update_result);
+  while ($row = mysqli_fetch_assoc($update_result)) {
+    $data[] = $row;
+  }
+
+
+  echo json_encode($data);
+}
+
 if ($incoming->action == 'fetchResDate') {
 
   $select_start_date = $incoming->startDate;
@@ -163,10 +181,16 @@ if ($incoming->action == "UpdateRate") {
 }
 
 if ($incoming->action == "Checkinout") {
-  $rate = $incoming->rate;
-  $delete_query = "SELECT * FROM";
-  $delete_result = mysqli_query($connection, $delete_query);
-  confirm($delete_result);
+  $location = $incoming->location;
+  $select_query = "SELECT * FROM checkinout AS c, reservations AS r WHERE c.res_id = r.res_id AND DATE(c.checkinDate) = CURDATE() OR DATE(c.checkoutDate) = CURDATE()";
+  $select_result = mysqli_query($connection, $select_query);
+  confirm($select_result);
+  $data = [];
+  while ($row = mysqli_fetch_assoc($select_result)) {
+    $data[] = $row;
+  }
+
+  echo json_encode($data);
 }
 
 
@@ -244,7 +268,7 @@ if ($incoming->action == "delete") {
 
     $insert_group_query = "INSERT INTO cancelation_report(cancel_agent, cancel_remark, res_id) ";
 
-    $insert_group_query .= "VALUES ('Aklile', '$reason', '$res_id')";
+    $insert_group_query .= "VALUES ('$agent_name', '$reason', '$res_id')";
 
 
 

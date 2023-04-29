@@ -958,8 +958,8 @@
           $('#viewCinCoutTable').DataTable({
             destroy: true,
             dom: 'lBfrtip',
-            iDisplayLength: 150,
-            scrollY: "500px",
+
+
             buttons: [
               'excel',
               'print',
@@ -970,41 +970,29 @@
             ],
             data: row,
             columns: [{
-                data: 'room_id'
-              },
-              {
-                data: 'room_acc'
-              },
-              {
-                data: 'room_number'
-              },
-              {
                 data: 'res_firstname'
               },
               {
-                data: 'info_adults'
+                data: 'res_lastname'
               },
               {
-                data: 'info_kids'
+                data: 'res_roomNo'
               },
               {
-                data: 'info_teens'
+                data: 'checkinDate'
               },
               {
-                data: 'b_checkin'
+                data: 'checkoutDate'
               },
               {
-                data: 'b_checkout'
+                data: 'agent_checkin'
               },
               {
-                data: 'status',
+                data: 'agent_checkout'
               },
               {
-                data: 'res_remark'
+                data: 'res_location'
               },
-              {
-                data: 'room_location'
-              }
             ],
           });
 
@@ -1016,7 +1004,8 @@
             action: "Checkinout",
             location: this.location
           }).then(res => {
-            
+            console.log("checkInOut", res.data);
+            this.viewCinCoutTable(res.data);
           })
 
 
@@ -1080,6 +1069,7 @@
       },
       created() {
         this.fetchData()
+        this.fetchCheckinout()
         <?php
 
         if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {

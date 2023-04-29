@@ -190,6 +190,8 @@ if ($received_data->action == 'DonutChart') {
 }
 
 
+
+
 if ($received_data->action == 'cancelation') {
     $location = $received_data->location;
     $query = "SELECT COUNT(*) AS canceled FROM reservations WHERE res_status = 'Canceled' AND res_checkin = CURDATE() AND res_location = '$location'";
