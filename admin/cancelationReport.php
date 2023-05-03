@@ -57,19 +57,18 @@
 
                                                         <thead>
                                                             <tr>
-                                                                <th>Id</th>
-                                                                <th>Group Name</th>
-                                                                <th>Guest Number</th>
-                                                                <th>Rooms</th>
-                                                                <th>Ava. Rooms</th>
-                                                                <th>Check in</th>
-                                                                <th>Check out</th>
-                                                                <th>Reason</th>
-                                                                <th>Payment Status</th>
-                                                                <th>Remark</th>
-                                                                <th>Location</th>
+
+                                                                <th>Guest First Name</th>
+                                                                <th>Guest Last Name</th>
+                                                                <th>Room Location</th>
+                                                                <th>email</th>
+                                                                <th>Phone Number</th>
+                                                                <th>Canceling Agent</th>
+                                                                <th>Canceling Date</th>
+                                                                <th>Cancelation Reason</th>
+                                                                <th>Room Numbers</th>
                                                                 <th>Total Price</th>
-                                                                <th></th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -205,7 +204,7 @@
                             end = picker.endDate.format('YYYY-MM-DD')
                             console.log("updated start", start);
                             console.log("updated end", end);
-                            app.fetchfromDateRange(start, end);
+                            app.fetchData(start, end);
                         });
                     })
 
@@ -257,47 +256,40 @@
                                     ],
                                     data: row,
                                     columns: [{
-                                            data: 'group_id'
+                                            data: 'res_firstname'
                                         },
                                         {
-                                            data: 'group_name'
+                                            data: 'res_lastname'
                                         },
                                         {
-                                            data: 'group_guest'
+                                            data: 'res_location'
                                         },
                                         {
-                                            data: 'group_roomQuantity'
+                                            data: 'res_email'
                                         },
                                         {
-                                            data: 'group_remainingRooms'
+                                            data: 'res_phone'
                                         },
                                         {
-                                            data: 'group_checkin'
+                                            data: 'cancel_agent'
                                         },
                                         {
-                                            data: 'group_checkout'
+                                            data: 'cancel_date'
                                         },
                                         {
-                                            data: 'group_reason',
-                                            render: function(data, display) {
-                                                if (data == 'con') {
-                                                    return `Conference`
-                                                } else if (data == 'wed') {
-                                                    return `Wedding`
-                                                }
+                                            data: 'cancel_remark',
 
-                                            }
                                         },
 
                                         {
-                                            data: 'group_remark'
+                                            data: 'res_roomNo'
                                         },
                                         {
-                                            data: 'group_location'
+                                            data: 'res_price'
                                         },
-                                        {
-                                            data: 'group_price'
-                                        },
+                                        // {
+                                        //     data: 'group_price'
+                                        // },
 
                                     ],
                                 });
@@ -328,21 +320,44 @@
                             },
 
                             async fetchData(start, end) {
-                                await axios.post('/backEndreservation.php', {
+                                await axios.post('./includes/backEndreservation.php', {
                                     action: 'fetchCancelationReport',
                                     start: start,
                                     end: end,
                                     location: this.location
                                 }).then(res => {
                                     console.log(res.data);
-                                    // this.fetchData()
+                                    this.table(res.data)
                                 })
 
                             },
 
+                            async fetchDataAll() {
+                                await axios.post('./includes/backEndreservation.php', {
+                                    action: 'fetchAllCancelationReport',
+                                    location: this.location
+                                }).then(res => {
+                                    console.log(res.data);
+                                    this.table(res.data)
+                                })
+
+                            }
+
                         },
                         created() {
-                            this.fetchData()
+
+                            <?php
+
+                            if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+                            ?>
+                                this.location = "ALL"
+
+                            <?php } else { ?>
+
+                                this.location = '<?php echo $_SESSION['user_location']; ?>'
+
+                            <?php  } ?>
+                            this.fetchDataAll()
 
                         }
                     }).mount("#resApp")

@@ -30,21 +30,126 @@ if ($incoming->action == 'fetchRes') {
 
 
 
-if ($received_data->action == 'fetchCancelationReport') {
-  $location = $received_data->location;
-  $startDate = $received_data->startDate;
-  $endDate = $received_data->endDate;
-  $query = "SELECT * FROM reservations AS r, cancelation_report AS cr WHERE res_location = '$location' AND res_checkin BETWEEN '$startDate' AND '$endDate' AND r.res_id = cr.res_id";
+if ($incoming->action == 'fetchCancelationReport') {
+  $location = $incoming->location;
+  $startDate = $incoming->start;
+  $endDate = $incoming->end;
+  if ($location == 'ALL') {
+    $query = "SELECT * FROM reservations AS r, cancelation_report AS cr WHERE res_checkin BETWEEN '$startDate' AND '$endDate' AND r.res_id = cr.res_id";
 
-  $update_result = mysqli_query($connection, $query);
+    $update_result = mysqli_query($connection, $query);
 
-  $exists = mysqli_num_rows($update_result);
-  while ($row = mysqli_fetch_assoc($update_result)) {
-    $data[] = $row;
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  } else {
+    $query = "SELECT * FROM reservations AS r, cancelation_report AS cr WHERE res_location = '$location' AND res_checkin BETWEEN '$startDate' AND '$endDate' AND r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
   }
+}
 
 
-  echo json_encode($data);
+if ($incoming->action == 'fetchcheckinoutReport') {
+  $location = $incoming->location;
+  $startDate = $incoming->start;
+  $endDate = $incoming->end;
+  if ($location == 'ALL') {
+    $query = "SELECT * FROM reservations AS r, checkinout AS cr WHERE res_checkin BETWEEN '$startDate' AND '$endDate' AND r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  } else {
+    $query = "SELECT * FROM reservations AS r, checkinout AS cr WHERE res_location = '$location' AND res_checkin BETWEEN '$startDate' AND '$endDate' AND r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  }
+}
+
+if ($incoming->action == 'fetchAllCancelationReport') {
+  $location = $incoming->location;
+  if ($location == 'ALL') {
+    $query = "SELECT * FROM reservations AS r, cancelation_report AS cr WHERE r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  } else {
+    $query = "SELECT * FROM reservations AS r, cancelation_report AS cr WHERE res_location = '$location' AND r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  }
+}
+
+
+if ($incoming->action == 'fetchAllCheckinoutReport') {
+  $location = $incoming->location;
+  if ($location == 'ALL') {
+    $query = "SELECT * FROM reservations AS r, checkinout AS cr WHERE r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  } else {
+    $query = "SELECT * FROM reservations AS r, checkinout AS cr WHERE res_location = '$location' AND r.res_id = cr.res_id";
+
+    $update_result = mysqli_query($connection, $query);
+
+    $exists = mysqli_num_rows($update_result);
+    while ($row = mysqli_fetch_assoc($update_result)) {
+      $data[] = $row;
+    }
+
+
+    echo json_encode($data);
+  }
 }
 
 if ($incoming->action == 'fetchResDate') {
