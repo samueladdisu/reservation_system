@@ -121,6 +121,20 @@ if ($received_data->action == 'addSpecialRequest') {
   echo json_encode($result);
 }
 
+if ($received_data->action == 'addInhouse') {
+
+  $Message = $received_data->message;
+  $req_location = $received_data->location;
+  $created_by = $_SESSION['username'];
+
+  $query = "INSERT INTO inhouse(update_info, created_by, location) VALUES('$Message', '$created_by', '$req_location')";
+  $result = mysqli_query($connection, $query);
+
+  confirm($result);
+
+  echo json_encode($result);
+}
+
 if ($received_data->action == 'deleteReq') {
   $id = intval($received_data->id);
   $query = "DELETE FROM special_request WHERE id = $id";

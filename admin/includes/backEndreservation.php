@@ -15,7 +15,7 @@ if ($incoming->action == 'fetchRes') {
     // $query = "SELECT * FROM reservations ORDER BY res_id DESC";
     $query = "SELECT * FROM reservations WHERE res_checkin = CURDATE() AND res_status !='Canceled' ORDER BY res_id DESC";
   } else {
-    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE() AND res_status !='Canceled ORDER BY res_id DESC";
+    $query = "SELECT * FROM reservations WHERE res_location = '$location' AND res_checkin = CURDATE() AND res_status !='Canceled' ORDER BY res_id DESC";
   }
 
   $result = mysqli_query($connection, $query);

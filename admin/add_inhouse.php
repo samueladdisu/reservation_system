@@ -146,52 +146,23 @@
         }
       },
       methods: {
-        checkLocation() {
-          if (document.getElementById("hiddenlocation").value) {
-            let location = document.getElementById("hiddenlocation").value
-
-            this.location = location
-          }
-
-          console.log(this.location);
-        },
         async submitForm() {
           await axios.post('load_modal.php', {
-              action: 'addSpecialRequest',
-              guest: this.guestName,
-              type: this.type,
-              otherType: this.otherType,
-              num: this.numberOfPeople,
-              date: this.date,
+              action: 'addInhouse',
+              message: this.guestName,
               location: this.location,
-              remark: this.remark
+
             }).then(res => console.log(res.data))
             .then(() => {
-              this.guestName = ""
-              this.type= ""
-              this.otherType = ""
-              this.numberOfPeople = ""
-              this.date = ""
-              this.location = ""
-              this.remark = ""
+
 
               window.location = "view_special.php"
             })
         }
       },
       mounted() {
-        <?php
-
-        if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
-
-        ?>
-          console.log("Super Admin")
-        <?php } else { ?>
-
-
-          this.checkLocation()
-
-        <?php  } ?>
+        this.location = '<?php echo $_SESSION['user_location']; ?>'
+        console.log(this.location)
       }
     })
 

@@ -220,9 +220,15 @@
               <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Today's Reservations</h6>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    Exchange Rates
-                  </button>
+                  <?php
+
+                  if ($_SESSION['user_role'] == 'SA' || ($_SESSION['user_location'] == 'Boston' && $_SESSION['user_role'] == 'RA')) {
+
+                  ?>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                      Exchange Rates
+                    </button>
+                  <?php  } ?>
 
                 </div>
                 <!------------------------- t-date picker  --------------------->
