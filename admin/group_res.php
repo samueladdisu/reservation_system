@@ -188,7 +188,7 @@ if ($received_data->action == "guestCancelation") {
   if ($role == "SA" || ($location == "Boston" && $role == 'RA')) {
     $query = "SELECT * FROM reservations INNER JOIN cancelation_report ON reservations.res_id = cancelation_report.res_id WHERE reservations.res_checkin = CURDATE()";
   } else {
-    $query = "SELECT * FROM reservations INNER JOIN cancelation_report ON reservations.res_id = cancelation_report.res_id WHERE reservations.res_checkin = CURDATE() AND r.res_location = '$location'";
+    $query = "SELECT * FROM reservations INNER JOIN cancelation_report ON reservations.res_id = cancelation_report.res_id WHERE reservations.res_checkin = CURDATE() AND reservations.res_location = '$location'";
   }
 
 

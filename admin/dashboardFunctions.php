@@ -77,15 +77,14 @@ if ($received_data->action == 'noRoomsAvailable') {
 
             echo json_encode($response);
         } else {
+            
             while ($row = mysqli_fetch_assoc($update_result)) {
-                $roomIDs = json_decode($row['res_roomIDs']); // Convert the string to an array
-                $rooms[] = $roomIDs;
+                $rooms[] = $row['res_roomIDs'];
             }
-            // echo json_encode($rooms);
 
-            // $combined = implode(",", $rooms); // Combining both array into a single string
-            $results = array_merge(...$rooms); // Converting string into array
-            $count = count($results); // Counting the number of elements in array
+            $combined = implode(",", $rooms); // Combining both array into a single string
+            $results = json_decode("[" . $combined . "]", true); // Converting string into array
+            $count = count($results[0]); // Counting the number of elements in array
 
             $bookedRoomsNumber =  $count; // Output the result
 
@@ -99,13 +98,28 @@ if ($received_data->action == 'noRoomsAvailable') {
                 "AvailableRooms" => $availableRooms,
             );
 
-            echo json_encode($response);
-        }
+            echo json_encode($response);}
     }
 }
 
 
 if ($received_data->action == 'arrivalDeparture') {
+    $location = $received_data->location;
+    if ($location == "all") {
+        $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations WHERE res_status != 'Canceled' ";
+        $update_result = mysqli_query($connection, $update_query);
+        $row = mysqli_fetch_assoc($update_result);
+        echo json_encode($row);
+    } else {
+        $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations WHERE res_location = '$location' AND res_status != 'Canceled'";
+        $update_result = mysqli_query($connection, $update_query);
+        $row = mysqli_fetch_assoc($update_result);
+        echo json_encode($row);
+    }
+}
+// needs work in here ....
+
+if ($received_data->action == 'inhouse') {
     $location = $received_data->location;
     if ($location == "all") {
         $update_query = "SELECT COUNT(CASE WHEN res_checkout = CURDATE() THEN 1 ELSE NULL END) AS rooms_leaving_today, COUNT(CASE WHEN res_checkin = CURDATE() THEN 1 ELSE NULL END) AS rooms_arriving_today FROM reservations WHERE res_status != 'Canceled' ";

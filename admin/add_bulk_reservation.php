@@ -949,12 +949,12 @@ if (isset($_FILES['file'])) {
 
           let capacity = this.bookedRooms.length * 3
           if (start && end) {
-            console.log(start);
-            console.log(end);
-            console.log(this.bookedRooms);
-            console.log(this.formData);
-            console.log(this.room_quantity);
-            console.log(this.location)
+            // console.log(start);
+            // console.log(end);
+            // console.log(this.bookedRooms);
+            // console.log(this.formData);
+            // console.log(this.room_quantity);
+            console.log("LOCO", this.location)
             if (this.formData.group_GNum >= this.bookedRooms.length) {
 
               if (capacity >= this.formData.group_GNum) {
@@ -994,7 +994,7 @@ if (isset($_FILES['file'])) {
                     })
                   } else {
 
-                    if (res.data == true) {
+                    if (res.data) {
                       this.spinner = false
                       this.success = true
                       this.bookedRooms = []
@@ -1203,7 +1203,8 @@ if (isset($_FILES['file'])) {
           console.log("Super Admin")
         <?php } else { ?>
 
-
+          this.location = '<?php echo $_SESSION['user_location']; ?>'
+          console.log(this.location)
           this.checkLocationLoaded()
 
         <?php  } ?>

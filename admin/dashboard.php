@@ -142,7 +142,7 @@
                         </div>
 
                         <div class='h6 mb-0 mt-2 text-gray-600'>
-                          11
+                          {{ today_inhouse }}
                         </div>
                       </div>
                       <div class="col-auto">
@@ -447,6 +447,7 @@
     const dashboardApp = Vue.createApp({
       data() {
         return {
+          today_inhouse: 0,
           checkedIn: 0,
           checkedout: 0,
           donutLocation: "Bishoftu",
@@ -546,6 +547,18 @@
             this.departures = respo.data.rooms_leaving_today
             // console.log(respo.data);
           })
+        },
+
+        async getInhouseRequests(){
+          // await axios.post("dashboardFunctions.php", {
+          //   action: "inhouse",
+          //   location: this.location
+          // }).then((respo) => {
+
+          //   this.arrivals = respo.data.rooms_arriving_today
+          //   this.departures = respo.data.rooms_leaving_today
+          //   // console.log(respo.data);
+          // })
         },
 
         async getDataDonut() {
@@ -769,6 +782,7 @@
         this.arrivalAndDeparture()
         this.getDashboardData()
         this.getSpecialRequests()
+        this.getInhouseRequests()
 
         this.getCancelation()
         this.drawBarGraph()
