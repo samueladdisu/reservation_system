@@ -28,7 +28,7 @@
           if (!file_exists($diractory)) {
             mkdir($diractory, 0777, true);
           }
-          $target_file = $_POST['savedDiractory'] ;
+          $target_file = $_POST['savedDiractory'];
           move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
           echo json_encode($name);
           return $name;
@@ -214,6 +214,7 @@
                   <!-- End of Spinner Modal  -->
 
                   <!-- Modal -->
+                  <!-- Modal -->
                   <div class="modal fade" id="guest">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
@@ -227,36 +228,25 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <div class="col-6 ">
+                              <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
+                                <option value="" disabled>Adults*</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
 
-                                <label for="">Adults *</label>
-                                <select v-model="res_adults" @change="CheckGuest" class="custom-select col-6">
-                                  <!-- <option value="" disabled>Adults*</option> -->
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-                              </div>
-                              <div>
+                              <select @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
+                                <option value="" disabled>Teens(12-17)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
 
-                                <label for="">Teens(12-17)</label>
-                                <select @change="CheckGuest" v-model="res_teen" class="custom-select col-6 " :disabled="teen">
-
-                                  <!-- <option value="" disabled>Teens(12-17)</option> -->
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-                              </div>
-                              <div>
-
-                                <label for="">kid(6-11)</label>
-                                <select @change="CheckGuest" v-model="res_kid" class="custom-select col-6 " :disabled="kid">
-                                  <!-- <option value="" disabled>kid(6-11)</option> -->
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-                              </div>
+                              <select @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
+                                <option value="" disabled>kid(6-11)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
 
 
                             </div>
@@ -268,7 +258,6 @@
                       </div>
                     </div>
                   </div>
-
                   <!-- Loft Modal  -->
                   <!-- Modal -->
                   <div class="modal fade" id="loftModal">
@@ -284,33 +273,25 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <div>
-                                <label for="">Adults *</label>
-                                <select name="adults" @change="checkLoft" v-model="res_adults" class="custom-select col-3">
-                                  <!-- <option value="" disabled>Guests</option> -->
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label for="">Teens(12-17)</label>
-                                <select name="teen" @change="checkLoft" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
-                                  <!-- <option value="" disabled>Teens(12-17)</option> -->
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                </select>
-                              </div>
+                              <select name="adults" @change="checkLoft" v-model="res_adults" class="custom-select col-3">
+                                <option value="" disabled>Guests</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                              </select>
 
-                              <div>
-                                <label for="">kid(6-11)</label>
-                                <select name="kid" @change="checkLoft" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
-                                  <!-- <option value="" disabled>kid(6-11)</option> -->
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                </select>
-                              </div>
+                              <select name="teen" @change="checkLoft" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="loftTeen">
+                                <option value="" disabled>Teens(12-17)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                              </select>
+
+                              <select name="kid" @change="checkLoft" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="loftKid">
+                                <option value="" disabled>kid(6-11)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                              </select>
 
 
                             </div>
@@ -323,6 +304,7 @@
                     </div>
                   </div>
 
+                
                   <!-- Awash Modal -->
                   <div class="modal fade" id="awashModal">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -337,32 +319,25 @@
                           <div class="form-group">
                             <label for="" class="text-dark">Room 1:</label>
                             <div class="row">
-                              <div>
-                                <label for="">Adults *</label>
-                                <select v-model="res_adults" @change="CheckGuest" class="custom-select col-6 w-100">
-                                  <!-- <option value="" disabled>Adults*</option> -->
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label for="">Teens(12-17)</label>
-                                <select @change="CheckGuest" v-model="res_teen" class="custom-select col-6 w-100 " :disabled="teen">
-                                  <!-- <option value="" disabled>Teens(12-17)</option> -->
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label for="">kid(6-11)</label>
-                                <select @change="CheckGuest" v-model="res_kid" class="custom-select col-6 w-100 " :disabled="kid">
-                                  <!-- <option value="" disabled>kid(6-11)</option> -->
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-                              </div>
+                              <select v-model="res_adults" @change="CheckGuest" class="custom-select col-3">
+                                <option value="" disabled>Adults*</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
+
+                              <select @change="CheckGuest" v-model="res_teen" class="custom-select col-3 offset-1" :disabled="teen">
+                                <option value="" disabled>Teens(12-17)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
+
+                              <select @change="CheckGuest" v-model="res_kid" class="custom-select col-3 offset-1" :disabled="kid">
+                                <option value="" disabled>kid(6-11)</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                              </select>
 
 
                             </div>

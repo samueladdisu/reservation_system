@@ -96,6 +96,20 @@
          </div>
      </li>
 
+     <li class="nav-item">
+         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ticket2" aria-expanded="true" aria-controls="collapseTick2">
+             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+             <span>Super App Tickets </span>
+             <i style="margin-left: 2.2rem; font-size: 0.8rem;" class="fas fa-chevron-down  text-gray-300"></i>
+         </a>
+         <div id="ticket2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+             <div class="bg-white py-2 collapse-inner rounded">
+                 <a class="collapse-item" href="./view_ticket_superapp.php">View Tickets</a>
+                 <a class="collapse-item" href="./redemed_tickets.php">Scanned Tickets </a>
+             </div>
+         </div>
+     </li>
+
      <!-- <li class="nav-item">
          <a class="nav-link" href="./view_tickets.php">
              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -112,7 +126,7 @@
              <div class="bg-white py-2 collapse-inner rounded">
                  <a class="collapse-item" href="./cancelationReport.php">Cancelation Report</a>
                  <a class="collapse-item" href="./checkinout.php">Checkin/Checkout Report</a>
-            
+
              </div>
          </div>
      </li>
