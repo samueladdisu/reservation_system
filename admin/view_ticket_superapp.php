@@ -47,7 +47,7 @@
 
                                         <select v-model="location" @change="fetchLocation" class="custom-select">
 
-                                            <option value="all">All</option>
+                                            <!-- <option value="all">All</option> -->
                                             <option value="boston">Boston</option>
                                             <option value="waterpark">Water Park</option>
                                             <option value="entoto">Entoto</option>
