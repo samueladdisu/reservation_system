@@ -16,14 +16,28 @@ if (isset($_GET['ref'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-   
+
     <title>Kuriftu - Reservation</title>
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-35L8P3KBCX"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-35L8P3KBCX');
+</script>
+
 <body>
     <header class="reserve-header">
         <nav class="nav-center">
@@ -175,12 +189,11 @@ if (isset($_GET['ref'])) {
 
     </footer>
 
-<<<<<<< HEAD
-    <script>
+    <<<<<<< HEAD <script>
         esk('track', 'Conversion');
-    </script>
-=======
->>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
+        </script>
+        =======
+        >>>>>>> f2b5d03ed0a603ccd63b9a431d7d00cbfbe452d8
 
 </body>
 

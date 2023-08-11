@@ -83,6 +83,18 @@ if (isset($_GET['checkout'])) {
 
   <title>Reservation</title>
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-35L8P3KBCX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'G-35L8P3KBCX');
+</script>
 
 <body>
 
@@ -456,7 +468,7 @@ if (isset($_GET['checkout'])) {
                 </div>
 
 
-             
+
 
                 <div class="col-3 offset-1">
                   <label class="form-label">Kid (6-11)</label>
@@ -722,10 +734,10 @@ if (isset($_GET['checkout'])) {
         $('#date').data('daterangepicker').setStartDate(today);
         $('#date').data('daterangepicker').setEndDate(tomorrow);
 
-     
+
 
         $('#date').on('hide.daterangepicker', function(ev, picker) {
-         
+
           console.log("hide")
           start = picker.startDate.format('YYYY-MM-DD')
           end = picker.endDate.format('YYYY-MM-DD')
@@ -1068,7 +1080,7 @@ if (isset($_GET['checkout'])) {
                 action: 'hold',
                 roomID: this.roww.room_id,
               }).then((res) => {
-              
+
                 if (user) {
 
                   if (row.cnt > 0) {
@@ -1099,7 +1111,7 @@ if (isset($_GET['checkout'])) {
                       kids: this.res_guest[2],
                       reservationBoard: ""
                     }
-                    
+
                     let PutTogeter = Object.assign(row, guests)
                     this.cart.push(PutTogeter);
                     let temparray = [];
