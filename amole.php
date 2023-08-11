@@ -41,15 +41,6 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
             <hr class="line1">
             <ul class="justify-list">
 
-              <!-- <li>
-                  <a class="link-text" href="./">Back to Resorts</a>
-                </li>
-                <li>
-                  <a class="link-text" href="">Sign Up</a>
-                </li>
-                <li>
-                  <a class="link-text" href="">Login</a>
-                </li> -->
             </ul>
 
 
@@ -73,7 +64,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
 
           $cart = $_SESSION['cart'];
           // print_r($cart);
-
+          $location = "";
           foreach ($cart as $name => $value) {
 
             $item[$name] = $value;
@@ -86,7 +77,9 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
             <h3 class="card-title"><?php echo $items['room_acc']; ?>
             </h3>
             <p class="card-text">
-              <?php echo $items['room_location']; ?>
+              <?php
+              $location = $items['room_location'];
+              echo $items['room_location']; ?>
             </p>
             <p class="text-muted">
               $<?php echo $items['room_price']; ?>
@@ -134,8 +127,14 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
 
           $cart = $_SESSION['cart'];
           $total_price = intval($_SESSION['total']);
-          $access_key = $_ENV['ACCESS_KEY'];
-          $profile_id = $_ENV['PROFILE_ID'];
+          if($location == "Bishoftu"){
+            $access_key = $_ENV['ACCESS_KEY_BIS'];
+            $profile_id = $_ENV['PROFILE_ID_BIS'];
+          }else{
+            $access_key = $_ENV['ACCESS_KEY'];
+            $profile_id = $_ENV['PROFILE_ID'];
+          }
+      
 
           $quantity = 1;
           $item_name = 1;
@@ -178,7 +177,7 @@ absolute; top: -5000px;" src="https://h.online-metrix.net/fp/tags.js?org_id=amol
           foreach ($arrayVariable as $name => $value) {
             echo "<input type=\"hidden\" id=\"" . $name . "\" name=\"" . $name . "\" value=\"" . $value . "\"/>\n";
           }
-          echo "<input type=\"hidden\" id=\"signature\" name=\"signature\" value=\"" . sign($arrayVariable) . "\"/>\n";
+          echo "<input type=\"hidden\" id=\"signature\" name=\"signature\" value=\"" . sign($arrayVariable, $location) . "\"/>\n";
 
 
 

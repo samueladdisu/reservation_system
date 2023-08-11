@@ -445,16 +445,6 @@ if (isset($_GET['checkout'])) {
                   </select>
 
                 </div>
-                <!-- <div class="col-3 offset-1">
-                  <label class="form-label">Teens(12 - 17)</label>
-                  <select name="adults" @change="CheckGuest" v-model="res_teen" class="form-select" :disabled="teen">
-                    <option selected>Teens(12-17)</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                  </select>
-                </div> -->
-
                 <div class="col-3 offset-1">
                   <label class="form-label">Teens(12 - 17)</label>
                   <select name="adults" @change="CheckGuest" v-model="res_teen" class="form-select" disabled="true">
@@ -466,15 +456,7 @@ if (isset($_GET['checkout'])) {
                 </div>
 
 
-                <!-- <div class="col-3 offset-1">
-                  <label class="form-label">Kid (6-11)</label>
-                  <select name="adults" @change="CheckGuest" v-model="res_kid" class="form-select" :disabled="kid">
-                    <option selected>Kid (6-11)</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                  </select>
-                </div> -->
+             
 
                 <div class="col-3 offset-1">
                   <label class="form-label">Kid (6-11)</label>
@@ -740,25 +722,10 @@ if (isset($_GET['checkout'])) {
         $('#date').data('daterangepicker').setStartDate(today);
         $('#date').data('daterangepicker').setEndDate(tomorrow);
 
-        // $('#date').on('apply.daterangepicker', function(ev, picker) {
-        //   // console.log(picker.startDate.format('YYYY-MM-DD'));
-        //   // console.log(picker.endDate.format('YYYY-MM-DD'));
-
-        //   console.log("apply")
-        //   start = picker.startDate.format('YYYY-MM-DD')
-        //   end = picker.endDate.format('YYYY-MM-DD')
-        //   console.log("updated start", start);
-        //   console.log("updated end", end);
-
-        //   // vm.submitData()
-
-
-        // });
+     
 
         $('#date').on('hide.daterangepicker', function(ev, picker) {
-          // console.log(picker.startDate.format('YYYY-MM-DD'));
-          // console.log(picker.endDate.format('YYYY-MM-DD'));
-
+         
           console.log("hide")
           start = picker.startDate.format('YYYY-MM-DD')
           end = picker.endDate.format('YYYY-MM-DD')
@@ -1101,7 +1068,7 @@ if (isset($_GET['checkout'])) {
                 action: 'hold',
                 roomID: this.roww.room_id,
               }).then((res) => {
-                console.log(res.data);
+              
                 if (user) {
 
                   if (row.cnt > 0) {
@@ -1132,8 +1099,7 @@ if (isset($_GET['checkout'])) {
                       kids: this.res_guest[2],
                       reservationBoard: ""
                     }
-                    // console.log("row size:" + Object.keys(row).length);
-
+                    
                     let PutTogeter = Object.assign(row, guests)
                     this.cart.push(PutTogeter);
                     let temparray = [];

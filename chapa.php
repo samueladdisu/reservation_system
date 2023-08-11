@@ -105,7 +105,9 @@
   } else {
     $chapa_sec = $_ENV['CHAPA_SECK'];
     $chapa_pub = $_ENV['CHAPA_PUB'];
+    // $callback_url = 'https://reservations.kurifturesorts.com/chapaCompleted/';
     $callback_url = 'https://reservations.kurifturesorts.com/chapaCompleted/';
+    $price = 1;
   }
 
   curl_setopt_array($curl, array(
